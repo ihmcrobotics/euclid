@@ -5,6 +5,8 @@ import org.ejml.data.DMatrix;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.Matrix3DTools;
@@ -20,7 +22,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Matrix3DReadOnly
+public interface Matrix3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the 1st row 1st column coefficient of this matrix.
@@ -1085,12 +1087,16 @@ public interface Matrix3DReadOnly
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other   the other matrix to compare against this. Not modified.
+    * @param object  the object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Matrix3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Matrix3DReadOnly))
+         return false;
+      Matrix3DReadOnly other = (Matrix3DReadOnly) object;
       if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon))
@@ -1111,5 +1117,33 @@ public interface Matrix3DReadOnly
          return false;
 
       return true;
+   }
+   
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code matrix} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getMatrix3DString(format, this);
    }
 }

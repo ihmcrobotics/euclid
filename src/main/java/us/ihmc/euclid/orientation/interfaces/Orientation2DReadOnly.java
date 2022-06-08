@@ -1,5 +1,7 @@
 package us.ihmc.euclid.orientation.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Orientation2DReadOnly
+public interface Orientation2DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the current yaw angle of this orientation 2D.
@@ -203,12 +205,16 @@ public interface Orientation2DReadOnly
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
     *
-    * @param other   the query. Not modified.
+    * @param object  the query.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Orientation2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Orientation2DReadOnly))
+         return false;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) object;
       return EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon);
    }
 
@@ -217,13 +223,17 @@ public interface Orientation2DReadOnly
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param other   the orientation to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(Orientation2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Orientation2DReadOnly))
+         return false;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) object;
       return Math.abs(difference(other)) <= epsilon;
    }
 
@@ -245,5 +255,17 @@ public interface Orientation2DReadOnly
          return false;
       else
          return getYaw() == other.getYaw();
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of the angle of this orientation 2D.
+    *
+    * @param format the format to be used.
+    * @return the hash code value for this orientation 2D.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getOrientation2DString(format, this);
    }
 }

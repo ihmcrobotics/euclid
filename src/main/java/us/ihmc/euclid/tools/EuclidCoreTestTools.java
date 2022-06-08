@@ -1537,7 +1537,7 @@ public class EuclidCoreTestTools
     */
    public static void assertOrientation2DEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DEquals(null, expected, actual, epsilon);
+      assertEquals(expected, actual, epsilon);
    }
 
    /**
@@ -1555,7 +1555,7 @@ public class EuclidCoreTestTools
     */
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1579,16 +1579,7 @@ public class EuclidCoreTestTools
                                                 double epsilon,
                                                 String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -1605,7 +1596,7 @@ public class EuclidCoreTestTools
     */
    public static void assertOrientation2DGeometricallyEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DGeometricallyEquals(null, expected, actual, epsilon);
+      assertGeometricallyEquals(null, expected, actual, epsilon);
    }
 
    /**
@@ -1623,7 +1614,7 @@ public class EuclidCoreTestTools
     */
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1647,22 +1638,13 @@ public class EuclidCoreTestTools
                                                              double epsilon,
                                                              String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
     * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
     * 'equal'.
-    * 
+    *
     * @param expected the orientation3D to be used for comparison. Not modified.
     * @param actual   the orientation3D to be used for comparison. Not modified.
     * @param epsilon  the tolerance to be used in comparison.
@@ -1675,7 +1657,7 @@ public class EuclidCoreTestTools
    /**
     * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
     * 'equal'.
-    * 
+    *
     * @param messagePrefix Prefix prefix to add to the error message.
     * @param expected      the orientation3D to be used for comparison. Not modified.
     * @param actual        the orientation3D to be used for comparison. Not modified.
@@ -1689,7 +1671,7 @@ public class EuclidCoreTestTools
    /**
     * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
     * 'equal'.
-    * 
+    *
     * @param messagePrefix Prefix prefix to add to the error message.
     * @param expected      the orientation3D to be used for comparison. Not modified.
     * @param actual        the orientation3D to be used for comparison. Not modified.
@@ -1722,7 +1704,7 @@ public class EuclidCoreTestTools
                                                    String difference,
                                                    String format)
    {
-      // TODO NEEDS TESTING 
+      // TODO NEEDS TESTING
       String expectedAsString = EuclidCoreIOTools.getOrientation3DString(expected);
       String actualAsString = EuclidCoreIOTools.getOrientation3DString(actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
@@ -2171,7 +2153,7 @@ public class EuclidCoreTestTools
     */
    public static void assertRigidBodyTransformEquals(RigidBodyTransform expected, RigidBodyTransform actual, double epsilon)
    {
-      assertRigidBodyTransformEquals(null, expected, actual, epsilon);
+      assertGeometricallyEquals(null, expected, actual, epsilon);
    }
 
    /**
@@ -2190,7 +2172,7 @@ public class EuclidCoreTestTools
     */
    public static void assertRigidBodyTransformEquals(String messagePrefix, RigidBodyTransform expected, RigidBodyTransform actual, double epsilon)
    {
-      assertRigidBodyTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2215,16 +2197,7 @@ public class EuclidCoreTestTools
                                                      double epsilon,
                                                      String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2242,7 +2215,7 @@ public class EuclidCoreTestTools
     */
    public static void assertRigidBodyTransformGeometricallyEquals(RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, double epsilon)
    {
-      assertRigidBodyTransformGeometricallyEquals(null, expected, actual, epsilon);
+      assertGeometricallyEquals(null, expected, actual, epsilon);
    }
    // TODO:RigidBodyTransform ->RigidBodyTransformReadOnly  <--
 
@@ -2265,7 +2238,7 @@ public class EuclidCoreTestTools
                                                                   RigidBodyTransformReadOnly actual,
                                                                   double epsilon)
    {
-      assertRigidBodyTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2290,16 +2263,7 @@ public class EuclidCoreTestTools
                                                                   double epsilon,
                                                                   String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2317,7 +2281,7 @@ public class EuclidCoreTestTools
     */
    public static void assertQuaternionBasedTransformEquals(QuaternionBasedTransform expected, QuaternionBasedTransform actual, double epsilon)
    {
-      assertQuaternionBasedTransformEquals(null, expected, actual, epsilon);
+      assertEquals(null, expected, actual, epsilon);
    }
 
    /**
@@ -2339,7 +2303,7 @@ public class EuclidCoreTestTools
                                                            QuaternionBasedTransform actual,
                                                            double epsilon)
    {
-      assertQuaternionBasedTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2364,16 +2328,7 @@ public class EuclidCoreTestTools
                                                            double epsilon,
                                                            String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2391,7 +2346,7 @@ public class EuclidCoreTestTools
     */
    public static void assertQuaternionBasedTransformGeometricallyEquals(QuaternionBasedTransform expected, QuaternionBasedTransform actual, double epsilon)
    {
-      assertQuaternionBasedTransformGeometricallyEquals(null, expected, actual, epsilon);
+      assertGeometricallyEquals(null, expected, actual, epsilon);
    }
 
    /**
@@ -2413,7 +2368,7 @@ public class EuclidCoreTestTools
                                                                         QuaternionBasedTransform actual,
                                                                         double epsilon)
    {
-      assertQuaternionBasedTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2438,16 +2393,7 @@ public class EuclidCoreTestTools
                                                                         double epsilon,
                                                                         String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2465,7 +2411,7 @@ public class EuclidCoreTestTools
     */
    public static void assertAffineTransformEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
-      assertAffineTransformEquals(null, expected, actual, epsilon);
+      assertEquals(null, expected, actual, epsilon);
    }
 
    /**
@@ -2484,7 +2430,7 @@ public class EuclidCoreTestTools
     */
    public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
-      assertAffineTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2509,16 +2455,7 @@ public class EuclidCoreTestTools
                                                   double epsilon,
                                                   String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -2535,7 +2472,7 @@ public class EuclidCoreTestTools
     */
    public static void assertAffineTransformGeometricallyEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
-      assertAffineTransformGeometricallyEquals(null, expected, actual, epsilon);
+      assertGeometricallyEquals(expected, actual, epsilon);
    }
 
    /**
@@ -2556,7 +2493,7 @@ public class EuclidCoreTestTools
                                                                AffineTransformReadOnly actual,
                                                                double epsilon)
    {
-      assertAffineTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon);
    }
 
    /**
@@ -2580,16 +2517,7 @@ public class EuclidCoreTestTools
                                                                double epsilon,
                                                                String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2822,7 +2750,7 @@ public class EuclidCoreTestTools
       String actualAsString = getQuaternionBasedTransformString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
-   
+
    private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
    {
       String expectedAsString = expected.toString(format);
@@ -2908,18 +2836,50 @@ public class EuclidCoreTestTools
       else
          return message;
    }
-   
+
+   public static void assertEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertEquals(null, expected, actual, epsilon);
+   }
+
+   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
    public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
    {
-      if (true!=expected.epsilonEquals(actual, epsilon))
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!(expected.epsilonEquals(actual, epsilon)))
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
    }
-   
+
+   public static void assertGeometricallyEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
    public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
    {
-      if (true!=expected.geometricallyEquals(actual, epsilon))
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!(expected.geometricallyEquals(actual, epsilon)))
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }

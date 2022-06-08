@@ -9,7 +9,6 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -34,7 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
  */
-public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, GeometryObject<FrameConvexPolygon2D>
+public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -205,17 +204,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    public FrameConvexPolygon2D(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
       setIncludingFrame(firstVertex2DSupplier, secondVertex2DSupplier);
-   }
-
-   /**
-    * {@inheritDoc}
-    *
-    * @see FrameConvexPolygon2D#set(FrameVertex2DSupplier)
-    */
-   @Override
-   public void set(FrameConvexPolygon2D other)
-   {
-      FrameConvexPolygon2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -434,20 +422,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       return referenceFrame;
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public boolean epsilonEquals(FrameConvexPolygon2D other, double epsilon)
-   {
-      return FrameConvexPolygon2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean geometricallyEquals(FrameConvexPolygon2D other, double epsilon)
-   {
-      return FrameConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
    @Override
    public boolean equals(Object object)
    {
@@ -469,6 +443,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameConvexPolygon2DString(this);
+      return FrameConvexPolygon2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

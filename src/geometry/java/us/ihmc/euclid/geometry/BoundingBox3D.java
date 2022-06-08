@@ -3,8 +3,6 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -17,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box.
  */
-public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<BoundingBox3D>, Settable<BoundingBox3D>, GeometricallyComparable<BoundingBox3D>
+public class BoundingBox3D implements BoundingBox3DBasics, Settable<BoundingBox3D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point3D minPoint = new Point3D();
@@ -151,36 +149,6 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    public Point3DBasics getMaxPoint()
    {
       return maxPoint;
-   }
-
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(BoundingBox3D other, double epsilon)
-   {
-      return BoundingBox3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(BoundingBox3D other, double epsilon)
-   {
-      return BoundingBox3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

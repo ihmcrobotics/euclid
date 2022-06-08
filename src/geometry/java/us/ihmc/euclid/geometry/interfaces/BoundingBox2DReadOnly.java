@@ -5,6 +5,8 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -13,7 +15,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * Read-only interface for a 2D axis-aligned bounding box defined from a set of minimum and maximum
  * coordinates.
  */
-public interface BoundingBox2DReadOnly
+public interface BoundingBox2DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the minimum coordinate of this bounding box.
@@ -178,10 +180,7 @@ public interface BoundingBox2DReadOnly
    default boolean isInsideExclusive(double x, double y)
    {
       checkBounds();
-      if (x <= getMinX() || x >= getMaxX())
-         return false;
-
-      if (y <= getMinY() || y >= getMaxY())
+      if (x <= getMinX() || x >= getMaxX() || y <= getMinY() || y >= getMaxY())
          return false;
 
       return true;
@@ -220,10 +219,7 @@ public interface BoundingBox2DReadOnly
    default boolean isInsideInclusive(double x, double y)
    {
       checkBounds();
-      if (x < getMinX() || x > getMaxX())
-         return false;
-
-      if (y < getMinY() || y > getMaxY())
+      if (x < getMinX() || x > getMaxX() || y < getMinY() || y > getMaxY())
          return false;
 
       return true;
@@ -280,10 +276,7 @@ public interface BoundingBox2DReadOnly
    default boolean isInsideEpsilon(double x, double y, double epsilon)
    {
       checkBounds();
-      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon)
-         return false;
-
-      if (y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
+      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon || y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
          return false;
 
       return true;
@@ -302,10 +295,7 @@ public interface BoundingBox2DReadOnly
    default boolean intersectsExclusive(BoundingBox2DReadOnly other)
    {
       checkBounds();
-      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
-         return false;
-
-      if (other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX() || other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
          return false;
 
       return true;
@@ -325,10 +315,7 @@ public interface BoundingBox2DReadOnly
    default boolean intersectsInclusive(BoundingBox2DReadOnly other)
    {
       checkBounds();
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
-         return false;
-
-      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX() || other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
          return false;
 
       return true;
@@ -356,10 +343,7 @@ public interface BoundingBox2DReadOnly
    default boolean intersectsEpsilon(BoundingBox2DReadOnly other, double epsilon)
    {
       checkBounds();
-      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
-         return false;
-
-      if (other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
          return false;
 
       return true;
@@ -602,8 +586,12 @@ public interface BoundingBox2DReadOnly
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(BoundingBox2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof BoundingBox2DReadOnly))
+         return false;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) object;
       return getMinPoint().epsilonEquals(other.getMinPoint(), epsilon) && getMaxPoint().epsilonEquals(other.getMaxPoint(), epsilon);
    }
 
@@ -617,8 +605,12 @@ public interface BoundingBox2DReadOnly
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(BoundingBox2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof BoundingBox2DReadOnly))
+         return false;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) object;
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
    }
 
@@ -637,5 +629,11 @@ public interface BoundingBox2DReadOnly
          return false;
       else
          return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+   }
+   
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getBoundingBox2DString(format, this);
    }
 }

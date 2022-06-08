@@ -2,14 +2,13 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
@@ -29,7 +28,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * using methods requiring {@code FrameLineSegment2D}.
  * </p>
  */
-public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObject<FrameLineSegment2D>
+public class FrameLineSegment2D implements FrameLineSegment2DBasics
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -107,13 +106,6 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameLineSegment2D other)
-   {
-      FrameLineSegment2DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -171,43 +163,6 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameLineSegment2D other, double epsilon)
-   {
-      return FrameLineSegment2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameLineSegment2D other, double epsilon)
-   {
-      return FrameLineSegment2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameLineSegment2DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -237,7 +192,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameLineSegment2DString(this);
+      return FrameLineSegment2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

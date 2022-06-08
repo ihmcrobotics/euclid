@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -9,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Triangle3DReadOnly
+public interface Triangle3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the first vertex of this triangle.
@@ -130,17 +132,17 @@ public interface Triangle3DReadOnly
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Triangle3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (!getA().epsilonEquals(other.getA(), epsilon))
+      if (!(object instanceof Triangle3DReadOnly))
          return false;
-      if (!getB().epsilonEquals(other.getB(), epsilon))
-         return false;
-      if (!getC().epsilonEquals(other.getC(), epsilon))
+      Triangle3DReadOnly other = (Triangle3DReadOnly) object;
+      if (!getA().epsilonEquals(other.getA(), epsilon) || !getB().epsilonEquals(other.getB(), epsilon) || !getC().epsilonEquals(other.getC(), epsilon))
          return false;
       return true;
    }
@@ -169,12 +171,16 @@ public interface Triangle3DReadOnly
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
     *
-    * @param other   the triangle to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Triangle3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Triangle3DReadOnly))
+         return false;
+      Triangle3DReadOnly other = (Triangle3DReadOnly) object;
       return geometricallyEquals(other.getA(), other.getB(), other.getC(), epsilon);
    }
 
@@ -215,5 +221,24 @@ public interface Triangle3DReadOnly
       {
          return false;
       }
+   }
+
+   /**
+    * Gets a representative {@code String} of a triangle as follows:
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getTriangle3DString(format, this);
    }
 }

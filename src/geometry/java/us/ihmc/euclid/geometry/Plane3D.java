@@ -4,7 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents an infinitely wide and long 3D plane defined by a 3D point and a 3D unit-vector.
  */
-public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
+public class Plane3D implements Plane3DBasics
 {
    /** Coordinates of a point located on this plane. */
    private final Point3D point = new Point3D();
@@ -165,17 +165,6 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
    }
 
    /**
-    * Sets this plane to be the same as the given plane.
-    *
-    * @param other the other plane to copy. Not modified.
-    */
-   @Override
-   public void set(Plane3D other)
-   {
-      Plane3DBasics.super.set(other);
-   }
-
-   /**
     * Changes the normal of this plane by setting it to the normalized value of the given vector.
     *
     * @param normalX the new x-component of the normal of this normal.
@@ -228,36 +217,22 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
    }
 
    /**
-    * Tests on a per-component basis on the point and normal if this plane is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two planes are
-    * physically the same but either the point or vector of each plane is different. For instance, if
-    * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
-    * physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two planes are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Plane3D other, double epsilon)
-   {
-      return Plane3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
     * Compares {@code this} to {@code other} to determine if the two planes are geometrically similar.
     * <p>
     * Two planes are considered geometrically equal if they are coincident. Two planes that are
     * geometrically equal can have normals pointing opposite direction.
     * </p>
     *
-    * @param other   the plane to compare to.
+    * @param object  the object to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the planes are coincident, {@code false} otherwise.
     */
    @Override
-   public boolean geometricallyEquals(Plane3D other, double epsilon)
+   public boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Plane3D))
+         return false;
+      Plane3D other = (Plane3D) object;
       return isCoincident(other, epsilon, epsilon);
    }
 
@@ -292,6 +267,19 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getPlane3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Provides a {@code String} representation of this plane 3D as follows:<br>
+    * Plane 3D: point = (x, y, z), normal = (x, y, z)
+    *
+    * @param format the format to be used.
+    * @return the {@code String} representing this plane 3D.
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidGeometryIOTools.getPlane3DString(format, this);
    }
 }

@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -13,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
  * </p>
  */
-public interface LineSegment3DReadOnly
+public interface LineSegment3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -445,9 +447,7 @@ public interface LineSegment3DReadOnly
    {
       double alpha = percentageAlongLineSegment(x, y, z);
 
-      if (alpha < epsilon)
-         return false;
-      if (alpha > 1.0 - epsilon)
+      if ((alpha < epsilon) || (alpha > 1.0 - epsilon))
          return false;
 
       return true;
@@ -537,12 +537,16 @@ public interface LineSegment3DReadOnly
     * Tests on a per component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(LineSegment3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof LineSegment3DReadOnly))
+         return false;
+      LineSegment3DReadOnly other = (LineSegment3DReadOnly) object;
       return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
    }
 
@@ -571,19 +575,40 @@ public interface LineSegment3DReadOnly
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other   the line segment to compare to. Not modified.
+    * @param object  the line segment to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(LineSegment3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
-            && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
-         return true;
-      if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
-            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
+      if (!(object instanceof LineSegment3DReadOnly))
+         return false;
+      LineSegment3DReadOnly other = (LineSegment3DReadOnly) object;
+      if ((getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)) || (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)))
          return true;
       return false;
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 3D: 1st endpoint = ( 0.174,  0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment3DString(format, this);
    }
 }

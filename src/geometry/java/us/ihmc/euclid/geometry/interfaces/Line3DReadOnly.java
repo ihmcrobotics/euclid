@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -14,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * direction.
  * </p>
  */
-public interface Line3DReadOnly
+public interface Line3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the point through which this line is going.
@@ -344,11 +346,13 @@ public interface Line3DReadOnly
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Line3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+      if ( !(object instanceof Line3DReadOnly))
          return false;
-      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+      Line3DReadOnly other = (Line3DReadOnly) object;
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
          return false;
 
       return true;
@@ -365,8 +369,12 @@ public interface Line3DReadOnly
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Line3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if ( !(object instanceof Line3DReadOnly))
+         return false;
+      Line3DReadOnly other = (Line3DReadOnly) object;
       return isCollinear(other, epsilon);
    }
 
@@ -384,5 +392,11 @@ public interface Line3DReadOnly
          return false;
       else
          return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLine3DString(format, this);
    }
 }

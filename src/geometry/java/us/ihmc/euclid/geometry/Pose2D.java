@@ -3,11 +3,10 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -16,7 +15,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 /**
  * A {@code Pose2D} represents a position and orientation in the XY-plane.
  */
-public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
+public class Pose2D implements Pose2DBasics
 {
    /** The position part of this pose 2D. */
    private final Point2D position = new Point2D();
@@ -99,17 +98,6 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    }
 
    /**
-    * Sets this pose 2D to the {@code other} pose 2D.
-    *
-    * @param other the other pose 2D. Not modified.
-    */
-   @Override
-   public void set(Pose2D other)
-   {
-      Pose2DBasics.super.set(other);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Pose2DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -126,36 +114,6 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    }
 
    /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Pose2D other, double epsilon)
-   {
-      return Pose2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Pose2D other, double epsilon)
-   {
-      return Pose2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this pose 2D as follows:<br>
     * Pose 2D: position = (x, y), orientation = (yaw)
     *
@@ -164,7 +122,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getPose2DString(this);
+      return Pose2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

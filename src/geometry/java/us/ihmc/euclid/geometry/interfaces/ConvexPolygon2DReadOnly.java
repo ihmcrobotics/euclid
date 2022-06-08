@@ -7,7 +7,9 @@ import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -21,7 +23,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
+public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometry
 {
    /**
     * Tests whether the vertices of this polygon are clockwise or counter-clockwise ordered.
@@ -1621,8 +1623,11 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
-   default boolean epsilonEquals(ConvexPolygon2DReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if ( !(object instanceof ConvexPolygon2DReadOnly))
+         return false;
+      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) object;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 
@@ -1651,8 +1656,11 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(ConvexPolygon2DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if ( !(object instanceof ConvexPolygon2DReadOnly))
+         return false;
+      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) object;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 
@@ -1674,5 +1682,26 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
       }
 
       return true;
+   }
+   
+   /**
+    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param format          the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getConvexPolygon2DString(format, this);
    }
 }

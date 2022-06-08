@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
@@ -10,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Read-only interface for an infinitely wide and long 3D plane defined by a 3D point and a 3D
  * unit-vector.
  */
-public interface Plane3DReadOnly
+public interface Plane3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the point through which this plane is going.
@@ -485,12 +486,16 @@ public interface Plane3DReadOnly
     * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
     * physically the same but this method returns {@code false}.
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two planes are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Plane3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Plane3DReadOnly))
+         return false;
+      Plane3DReadOnly other = (Plane3DReadOnly) object;
       return other.getNormal().epsilonEquals(getNormal(), epsilon) && other.getPoint().epsilonEquals(getPoint(), epsilon);
    }
 
@@ -509,5 +514,4 @@ public interface Plane3DReadOnly
       else
          return getPoint().equals(other.getPoint()) && getNormal().equals(other.getNormal());
    }
-
 }

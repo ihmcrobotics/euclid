@@ -2,8 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -12,7 +11,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.
  */
-public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSegment2D>
+public class LineSegment2D implements LineSegment2DBasics
 {
    /** The first endpoint defining this line segment. */
    private final Point2D firstEndpoint = new Point2D();
@@ -70,17 +69,6 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
       set(firstEndpoint, secondEndpoint);
    }
 
-   /**
-    * Sets this line segment to be same as the given line segment.
-    *
-    * @param other the other line segment to copy. Not modified.
-    */
-   @Override
-   public void set(LineSegment2D other)
-   {
-      LineSegment2DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public Point2DBasics getFirstEndpoint()
@@ -93,39 +81,6 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    public Point2DBasics getSecondEndpoint()
    {
       return secondEndpoint;
-   }
-
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(LineSegment2D other, double epsilon)
-   {
-      return LineSegment2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
-    * <p>
-    * The comparison is based on comparing the line segments' endpoints. Two line segments are
-    * considered geometrically equal even if they are defined with opposite direction.
-    * </p>
-    *
-    * @param other   the line segment to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(LineSegment2D other, double epsilon)
-   {
-      return LineSegment2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -153,7 +108,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment2DString(this);
+      return LineSegment2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

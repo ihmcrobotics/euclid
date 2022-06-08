@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
@@ -10,7 +8,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -19,7 +17,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * an axis-aligned bounding box in the XY-plane that is expressed in a given reference frame..
  */
 public class FrameBoundingBox2D
-      implements FrameBoundingBox2DBasics, EpsilonComparable<FrameBoundingBox2D>, Settable<FrameBoundingBox2D>, GeometricallyComparable<FrameBoundingBox2D>
+      implements FrameBoundingBox2DBasics, Settable<FrameBoundingBox2D>
 {
    /** The reference frame is which this bounding box is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -135,43 +133,7 @@ public class FrameBoundingBox2D
    {
       return referenceFrame;
    }
-
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameBoundingBox2D other, double epsilon)
-   {
-      return FrameBoundingBox2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameBoundingBox2D other, double epsilon)
-   {
-      return FrameBoundingBox2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
+   
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameBoundingBox2DReadOnly)}, it returns {@code false} otherwise.
@@ -214,6 +176,6 @@ public class FrameBoundingBox2D
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
+      return FrameBoundingBox2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

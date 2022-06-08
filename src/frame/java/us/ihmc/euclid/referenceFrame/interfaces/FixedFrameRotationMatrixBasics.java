@@ -5,6 +5,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
@@ -439,4 +440,39 @@ public interface FixedFrameRotationMatrixBasics
       checkReferenceFrameMatch(r0, rf);
       RotationMatrixBasics.super.interpolate(r0, rf, alpha);
    }
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return FrameRotationMatrixReadOnly.super.geometricallyEquals(object, epsilon);
+   }
+   
+   /**
+    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
+    * {@code epsilon}.
+    * <p>
+    * If the two matrices have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
+    */
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
+   {
+      return FrameRotationMatrixReadOnly.super.epsilonEquals(object, epsilon);
+   }
+
 }

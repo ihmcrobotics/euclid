@@ -4,7 +4,6 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
@@ -14,7 +13,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -35,7 +34,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * requiring {@code FrameLine2D}.
  * </p>
  */
-public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2D>
+public class FrameLine2D implements FrameLine2DBasics
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -184,13 +183,6 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameLine2D other)
-   {
-      FrameLine2DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -248,42 +240,6 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameLine2D other, double epsilon)
-   {
-      return FrameLine2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameLine2D other, double epsilon)
-   {
-      return FrameLine2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameLine2DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -308,7 +264,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameLine2DString(this);
+      return FrameLine2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

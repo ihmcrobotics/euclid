@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -416,5 +417,21 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
    default String toString(String format)
    {
       return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
+   }
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return FrameMatrix3DReadOnly.super.geometricallyEquals(object, epsilon);
    }
 }

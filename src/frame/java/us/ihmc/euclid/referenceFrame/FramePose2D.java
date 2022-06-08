@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
@@ -12,7 +11,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
@@ -31,7 +30,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * requiring {@code FramePose2D}.
  * </p>
  */
-public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2D>
+public class FramePose2D implements FramePose2DBasics
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -135,13 +134,6 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
 
    /** {@inheritDoc} */
    @Override
-   public void set(FramePose2D other)
-   {
-      FramePose2DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -188,42 +180,6 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    }
 
    /**
-    * Tests on a per component basis if this pose is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other pose to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FramePose2D other, double epsilon)
-   {
-      return FramePose2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FramePose2D other, double epsilon)
-   {
-      return FramePose2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this pose 2D as follows:<br>
     * Pose 2D: position = (x, y), orientation = (yaw)-worldFrame
     *
@@ -232,7 +188,7 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFramePose2DString(this);
+      return FramePose2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

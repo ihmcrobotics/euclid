@@ -2,13 +2,11 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
@@ -27,7 +25,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
  * using methods requiring {@code FrameLineSegment3D}.
  * </p>
  */
-public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObject<FrameLineSegment3D>
+public class FrameLineSegment3D implements FrameLineSegment3DBasics
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -90,13 +88,6 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameLineSegment3D other)
-   {
-      FrameLineSegment3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -121,43 +112,6 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
-   }
-
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameLineSegment3D other, double epsilon)
-   {
-      return FrameLineSegment3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameLineSegment3D other, double epsilon)
-   {
-      return FrameLineSegment3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -190,7 +144,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameLineSegment3DString(this);
+      return FrameLineSegment3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

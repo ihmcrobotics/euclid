@@ -4,8 +4,10 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -1041,16 +1043,60 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * If the two matrices have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the other matrix to compare against this. Not modified.
+    * @param object  the object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameMatrix3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameMatrix3DReadOnly))
+         return false;
+      FrameMatrix3DReadOnly other = (FrameMatrix3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Matrix3DReadOnly.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      if (!(object instanceof FrameMatrix3DReadOnly))
+         return false;
+      return epsilonEquals(object, epsilon);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code matrix} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
    }
 }

@@ -2,8 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -12,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.
  */
-public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSegment3D>
+public class LineSegment3D implements LineSegment3DBasics
 {
    /** The first endpoint defining this line segment. */
    private final Point3D firstEndpoint = new Point3D();
@@ -67,17 +66,6 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
       set(firstEndpointX, firstEndpointY, firstEndpointZ, secondEndpointX, secondEndpointY, secondEndpointZ);
    }
 
-   /**
-    * Sets this line segment to be the same as the given line segment.
-    *
-    * @param other the other line segment to copy. Not modified.
-    */
-   @Override
-   public void set(LineSegment3D other)
-   {
-      LineSegment3DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public Point3DBasics getFirstEndpoint()
@@ -90,20 +78,6 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    public Point3DBasics getSecondEndpoint()
    {
       return secondEndpoint;
-   }
-
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(LineSegment3D other, double epsilon)
-   {
-      return LineSegment3DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -123,25 +97,6 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
-    * <p>
-    * The comparison is based on comparing the line segments' endpoints. Two line segments are
-    * considered geometrically equal even if they are defined with opposite direction.
-    * </p>
-    *
-    * @param other   the line segment to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(LineSegment3D other, double epsilon)
-   {
-      return LineSegment3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this line segment 3D as follows:<br>
     * Line segment 3D: 1st endpoint = (x, y, z), 2nd endpoint = (x, y, z)
     *
@@ -150,7 +105,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment3DString(this);
+      return LineSegment3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

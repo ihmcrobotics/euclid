@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -135,6 +136,22 @@ public class PointShape3D implements PointShape3DBasics
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getPointShape3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Provides a {@code String} representation of this point shape 3D as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 )
+    * </pre>
+    *
+    * @param format the format to be used.
+    * @return the {@code String} representing this point shape 3D.
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidShapeIOTools.getPointShape3DString(format, this);
    }
 }

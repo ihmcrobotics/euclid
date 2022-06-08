@@ -3,7 +3,9 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -16,7 +18,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
  * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
  * </p>
  */
-public interface LineSegment2DReadOnly
+public interface LineSegment2DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -193,9 +195,7 @@ public interface LineSegment2DReadOnly
    {
       double alpha = percentageAlongLineSegment(x, y);
 
-      if (alpha < epsilon)
-         return false;
-      if (alpha > 1.0 - epsilon)
+      if ((alpha < epsilon) || (alpha > 1.0 - epsilon))
          return false;
 
       return true;
@@ -797,12 +797,16 @@ public interface LineSegment2DReadOnly
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(LineSegment2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof LineSegment2DReadOnly))
+         return false;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) object;
       return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
    }
 
@@ -831,19 +835,41 @@ public interface LineSegment2DReadOnly
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other   the line segment to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(LineSegment2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
+      if (!(object instanceof LineSegment2DReadOnly))
+         return false;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) object;
+      if ((getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
-         return true;
-      if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
-            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
+            || (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
+                  && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)))
          return true;
       return false;
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment2DString(format, this);
    }
 }

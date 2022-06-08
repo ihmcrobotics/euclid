@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
  *
  * @author Sylvain Bertrand
  */
-public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
+public class Matrix3D implements Matrix3DBasics
 {
    /** The 1st row 1st column coefficient of this matrix. */
    private double m00;
@@ -97,13 +96,6 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    public Matrix3D(Matrix3DReadOnly other)
    {
       set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(Matrix3D other)
-   {
-      set((Matrix3DReadOnly) other);
    }
 
    @Override
@@ -266,36 +258,6 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    }
 
    /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Matrix3D other, double epsilon)
-   {
-      return Matrix3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
-    * <p>
-    * This method is equivalent to {@link #epsilonEquals(Matrix3D, double)}.
-    * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Matrix3D other, double epsilon)
-   {
-      return epsilonEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this matrix as follows:
     *
     * <pre>
@@ -309,7 +271,7 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrix3DString(this);
+      return Matrix3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
@@ -321,5 +283,21 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    public int hashCode()
    {
       return EuclidHashCodeTools.toIntHashCode(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(Matrix3DReadOnly, double)}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return Matrix3DBasics.super.epsilonEquals(object, epsilon);
    }
 }

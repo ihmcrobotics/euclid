@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
-import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -27,7 +24,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
  */
-public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<ConvexPolygon2D>
+public class ConvexPolygon2D implements ConvexPolygon2DBasics
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -234,24 +231,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(Vertex2DSupplier)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param other the other convex polygon to copy. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *                                  other polygon's vertices were edited.
-    */
-   @Override
-   public void set(ConvexPolygon2D other)
-   {
-      ConvexPolygon2DBasics.super.set(other);
-   }
-
-   /**
     * Compute centroid and area of this polygon. Formula taken from <a href=
     * "https://www.seas.upenn.edu/~sys502/extra_materials/Polygon%20Area%20and%20Centroid.pdf">here</a>.
     */
@@ -336,46 +315,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
          return ConvexPolygon2DBasics.super.equals((ConvexPolygon2DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * The method returns {@code false} if the two polygons have different size.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *                                  polygon's vertices were edited.
-    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
-    */
-   @Override
-   public boolean epsilonEquals(ConvexPolygon2D other, double epsilon)
-   {
-      return ConvexPolygon2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
-    * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible shift
-    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
-    * counter-clockwise order, are considered geometrically equal even if they do not start with the
-    * same vertex.
-    * </p>
-    *
-    * @param other   the convex polygon to compare to.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(ConvexPolygon2D other, double epsilon)
-   {
-      return ConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    @Override
