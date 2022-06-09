@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -25,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<FrameCapsule3D>
+public class FrameCapsule3D implements FrameCapsule3DBasics
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -139,13 +138,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameCapsule3D other)
-   {
-      FrameCapsule3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -231,39 +223,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    public FrameCapsule3D copy()
    {
       return new FrameCapsule3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two capsules have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other capsule to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two capsules are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameCapsule3D other, double epsilon)
-   {
-      return FrameCapsule3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two capsules are geometrically
-    * similar.
-    *
-    * @param other   the capsule to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the capsules represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameCapsule3D other, double epsilon)
-   {
-      return FrameCapsule3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

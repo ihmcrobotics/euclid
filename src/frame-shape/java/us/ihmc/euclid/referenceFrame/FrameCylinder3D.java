@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -10,8 +9,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -25,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<FrameCylinder3D>
+public class FrameCylinder3D implements FrameCylinder3DBasics
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -139,13 +138,6 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameCylinder3D other)
-   {
-      FrameCylinder3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -234,39 +226,6 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two cylinders have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other cylinder to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two cylinders are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameCylinder3D other, double epsilon)
-   {
-      return FrameCylinder3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
-    * similar.
-    *
-    * @param other   the cylinder to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameCylinder3D other, double epsilon)
-   {
-      return FrameCylinder3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameCylinder3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -312,6 +271,6 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameCylinder3DString(this);
+      return FrameCylinder3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

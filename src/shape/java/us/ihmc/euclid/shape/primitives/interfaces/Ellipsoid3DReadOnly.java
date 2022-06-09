@@ -7,6 +7,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -83,7 +84,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
 
    /**
     * Checks that the radius corresponding to the given axis is positive.
-    * 
+    *
     * @param axis to identify the component to check.
     * @throws IllegalArgumentException if the radius component is strictly negative.
     */
@@ -332,13 +333,17 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other   the other ellipsoid which pose and radii is to be compared against this ellipsoid
+    * @param object  the other object which pose and radii is to be compared against this ellipsoid
     *                pose and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Ellipsoid3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Ellipsoid3DReadOnly))
+         return false;
+      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) object;
       return getRadii().epsilonEquals(other.getRadii(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
@@ -347,12 +352,16 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param other   the ellipsoid to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Ellipsoid3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Ellipsoid3DReadOnly))
+         return false;
+      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) object;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
@@ -366,9 +375,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       if (areThisRadiiXYEqual && areThisRadiiXZEqual)
       { // This ellipsoid is a sphere.
         // First - assert that the other ellipsoid is also a sphere.
-         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusY(), epsilon))
-            return false;
-         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusZ(), epsilon))
+         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusY(), epsilon)
+               || !EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusZ(), epsilon))
             return false;
          // Second - assert that the radii are the same between the two ellipsoids.
          double thisRadiiSum = thisRadiusX + thisRadiusY + thisRadiusZ;
@@ -469,5 +477,24 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    default void transformToWorld(Transformable transformable)
    {
       transformable.applyTransform(getPose());
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ellipsoid3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getEllipsoid3DString(format, this);
    }
 }

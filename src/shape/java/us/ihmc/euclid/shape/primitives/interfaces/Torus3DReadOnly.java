@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -160,13 +161,17 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.
     *
-    * @param other   the other torus which pose and radii is to be compared against this torus pose and
-    *                radii. Not modified.
+    * @param object  the other object which pose and radii is to be compared against this torus pose
+    *                and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Torus3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Torus3DReadOnly))
+         return false;
+      Torus3DReadOnly other = (Torus3DReadOnly) object;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getAxis().epsilonEquals(other.getAxis(), epsilon);
@@ -175,18 +180,18 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
     *
-    * @param other   the torus to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Torus3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+      if (!(object instanceof Torus3DReadOnly))
          return false;
-      if (!EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon))
-         return false;
-
-      if (!getPosition().geometricallyEquals(getPosition(), epsilon))
+      Torus3DReadOnly other = (Torus3DReadOnly) object;
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) || !getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
@@ -210,15 +215,29 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       }
       else
       {
-         if (getRadius() != other.getRadius())
-            return false;
-         if (getTubeRadius() != other.getTubeRadius())
-            return false;
-         if (!getPosition().equals(other.getPosition()))
-            return false;
-         if (!getAxis().equals(other.getAxis()))
+         if ((getRadius() != other.getRadius()) || (getTubeRadius() != other.getTubeRadius()) || !getPosition().equals(other.getPosition())
+               || !getAxis().equals(other.getAxis()))
             return false;
          return true;
       }
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code torus3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getTorus3DString(format, this);
    }
 }

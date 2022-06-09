@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -256,12 +257,16 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this cylinder and {@code other} are equal to an
     * {@code epsilon}.
     *
-    * @param other   the other cylinder to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Cylinder3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Cylinder3DReadOnly))
+         return false;
+      Cylinder3DReadOnly other = (Cylinder3DReadOnly) object;
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
@@ -270,16 +275,17 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param other   the cylinder to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Cylinder3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon)
+      if (!(object instanceof Cylinder3DReadOnly))
          return false;
-
-      if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
+      Cylinder3DReadOnly other = (Cylinder3DReadOnly) object;
+      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
@@ -304,15 +310,28 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       }
       else
       {
-         if (getLength() != other.getLength())
-            return false;
-         if (getRadius() != other.getRadius())
-            return false;
-         if (!getPosition().equals(other.getPosition()))
-            return false;
-         if (!getAxis().equals(other.getAxis()))
+         if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition()) || !getAxis().equals(other.getAxis()))
             return false;
          return true;
       }
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code cylinder3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Cylinder 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getCylinder3DString(format, this);
    }
 }

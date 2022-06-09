@@ -5,6 +5,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 
@@ -193,14 +194,18 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
     * If the two ramps have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the other ramp which pose and size is to be compared against this ramp pose and
+    * @param object  the other object which pose and size is to be compared against this ramp pose and
     *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameRamp3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameRamp3DReadOnly))
+         return false;
+      FrameRamp3DReadOnly other = (FrameRamp3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -212,14 +217,18 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param other   the ramp to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameRamp3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameRamp3DReadOnly))
+         return false;
+      FrameRamp3DReadOnly other = (FrameRamp3DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Ramp3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
@@ -242,5 +251,24 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
          return false;
       else
          return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFrameRamp3DString(format, this);
    }
 }

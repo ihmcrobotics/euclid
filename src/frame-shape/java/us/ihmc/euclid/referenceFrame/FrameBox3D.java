@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -35,7 +34,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
+public class FrameBox3D implements FrameBox3DBasics
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The reference frame in which this shape is expressed. */
@@ -387,13 +386,6 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameBox3D other)
-   {
-      FrameBox3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public FrameBox3D copy()
    {
       return new FrameBox3D(this);
@@ -457,38 +449,6 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
       boolean hasBeenRemoved = changeListeners.remove(listener);
       hasBeenRemoved |= pose.removeChangeListener(listener);
       return hasBeenRemoved;
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two faces have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other box to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameBox3D other, double epsilon)
-   {
-      return FrameBox3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param other   the box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameBox3D other, double epsilon)
-   {
-      return FrameBox3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -74,7 +75,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
 
    /**
     * Checks that the size component corresponding to the given axis is positive.
-    * 
+    *
     * @param axis to identify the component to check.
     * @throws IllegalArgumentException if the size component is strictly negative.
     */
@@ -356,7 +357,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the {@code ConvexPolytope3DReadOnly} view backed this ramp.
-    * 
+    *
     * @return the polytope view of this ramp.
     */
    RampPolytope3DView asConvexPolytope();
@@ -389,13 +390,17 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other   the other ramp which pose and size is to be compared against this ramp pose and
+    * @param object  the other object which pose and size is to be compared against this ramp pose and
     *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Ramp3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Ramp3DReadOnly))
+         return false;
+      Ramp3DReadOnly other = (Ramp3DReadOnly) object;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
@@ -405,12 +410,16 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param other   the ramp to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Ramp3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Ramp3DReadOnly))
+         return false;
+      Ramp3DReadOnly other = (Ramp3DReadOnly) object;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon)
             && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
@@ -453,5 +462,24 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    default void transformToWorld(Transformable transformable)
    {
       transformable.applyTransform(getPose());
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getRamp3DString(format, this);
    }
 }

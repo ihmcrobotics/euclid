@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -727,12 +728,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
     *
-    * @param other   the other face to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Face3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Face3DReadOnly))
+         return false;
+      Face3DReadOnly other = (Face3DReadOnly) object;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -747,12 +752,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
     *
-    * @param other   the other face to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Face3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Face3DReadOnly))
+         return false;
+      Face3DReadOnly other = (Face3DReadOnly) object;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -796,9 +805,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    {
       if (other == this)
          return true;
-      if (other == null)
-         return false;
-      if (getNumberOfEdges() != other.getNumberOfEdges())
+      if ((other == null) || (getNumberOfEdges() != other.getNumberOfEdges()))
          return false;
 
       for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
@@ -807,5 +814,28 @@ public interface Face3DReadOnly extends SupportingVertexHolder
             return false;
       }
       return true;
+   }
+   
+   /**
+    * Gets the representative {@code String} of {@code face3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getFace3DString(format, this);
    }
 }

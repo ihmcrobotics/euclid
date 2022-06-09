@@ -1,11 +1,10 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -23,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
+public class Cylinder3D implements Cylinder3DBasics
 {
    /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
@@ -92,17 +91,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public Cylinder3D(Cylinder3DReadOnly other)
    {
       set(other);
-   }
-
-   /**
-    * Copies the {@code other} cylinder data into {@code this}.
-    *
-    * @param other the other cylinder to copy. Not modified.
-    */
-   @Override
-   public void set(Cylinder3D other)
-   {
-      Cylinder3DBasics.super.set(other);
    }
 
    /**
@@ -197,33 +185,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other cylinder to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Cylinder3D other, double epsilon)
-   {
-      return Cylinder3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
-    * similar.
-    *
-    * @param other   the cylinder to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Cylinder3D other, double epsilon)
-   {
-      return Cylinder3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Cylinder3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -263,6 +224,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getCylinder3DString(this);
+      return Cylinder3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -84,7 +85,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
    /**
     * Checks that the size component corresponding to the given axis is positive.
-    * 
+    *
     * @param axis to identify the component to check.
     * @throws IllegalArgumentException if the size component is strictly negative.
     */
@@ -349,7 +350,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the {@code ConvexPolytope3DReadOnly} view backed this box.
-    * 
+    *
     * @return the polytope view of this box.
     */
    BoxPolytope3DView asConvexPolytope();
@@ -410,7 +411,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * @param vertexIndex  the index in [0, 7] of the vertex to pack.
     * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
-    */tetrm
+    */
    default void getVertex(int vertexIndex, Point3DBasics vertexToPack)
    {
       if (vertexIndex < 0 || vertexIndex >= 8)
@@ -430,13 +431,17 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other   the other box which pose and size is to be compared against this box pose and
+    * @param object  the other object which pose and size is to be compared against this box pose and
     *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Box3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Box3DReadOnly))
+         return false;
+      Box3DReadOnly other = (Box3DReadOnly) object;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
@@ -444,12 +449,16 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
     *
-    * @param other   the box to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Box3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Box3DReadOnly))
+         return false;
+      Box3DReadOnly other = (Box3DReadOnly) object;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
@@ -501,5 +510,24 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    default void transformToWorld(Transformable transformable)
    {
       transformable.applyTransform(getPose());
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code box3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getBox3DString(format, this);
    }
 }

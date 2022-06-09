@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -358,13 +359,17 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * If the two cylinders have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the other cylinder to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameCylinder3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameCylinder3DReadOnly))
+         return false;
+      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -375,14 +380,18 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param other   the cylinder to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameCylinder3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameCylinder3DReadOnly))
+         return false;
+      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Cylinder3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
@@ -409,17 +418,18 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       }
       else
       {
-         if (getReferenceFrame() != other.getReferenceFrame())
-            return false;
-         if (getLength() != other.getLength())
-            return false;
-         if (getRadius() != other.getRadius())
-            return false;
-         if (!getPosition().equals(other.getPosition()))
+         if ((getReferenceFrame() != other.getReferenceFrame()) || (getLength() != other.getLength()) || (getRadius() != other.getRadius())
+               || !getPosition().equals(other.getPosition()))
             return false;
          if (!getAxis().equals(other.getAxis()))
             return false;
          return true;
       }
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFrameCylinder3DString(format, this);
    }
 }

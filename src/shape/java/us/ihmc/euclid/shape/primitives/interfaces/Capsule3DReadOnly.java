@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -195,12 +196,16 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
     *
-    * @param other   the other capsule to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Capsule3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Capsule3DReadOnly))
+         return false;
+      Capsule3DReadOnly other = (Capsule3DReadOnly) object;
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
@@ -209,18 +214,17 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
     * similar.
     *
-    * @param other   the other capsule to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Capsule3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+      if (!(object instanceof Capsule3DReadOnly))
          return false;
-      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
-         return false;
-
-      if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
+      Capsule3DReadOnly other = (Capsule3DReadOnly) object;
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) || !EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
@@ -245,13 +249,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       }
       else
       {
-         if (getLength() != other.getLength())
-            return false;
-         if (getRadius() != other.getRadius())
-            return false;
-         if (!getPosition().equals(other.getPosition()))
-            return false;
-         if (!getAxis().equals(other.getAxis()))
+         if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition()) || !getAxis().equals(other.getAxis()))
             return false;
          return true;
       }
@@ -262,5 +260,24 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
       EuclidShapeTools.boundingBoxCapsule3D(getPosition(), getAxis(), getLength(), getRadius(), boundingBoxToPack);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getCapsule3DString(format, this);
    }
 }

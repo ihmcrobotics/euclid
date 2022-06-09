@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -37,7 +36,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
+public class Ramp3D implements Ramp3DBasics
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
 
@@ -246,17 +245,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       centroidDirty = false;
    }
 
-   /**
-    * Copies the {@code other} ramp data into {@code this}.
-    *
-    * @param other the other ramp to copy. Not modified.
-    */
-   @Override
-   public void set(Ramp3D other)
-   {
-      Ramp3DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public Shape3DPose getPose()
@@ -404,34 +392,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other ramp to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Ramp3D other, double epsilon)
-   {
-      return Ramp3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically similar,
-    * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
-    * are geometrically similar given {@code epsilon}.
-    *
-    * @param other   the ramp to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Ramp3D other, double epsilon)
-   {
-      return Ramp3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Ramp3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -468,6 +428,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getRamp3DString(this);
+      return Ramp3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -445,8 +446,12 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
     * @return {@code true} if the two boxes are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameBox3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameBox3DReadOnly))
+         return false;
+      FrameBox3DReadOnly other = (FrameBox3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -462,8 +467,12 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameBox3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameBox3DReadOnly))
+         return false;
+      FrameBox3DReadOnly other = (FrameBox3DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Box3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
@@ -486,5 +495,24 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
          return false;
       else
          return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code box3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFrameBox3DString(format, this);
    }
 }

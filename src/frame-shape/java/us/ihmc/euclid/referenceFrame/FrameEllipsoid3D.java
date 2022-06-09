@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -14,9 +13,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -30,7 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<FrameEllipsoid3D>
+public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -376,49 +375,9 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameEllipsoid3D other)
-   {
-      FrameEllipsoid3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public FrameEllipsoid3D copy()
    {
       return new FrameEllipsoid3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two ellipsoids have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other ellipsoid to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two ellipsoids are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameEllipsoid3D other, double epsilon)
-   {
-      return FrameEllipsoid3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
-    * similar.
-    *
-    * @param other   the ellipsoid to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameEllipsoid3D other, double epsilon)
-   {
-      return FrameEllipsoid3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -464,6 +423,6 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameEllipsoid3DString(this);
+      return FrameEllipsoid3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

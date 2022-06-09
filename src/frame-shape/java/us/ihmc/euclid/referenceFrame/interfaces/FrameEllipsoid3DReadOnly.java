@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -350,14 +351,18 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
     * If the two ellipsoids have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the other ellipsoid which pose and radii is to be compared against this ellipsoid
+    * @param object  the other object which pose and radii is to be compared against this ellipsoid
     *                pose and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameEllipsoid3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameEllipsoid3DReadOnly))
+         return false;
+      FrameEllipsoid3DReadOnly other = (FrameEllipsoid3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -368,14 +373,18 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param other   the ellipsoid to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameEllipsoid3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameEllipsoid3DReadOnly))
+         return false;
+      FrameEllipsoid3DReadOnly other = (FrameEllipsoid3DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Ellipsoid3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
@@ -398,5 +407,11 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
          return false;
       else
          return getPose().equals(other.getPose()) && getRadii().equals(other.getRadii());
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFrameEllipsoid3DString(format, this);
    }
 }

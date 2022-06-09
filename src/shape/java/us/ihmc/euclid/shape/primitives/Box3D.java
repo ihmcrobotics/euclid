@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -27,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Box3D implements Box3DBasics, GeometryObject<Box3D>
+public class Box3D implements Box3DBasics
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** Pose of this box. */
@@ -200,17 +199,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       supplier = newSupplier;
    }
 
-   /**
-    * Copies the {@code other} box data into {@code this}.
-    *
-    * @param other the other box to copy. Not modified.
-    */
-   @Override
-   public void set(Box3D other)
-   {
-      Box3DBasics.super.set(other);
-   }
-
    @Override
    public Box3D copy()
    {
@@ -278,32 +266,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other box to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Box3D other, double epsilon)
-   {
-      return Box3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param other   the box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Box3D other, double epsilon)
-   {
-      return Box3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Box3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -342,6 +304,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getBox3DString(this);
+      return Box3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

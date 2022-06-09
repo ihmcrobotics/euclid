@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -47,7 +46,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3D>
+public class FrameRamp3D implements FrameRamp3DBasics
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The reference frame in which this shape is expressed. */
@@ -560,13 +559,6 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       supplier = newSupplier;
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public void set(FrameRamp3D other)
-   {
-      FrameRamp3DBasics.super.set(other);
-   }
-
    /**
     * Gets the length of this ramp's slope part.
     * <p>
@@ -611,40 +603,6 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       if (polytopeView == null)
          polytopeView = new FrameRampPolytope3D(this);
       return polytopeView;
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two ramp have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other ramp to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two ramps are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameRamp3D other, double epsilon)
-   {
-      return FrameRamp3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically similar,
-    * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
-    * are geometrically similar given {@code epsilon}.
-    *
-    * @param other   the ramp to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameRamp3D other, double epsilon)
-   {
-      return FrameRamp3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

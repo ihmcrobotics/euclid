@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.polytope;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
@@ -14,13 +13,13 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -34,7 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Sylvain Bertrand
  */
 public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D>
-      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, FrameChangeable, GeometryObject<FrameConvexPolytope3D>
+      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, FrameChangeable
 {
    /** The reference frame in which this polytope is expressed. */
    private ReferenceFrame referenceFrame;
@@ -173,7 +172,6 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
     * WARNING: This method generates garbage.
     * </p>
     */
-   @Override
    public void set(FrameConvexPolytope3D other)
    {
       this.set((FrameConvexPolytope3DReadOnly) other);
@@ -272,40 +270,6 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameConvexPolytope3D other, double epsilon)
-   {
-      return FrameConvexPolytope3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two convex polytopes are
-    * geometrically similar.
-    *
-    * @param other   the convex polytope to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytope represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameConvexPolytope3D other, double epsilon)
-   {
-      return FrameConvexPolytope3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -361,6 +325,6 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameConvexPolytope3DString(this);
+      return FrameConvexPolytope3DReadOnly.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

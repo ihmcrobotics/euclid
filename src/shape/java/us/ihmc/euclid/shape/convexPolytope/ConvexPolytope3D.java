@@ -5,7 +5,6 @@ import java.util.List;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
@@ -22,7 +21,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
  * @author Apoorv Shrivastava
  * @author Sylvain Bertrand
  */
-public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D> implements GeometryObject<ConvexPolytope3D>
+public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D>
 {
    /** The centroid of this convex polytope. */
    private final Point3D centroid = new Point3D();
@@ -108,7 +107,6 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
     * WARNING: This method generates garbage.
     * </p>
     */
-   @Override
    public void set(ConvexPolytope3D other)
    {
       this.set((ConvexPolytope3DReadOnly) other);
@@ -130,35 +128,6 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
    public ConvexPolytope3D copy()
    {
       return new ConvexPolytope3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(ConvexPolytope3D other, double epsilon)
-   {
-      return super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two convex polytopes are
-    * geometrically similar.
-    *
-    * @param other   the convex polytope to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytope represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(ConvexPolytope3D other, double epsilon)
-   {
-      return super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -22,7 +21,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
+public class Torus3D implements Torus3DBasics
 {
    /** Position of this torus' center. */
    private final Point3D position = new Point3D();
@@ -80,17 +79,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    }
 
    /**
-    * Copies the {@code other} torus data into {@code this}.
-    *
-    * @param other the other torus to copy. Not modified.
-    */
-   @Override
-   public void set(Torus3D other)
-   {
-      Torus3DBasics.super.set(other);
-   }
-
-   /**
     * Sets the radii of this torus 3D.
     *
     * @param radius     radius from the torus center to the tube center.
@@ -141,32 +129,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public Torus3D copy()
    {
       return new Torus3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other torus to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Torus3D other, double epsilon)
-   {
-      return Torus3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
-    *
-    * @param other   the torus to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Torus3D other, double epsilon)
-   {
-      return Torus3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -178,12 +178,12 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Object other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (!(other instanceof Point3DReadOnly))
-      {
+      if (!(object instanceof Point3DReadOnly))
          return false;
-      }
-      return distance((Point3DReadOnly) other) <= epsilon;
+      Point3DReadOnly other = (Point3DReadOnly) object;
+      return distance(other) <= epsilon;
    }
 }
