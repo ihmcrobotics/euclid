@@ -988,7 +988,7 @@ public class EuclidGeometryTestTools
    @Deprecated
    public static void assertOrientation2DEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      EuclidCoreTestTools.assertOrientation2DEquals(expected, actual, epsilon);
+      EuclidCoreTestTools.assertEquals(expected, actual, epsilon);
    }
 
    /**
@@ -1010,7 +1010,7 @@ public class EuclidGeometryTestTools
    @Deprecated
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon);
+      EuclidCoreTestTools.assertEquals(messagePrefix, expected, actual, epsilon, EuclidCoreTestTools.DEFAULT_FORMAT);
    }
 
    /**
@@ -1038,7 +1038,7 @@ public class EuclidGeometryTestTools
                                                 double epsilon,
                                                 String format)
    {
-      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -1059,7 +1059,7 @@ public class EuclidGeometryTestTools
    @Deprecated
    public static void assertOrientation2DGeometricallyEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(expected, actual, epsilon);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, epsilon);
    }
 
    /**
@@ -1081,7 +1081,7 @@ public class EuclidGeometryTestTools
    @Deprecated
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon);
+      EuclidCoreTestTools.assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, EuclidCoreTestTools.DEFAULT_FORMAT);
    }
 
    /**
@@ -1109,7 +1109,7 @@ public class EuclidGeometryTestTools
                                                              double epsilon,
                                                              String format)
    {
-      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**

@@ -752,7 +752,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       QuaternionReadOnly actual = linearTransform3D.getAsQuaternion();
       Quaternion expected = new Quaternion();
 
-      EuclidCoreTestTools.assertQuaternionEquals(expected, actual, SMALL_EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, SMALL_EPSILON);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -789,9 +789,9 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       Vector3D expectedScale = new Vector3D(1, 1, 1);
       Quaternion expectedPostScale = new Quaternion();
 
-      EuclidCoreTestTools.assertQuaternionEquals(expectedPreScale, actualPreScale, SMALL_EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPreScale, actualPreScale, SMALL_EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedScale, actualScale, SMALL_EPSILON);
-      EuclidCoreTestTools.assertQuaternionEquals(expectedPostScale, actualPostScale, SMALL_EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPostScale, actualPostScale, SMALL_EPSILON);
 
       for (int i = 0; i < ITERATIONS; i++)
       {

@@ -661,19 +661,19 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
          qExpected.multiply(quaternion, qOriginal);
 
          axisAngle.transform(qOriginal, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, getEpsilon());
 
          qActual.set(qOriginal);
          axisAngle.transform(qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, getEpsilon());
 
          axisAngle = createAxisAngle(0.0, 0.0, 0.0, 0.0);
          axisAngle.transform(qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, getEpsilon());
 
          qActual = new Quaternion();
          axisAngle.transform(qOriginal, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qOriginal, qActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(qOriginal, qActual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

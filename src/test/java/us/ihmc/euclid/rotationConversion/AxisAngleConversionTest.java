@@ -163,7 +163,7 @@ public class AxisAngleConversionTest
          AxisAngleConversion.convertRotationVectorToAxisAngle(rotationVector.getX(), rotationVector.getY(), rotationVector.getZ(), expectedAxisAngle);
          AxisAngleConversion.convertRotationVectorToAxisAngle(rotationVector, actualAxisAngle);
 
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
          // Assert that the parameter does not get modified
          assertTrue(rotationVector.equals(rotationVectorCopy));
       }

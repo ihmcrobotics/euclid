@@ -990,7 +990,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -1065,7 +1065,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**

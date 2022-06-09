@@ -1282,11 +1282,11 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       quaternionExpected.multiply(quaternionOriginal);
 
       transform.transform(quaternionOriginal, quaternionActual);
-      EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPS);
+      EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPS);
 
       quaternionActual.set(quaternionOriginal);
       transform.transform(quaternionActual);
-      EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPS);
+      EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPS);
    }
 
    @Test

@@ -20,10 +20,6 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -1263,61 +1259,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two quaternions are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected quaternion. Not modified.
-    * @param actual   the actual quaternion. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two quaternions are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertQuaternionEquals(QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon)
-   {
-      assertTuple4DEquals(expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two quaternions are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected quaternion. Not modified.
-    * @param actual        the actual quaternion. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two quaternions are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertQuaternionEquals(String messagePrefix, QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon)
-   {
-      assertTuple4DEquals(messagePrefix, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two quaternions are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected quaternion. Not modified.
-    * @param actual        the actual quaternion. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two quaternions are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertQuaternionEquals(String messagePrefix, QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon, String format)
-   {
-      assertTuple4DEquals(messagePrefix, expected, actual, epsilon, format);
-   }
-
-   /**
     * Asserts that the two quaternions represent the same geometry to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
@@ -1388,68 +1329,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts on a per component basis if the two axis-angles are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected axis-angle. Not modified.
-    * @param actual   the actual axis-angle. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two axis-angles are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertAxisAngleEquals(AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon)
-   {
-      assertAxisAngleEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis if the two axis-angles are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected axis-angle. Not modified.
-    * @param actual        the actual axis-angle. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two axis-angles are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertAxisAngleEquals(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon)
-   {
-      assertAxisAngleEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis if the two axis-angles are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected axis-angle. Not modified.
-    * @param actual        the actual axis-angle. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two axis-angles are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertAxisAngleEquals(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-   }
-
-   /**
     * Asserts that the two axis-angles represent the same geometry to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
@@ -1517,65 +1396,6 @@ public class EuclidCoreTestTools
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
-   }
-
-   /**
-    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected orientation 2D. Not modified.
-    * @param actual   the actual orientation 2D. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertOrientation2DEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
-   {
-      assertEquals(expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected orientation 2D. Not modified.
-    * @param actual        the actual orientation 2D. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
-   {
-      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected orientation 2D. Not modified.
-    * @param actual        the actual orientation 2D. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertOrientation2DEquals(String messagePrefix,
-                                                Orientation2DReadOnly expected,
-                                                Orientation2DReadOnly actual,
-                                                double epsilon,
-                                                String format)
-   {
-      assertEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**

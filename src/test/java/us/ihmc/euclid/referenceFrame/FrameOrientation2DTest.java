@@ -84,7 +84,7 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
          FrameOrientation2D expected = new FrameOrientation2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidCoreTestTools.assertOrientation2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

@@ -139,10 +139,10 @@ public class QuaternionToolsTest
 
          qExpected.set(q);
          QuaternionTools.multiply(q, qNeutral, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          assertTrue(qNeutral.equals(qNeutralCopy));
          QuaternionTools.multiply(qNeutral, q, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Test that q * q^-1 = qNeutral
@@ -157,9 +157,9 @@ public class QuaternionToolsTest
          qInv.conjugate();
          qExpected.setToZero();
          QuaternionTools.multiply(q, qInv, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          QuaternionTools.multiply(qInv, q, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
@@ -180,10 +180,10 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(qExpected, EPSILON);
 
          QuaternionTools.multiply(q1, q2, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
 
          QuaternionTools.multiply(q2, q1, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Check that we can do in-place multiplication
@@ -198,7 +198,7 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(qExpected, EPSILON);
 
          QuaternionTools.multiply(qActual, qActual, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
    }
 
@@ -222,12 +222,12 @@ public class QuaternionToolsTest
          qExpected.set(q);
 
          QuaternionTools.multiplyConjugateLeft(qNeutral, q, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          assertTrue(qNeutral.equals(qNeutralCopy));
 
          qExpected.conjugate();
          QuaternionTools.multiplyConjugateLeft(q, qNeutral, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Test that conj(q^-1) * q = q * q and that conj(q) * q^-1 = (q * q)^-1
@@ -247,11 +247,11 @@ public class QuaternionToolsTest
          qInv.conjugate();
 
          QuaternionTools.multiplyConjugateLeft(qInv, q, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          QuaternionTools.multiplyConjugateLeft(q, qInv, qActual);
 
          qExpected.conjugate();
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
@@ -272,11 +272,11 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(qExpected, EPSILON);
 
          QuaternionTools.multiplyConjugateLeft(q1, q2, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
 
          qExpected.conjugate();
          QuaternionTools.multiplyConjugateLeft(q2, q1, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Check that we can do in-place multiplication, so we test that: conj(q) * q = qNeutral
@@ -290,7 +290,7 @@ public class QuaternionToolsTest
          qExpected.setToZero();
 
          QuaternionTools.multiplyConjugateLeft(qActual, qActual, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
    }
 
@@ -314,12 +314,12 @@ public class QuaternionToolsTest
          qExpected.set(q);
 
          QuaternionTools.multiplyConjugateRight(q, qNeutral, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          assertTrue(qNeutral.equals(qNeutralCopy));
 
          qExpected.conjugate();
          QuaternionTools.multiplyConjugateRight(qNeutral, q, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Test that q^-1 * conj(q) = (q * q)^-1 and that q * conj(q^-1) = q * q
@@ -339,10 +339,10 @@ public class QuaternionToolsTest
          qInv.conjugate();
 
          QuaternionTools.multiplyConjugateRight(q, qInv, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
          QuaternionTools.multiplyConjugateRight(qInv, q, qActual);
          qExpected.conjugate();
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
@@ -363,11 +363,11 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(qExpected, EPSILON);
 
          QuaternionTools.multiplyConjugateRight(q1, q2, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
 
          qExpected.conjugate();
          QuaternionTools.multiplyConjugateRight(q2, q1, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Check that we can do in-place multiplication, so we test that: q * conj(q) = qNeutral
@@ -381,7 +381,7 @@ public class QuaternionToolsTest
          qExpected.setToZero();
 
          QuaternionTools.multiplyConjugateRight(qActual, qActual, qActual);
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
    }
 
@@ -461,7 +461,7 @@ public class QuaternionToolsTest
          qExpected.normalize();
          qActual.normalizeAndLimitToPi();
 
-         EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(qExpected, qActual, EPSILON);
       }
 
       // Test that outside the range [-Pi, Pi] normalizedAndLimitToMinusPiToPi actually limits the angle described by the quaternion to interval [-Pi, Pi].
@@ -1078,14 +1078,14 @@ public class QuaternionToolsTest
 
          quaternionActual.set(quaternionOriginal);
          QuaternionTools.transform(quaternion, quaternionActual, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
 
          quaternionActual.setToNaN();
          QuaternionTools.transform(quaternion, quaternionOriginal, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
 
          QuaternionTools.inverseTransform(quaternion, quaternionActual, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionOriginal, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionOriginal, quaternionActual, EPSILON);
       }
    }
 
@@ -1201,13 +1201,13 @@ public class QuaternionToolsTest
 
          QuaternionTools.multiply(quaternion, new Quaternion(matrix), quaternionExpected);
          QuaternionTools.multiply(quaternion, false, matrix, false, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
          assertTrue(matrix.equals(matrixCopy));
 
          // Check that is works even the two quaternion arguments are the same object
          quaternionActual.set(quaternion);
          QuaternionTools.multiply(quaternionActual, false, matrix, false, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
          assertTrue(matrix.equals(matrixCopy));
       }
 
@@ -1221,7 +1221,7 @@ public class QuaternionToolsTest
 
          QuaternionTools.multiply(conjugate, new Quaternion(matrix), quaternionExpected);
          QuaternionTools.multiply(quaternion, true, matrix, false, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
@@ -1272,13 +1272,13 @@ public class QuaternionToolsTest
 
          QuaternionTools.multiply(new Quaternion(matrix), quaternion, quaternionExpected);
          QuaternionTools.multiply(matrix, false, quaternion, false, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
          assertTrue(matrix.equals(matrixCopy));
 
          // Check that is works even the two quaternion arguments are the same object
          quaternionActual.set(quaternion);
          QuaternionTools.multiply(matrix, false, quaternionActual, false, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
          assertTrue(matrix.equals(matrixCopy));
       }
 
@@ -1292,7 +1292,7 @@ public class QuaternionToolsTest
 
          QuaternionTools.multiply(new Quaternion(matrix), conjugate, quaternionExpected);
          QuaternionTools.multiply(matrix, false, quaternion, true, quaternionActual);
-         EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPSILON);
+         EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPSILON);
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)

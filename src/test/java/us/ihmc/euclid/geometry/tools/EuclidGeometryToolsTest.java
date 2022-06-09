@@ -807,7 +807,7 @@ public class EuclidGeometryToolsTest
             expectedAxisAngle.set(expectedAxis, expectedAngle);
          }
 
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
 
       // Test close to 0.0
@@ -846,7 +846,7 @@ public class EuclidGeometryToolsTest
          }
 
          // Can not be as accurate as we get closer to 0.0
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, 1.0e-10);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, 1.0e-10);
       }
 
       // Test close to Math.PI
@@ -913,7 +913,7 @@ public class EuclidGeometryToolsTest
             expectedAxisAngle.set(expectedAxis, expectedAngle);
          }
 
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
 
       // Test exactly at Math.PI
@@ -942,7 +942,7 @@ public class EuclidGeometryToolsTest
             expectedAxisAngle.set(expectedAxis, expectedAngle);
          }
 
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
 
       // Test axisAngleFromZUpToVector3D(Vector3DReadOnly vector, AxisAngleBasics rotationToPack) & axisAngleFromZUpToVector3D(Vector3DReadOnly vector)
@@ -954,9 +954,9 @@ public class EuclidGeometryToolsTest
          AxisAngle actualAxisAngle = new AxisAngle();
          EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(zUp, vector, expectedAxisAngle);
          EuclidGeometryTools.orientation3DFromZUpToVector3D(vector, actualAxisAngle);
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
          actualAxisAngle = EuclidGeometryTools.axisAngleFromZUpToVector3D(vector);
-         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 

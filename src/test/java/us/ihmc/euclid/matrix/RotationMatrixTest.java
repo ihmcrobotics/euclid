@@ -1550,17 +1550,17 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          matrix.transform(original, expected);
          actual.set(original);
          matrix.transform(actual);
-         EuclidCoreTestTools.assertQuaternionEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
          actual.setToNaN();
          matrix.transform(original, actual);
-         EuclidCoreTestTools.assertQuaternionEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
          matrix.setToZero();
          matrix.transform(original, expected);
          actual.set(original);
          matrix.transform(actual);
-         EuclidCoreTestTools.assertQuaternionEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       }
    }
 
