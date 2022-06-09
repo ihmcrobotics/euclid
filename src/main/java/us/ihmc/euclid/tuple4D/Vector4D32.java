@@ -207,7 +207,7 @@ public class Vector4D32 implements Vector4DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple4DString(this);
+      return Vector4DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

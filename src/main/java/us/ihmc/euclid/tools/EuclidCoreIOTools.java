@@ -88,7 +88,6 @@ public class EuclidCoreIOTools
       else
          return rigidBodyTransform.getClass().getSimpleName() + ": " + getOrientation3DString(format, rigidBodyTransform.getRotation()) + ", "
                + getTuple3DString(format, rigidBodyTransform.getTranslation());
-      // TODO:
    }
 
    /**

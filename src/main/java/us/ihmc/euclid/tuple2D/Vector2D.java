@@ -142,7 +142,7 @@ public class Vector2D implements Vector2DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple2DString(this);
+      return Vector2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

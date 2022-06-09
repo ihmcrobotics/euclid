@@ -395,29 +395,27 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
     */
+   @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
-      if(!(object instanceof YawPitchRollReadOnly))
+      if (!(object instanceof YawPitchRollReadOnly))
          return false;
-      
-      YawPitchRollReadOnly other = (YawPitchRollReadOnly) object;      
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
+
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) object;
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;
-      if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
-         return false;
-         
+
       return true;
    }
-   
+
    /**
-   * Provides a {@code String} representation of this yaw-pitch-roll as follows: yaw-pitch-roll: (yaw,
-   * pitch, roll).
-   * 
-   * @param  format the format to be used
-   * @return the {@code String} representing this yaw-pitch-roll.
-   */
+    * Provides a {@code String} representation of this yaw-pitch-roll as follows: yaw-pitch-roll: (yaw,
+    * pitch, roll).
+    *
+    * @param format the format to be used
+    * @return the {@code String} representing this yaw-pitch-roll.
+    */
    @Override
    default String toString(String format)
    {

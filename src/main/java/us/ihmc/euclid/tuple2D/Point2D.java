@@ -140,7 +140,7 @@ public class Point2D implements Point2DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple2DString(this);
+      return Point2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

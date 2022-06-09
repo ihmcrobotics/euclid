@@ -60,7 +60,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
    {
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
-   
+
    default double differenceLengthSquared(Vector3DReadOnly other)
    {
       double dx = getX() - other.getX();
@@ -68,7 +68,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       double dz = getZ() - other.getZ();
       return EuclidCoreTools.normSquared(dx, dy, dz);
    }
-   
+
    default double differenceLength(Vector3DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
@@ -119,6 +119,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
+   @Override
    default boolean geometricallyEquals(Object other, double epsilon)
    {
       if( !(other instanceof Vector3DReadOnly))

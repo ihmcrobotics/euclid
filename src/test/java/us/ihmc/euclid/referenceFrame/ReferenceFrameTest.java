@@ -49,13 +49,13 @@ public class ReferenceFrameTest
          RigidBodyTransform actual = new RigidBodyTransform();
          ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant" + i, world, expected);
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
 
          constantFrame.getTransformToParent(actual);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -65,13 +65,13 @@ public class ReferenceFrameTest
          ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant" + i, world, expected);
          expected.invert();
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
 
          constantFrame.getTransformToParent(actual);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPSILON);
       }
    }
 
@@ -185,7 +185,7 @@ public class ReferenceFrameTest
          RigidBodyTransform shouldBeIdentity = new RigidBodyTransform(frameB.getTransformToDesiredFrame(frameA));
          shouldBeIdentity.multiply(frameA.getTransformToDesiredFrame(frameB));
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(new RigidBodyTransform(), shouldBeIdentity, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(new RigidBodyTransform(), shouldBeIdentity, EPSILON);
       }
    }
 
@@ -206,11 +206,11 @@ public class ReferenceFrameTest
          {
             RigidBodyTransform transformToParentOne = frame.getTransformToParent();
             RigidBodyTransform transformToParentTwo = frame.getTransformToDesiredFrame(parent);
-            EuclidCoreTestTools.assertRigidBodyTransformEquals(transformToParentOne, transformToParentTwo, EPSILON);
+            EuclidCoreTestTools.assertGeometricallyEquals(transformToParentOne, transformToParentTwo, EPSILON);
 
             RigidBodyTransform transformToParentThree = parent.getTransformToDesiredFrame(frame);
             transformToParentThree.invert();
-            EuclidCoreTestTools.assertRigidBodyTransformEquals(transformToParentOne, transformToParentThree, EPSILON);
+            EuclidCoreTestTools.assertGeometricallyEquals(transformToParentOne, transformToParentThree, EPSILON);
          }
       }
    }
@@ -340,7 +340,7 @@ public class ReferenceFrameTest
          ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToSelf = frame.getTransformToDesiredFrame(frame);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(new RigidBodyTransform(), transformToSelf, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(new RigidBodyTransform(), transformToSelf, EPSILON);
       }
    }
 
@@ -360,32 +360,32 @@ public class ReferenceFrameTest
 
          transformTwo.invert();
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(transformOne, transformTwo, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(transformOne, transformTwo, EPSILON);
 
          RigidBodyTransform transformThree = new RigidBodyTransform();
          if (frame2.getTransformToRoot() != null)
             transformThree.setAndInvert(frame2.getTransformToRoot());
          if (frame1.getTransformToRoot() != null)
             transformThree.multiply(frame1.getTransformToRoot());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(transformOne, transformThree, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(transformOne, transformThree, EPSILON);
 
          RigidBodyTransform transformFour = new RigidBodyTransform();
          transformFour.set(worldFrame.getTransformToDesiredFrame(frame2));
          transformFour.multiply(frame1.getTransformToDesiredFrame(worldFrame));
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(transformOne, transformFour, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(transformOne, transformFour, EPSILON);
 
          ReferenceFrame frame3 = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformFive = new RigidBodyTransform();
          transformFive.set(frame3.getTransformToDesiredFrame(frame2));
          transformFive.multiply(frame1.getTransformToDesiredFrame(frame3));
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(transformOne, transformFive, EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(transformOne, transformFive, EPSILON);
       }
    }
 
    private void verifyTransformToRootByClimbingTree(ReferenceFrame frame, RigidBodyTransform transformToRootOne)
    {
       RigidBodyTransform transformToRootTwo = getTransformToDesiredAncestorByClimbingTree(frame, null);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(transformToRootOne, transformToRootTwo, EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(transformToRootOne, transformToRootTwo, EPSILON);
    }
 
    private RigidBodyTransform getTransformToDesiredAncestorByClimbingTree(ReferenceFrame frame, ReferenceFrame desiredFrame)

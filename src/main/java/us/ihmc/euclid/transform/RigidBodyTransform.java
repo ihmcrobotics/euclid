@@ -1013,13 +1013,7 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
    @Override
    public String toString()
    {
-      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-   }
-   
-   @Override
-   public String toString(String format)
-   {
-      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
+      return RigidBodyTransformBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    @Override

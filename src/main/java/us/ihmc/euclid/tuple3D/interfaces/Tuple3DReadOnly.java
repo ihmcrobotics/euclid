@@ -259,11 +259,10 @@ public interface Tuple3DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof Tuple3DReadOnly))
+      if (!(object instanceof Tuple3DReadOnly))
          return false;
-      
       Tuple3DReadOnly other = (Tuple3DReadOnly) object;
-      return TupleTools.epsilonEquals(this, (Tuple3DReadOnly)other, epsilon);
+      return TupleTools.epsilonEquals(this, (Tuple3DReadOnly) other, epsilon);
    }
 
    /**

@@ -205,7 +205,7 @@ public class Quaternion implements QuaternionBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple4DString(this);
+      return QuaternionBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -201,7 +201,7 @@ public class UnitVector2D implements UnitVector2DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple2DString(this);
+      return UnitVector2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

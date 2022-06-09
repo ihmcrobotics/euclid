@@ -389,11 +389,9 @@ public interface AffineTransformReadOnly extends Transform
       return geometricallyEquals(other, epsilon);
    }
 
-
    /**
     * Tests on a per component basis if this transform and {@code other} are equal to an
-    * {@code epsilon}.
-    * Returns false by default if incoming object is not a type of affineTransform.
+    * {@code epsilon}. Returns false by default if incoming object is not a type of affineTransform.
     *
     * @param object  the object to compare against this.
     * @param epsilon tolerance to use when comparing each component.
@@ -402,24 +400,10 @@ public interface AffineTransformReadOnly extends Transform
    @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof AffineTransformReadOnly))
-      {
+      if (!(object instanceof AffineTransformReadOnly))
          return false;
-      }
-      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
-      return epsilonEquals(other, epsilon);
-   }
 
-   /**
-    * Tests on a per component basis if this transform and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param epsilon tolerance to use when comparing each component.
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(AffineTransformReadOnly other, double epsilon)
-   {
+      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
       return getLinearTransform().epsilonEquals(other.getLinearTransform(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
@@ -442,7 +426,6 @@ public interface AffineTransformReadOnly extends Transform
       else
          return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());
    }
-
 
    @Override
    default String toString(String format)

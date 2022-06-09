@@ -13,7 +13,6 @@ import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -24,7 +23,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
-public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformBasics & EpsilonComparable<T>> extends TransformTest<T>
+public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformBasics> extends TransformTest<T>
 {
    private static final double EPS = 1.0e-14;
 
@@ -2073,7 +2072,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
                                     m3.get(2, 2));
       expected_t3.getTranslation().set(0, 3, m3);
 
-      EuclidCoreTestTools.assertRigidBodyTransformGeometricallyEquals(expected_t3, actual_t3, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected_t3, actual_t3, EPS);
    }
 
 }

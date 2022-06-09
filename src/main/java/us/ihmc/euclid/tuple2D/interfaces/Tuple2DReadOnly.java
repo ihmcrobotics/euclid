@@ -215,8 +215,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       tupleMatrixToPack.unsafe_set(startRow++, column, getX());
       tupleMatrixToPack.unsafe_set(startRow, column, getY());
    }
-   
-   
+
    /**
     * Calculates and returns the distance between this point and {@code other}.
     *
@@ -245,7 +244,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       double dy = getY() - other.getY();
       return dx * dx + dy * dy;
    }
-   
+
    /**
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
@@ -258,7 +257,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    {
       if (!(object instanceof Tuple2DReadOnly))
          return false;
-      
+
       Tuple2DReadOnly other = (Tuple2DReadOnly) object;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
@@ -278,7 +277,20 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       else
          return getX() == other.getX() && getY() == other.getY();
    }
-   
+
+   /**
+    * Gets a representative {@code String} of {@code tuple} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (-0.675, -0.102 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
    @Override
    default String toString(String format)
    {

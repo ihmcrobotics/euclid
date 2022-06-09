@@ -289,10 +289,9 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Override
    default boolean geometricallyEquals(Object other, double epsilon)
    {
-      if ( !(other instanceof Orientation3DReadOnly))
-      {
+      if (!(other instanceof Orientation3DReadOnly))
          return false;
-      }
+
       if (epsilon >= Math.PI)
          return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
       return distance((Orientation3DReadOnly) other, true) <= epsilon;

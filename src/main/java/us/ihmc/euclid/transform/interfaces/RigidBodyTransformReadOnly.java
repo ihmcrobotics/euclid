@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -380,7 +381,6 @@ public interface RigidBodyTransformReadOnly extends Transform
       translationToPack.set(getTranslation());
    }
 
-   
    /**
     * Tests separately and on a per component basis if the rotation part and the translation part of
     * this transform and {@code other} are equal to an {@code epsilon}.
@@ -392,11 +392,12 @@ public interface RigidBodyTransformReadOnly extends Transform
    @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof RigidBodyTransformReadOnly))
+      if (!(object instanceof RigidBodyTransformReadOnly))
          return false;
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
       return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
+
    /**
     * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
     * translation vectors are equal.
@@ -408,9 +409,32 @@ public interface RigidBodyTransformReadOnly extends Transform
    @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof RigidBodyTransformReadOnly))
+      if (!(object instanceof RigidBodyTransformReadOnly))
          return false;
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
       return other.getRotation().geometricallyEquals(getRotation(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code rigidBodyTransform} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
    }
 }

@@ -83,7 +83,7 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
 
       return Tuple4DReadOnly.super.equals(other);
    }
-   
+
    @Override
    default String toString(String format)
    {

@@ -412,7 +412,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
    @Override
    public boolean epsilonEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof QuaternionBasedTransform))
+      if (!(object instanceof QuaternionBasedTransform))
          return false;
       QuaternionBasedTransform other = (QuaternionBasedTransform) object;
       return quaternion.epsilonEquals(other.quaternion, epsilon) && translationVector.epsilonEquals(other.translationVector, epsilon);
@@ -466,7 +466,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
    @Override
    public boolean geometricallyEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof QuaternionBasedTransform))
+      if (!(object instanceof QuaternionBasedTransform))
          return false;
       QuaternionBasedTransform other = (QuaternionBasedTransform) object;
       return other.quaternion.geometricallyEquals(quaternion, epsilon) && other.translationVector.geometricallyEquals(translationVector, epsilon);
@@ -482,7 +482,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getQuaternionBasedTransformString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
