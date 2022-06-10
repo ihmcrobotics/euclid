@@ -60,7 +60,7 @@ public class FrameCapsule3DTest
    @Test
    public void testConsistencyWithCapsule3D()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, capsule) -> new FrameCapsule3D(frame, (Capsule3D) capsule),
                                                                   EuclidShapeRandomTools::nextCapsule3D,

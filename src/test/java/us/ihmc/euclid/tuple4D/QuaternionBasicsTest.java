@@ -223,7 +223,6 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          axisAngle.setAngle(angle);
          Quaternion quaternion = new Quaternion(axisAngle);
-         System.out.println("expected: " + angle * 180/Math.PI + "\nmine: " + quaternion.angle() * 180/Math.PI);
          assertEquals(quaternion.angle(),Math.abs(angle),EPS);
       }
    }

@@ -56,7 +56,7 @@ public class FramePointShape3DTest
    @Test
    public void testConsistencyWithPointShape3D()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, pointShape) -> new FramePointShape3D(frame, (PointShape3D) pointShape),
                                                                   EuclidShapeRandomTools::nextPointShape3D,

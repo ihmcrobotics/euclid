@@ -461,7 +461,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
    {
       FrameTypeCopier frameTypeBuilder = (frame, tuple) -> createFrameTuple(frame, (Tuple2DReadOnly) tuple);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilber,

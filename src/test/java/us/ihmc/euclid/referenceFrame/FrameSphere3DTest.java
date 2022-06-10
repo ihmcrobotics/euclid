@@ -56,7 +56,7 @@ public class FrameSphere3DTest
    @Test
    public void testConsistencyWithSphere3D()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, sphere) -> new FrameSphere3D(frame, (Sphere3D) sphere),
                                                                   EuclidShapeRandomTools::nextSphere3D,

@@ -1,28 +1,16 @@
 package us.ihmc.euclid.referenceFrame.api;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.ejml.data.DMatrix;
 import org.ejml.ops.MatrixFeatures_D;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 
 class ReflectionBasedComparer
 {
-   private static final String EPSILON_EQUALS = "epsilonEquals";
-   private static final Predicate<Method> epsilonEqualsMethodFilter = m ->
-   {
-      if (!m.getName().equals(EPSILON_EQUALS) || m.getParameterCount() != 2)
-         return false;
-      return m.getParameterTypes()[1] == double.class || m.getParameterTypes()[1] == float.class;
-   };
-
    static <T> boolean epsilonEquals(Object framelessParameter, Object frameParameter, double epsilon)
    {
       if (framelessParameter == null && frameParameter == null)
@@ -37,29 +25,9 @@ class ReflectionBasedComparer
             return true;
       }
 
-      List<Method> epsilonEqualsMethods = Stream.of(frameParameter.getClass().getMethods()).filter(epsilonEqualsMethodFilter).collect(Collectors.toList());
-
-      if (!epsilonEqualsMethods.isEmpty())
+      if (framelessParameter instanceof EuclidGeometry)
       {
-         Method epsilonEqualsMethod = epsilonEqualsMethods.stream().filter(m -> m.getParameterTypes()[0] != Object.class) // Filters the method from FrameGeometryObject.
-                                                          .filter(m -> m.getParameterTypes()[0].isAssignableFrom(framelessParameter.getClass())).findAny()
-                                                          .orElse(null);
-         if (epsilonEqualsMethod != null)
-         {
-            try
-            {
-               boolean epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
-               return epsilonEqualsResult;
-            }
-            catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-            {
-               System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
-               System.err.println("Objects used as parameters: "
-                     + MethodSignature.getMethodSimpleName(boolean.class, EPSILON_EQUALS, framelessParameter.getClass(), double.class));
-               e.printStackTrace();
-               throw new AssertionError(e);
-            }
-         }
+         return ((EuclidGeometry) framelessParameter).epsilonEquals(frameParameter, epsilon);
       }
 
       if (Double.TYPE.isInstance(framelessParameter) || Float.TYPE.isInstance(framelessParameter))

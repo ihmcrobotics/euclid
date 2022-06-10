@@ -275,9 +275,6 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    {
       super.testOverloading();
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
-      signaturesToIgnore.add(new MethodSignature("set", Vector3D.class));
-      signaturesToIgnore.add(new MethodSignature("epsilonEquals", Vector3D.class, Double.TYPE));
-      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Vector3D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());

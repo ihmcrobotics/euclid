@@ -60,7 +60,7 @@ public class FrameCylinder3DTest
    @Test
    public void testConsistencyWithCylinder3D()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, cylinder) -> new FrameCylinder3D(frame, (Cylinder3D) cylinder),
                                                                   EuclidShapeRandomTools::nextCylinder3D,

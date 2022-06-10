@@ -49,7 +49,7 @@ public class FrameUnitVector2DTest
    {
       FrameTypeCopier frameTypeBuilder = (frame, unitVector) -> new FrameUnitVector2D(frame, (UnitVector2DReadOnly) unitVector);
       RandomFramelessTypeBuilder framelessTypeBuilber = EuclidCoreRandomTools::nextUnitVector2D;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilber,

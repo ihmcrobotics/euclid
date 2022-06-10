@@ -270,7 +270,24 @@ public class ReflectionBasedBuilder
                   frame = ((ReferenceFrameHolder) parametersToClone[i]).getReferenceFrame();
 
                clone[i] = next(new Random(), frame, parameterType);
-               Method setter = parameterType.getMethod("set", parameterType);
+
+               Method setter = null;
+
+               for (Method method : parameterType.getMethods())
+               {
+                  if (!method.getName().equals("set"))
+                     continue;
+                  if (method.getParameterTypes().length != 1)
+                     continue;
+                  if (method.getParameterTypes()[0].isAssignableFrom(parameterType))
+                  {
+                     setter = method;
+                     break;
+                  }
+               }
+
+               if (setter == null)
+                  setter = parameterType.getMethod("set", parameterType);
                setter.invoke(clone[i], parametersToClone[i]);
             }
             catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e)

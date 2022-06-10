@@ -458,7 +458,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    {
       FrameTypeCopier frameTypeBuilder = (frame, tuple) -> createFrameTuple(frame, (Tuple3DReadOnly) tuple);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilber,
