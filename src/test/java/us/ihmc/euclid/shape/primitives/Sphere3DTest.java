@@ -78,7 +78,7 @@ public class Sphere3DTest
          Sphere3D original = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D copy = new Sphere3D(original);
 
-         EuclidShapeTestTools.assertSphere3DEquals(original, copy, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, original, copy, EPSILON);
       }
    }
 
@@ -133,7 +133,7 @@ public class Sphere3DTest
          Sphere3D actual = EuclidShapeRandomTools.nextSphere3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set(expected);
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -142,7 +142,7 @@ public class Sphere3DTest
          Sphere3D actual = EuclidShapeRandomTools.nextSphere3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set((Sphere3DReadOnly) expected);
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
       }
 
       { // set(double centerX, double centerY, double centerZ, double radius)
@@ -152,7 +152,7 @@ public class Sphere3DTest
             Sphere3D actual = EuclidShapeRandomTools.nextSphere3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(expected.getPosition().getX(), expected.getPosition().getY(), expected.getPosition().getZ(), expected.getRadius());
-            EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Sphere3D().set(1.0, 1.0, 1.0, -0.1));
@@ -165,7 +165,7 @@ public class Sphere3DTest
             Sphere3D actual = EuclidShapeRandomTools.nextSphere3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(expected.getPosition(), expected.getRadius());
-            EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Sphere3D().set(1.0, 1.0, 1.0, -0.1));
@@ -256,7 +256,7 @@ public class Sphere3DTest
          expected.getPosition().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -269,7 +269,7 @@ public class Sphere3DTest
          expected.getPosition().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 
@@ -289,9 +289,9 @@ public class Sphere3DTest
          expected.getPosition().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertSphere3DEquals(original, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -305,9 +305,9 @@ public class Sphere3DTest
          expected.getPosition().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertSphere3DEquals(expected, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertSphere3DEquals(original, actual, EPSILON);
+         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
       }
    }
 
@@ -565,7 +565,7 @@ public class Sphere3DTest
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
 
          BoundingBox3DReadOnly actualBoundingBox = sphere3D.getBoundingBox();
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

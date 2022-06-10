@@ -128,7 +128,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          FramePoint2D framePoint2D = new FramePoint2D(randomTuple);
          assertTrue(framePoint2D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple, framePoint2D, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple2DEquals(randomTuple, framePoint2D, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, randomTuple, framePoint2D, EPSILON);
       }
    }
 
@@ -153,7 +153,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          FramePoint2D expected = new FramePoint2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
    }
 

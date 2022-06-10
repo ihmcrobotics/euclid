@@ -143,7 +143,7 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
          FrameVector2D expected = new FrameVector2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
    }
 

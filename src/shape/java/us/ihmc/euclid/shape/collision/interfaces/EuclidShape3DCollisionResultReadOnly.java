@@ -283,7 +283,7 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
          return true;
       }
    }
-
+   
    /**
     * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
     * format to use.

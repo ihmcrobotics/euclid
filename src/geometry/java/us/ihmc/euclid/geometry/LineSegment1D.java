@@ -3,9 +3,9 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents a finite-length 1D line segment defined by its two 1D endpoints.
  */
-public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EpsilonComparable<LineSegment1D>, GeometricallyComparable<LineSegment1D>
+public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EuclidGeometry
 {
    /** The first endpoint defining this line segment. */
    private double firstEndpoint = Double.NaN;
@@ -574,13 +574,16 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
    @Override
-   public boolean epsilonEquals(LineSegment1D other, double epsilon)
+   public boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) object;
       if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
@@ -596,14 +599,17 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other   the line segment to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   public boolean geometricallyEquals(LineSegment1D other, double epsilon)
+   public boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) object;
       if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
             && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return true;
@@ -661,7 +667,20 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment1DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Provides a {@code String} representation of this line segment 1D as follows:<br>
+    * Line segment 1D: 1st endpoint = (x), 2nd endpoint = (x)
+    *
+    * @param format the format to be used.
+    * @return the {@code String} representing this line segment 1D.
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment1DString(format, this);
    }
 
    /**

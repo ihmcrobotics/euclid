@@ -122,7 +122,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          FrameVector3D frameVector3D = new FrameVector3D(randomTuple);
          assertTrue(frameVector3D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple3DEquals(randomTuple, frameVector3D, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, randomTuple, frameVector3D, EPSILON);
       }
    }
 
@@ -147,7 +147,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          FrameVector3D expected = new FrameVector3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -165,7 +165,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          expected.setIncludingFrame(source, z);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
    }
 

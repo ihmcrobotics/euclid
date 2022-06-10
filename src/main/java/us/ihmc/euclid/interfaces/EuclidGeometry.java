@@ -12,7 +12,7 @@ public interface EuclidGeometry
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    boolean epsilonEquals(Object object, double epsilon);
-   
+
    /**
     * Tests if {@code this} and {@code other} represent the same geometry to an {@code epsilon}.
     * <p>
@@ -26,7 +26,7 @@ public interface EuclidGeometry
     * @return {@code true} if the two objects represent the same geometry, {@code false} otherwise.
     */
    boolean geometricallyEquals(Object object, double epsilon);
-   
+
    /**
     * Provides a {@code String} representation of this EuclidGeometry.
     *

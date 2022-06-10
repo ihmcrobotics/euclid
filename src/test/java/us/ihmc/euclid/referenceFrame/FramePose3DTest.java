@@ -90,7 +90,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
          FramePose3D expected = new FramePose3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertPose3DEquals(expected, actual, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

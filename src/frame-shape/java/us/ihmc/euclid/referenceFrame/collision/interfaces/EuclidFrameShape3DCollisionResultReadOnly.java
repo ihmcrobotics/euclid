@@ -41,20 +41,20 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other   the other collision result to compare against this. Not modified.
+    * @param object  the object result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean epsilonEquals(EuclidFrameShape3DCollisionResultReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (getPointOnA().getReferenceFrame() != other.getPointOnA().getReferenceFrame())
+      if (!(object instanceof EuclidFrameShape3DCollisionResultReadOnly))
          return false;
-      if (getPointOnB().getReferenceFrame() != other.getPointOnB().getReferenceFrame())
-         return false;
-      if (getNormalOnA().getReferenceFrame() != other.getNormalOnA().getReferenceFrame())
-         return false;
-      if (getNormalOnB().getReferenceFrame() != other.getNormalOnB().getReferenceFrame())
+      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) object;
+      if ((getPointOnA().getReferenceFrame() != other.getPointOnA().getReferenceFrame())
+            || (getPointOnB().getReferenceFrame() != other.getPointOnB().getReferenceFrame())
+            || (getNormalOnA().getReferenceFrame() != other.getNormalOnA().getReferenceFrame())
+            || (getNormalOnB().getReferenceFrame() != other.getNormalOnB().getReferenceFrame()))
          return false;
       return EuclidShape3DCollisionResultReadOnly.super.epsilonEquals(other, epsilon);
    }
@@ -62,15 +62,19 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
     *
-    * @param other   the other collision result to compare against this. Not modified.
+    * @param object  the object result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each feature.
     * @return {@code true} if the two collision results are considered geometrically similar,
     *         {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} does not hold the same reference frames
     *                                         as {@code this}.
     */
-   default boolean geometricallyEquals(EuclidFrameShape3DCollisionResultReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof EuclidFrameShape3DCollisionResultReadOnly))
+         return false;
+      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) object;
       return geometricallyEquals(other, epsilon, epsilon, epsilon);
    }
 
@@ -127,13 +131,9 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
     */
    default boolean equals(EuclidFrameShape3DCollisionResultReadOnly other)
    {
-      if (other == null)
-         return false;
-      if (getPointOnA().getReferenceFrame() != other.getPointOnA().getReferenceFrame())
-         return false;
-      if (getPointOnB().getReferenceFrame() != other.getPointOnB().getReferenceFrame())
-         return false;
-      if (getNormalOnA().getReferenceFrame() != other.getNormalOnA().getReferenceFrame())
+      if ((other == null) || (getPointOnA().getReferenceFrame() != other.getPointOnA().getReferenceFrame())
+            || (getPointOnB().getReferenceFrame() != other.getPointOnB().getReferenceFrame())
+            || (getNormalOnA().getReferenceFrame() != other.getNormalOnA().getReferenceFrame()))
          return false;
       if (getNormalOnB().getReferenceFrame() != other.getNormalOnB().getReferenceFrame())
          return false;

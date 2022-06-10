@@ -442,7 +442,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          frameTuple.setIncludingFrame(frameTupleReadOnly);
          assertTrue(frameTupleReadOnly.getReferenceFrame() == frameTuple.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DEquals(frameTuple, frameTupleReadOnly, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple4DEquals(frameTuple, frameTupleReadOnly, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, frameTuple, frameTupleReadOnly, EPSILON);
       }
    }
 

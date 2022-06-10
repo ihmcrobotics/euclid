@@ -84,7 +84,7 @@ public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<Frame
          FrameLineSegment2D expected = new FrameLineSegment2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertLineSegment2DEquals(expected, actual, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

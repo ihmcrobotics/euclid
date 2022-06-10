@@ -44,23 +44,33 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
          transform.transform(supportingVertexToPack);
       return success;
    }
-   
+
    @Override
    public boolean epsilonEquals(Object object, double epsilon)
    {
-      if (!(object instanceof RigidBodyTransformReadOnly))
+      if (!(object instanceof SupportingVertexTransformer))
          return false;
+      if (object instanceof SupportingVertexHolder)
+      {
+         SupportingVertexHolder other = (SupportingVertexHolder) object;
+         return original.epsilonEquals(other, epsilon);
+      }
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
-      return other.epsilonEquals(object, epsilon);
+      return transform.epsilonEquals(other, epsilon);
    }
 
    @Override
    public boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (!(object instanceof RigidBodyTransformReadOnly))
+      if (!(object instanceof SupportingVertexTransformer))
          return false;
+      if (object instanceof SupportingVertexHolder)
+      {
+         SupportingVertexHolder other = (SupportingVertexHolder) object;
+         return original.geometricallyEquals(other, epsilon);
+      }
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
-      return other.geometricallyEquals(object, epsilon);
+      return transform.geometricallyEquals(other, epsilon);
    }
 
    @Override

@@ -186,7 +186,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          FrameQuaternion frameQuaternion = new FrameQuaternion(randomFrameTuple4D);
          assertTrue(frameQuaternion.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomFrameTuple4D, frameQuaternion, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple4DEquals(randomFrameTuple4D, frameQuaternion, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, randomFrameTuple4D, frameQuaternion, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -196,7 +196,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          FrameQuaternion frameQuaternion = new FrameQuaternion(randomFrameQuaternion);
          assertTrue(frameQuaternion.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, randomFrameQuaternion, frameQuaternion, EPSILON);
       }
    }
 
@@ -276,7 +276,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          actual.setMatchingFrame(expected);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -291,7 +291,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          FrameQuaternion expected = new FrameQuaternion(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
    }
 

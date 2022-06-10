@@ -108,8 +108,8 @@ public class FrameBoxPolytope3DTest
          {
             FrameFace3DReadOnly polytopeFace = convexPolytope3D.getClosestFace(boxFace.getCentroid());
 
-            EuclidFrameTestTools.assertFramePoint3DGeometricallyEquals(boxFace.getCentroid(), boxFace.getCentroid(), EPSILON);
-            EuclidFrameTestTools.assertFrameVector3DGeometricallyEquals(boxFace.getNormal(), boxFace.getNormal(), EPSILON);
+            EuclidFrameTestTools.assertFrameGeometricallyEquals(null, boxFace.getCentroid(), boxFace.getCentroid(), EPSILON);
+            EuclidFrameTestTools.assertFrameGeometricallyEquals(null, boxFace.getNormal(), boxFace.getNormal(), EPSILON);
 
             for (FrameVertex3DReadOnly boxVertex : boxFace.getVertices())
             {

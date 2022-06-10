@@ -800,6 +800,7 @@ public interface Orientation3DReadOnly extends EuclidGeometry
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof Orientation3DReadOnly))

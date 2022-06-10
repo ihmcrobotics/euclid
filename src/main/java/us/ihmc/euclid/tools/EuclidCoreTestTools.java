@@ -18,7 +18,6 @@ import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -995,12 +994,12 @@ public class EuclidCoreTestTools
          return;
 
       if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
          throwNotEqualAssertionError(messagePrefix,
-                                     (Orientation3DReadOnly) expected,
+                                     expected,
                                      actual,
                                      "Difference of: " + Double.toString(expected.distance(actual)),
                                      format);
@@ -1318,13 +1317,13 @@ public class EuclidCoreTestTools
          return;
 
       if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, "Difference of: " + Double.toString(difference), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -1396,65 +1395,6 @@ public class EuclidCoreTestTools
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
-   }
-
-   /**
-    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected orientation 2D. Not modified.
-    * @param actual   the actual orientation 2D. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
-    *                        of the arguments is equal to {@code null}.
-    */
-   public static void assertOrientation2DGeometricallyEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
-   {
-      assertGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected orientation 2D. Not modified.
-    * @param actual        the actual orientation 2D. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
-    *                        of the arguments is equal to {@code null}.
-    */
-   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
-   {
-      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected orientation 2D. Not modified.
-    * @param actual        the actual orientation 2D. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
-    *                        of the arguments is equal to {@code null}.
-    */
-   public static void assertOrientation2DGeometricallyEquals(String messagePrefix,
-                                                             Orientation2DReadOnly expected,
-                                                             Orientation2DReadOnly actual,
-                                                             double epsilon,
-                                                             String format)
-   {
-      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -2225,9 +2165,9 @@ public class EuclidCoreTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected      the expected EuclidGeometry. Not modified.
-    * @param actual        the actual EuclidGeometry. Not modified.
-    * @param epsilon       the tolerance to use.
+    * @param expected the expected EuclidGeometry. Not modified.
+    * @param actual   the actual EuclidGeometry. Not modified.
+    * @param epsilon  the tolerance to use.
     * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */

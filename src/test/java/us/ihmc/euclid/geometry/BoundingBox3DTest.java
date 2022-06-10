@@ -189,7 +189,7 @@ public class BoundingBox3DTest
          expected.combine(boundingBoxOne, boundingBoxTwo);
          BoundingBox3D actual = BoundingBox3D.union(boundingBoxOne, boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 
@@ -689,7 +689,7 @@ public class BoundingBox3DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(boundingBoxTwo, combined, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, boundingBoxTwo, combined, EPSILON);
 
          boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          boundingBoxTwo.setToNaN();
@@ -697,7 +697,7 @@ public class BoundingBox3DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(boundingBoxOne, combined, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, boundingBoxOne, combined, EPSILON);
       }
    }
 

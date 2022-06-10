@@ -84,7 +84,7 @@ public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
          FramePose2D expected = new FramePose2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertPose2DEquals(expected, actual, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

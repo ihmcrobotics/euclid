@@ -83,7 +83,7 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
          FrameLine3D expected = new FrameLine3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertLine3DEquals(expected, actual, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

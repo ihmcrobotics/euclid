@@ -736,7 +736,7 @@ public class LineSegment3DTest
          RigidBodyTransform transform = new RigidBodyTransform();
          transform.getTranslation().set(x, y, z);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertLineSegment3DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -753,7 +753,7 @@ public class LineSegment3DTest
          RigidBodyTransform transform = new RigidBodyTransform();
          transform.getTranslation().set(translation);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertLineSegment3DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidGeometryTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
       }
    }
 

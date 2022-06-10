@@ -1093,25 +1093,25 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       LineSegment2D edge4 = new LineSegment2D(vertex4, vertex1);
 
       Point2D point1 = new Point2D(0.5, 0.1);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge4, polygon.getClosestEdgeCopy(point1), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge4, polygon.getClosestEdgeCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(-0.5, -0.5);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(-0.5, 0.5);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point3), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge2, polygon.getClosestEdgeCopy(point3), EPSILON);
 
       Point2D point4 = new Point2D(-0.5, 0.25);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point4), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge2, polygon.getClosestEdgeCopy(point4), EPSILON);
 
       Point2D point5 = new Point2D(-0.1, 3.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point5), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge2, polygon.getClosestEdgeCopy(point5), EPSILON);
 
       Point2D point6 = new Point2D(0.1, 0.8);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge3, polygon.getClosestEdgeCopy(point6), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge3, polygon.getClosestEdgeCopy(point6), EPSILON);
 
       Point2D point7 = new Point2D(-0.11, 0.2);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point7), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge1, polygon.getClosestEdgeCopy(point7), EPSILON);
    }
 
    @Test
@@ -1128,13 +1128,13 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       LineSegment2D edge1 = new LineSegment2D(vertex1, vertex2);
 
       Point2D point1 = new Point2D(0.5, 0.1);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point1), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge1, polygon.getClosestEdgeCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(4.0, 4.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(1.0, 1.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point3), EPSILON);
+      EuclidGeometryTestTools.assertGeometricallyEquals(null, edge1, polygon.getClosestEdgeCopy(point3), EPSILON);
    }
 
    @Test

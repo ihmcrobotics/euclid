@@ -107,7 +107,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          FrameVector4D frameVector4D = new FrameVector4D(randomTuple);
          assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, randomTuple, frameVector4D, EPSILON);
       }
    }
 

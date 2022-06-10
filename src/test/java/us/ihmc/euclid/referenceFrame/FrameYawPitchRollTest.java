@@ -163,7 +163,7 @@ public class FrameYawPitchRollTest
          actual.setMatchingFrame(expected);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
       }
    }
 
