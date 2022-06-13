@@ -461,6 +461,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -512,6 +513,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -584,6 +586,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -635,6 +638,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -686,6 +690,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -737,6 +742,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -788,6 +794,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -839,6 +846,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -890,6 +898,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -941,6 +950,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
