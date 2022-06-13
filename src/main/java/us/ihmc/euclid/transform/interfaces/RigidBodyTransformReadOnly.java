@@ -9,6 +9,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -435,6 +436,6 @@ public interface RigidBodyTransformReadOnly extends Transform
    @Override
    default String toString(String format)
    {
-      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
+      return EuclidCoreIOTools.getRigidBodyTransformString(format, (RigidBodyTransform) this);
    }
 }
