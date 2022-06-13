@@ -54,6 +54,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 class GilbertJohnsonKeerthiCollisionDetectorTest
 {
+   private static final boolean VERBOSE = false;
    private static final int ITERATIONS = 5000;
    private static final double EPSILON = 1.0e-10;
 
@@ -101,7 +102,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             totalIterationsWithHint += newNumberOfIterations;
          }
 
-         System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         if (VERBOSE)
+            System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
          assertTrue(totalIterationsWithHint < totalIterationsWithoutHint / 3);
       }
 
@@ -145,7 +147,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             totalIterationsWithHint += newNumberOfIterations;
          }
 
-         System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         if (VERBOSE)
+            System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
          /*
           * Providing the initial support direction doesn't seem to be as beneficial compared to
           * non-colliding case. The average number of iterations to converge is also by default about 4 times

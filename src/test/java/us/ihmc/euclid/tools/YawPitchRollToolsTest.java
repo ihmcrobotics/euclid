@@ -235,10 +235,6 @@ public class YawPitchRollToolsTest
 
          double expectedNoLimit = QuaternionTools.distance(q1, q2, false);
          
-         
-         System.out.println("expectedNoLimit = " + expectedNoLimit * 180 / Math.PI + 
-                            "actual1 (limit) = " + actual1 * 180 / Math.PI );
-
          assertFalse(Math.abs(actual1 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual2 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual3 - expectedNoLimit) < EPSILON);

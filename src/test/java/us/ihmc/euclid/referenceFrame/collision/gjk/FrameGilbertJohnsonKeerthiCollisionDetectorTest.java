@@ -31,6 +31,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 {
+   private static final boolean VERBOSE = false;
    private static final int ITERATIONS = 10000;
 
    private static final double DISTANCE_EPSILON = 0.0;
@@ -90,7 +91,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             totalIterationsWithHint += newNumberOfIterations;
          }
 
-         System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         if (VERBOSE)
+            System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
          assertTrue(totalIterationsWithHint < totalIterationsWithoutHint / 3);
       }
 
@@ -137,7 +139,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             totalIterationsWithHint += newNumberOfIterations;
          }
 
-         System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         if (VERBOSE)
+            System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
          /*
           * Providing the initial support direction doesn't seem to be as beneficial compared to
           * non-colliding case. The average number of iterations to converge is also by default about 4 times
@@ -175,8 +178,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
-               + average);
+         if (VERBOSE)
+            System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+                  + average);
       }
 
       {
@@ -200,8 +204,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in same frame (not worldFrame):\n\tmax error: " + ComparisonError.max(errors)
-               + "\n\tavg error: " + average);
+         if (VERBOSE)
+            System.out.println(getClass().getSimpleName() + ": Two shapes in same frame (not worldFrame):\n\tmax error: " + ComparisonError.max(errors)
+                  + "\n\tavg error: " + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -226,8 +231,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": shapeA in worldFrame and shape B in a random frame:\n\tmax error: " + ComparisonError.max(errors)
-               + "\n\tavg error: " + average);
+         if (VERBOSE)
+            System.out.println(getClass().getSimpleName() + ": shapeA in worldFrame and shape B in a random frame:\n\tmax error: " + ComparisonError.max(errors)
+                  + "\n\tavg error: " + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -252,8 +258,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": shapeA in random frame and shape B in worldFrame:\n\tmax error: " + ComparisonError.max(errors)
-               + "\n\tavg error: " + average);
+         if (VERBOSE)
+            System.out.println(getClass().getSimpleName() + ": shapeA in random frame and shape B in worldFrame:\n\tmax error: " + ComparisonError.max(errors)
+                  + "\n\tavg error: " + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -278,8 +285,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Both shape in distinct random frame:\n\tmax error: " + ComparisonError.max(errors)
-               + "\n\tavg error: " + average);
+         if (VERBOSE)
+            System.out.println(getClass().getSimpleName() + ": Both shape in distinct random frame:\n\tmax error: " + ComparisonError.max(errors)
+                  + "\n\tavg error: " + average);
       }
    }
 

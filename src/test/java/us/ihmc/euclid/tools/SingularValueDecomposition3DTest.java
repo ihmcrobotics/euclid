@@ -31,6 +31,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
 public class SingularValueDecomposition3DTest
 {
+   private static final boolean VERBOSE = false;
    private static final int ITERATIONS = 10000;
    private static final double EPSILON = 1.0e-11;
 
@@ -128,9 +129,10 @@ public class SingularValueDecomposition3DTest
 
       double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS / generators.size();
       double ejmlAverageMilllis = ejmlTotalTime / 1.0e6 / ITERATIONS / generators.size();
-      System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
-                                       Double.toString(ejmlAverageMilllis),
-                                       Double.toString(euclidAverageMilllis)));
+      if (VERBOSE)
+         System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
+                                          Double.toString(ejmlAverageMilllis),
+                                          Double.toString(euclidAverageMilllis)));
    }
 
    public static void performGeneralAssertions(String messagePrefix, Matrix3DReadOnly A, SVD3DOutput outputToTest, boolean sorted, double epsilon)
@@ -210,7 +212,8 @@ public class SingularValueDecomposition3DTest
       }
 
       double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS / generators.size();
-      System.out.println(String.format("Average time in millisec:\n\t-Euclid:%s", Double.toString(euclidAverageMilllis)));
+      if (VERBOSE)
+         System.out.println(String.format("Average time in millisec:\n\t-Euclid:%s", Double.toString(euclidAverageMilllis)));
    }
 
    static double columnDot(int col, Matrix3DReadOnly a, Matrix3DReadOnly b)
