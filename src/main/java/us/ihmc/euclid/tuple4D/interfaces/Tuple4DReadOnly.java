@@ -340,9 +340,8 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof Tuple4DReadOnly))
-      {
          return false;
-      }
+
       Tuple4DReadOnly other = (Tuple4DReadOnly) object;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }

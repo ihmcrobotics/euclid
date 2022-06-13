@@ -208,8 +208,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       FrameRamp3DReadOnly other = (FrameRamp3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      else
-         return Ramp3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Ramp3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -229,7 +228,8 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       if (!(object instanceof FrameRamp3DReadOnly))
          return false;
       FrameRamp3DReadOnly other = (FrameRamp3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Ramp3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

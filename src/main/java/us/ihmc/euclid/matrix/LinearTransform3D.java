@@ -1142,7 +1142,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrix3DString(this);
+      return LinearTransform3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

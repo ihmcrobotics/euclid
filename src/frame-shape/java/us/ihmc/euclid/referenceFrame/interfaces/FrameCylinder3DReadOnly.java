@@ -372,8 +372,7 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      else
-         return Cylinder3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Cylinder3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -392,7 +391,8 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       if (!(object instanceof FrameCylinder3DReadOnly))
          return false;
       FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Cylinder3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

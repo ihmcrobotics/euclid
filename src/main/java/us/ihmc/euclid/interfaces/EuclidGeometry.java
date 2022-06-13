@@ -1,5 +1,9 @@
 package us.ihmc.euclid.interfaces;
 
+/**
+ * @author joh
+ *
+ */
 public interface EuclidGeometry
 {
    /**

@@ -249,9 +249,8 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof Pose3DReadOnly))
-      {
          return false;
-      }
+
       Pose3DReadOnly other = (Pose3DReadOnly) object;
       return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }

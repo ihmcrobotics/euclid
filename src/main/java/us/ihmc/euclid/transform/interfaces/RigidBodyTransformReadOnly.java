@@ -412,7 +412,7 @@ public interface RigidBodyTransformReadOnly extends Transform
       if (!(object instanceof RigidBodyTransformReadOnly))
          return false;
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
-      return other.getRotation().geometricallyEquals(getRotation(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
+      return getRotation().geometricallyEquals(other.getRotation(), epsilon) && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
 
    /**

@@ -795,7 +795,7 @@ public interface Orientation3DReadOnly extends EuclidGeometry
     * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
     * </p>
     *
-    * @param other   the other orientation to compare against this. Not modified.
+    * @param object  the object to compare against this. Not modified.
     * @param epsilon the maximum angle for the two orientations to be considered equal.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.

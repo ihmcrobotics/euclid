@@ -354,8 +354,7 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
       FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      else
-         return Sphere3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Sphere3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -374,7 +373,8 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
       if (!(object instanceof FrameSphere3DReadOnly))
          return false;
       FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Sphere3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

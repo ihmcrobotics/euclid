@@ -458,7 +458,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
     * different orientations.
     *
-    * @param other   the other axis-angle to compare against this. Not modified.
+    * @param object  the object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
@@ -467,13 +467,13 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    {
       if (!(object instanceof AxisAngleReadOnly))
          return false;
-      
+
       AxisAngleReadOnly other = (AxisAngleReadOnly) object;
-      if ( !EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon)) 
+      if (!EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon))
          return false;
-      if ( !EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))
          return false;
-      if ( !EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getAngle(), other.getAngle(), epsilon))
          return false;

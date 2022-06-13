@@ -473,7 +473,8 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
       if (!(object instanceof FrameBox3DReadOnly))
          return false;
       FrameBox3DReadOnly other = (FrameBox3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Box3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

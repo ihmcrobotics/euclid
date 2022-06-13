@@ -365,8 +365,7 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
       FrameEllipsoid3DReadOnly other = (FrameEllipsoid3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      else
-         return Ellipsoid3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Ellipsoid3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -385,7 +384,8 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
       if (!(object instanceof FrameEllipsoid3DReadOnly))
          return false;
       FrameEllipsoid3DReadOnly other = (FrameEllipsoid3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Ellipsoid3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

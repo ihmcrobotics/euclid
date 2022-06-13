@@ -130,6 +130,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof Vector2DReadOnly))

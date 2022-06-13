@@ -374,7 +374,7 @@ public interface AffineTransformReadOnly extends Transform
     * translation vector are geometrically equal. Returns false by default if incoming object is not a
     * type of AffineTransform.
     *
-    * @param other   the other object to compare against this.
+    * @param object  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two transforms are equal, {@code false} otherwise.
     */
@@ -382,11 +382,11 @@ public interface AffineTransformReadOnly extends Transform
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof AffineTransformReadOnly))
-      {
          return false;
-      }
+
       AffineTransformReadOnly other = (AffineTransformReadOnly) object;
-      return geometricallyEquals(other, epsilon);
+      return getLinearTransform().geometricallyEquals(other.getLinearTransform(), epsilon)
+            && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
 
    /**

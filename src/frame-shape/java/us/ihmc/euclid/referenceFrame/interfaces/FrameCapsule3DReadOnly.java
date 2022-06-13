@@ -103,8 +103,7 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      else
-         return Capsule3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Capsule3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -123,7 +122,8 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       if (!(object instanceof FrameCapsule3DReadOnly))
          return false;
       FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Capsule3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
@@ -149,14 +149,15 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       }
       else
       {
-         if ((getReferenceFrame() != other.getReferenceFrame()) || (getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition()))
+         if ((getReferenceFrame() != other.getReferenceFrame()) || (getLength() != other.getLength()) || (getRadius() != other.getRadius())
+               || !getPosition().equals(other.getPosition()))
             return false;
          if (!getAxis().equals(other.getAxis()))
             return false;
          return true;
       }
    }
-   
+
    /**
     * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
     * <p>
@@ -167,7 +168,7 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
     * </pre>
     * </p>
     *
-    * @param format    the format to use for each number.
+    * @param format the format to use for each number.
     * @return the representative {@code String}.
     */
    @Override
