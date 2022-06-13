@@ -33,7 +33,7 @@ class ReflectionBasedComparer
       if (Double.TYPE.isInstance(framelessParameter) || Float.TYPE.isInstance(framelessParameter))
       {
          if (!Double.TYPE.isInstance(frameParameter) && !Float.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return EuclidCoreTools.epsilonEquals((double) framelessParameter, (double) frameParameter, epsilon);
       }
@@ -41,7 +41,7 @@ class ReflectionBasedComparer
       if (Integer.TYPE.isInstance(framelessParameter) || Long.TYPE.isInstance(framelessParameter))
       {
          if (!Integer.TYPE.isInstance(frameParameter) && !Long.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return (long) framelessParameter == (long) frameParameter;
       }
@@ -49,7 +49,7 @@ class ReflectionBasedComparer
       if (Double.class.isInstance(framelessParameter) || Float.class.isInstance(framelessParameter))
       {
          if (!Double.class.isInstance(frameParameter) && !Float.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          double framelessDouble = ((Number) framelessParameter).doubleValue();
          double frameDouble = ((Number) frameParameter).doubleValue();
@@ -59,7 +59,7 @@ class ReflectionBasedComparer
       if (Integer.class.isInstance(framelessParameter) || Long.class.isInstance(framelessParameter))
       {
          if (!Integer.class.isInstance(frameParameter) && !Long.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return ((Number) framelessParameter).longValue() == ((Number) frameParameter).longValue();
       }
@@ -67,7 +67,7 @@ class ReflectionBasedComparer
       if (Boolean.class.isInstance(framelessParameter))
       {
          if (!Boolean.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return (boolean) framelessParameter == (boolean) frameParameter;
       }
@@ -91,7 +91,7 @@ class ReflectionBasedComparer
          }
          else
          {
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
          }
       }
 
@@ -109,7 +109,7 @@ class ReflectionBasedComparer
       if (framelessParameter instanceof Class && frameParameter instanceof Class)
          return true;
 
-      throw new RuntimeException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
+      throw new ReflectionBasedComparerException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
             + frameParameter.getClass().getSimpleName());
    }
 
@@ -162,8 +162,8 @@ class ReflectionBasedComparer
             return true;
          }
 
-         throw new RuntimeException("Did not expect the following component types: " + framelessParameter.getClass().getComponentType().getSimpleName() + " & "
-               + frameParameter.getClass().getComponentType().getSimpleName());
+         throw new ReflectionBasedComparerException("Did not expect the following component types: "
+               + framelessParameter.getClass().getComponentType().getSimpleName() + " & " + frameParameter.getClass().getComponentType().getSimpleName());
       }
       else
       {
@@ -177,6 +177,30 @@ class ReflectionBasedComparer
                return false;
          }
          return true;
+      }
+   }
+
+   public static class ReflectionBasedComparerException extends RuntimeException
+   {
+      private static final long serialVersionUID = -6087778771648672668L;
+
+      public ReflectionBasedComparerException()
+      {
+      }
+
+      public ReflectionBasedComparerException(String message, Throwable cause)
+      {
+         super(message, cause);
+      }
+
+      public ReflectionBasedComparerException(String message)
+      {
+         super(message);
+      }
+
+      public ReflectionBasedComparerException(Throwable cause)
+      {
+         super(cause);
       }
    }
 }
