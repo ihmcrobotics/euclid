@@ -23,7 +23,6 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple4D.Tuple4DBasicsTest;
@@ -442,7 +441,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          frameTuple.setIncludingFrame(frameTupleReadOnly);
          assertTrue(frameTupleReadOnly.getReferenceFrame() == frameTuple.getReferenceFrame());
          EuclidCoreTestTools.assertEquals(frameTuple, frameTupleReadOnly, EPSILON);
-         EuclidFrameTestTools.assertFrameEquals(null, frameTuple, frameTupleReadOnly, EPSILON);
+         EuclidCoreTestTools.assertEquals(frameTuple, frameTupleReadOnly, EPSILON);
       }
    }
 

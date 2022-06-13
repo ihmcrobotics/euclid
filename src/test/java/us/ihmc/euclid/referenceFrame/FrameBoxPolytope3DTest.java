@@ -25,7 +25,6 @@ import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.primitives.Box3D;
@@ -108,8 +107,8 @@ public class FrameBoxPolytope3DTest
          {
             FrameFace3DReadOnly polytopeFace = convexPolytope3D.getClosestFace(boxFace.getCentroid());
 
-            EuclidFrameTestTools.assertFrameGeometricallyEquals(null, boxFace.getCentroid(), boxFace.getCentroid(), EPSILON);
-            EuclidFrameTestTools.assertFrameGeometricallyEquals(null, boxFace.getNormal(), boxFace.getNormal(), EPSILON);
+            EuclidCoreTestTools.assertGeometricallyEquals(boxFace.getCentroid(), boxFace.getCentroid(), EPSILON);
+            EuclidCoreTestTools.assertGeometricallyEquals(boxFace.getNormal(), boxFace.getNormal(), EPSILON);
 
             for (FrameVertex3DReadOnly boxVertex : boxFace.getVertices())
             {

@@ -14,7 +14,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
@@ -91,7 +90,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
          FramePose3D expected = new FramePose3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

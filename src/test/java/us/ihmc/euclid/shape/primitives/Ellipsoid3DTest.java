@@ -111,7 +111,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D original = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Ellipsoid3D copy = new Ellipsoid3D(original);
 
-         EuclidShapeTestTools.assertEquals(null, original, copy, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, copy, EPSILON);
       }
    }
 
@@ -172,7 +172,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set(expected);
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -181,7 +181,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set((Ellipsoid3DReadOnly) expected);
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       { // set(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
@@ -191,7 +191,7 @@ public class Ellipsoid3DTest
             Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(expected.getPosition(), expected.getOrientation(), expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Point3D(), new Quaternion(), -0.1, 1.0, 1.0));
@@ -206,7 +206,7 @@ public class Ellipsoid3DTest
             Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(new Pose3D(expected.getPosition(), expected.getOrientation()), expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Pose3D(), -0.1, 1.0, 1.0));
@@ -224,7 +224,7 @@ public class Ellipsoid3DTest
                        expected.getRadiusX(),
                        expected.getRadiusY(),
                        expected.getRadiusZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), -0.1, 1.0, 1.0));
@@ -240,7 +240,7 @@ public class Ellipsoid3DTest
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
                        new double[] {expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ()});
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), new double[] {-0.1, 1.0, 1.0}));
@@ -459,7 +459,7 @@ public class Ellipsoid3DTest
          expected.getPose().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -472,7 +472,7 @@ public class Ellipsoid3DTest
          expected.getPose().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -492,9 +492,9 @@ public class Ellipsoid3DTest
          expected.getPose().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -508,9 +508,9 @@ public class Ellipsoid3DTest
          expected.getPose().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, actual, EPSILON);
       }
    }
 
@@ -1281,7 +1281,7 @@ public class Ellipsoid3DTest
          expectedBoundingBox.updateToIncludePoint(ellipsoid3D.getSupportingVertex(supportDirection));
 
          BoundingBox3DReadOnly actualBoundingBox = ellipsoid3D.getBoundingBox();
-         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

@@ -1355,7 +1355,7 @@ public class Line2DTest
       Line2D line10 = new Line2D(new Point2D(10.0, 0.0), new Point2D(20.0, 1.0));
       Line2D line11 = new Line2D(new Point2D(-10.0, 1.0), new Point2D(10.0, 1.0));
 
-      assertEquals(null, line1.intersectionWith(line11));
+      assertNull(line1.intersectionWith(line11));
 
       assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5));
       assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6));

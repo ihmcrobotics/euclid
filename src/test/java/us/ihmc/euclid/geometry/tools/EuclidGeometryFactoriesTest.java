@@ -241,14 +241,14 @@ public class EuclidGeometryFactoriesTest
    public static void thoroughAssertionsBoundingBox2D(BoundingBox2DReadOnly expected, BoundingBox2DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
-      EuclidCoreTestTools.assertEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    public static void thoroughAssertionsBoundingBox3D(BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
-      EuclidCoreTestTools.assertEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 }

@@ -22,7 +22,6 @@ import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -123,7 +122,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          FramePoint3D framePoint3D = new FramePoint3D(randomTuple);
          assertTrue(framePoint3D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertEquals(randomTuple, framePoint3D, EPSILON);
-         EuclidFrameTestTools.assertFrameEquals(null, randomTuple, framePoint3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, framePoint3D, EPSILON);
       }
    }
 
@@ -148,7 +147,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          FramePoint3D expected = new FramePoint3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -166,7 +165,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          expected.setIncludingFrame(source, z);
          expected.changeFrame(destinationFrame);
 
-         EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

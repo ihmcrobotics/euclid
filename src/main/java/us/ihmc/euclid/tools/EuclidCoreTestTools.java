@@ -56,6 +56,134 @@ public class EuclidCoreTestTools
    }
 
    /**
+    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected EuclidGeomoetry. Not modified.
+    * @param actual   the actual EuclidGeomoetry. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
+    *                        is equal to {@code null}.
+    */
+   public static void assertEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected EuclidGeomoetry. Not modified.
+    * @param actual        the actual EuclidGeomoetry. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
+    *                        is equal to {@code null}.
+    */
+   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected EuclidGeomoetry. Not modified.
+    * @param actual        the actual EuclidGeomoetry. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
+    *                        is equal to {@code null}.
+    */
+   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!(expected.epsilonEquals(actual, epsilon)))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
+    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected EuclidGeometry. Not modified.
+    * @param actual   the actual EuclidGeometry. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertGeometricallyEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected EuclidGeometry. Not modified.
+    * @param actual        the actual EuclidGeometry. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
+   {
+      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected EuclidGeometry. Not modified.
+    * @param actual        the actual EuclidGeometry. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!(expected.geometricallyEquals(actual, epsilon)))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
     * Asserts that the two given angles are equal to an {@code epsilon}.
     * <p>
     * The method returns {@code true} for angles such as:
@@ -1560,133 +1688,5 @@ public class EuclidCoreTestTools
          return prefix + " " + message;
       else
          return message;
-   }
-
-   /**
-    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected EuclidGeomoetry. Not modified.
-    * @param actual   the actual EuclidGeomoetry. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
-    *                        is equal to {@code null}.
-    */
-   public static void assertEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
-   {
-      assertEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected EuclidGeomoetry. Not modified.
-    * @param actual        the actual EuclidGeomoetry. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
-    *                        is equal to {@code null}.
-    */
-   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
-   {
-      assertEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two EuclidGeometries are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected EuclidGeomoetry. Not modified.
-    * @param actual        the actual EuclidGeomoetry. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two EuclidGeomoetries are not equal. If only one of the arguments
-    *                        is equal to {@code null}.
-    */
-   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!(expected.epsilonEquals(actual, epsilon)))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
-   }
-
-   /**
-    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected EuclidGeometry. Not modified.
-    * @param actual   the actual EuclidGeometry. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertGeometricallyEquals(EuclidGeometry expected, EuclidGeometry actual, double epsilon)
-   {
-      assertGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected EuclidGeometry. Not modified.
-    * @param actual        the actual EuclidGeometry. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon)
-   {
-      assertGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts the two EuclidGeometries are geometrically equivalent to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected EuclidGeometry. Not modified.
-    * @param actual        the actual EuclidGeometry. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two EuclidGeometries do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!(expected.geometricallyEquals(actual, epsilon)))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
    }
 }

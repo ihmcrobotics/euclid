@@ -10,7 +10,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
@@ -75,7 +74,7 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
          FrameLine2D expected = new FrameLine2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

@@ -1893,49 +1893,49 @@ public class EuclidFrameFactoriesTest
    private void thoroughAssertionsFrameTuple2D(FrameTuple2DReadOnly expected, FrameTuple2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameTuple3D(FrameTuple3DReadOnly expected, FrameTuple3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameTuple4D(FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameMatrix3D(FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameBoundingBox2D(FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameBoundingBox3D(FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameOrientation2D(FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameEquals(null, expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameEquals(null, actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 }

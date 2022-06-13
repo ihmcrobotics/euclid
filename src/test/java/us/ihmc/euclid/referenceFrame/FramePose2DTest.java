@@ -14,7 +14,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
@@ -85,7 +84,7 @@ public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
          FramePose2D expected = new FramePose2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

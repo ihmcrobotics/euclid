@@ -122,7 +122,7 @@ public class Ramp3DTest
          Ramp3D original = EuclidShapeRandomTools.nextRamp3D(random);
          Ramp3D copy = new Ramp3D(original);
 
-         EuclidShapeTestTools.assertEquals(null, original, copy, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, copy, EPSILON);
       }
    }
 
@@ -183,7 +183,7 @@ public class Ramp3DTest
          Ramp3D actual = EuclidShapeRandomTools.nextRamp3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set(expected);
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -192,7 +192,7 @@ public class Ramp3DTest
          Ramp3D actual = EuclidShapeRandomTools.nextRamp3D(random);
          assertFalse(expected.epsilonEquals(actual, EPSILON));
          actual.set((Ramp3DReadOnly) expected);
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       { // set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
@@ -202,7 +202,7 @@ public class Ramp3DTest
             Ramp3D actual = EuclidShapeRandomTools.nextRamp3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(expected.getPosition(), expected.getOrientation(), expected.getSizeX(), expected.getSizeY(), expected.getSizeZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ramp3D().set(new Point3D(), new Quaternion(), -0.1, 1.0, 1.0));
@@ -217,7 +217,7 @@ public class Ramp3DTest
             Ramp3D actual = EuclidShapeRandomTools.nextRamp3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(new Pose3D(expected.getPosition(), expected.getOrientation()), expected.getSizeX(), expected.getSizeY(), expected.getSizeZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ramp3D().set(new Pose3D(), -0.1, 1.0, 1.0));
@@ -235,7 +235,7 @@ public class Ramp3DTest
                        expected.getSizeX(),
                        expected.getSizeY(),
                        expected.getSizeZ());
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ramp3D().set(new RigidBodyTransform(), -0.1, 1.0, 1.0));
@@ -251,7 +251,7 @@ public class Ramp3DTest
             assertFalse(expected.epsilonEquals(actual, EPSILON));
             actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
                        new double[] {expected.getSizeX(), expected.getSizeY(), expected.getSizeZ()});
-            EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Ramp3D().set(new RigidBodyTransform(), new double[] {-0.1, 1.0, 1.0}));
@@ -918,7 +918,7 @@ public class Ramp3DTest
          expected.getPose().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -931,7 +931,7 @@ public class Ramp3DTest
          expected.getPose().applyTransform(transform);
          actual.applyTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -951,9 +951,9 @@ public class Ramp3DTest
          expected.getPose().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -967,9 +967,9 @@ public class Ramp3DTest
          expected.getPose().applyInverseTransform(transform);
          actual.applyInverseTransform(transform);
 
-         EuclidShapeTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          actual.applyTransform(transform);
-         EuclidShapeTestTools.assertEquals(null, original, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, actual, EPSILON);
       }
    }
 
@@ -1656,7 +1656,7 @@ public class Ramp3DTest
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
 
          BoundingBox3DReadOnly actualBoundingBox = ramp3D.getBoundingBox();
-         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 
