@@ -31,6 +31,20 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    @Override
    FrameQuaternionReadOnly getOrientation();
 
+   /** {@inheritDoc} */
+   @Override
+   default FramePoint3DReadOnly getTranslation()
+   {
+      return getPosition();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default FrameQuaternionReadOnly getRotation()
+   {
+      return getOrientation();
+   }
+
    /**
     * Gets the position and orientation.
     *
