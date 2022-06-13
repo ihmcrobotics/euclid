@@ -21,22 +21,5 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrientation3DReadOnly, QuaternionReadOnly
 {
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
-    * Returns false if the reference frame does not match.
-    * </p>
-    *
-    * @param object  the object to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two orientations to be considered equal.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      return FrameOrientation3DReadOnly.super.geometricallyEquals(object, epsilon);
-   }
+
 }

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -27,17 +28,17 @@ public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHol
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameTuple3DReadOnly))
+      if (!(geometry instanceof FrameTuple3DReadOnly))
          return false;
-      FrameTuple3DReadOnly other = (FrameTuple3DReadOnly) object;
+      FrameTuple3DReadOnly other = (FrameTuple3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 

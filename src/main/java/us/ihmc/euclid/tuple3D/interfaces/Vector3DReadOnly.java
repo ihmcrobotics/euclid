@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -120,7 +121,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object other, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry other, double epsilon)
    {
       if( !(other instanceof Vector3DReadOnly))
       {

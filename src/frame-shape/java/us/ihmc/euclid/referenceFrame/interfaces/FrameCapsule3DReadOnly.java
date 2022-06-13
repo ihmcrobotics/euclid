@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -90,17 +91,17 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
     * If the two capsules have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameCapsule3DReadOnly))
+      if (!(geometry instanceof FrameCapsule3DReadOnly))
          return false;
-      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) object;
+      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Capsule3DReadOnly.super.epsilonEquals(other, epsilon);
@@ -110,18 +111,18 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
     * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
     * similar.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameCapsule3DReadOnly))
+      if (!(geometry instanceof FrameCapsule3DReadOnly))
          return false;
-      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) object;
+      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Capsule3DReadOnly.super.geometricallyEquals(other, epsilon);

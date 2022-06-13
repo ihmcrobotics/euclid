@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple4D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 
 /**
@@ -42,11 +43,11 @@ public interface Vector4DReadOnly extends Tuple4DReadOnly
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Vector4DReadOnly))
+      if (!(geometry instanceof Vector4DReadOnly))
          return false;
-      Vector4DReadOnly other = (Vector4DReadOnly) object;
+      Vector4DReadOnly other = (Vector4DReadOnly) geometry;
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       double dz = getZ() - other.getZ();

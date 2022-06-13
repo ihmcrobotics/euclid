@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -257,16 +258,16 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this cylinder and {@code other} are equal to an
     * {@code epsilon}.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Cylinder3DReadOnly))
+      if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
-      Cylinder3DReadOnly other = (Cylinder3DReadOnly) object;
+      Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
@@ -275,16 +276,16 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Cylinder3DReadOnly))
+      if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
-      Cylinder3DReadOnly other = (Cylinder3DReadOnly) object;
+      Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
       if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 

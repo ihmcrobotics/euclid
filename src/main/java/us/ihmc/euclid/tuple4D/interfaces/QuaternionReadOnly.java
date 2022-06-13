@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -287,7 +288,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object other, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry other, double epsilon)
    {
       if (!(other instanceof Orientation3DReadOnly))
          return false;

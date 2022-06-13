@@ -28,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * and always prefer using methods requiring {@code FrameLineSegment3DReadOnly}.
  * </p>
  */
-public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, ReferenceFrameHolder
+public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, EuclidFrameGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -668,53 +668,6 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    {
       midpointToPack.setReferenceFrame(getReferenceFrame());
       LineSegment3DReadOnly.super.midpoint(midpointToPack);
-   }
-
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameLineSegment3DReadOnly))
-         return false;
-      FrameLineSegment3DReadOnly other = (FrameLineSegment3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return LineSegment3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param object  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameLineSegment3DReadOnly))
-         return false;
-      FrameLineSegment3DReadOnly other = (FrameLineSegment3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return LineSegment3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

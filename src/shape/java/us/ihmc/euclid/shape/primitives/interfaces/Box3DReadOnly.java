@@ -6,6 +6,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -431,17 +432,17 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param object  the other object which pose and size is to be compared against this box pose and
+    * @param geometry  the other object which pose and size is to be compared against this box pose and
     *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Box3DReadOnly))
+      if (!(geometry instanceof Box3DReadOnly))
          return false;
-      Box3DReadOnly other = (Box3DReadOnly) object;
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
@@ -449,16 +450,16 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Box3DReadOnly))
+      if (!(geometry instanceof Box3DReadOnly))
          return false;
-      Box3DReadOnly other = (Box3DReadOnly) object;
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 

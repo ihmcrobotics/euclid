@@ -154,16 +154,16 @@ public interface Pose2DReadOnly extends EuclidGeometry
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Pose2DReadOnly))
+      if (!(geometry instanceof Pose2DReadOnly))
          return false;
-      Pose2DReadOnly other = (Pose2DReadOnly) object;
+      Pose2DReadOnly other = (Pose2DReadOnly) geometry;
       return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
@@ -173,16 +173,16 @@ public interface Pose2DReadOnly extends EuclidGeometry
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Pose2DReadOnly))
+      if (!(geometry instanceof Pose2DReadOnly))
          return false;
-      Pose2DReadOnly other = (Pose2DReadOnly) object;
+      Pose2DReadOnly other = (Pose2DReadOnly) geometry;
       return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 

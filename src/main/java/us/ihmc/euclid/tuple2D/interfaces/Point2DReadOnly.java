@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -135,16 +136,16 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof Point2DReadOnly))
+      if ( !(geometry instanceof Point2DReadOnly))
          return false;
-      Point2DReadOnly other = (Point2DReadOnly) object;
+      Point2DReadOnly other = (Point2DReadOnly) geometry;
       return distance(other) <= epsilon;
    }
 }

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -447,11 +448,11 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
     *         reference frame, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameBox3DReadOnly))
+      if (!(geometry instanceof FrameBox3DReadOnly))
          return false;
-      FrameBox3DReadOnly other = (FrameBox3DReadOnly) object;
+      FrameBox3DReadOnly other = (FrameBox3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -468,11 +469,11 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
     *                                         the same reference frame.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameBox3DReadOnly))
+      if (!(geometry instanceof FrameBox3DReadOnly))
          return false;
-      FrameBox3DReadOnly other = (FrameBox3DReadOnly) object;
+      FrameBox3DReadOnly other = (FrameBox3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Box3DReadOnly.super.geometricallyEquals(other, epsilon);

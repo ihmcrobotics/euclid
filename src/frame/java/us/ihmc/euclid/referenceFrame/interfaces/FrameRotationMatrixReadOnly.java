@@ -1,9 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -412,7 +412,7 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
       checkReferenceFrameMatch(tupleOriginal);
       RotationMatrixReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
    }
-   
+
    @Override
    default String toString(String format)
    {
@@ -422,16 +422,16 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
    /**
     * Two 3D matrices are considered geometrically equal if they are epsilon equal.
     * <p>
-    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
+    * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param object  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this. Not modified.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      return FrameMatrix3DReadOnly.super.geometricallyEquals(object, epsilon);
+      return RotationMatrixReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

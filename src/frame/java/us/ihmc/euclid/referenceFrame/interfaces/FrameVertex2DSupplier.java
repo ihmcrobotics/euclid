@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
@@ -90,15 +91,15 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (object == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (object instanceof FrameVertex2DSupplier)
+      else if (geometry instanceof FrameVertex2DSupplier)
       {
-         FrameVertex2DSupplier other = (FrameVertex2DSupplier) object;
+         FrameVertex2DSupplier other = (FrameVertex2DSupplier) geometry;
 
          if (getNumberOfVertices() != other.getNumberOfVertices())
             return false;
@@ -120,24 +121,24 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     * <p>
-    * The difference with {@link #epsilonEquals(Object, double)} is this method relies on
-    * {@link FramePoint2DReadOnly#geometricallyEquals(Object, double)}.
+    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
+    * {@link FramePoint2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param object  the other supplier to compare against this.
+    * @param geometry  the other supplier to compare against this.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (object == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (object instanceof FrameVertex2DSupplier)
+      else if (geometry instanceof FrameVertex2DSupplier)
       {
-         FrameVertex2DSupplier other = (FrameVertex2DSupplier) object;
+         FrameVertex2DSupplier other = (FrameVertex2DSupplier) geometry;
 
          if (getNumberOfVertices() != other.getNumberOfVertices())
             return false;

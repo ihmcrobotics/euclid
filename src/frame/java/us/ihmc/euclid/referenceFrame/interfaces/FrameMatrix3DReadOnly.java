@@ -4,7 +4,6 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
@@ -31,7 +30,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameHolder
+public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, EuclidFrameGeometry
 {
    /**
     * Packs a column of this matrix into a 3D frame tuple.
@@ -1034,48 +1033,6 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
          return false;
 
       return Matrix3DReadOnly.super.equals(other);
-   }
-
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param object  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameMatrix3DReadOnly))
-         return false;
-      FrameMatrix3DReadOnly other = (FrameMatrix3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Matrix3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
-    * <p>
-    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
-    * </p>
-    *
-    * @param object  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameMatrix3DReadOnly))
-         return false;
-      return epsilonEquals(object, epsilon);
    }
 
    /**

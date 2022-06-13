@@ -1,10 +1,10 @@
 package us.ihmc.euclid.interfaces;
 
 /**
- * Interface used for geometry objects to provide basic comparison and print methods for convenience.
+ * Interface used for geometry objects to provide basic comparison and print methods for
+ * convenience.
  * 
  * @author joh
- *
  */
 public interface EuclidGeometry
 {
@@ -13,11 +13,11 @@ public interface EuclidGeometry
     * achieved on a per component basis. Sometimes a failing test does not necessarily mean that the
     * two objects are different in a geometric way.
     *
-    * @param object  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other euclidGeometry to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
-   boolean epsilonEquals(Object object, double epsilon);
+   boolean epsilonEquals(EuclidGeometry geometry, double epsilon);
 
    /**
     * Tests if {@code this} and {@code other} represent the same geometry to an {@code epsilon}.
@@ -27,11 +27,11 @@ public interface EuclidGeometry
     * than {@code epsilon}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing the two objects, usually refers to a distance.
+    * @param geometry the other euclidGeometry to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing the two objects, usually refers to a distance.
     * @return {@code true} if the two objects represent the same geometry, {@code false} otherwise.
     */
-   boolean geometricallyEquals(Object object, double epsilon);
+   boolean geometricallyEquals(EuclidGeometry geometry, double epsilon);
 
    /**
     * Provides a {@code String} representation of this EuclidGeometry.

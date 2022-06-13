@@ -1087,16 +1087,16 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param object  the object to compare against this. Not modified.
+    * @param geometry  the object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Matrix3DReadOnly))
+      if (!(geometry instanceof Matrix3DReadOnly))
          return false;
-      Matrix3DReadOnly other = (Matrix3DReadOnly) object;
+      Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon))
@@ -1122,17 +1122,17 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    /**
     * Two 3D matrices are considered geometrically equal if they are epsilon equal.
     * <p>
-    * This method is equivalent to {@link #epsilonEquals(Matrix3DReadOnly, double)}.
+    * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param object  the object to compare against this. Not modified.
+    * @param geometry  the object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      return epsilonEquals(object, epsilon);
+      return epsilonEquals(geometry, epsilon);
    }
 
    /**

@@ -1595,10 +1595,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    {
       if (other == this)
          return true;
-      if (other == null)
-         return false;
-
-      if (getNumberOfVertices() != other.getNumberOfVertices())
+      if ((other == null) || (getNumberOfVertices() != other.getNumberOfVertices()))
          return false;
 
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -1623,11 +1620,12 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
-   default boolean epsilonEquals(Object object, double epsilon)
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof ConvexPolygon2DReadOnly))
+      if ( !(geometry instanceof ConvexPolygon2DReadOnly))
          return false;
-      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) object;
+      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 
@@ -1656,11 +1654,12 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Object object, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof ConvexPolygon2DReadOnly))
+      if ( !(geometry instanceof ConvexPolygon2DReadOnly))
          return false;
-      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) object;
+      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 
@@ -1683,7 +1682,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
 
       return true;
    }
-   
+
    /**
     * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to use.
     * <p>

@@ -99,20 +99,20 @@ public interface Vertex2DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     *
-    * @param object  the other supplier to compare against this.
+    * @param geometry  the other supplier to compare against this.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (object == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (object instanceof Vertex2DSupplier)
+      else if (geometry instanceof Vertex2DSupplier)
       {
-         Vertex2DSupplier other = (Vertex2DSupplier) object;
+         Vertex2DSupplier other = (Vertex2DSupplier) geometry;
 
          if (getNumberOfVertices() != other.getNumberOfVertices())
             return false;
@@ -134,24 +134,24 @@ public interface Vertex2DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     * <p>
-    * The difference with {@link #epsilonEquals(Object, double)} is this method relies on
-    * {@link Point2DReadOnly#geometricallyEquals(Object, double)}.
+    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
+    * {@link Point2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param object  the other supplier to compare against this.
+    * @param geometry  the other supplier to compare against this.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (object == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (object instanceof Vertex2DSupplier)
+      else if (geometry instanceof Vertex2DSupplier)
       {
-         Vertex2DSupplier other = (Vertex2DSupplier) object;
+         Vertex2DSupplier other = (Vertex2DSupplier) geometry;
 
          if (getNumberOfVertices() != other.getNumberOfVertices())
             return false;

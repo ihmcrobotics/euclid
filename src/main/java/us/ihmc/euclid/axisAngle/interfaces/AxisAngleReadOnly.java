@@ -1,5 +1,6 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -458,17 +459,17 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
     * different orientations.
     *
-    * @param object  the object to compare against this. Not modified.
+    * @param geometry  the object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof AxisAngleReadOnly))
+      if (!(geometry instanceof AxisAngleReadOnly))
          return false;
 
-      AxisAngleReadOnly other = (AxisAngleReadOnly) object;
+      AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))

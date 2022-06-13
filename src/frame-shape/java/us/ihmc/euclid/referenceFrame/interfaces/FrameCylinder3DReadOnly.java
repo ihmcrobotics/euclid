@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -359,17 +360,17 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * If the two cylinders have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameCylinder3DReadOnly))
+      if (!(geometry instanceof FrameCylinder3DReadOnly))
          return false;
-      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
+      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Cylinder3DReadOnly.super.epsilonEquals(other, epsilon);
@@ -379,18 +380,18 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameCylinder3DReadOnly))
+      if (!(geometry instanceof FrameCylinder3DReadOnly))
          return false;
-      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) object;
+      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Cylinder3DReadOnly.super.geometricallyEquals(other, epsilon);

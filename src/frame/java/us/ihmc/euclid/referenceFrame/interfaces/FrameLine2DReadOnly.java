@@ -34,7 +34,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * using methods requiring {@code FrameLine2DReadOnly}.
  * </p>
  */
-public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolder
+public interface FrameLine2DReadOnly extends Line2DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1770,56 +1770,6 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
       checkReferenceFrameMatch(secondLine);
       interiorBisectorToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
-   }
-
-   /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    * <p>
-    * If the two lines have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param object  the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameLine2DReadOnly))
-         return false;
-      FrameLine2DReadOnly other = (FrameLine2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Line2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param object  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameLine2DReadOnly))
-         return false;
-      FrameLine2DReadOnly other = (FrameLine2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Line2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

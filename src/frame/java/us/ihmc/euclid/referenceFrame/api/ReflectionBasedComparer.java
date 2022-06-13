@@ -27,7 +27,7 @@ class ReflectionBasedComparer
 
       if (framelessParameter instanceof EuclidGeometry)
       {
-         return ((EuclidGeometry) framelessParameter).epsilonEquals(frameParameter, epsilon);
+         return ((EuclidGeometry) framelessParameter).epsilonEquals((EuclidGeometry) frameParameter, epsilon);
       }
 
       if (Double.TYPE.isInstance(framelessParameter) || Float.TYPE.isInstance(framelessParameter))

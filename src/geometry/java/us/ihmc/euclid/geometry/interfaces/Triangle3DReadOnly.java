@@ -132,16 +132,16 @@ public interface Triangle3DReadOnly extends EuclidGeometry
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Triangle3DReadOnly))
+      if (!(geometry instanceof Triangle3DReadOnly))
          return false;
-      Triangle3DReadOnly other = (Triangle3DReadOnly) object;
+      Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
       if (!getA().epsilonEquals(other.getA(), epsilon) || !getB().epsilonEquals(other.getB(), epsilon) || !getC().epsilonEquals(other.getC(), epsilon))
          return false;
       return true;
@@ -171,16 +171,16 @@ public interface Triangle3DReadOnly extends EuclidGeometry
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Triangle3DReadOnly))
+      if (!(geometry instanceof Triangle3DReadOnly))
          return false;
-      Triangle3DReadOnly other = (Triangle3DReadOnly) object;
+      Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
       return geometricallyEquals(other.getA(), other.getB(), other.getC(), epsilon);
    }
 

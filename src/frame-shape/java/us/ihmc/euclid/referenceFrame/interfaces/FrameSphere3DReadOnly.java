@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
@@ -340,18 +341,18 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
     * If the two spheres have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object which pose and radius is to be compared against this radius pose
+    * @param geometry  the other object which pose and radius is to be compared against this radius pose
     *                and radius. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameSphere3DReadOnly))
+      if (!(geometry instanceof FrameSphere3DReadOnly))
          return false;
-      FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) object;
+      FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Sphere3DReadOnly.super.epsilonEquals(other, epsilon);
@@ -361,18 +362,18 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
     * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
     * to an {@code epsilon}.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameSphere3DReadOnly))
+      if (!(geometry instanceof FrameSphere3DReadOnly))
          return false;
-      FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) object;
+      FrameSphere3DReadOnly other = (FrameSphere3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Sphere3DReadOnly.super.geometricallyEquals(other, epsilon);

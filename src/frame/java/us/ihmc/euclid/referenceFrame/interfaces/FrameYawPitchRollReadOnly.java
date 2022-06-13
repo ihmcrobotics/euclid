@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -63,17 +64,17 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameYawPitchRollReadOnly))
+      if (!(geometry instanceof FrameYawPitchRollReadOnly))
          return false;
-      FrameYawPitchRollReadOnly other = (FrameYawPitchRollReadOnly) object;
+      FrameYawPitchRollReadOnly other = (FrameYawPitchRollReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 

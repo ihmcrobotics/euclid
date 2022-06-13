@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -386,16 +387,16 @@ public interface RigidBodyTransformReadOnly extends Transform
     * Tests separately and on a per component basis if the rotation part and the translation part of
     * this transform and {@code other} are equal to an {@code epsilon}.
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof RigidBodyTransformReadOnly))
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
          return false;
-      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
       return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
@@ -403,16 +404,16 @@ public interface RigidBodyTransformReadOnly extends Transform
     * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
     * translation vectors are equal.
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof RigidBodyTransformReadOnly))
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
          return false;
-      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
       return getRotation().geometricallyEquals(other.getRotation(), epsilon) && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
 

@@ -7,6 +7,7 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
@@ -25,7 +26,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, ReferenceFrameHolder, FrameVertex2DSupplier
+public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, EuclidFrameGeometry, FrameVertex2DSupplier
 {
    /** {@inheritDoc} */
    @Override
@@ -1917,17 +1918,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * The method returns {@code false} if the two polygons are expressed in different frames.
     * </p>
     *
-    * @param object  the query. Not modified.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query. Not modified.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    * @see #epsilonEquals(ConvexPolygon2DReadOnly, double)
+    * @see #epsilonEquals(EuclidGeometry, double)
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameConvexPolygon2DReadOnly))
+      if (!(geometry instanceof FrameConvexPolygon2DReadOnly))
          return false;
-      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) object;
+      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -1944,19 +1945,19 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * same vertex.
     * </p>
     *
-    * @param object  the convex polygon to compare to.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the convex polygon to compare to.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
     *                                         the same reference frame.
-    * @see #geometricallyEquals(ConvexPolygon2DReadOnly, double)
+    * @see #geometricallyEquals(EuclidGeometry, double)
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameConvexPolygon2DReadOnly))
+      if (!(geometry instanceof FrameConvexPolygon2DReadOnly))
          return false;
-      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) object;
+      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);

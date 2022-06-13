@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -219,17 +220,17 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing..
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FramePose3DReadOnly))
+      if (!(geometry instanceof FramePose3DReadOnly))
          return false;
-      FramePose3DReadOnly other = (FramePose3DReadOnly) object;
+      FramePose3DReadOnly other = (FramePose3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 
@@ -242,18 +243,18 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FramePose3DReadOnly))
+      if (!(geometry instanceof FramePose3DReadOnly))
          return false;
-      FramePose3DReadOnly other = (FramePose3DReadOnly) object;
+      FramePose3DReadOnly other = (FramePose3DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);

@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Read-only interface for a 2D axis-aligned bounding box expressed in a given reference frame.
  */
-public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, ReferenceFrameHolder
+public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1207,52 +1207,6 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
       if (secondIntersectionToPack != null)
          checkReferenceFrameMatch(secondIntersectionToPack);
       return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameBoundingBox2DReadOnly))
-         return false;
-      FrameBoundingBox2DReadOnly other = (FrameBoundingBox2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return BoundingBox2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param object  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameBoundingBox2DReadOnly))
-         return false;
-      FrameBoundingBox2DReadOnly other = (FrameBoundingBox2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return BoundingBox2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

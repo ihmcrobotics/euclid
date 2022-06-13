@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -161,17 +162,17 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.
     *
-    * @param object  the other object which pose and radii is to be compared against this torus pose
+    * @param geometry  the other object which pose and radii is to be compared against this torus pose
     *                and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Torus3DReadOnly))
+      if (!(geometry instanceof Torus3DReadOnly))
          return false;
-      Torus3DReadOnly other = (Torus3DReadOnly) object;
+      Torus3DReadOnly other = (Torus3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getAxis().epsilonEquals(other.getAxis(), epsilon);
@@ -180,16 +181,16 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Torus3DReadOnly))
+      if (!(geometry instanceof Torus3DReadOnly))
          return false;
-      Torus3DReadOnly other = (Torus3DReadOnly) object;
+      Torus3DReadOnly other = (Torus3DReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             || !EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) || !getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;

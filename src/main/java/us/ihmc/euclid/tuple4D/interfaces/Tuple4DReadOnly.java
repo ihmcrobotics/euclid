@@ -331,18 +331,18 @@ public interface Tuple4DReadOnly extends EuclidGeometry
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other tuple to compare against this. Not modified.
+    * @param geometry  the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Tuple4DReadOnly))
+      if (!(geometry instanceof Tuple4DReadOnly))
          return false;
 
-      Tuple4DReadOnly other = (Tuple4DReadOnly) object;
+      Tuple4DReadOnly other = (Tuple4DReadOnly) geometry;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
 

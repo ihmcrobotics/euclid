@@ -797,16 +797,16 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof LineSegment2DReadOnly))
+      if (!(geometry instanceof LineSegment2DReadOnly))
          return false;
-      LineSegment2DReadOnly other = (LineSegment2DReadOnly) object;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
       return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
    }
 
@@ -835,17 +835,17 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof LineSegment2DReadOnly))
+      if (!(geometry instanceof LineSegment2DReadOnly))
          return false;
-      LineSegment2DReadOnly other = (LineSegment2DReadOnly) object;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
       if ((getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
             || (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)

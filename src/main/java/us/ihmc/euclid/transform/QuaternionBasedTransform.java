@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -407,14 +408,14 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
     * Tests separately and on a per component basis if the rotation part and the translation part of
     * this transform and {@code other} are equal to an {@code epsilon}.
     *
-    * @param object the object to compare against this.
+    * @param geometry the object to compare against this.
     */
    @Override
-   public boolean epsilonEquals(Object object, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof QuaternionBasedTransform))
+      if (!(geometry instanceof QuaternionBasedTransform))
          return false;
-      QuaternionBasedTransform other = (QuaternionBasedTransform) object;
+      QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
       return quaternion.epsilonEquals(other.quaternion, epsilon) && translationVector.epsilonEquals(other.translationVector, epsilon);
    }
 
@@ -459,16 +460,16 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
     * Two quaternion based transforms are considered geometrically equal if both the rotation-scale
     * matrices and translation vectors are equal.
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two quaternion based transforms are equal, {@code false} otherwise.
     */
    @Override
-   public boolean geometricallyEquals(Object object, double epsilon)
+   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof QuaternionBasedTransform))
+      if (!(geometry instanceof QuaternionBasedTransform))
          return false;
-      QuaternionBasedTransform other = (QuaternionBasedTransform) object;
+      QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
       return other.quaternion.geometricallyEquals(quaternion, epsilon) && other.translationVector.geometricallyEquals(translationVector, epsilon);
    }
 

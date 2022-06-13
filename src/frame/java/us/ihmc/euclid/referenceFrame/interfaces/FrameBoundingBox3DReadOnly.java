@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Read-only interface for a 3D axis-aligned bounding box expressed in a given reference frame.
  */
-public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, ReferenceFrameHolder
+public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1303,53 +1303,6 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return BoundingBox3DReadOnly.super.intersectionWithRay3D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param object  the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameBoundingBox3DReadOnly))
-         return false;
-      FrameBoundingBox3DReadOnly other = (FrameBoundingBox3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return BoundingBox3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param object  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameBoundingBox3DReadOnly))
-         return false;
-      FrameBoundingBox3DReadOnly other = (FrameBoundingBox3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return BoundingBox3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    @Override

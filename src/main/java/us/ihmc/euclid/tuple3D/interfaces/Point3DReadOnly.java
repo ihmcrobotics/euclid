@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -179,11 +180,11 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Point3DReadOnly))
+      if (!(geometry instanceof Point3DReadOnly))
          return false;
-      Point3DReadOnly other = (Point3DReadOnly) object;
+      Point3DReadOnly other = (Point3DReadOnly) geometry;
       return distance(other) <= epsilon;
    }
 }

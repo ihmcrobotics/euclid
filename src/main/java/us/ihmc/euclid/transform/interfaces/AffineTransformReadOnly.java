@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform.interfaces;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
@@ -374,17 +375,17 @@ public interface AffineTransformReadOnly extends Transform
     * translation vector are geometrically equal. Returns false by default if incoming object is not a
     * type of AffineTransform.
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two transforms are equal, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof AffineTransformReadOnly))
+      if (!(geometry instanceof AffineTransformReadOnly))
          return false;
 
-      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
+      AffineTransformReadOnly other = (AffineTransformReadOnly) geometry;
       return getLinearTransform().geometricallyEquals(other.getLinearTransform(), epsilon)
             && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
@@ -393,17 +394,17 @@ public interface AffineTransformReadOnly extends Transform
     * Tests on a per component basis if this transform and {@code other} are equal to an
     * {@code epsilon}. Returns false by default if incoming object is not a type of affineTransform.
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof AffineTransformReadOnly))
+      if (!(geometry instanceof AffineTransformReadOnly))
          return false;
 
-      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
+      AffineTransformReadOnly other = (AffineTransformReadOnly) geometry;
       return getLinearTransform().epsilonEquals(other.getLinearTransform(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 

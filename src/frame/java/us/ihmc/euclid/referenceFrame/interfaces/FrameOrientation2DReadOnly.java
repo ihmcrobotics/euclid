@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, ReferenceFrameHolder
+public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, EuclidFrameGeometry
 {
    /**
     * Computes and returns the difference between {@code this} and {@code other}:<br>
@@ -534,56 +534,6 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    {
       tupleTransformed.setToZero(getReferenceFrame());
       Orientation2DReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
-   }
-
-   /**
-    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
-    * {@code other}.
-    * <p>
-    * Note that this method performs number comparison and not an angle comparison, such that:
-    * -<i>pi</i> &ne; <i>pi</i>.
-    * </p>
-    * <p>
-    * If the two orientations have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param object  the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two orientations are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameOrientation2DReadOnly))
-         return false;
-      FrameOrientation2DReadOnly other = (FrameOrientation2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
-    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param object  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameOrientation2DReadOnly))
-         return false;
-      FrameOrientation2DReadOnly other = (FrameOrientation2DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

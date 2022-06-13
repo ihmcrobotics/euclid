@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -728,16 +729,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Face3DReadOnly))
+      if (!(geometry instanceof Face3DReadOnly))
          return false;
-      Face3DReadOnly other = (Face3DReadOnly) object;
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -752,16 +753,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Face3DReadOnly))
+      if (!(geometry instanceof Face3DReadOnly))
          return false;
-      Face3DReadOnly other = (Face3DReadOnly) object;
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 

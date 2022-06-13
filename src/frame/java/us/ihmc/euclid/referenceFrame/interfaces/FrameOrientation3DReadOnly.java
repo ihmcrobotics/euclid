@@ -36,7 +36,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, ReferenceFrameHolder
+public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, EuclidFrameGeometry
 {
    /**
     * Calculates and returns the angular distance between this(self) and other orientation.
@@ -2215,14 +2215,4 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameOrientation3DReadOnly))
-         return false;
-      FrameOrientation3DReadOnly other = (FrameOrientation3DReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
 }

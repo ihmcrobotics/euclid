@@ -7,6 +7,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
@@ -508,17 +509,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof ConvexPolytope3DReadOnly))
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
-      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) object;
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
       if ((other == null) || (getNumberOfFaces() != other.getNumberOfFaces()))
          return false;
 
@@ -535,17 +536,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
     * similar.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof ConvexPolytope3DReadOnly))
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
-      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) object;
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
       if ((other == null) || (getNumberOfFaces() != other.getNumberOfFaces()))
          return false;
 

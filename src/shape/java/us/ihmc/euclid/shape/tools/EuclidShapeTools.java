@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.tools;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
@@ -2665,7 +2666,7 @@ public class EuclidShapeTools
    }
 
    /**
-    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
     *
@@ -2691,7 +2692,7 @@ public class EuclidShapeTools
    }
 
    /**
-    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
     *

@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
@@ -333,17 +334,17 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param object  the other object which pose and radii is to be compared against this ellipsoid
+    * @param geometry  the other object which pose and radii is to be compared against this ellipsoid
     *                pose and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Ellipsoid3DReadOnly))
+      if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
-      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) object;
+      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;
       return getRadii().epsilonEquals(other.getRadii(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
@@ -352,16 +353,16 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Ellipsoid3DReadOnly))
+      if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
-      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) object;
+      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 

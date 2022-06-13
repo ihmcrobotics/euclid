@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.collision.gjk;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -46,30 +47,30 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    }
 
    @Override
-   public boolean epsilonEquals(Object object, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof SupportingVertexTransformer))
+      if (!(geometry instanceof SupportingVertexTransformer))
          return false;
-      if (object instanceof SupportingVertexHolder)
+      if (geometry instanceof SupportingVertexHolder)
       {
-         SupportingVertexHolder other = (SupportingVertexHolder) object;
+         SupportingVertexHolder other = (SupportingVertexHolder) geometry;
          return original.epsilonEquals(other, epsilon);
       }
-      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
       return transform.epsilonEquals(other, epsilon);
    }
 
    @Override
-   public boolean geometricallyEquals(Object object, double epsilon)
+   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof SupportingVertexTransformer))
+      if (!(geometry instanceof SupportingVertexTransformer))
          return false;
-      if (object instanceof SupportingVertexHolder)
+      if (geometry instanceof SupportingVertexHolder)
       {
-         SupportingVertexHolder other = (SupportingVertexHolder) object;
+         SupportingVertexHolder other = (SupportingVertexHolder) geometry;
          return original.geometricallyEquals(other, epsilon);
       }
-      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) object;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
       return transform.geometricallyEquals(other, epsilon);
    }
 

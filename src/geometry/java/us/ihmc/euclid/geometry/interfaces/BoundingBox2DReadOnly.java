@@ -587,11 +587,11 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof BoundingBox2DReadOnly))
+      if (!(geometry instanceof BoundingBox2DReadOnly))
          return false;
-      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) object;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
       return getMinPoint().epsilonEquals(other.getMinPoint(), epsilon) && getMaxPoint().epsilonEquals(other.getMaxPoint(), epsilon);
    }
 
@@ -606,11 +606,11 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof BoundingBox2DReadOnly))
+      if (!(geometry instanceof BoundingBox2DReadOnly))
          return false;
-      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) object;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
    }
 

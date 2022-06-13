@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -221,17 +222,17 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
     * {@code other}'s pose and radius are equal to an {@code epsilon}.
     *
-    * @param object  the other object which pose and radius is to be compared against this radius pose
+    * @param geometry  the other object which pose and radius is to be compared against this radius pose
     *                and radius. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Sphere3DReadOnly))
+      if (!(geometry instanceof Sphere3DReadOnly))
          return false;
-      Sphere3DReadOnly other = (Sphere3DReadOnly) object;
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
 
@@ -239,16 +240,16 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
     * to an {@code epsilon}.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Sphere3DReadOnly))
+      if (!(geometry instanceof Sphere3DReadOnly))
          return false;
-      Sphere3DReadOnly other = (Sphere3DReadOnly) object;
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon);
    }
 

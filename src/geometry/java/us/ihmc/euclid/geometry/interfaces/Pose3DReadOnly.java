@@ -241,17 +241,17 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}. Returns false by default if incoming object is not a type of pose3D.
     *
-    * @param object  the query.
+    * @param geometry  the query.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Pose3DReadOnly))
+      if (!(geometry instanceof Pose3DReadOnly))
          return false;
 
-      Pose3DReadOnly other = (Pose3DReadOnly) object;
+      Pose3DReadOnly other = (Pose3DReadOnly) geometry;
       return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
@@ -262,16 +262,16 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
     * Returns false by default if incoming object is not a type of Pose3D.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Pose3DReadOnly))
+      if (!(geometry instanceof Pose3DReadOnly))
          return false;
-      Pose3DReadOnly other = (Pose3DReadOnly) object;
+      Pose3DReadOnly other = (Pose3DReadOnly) geometry;
       return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 

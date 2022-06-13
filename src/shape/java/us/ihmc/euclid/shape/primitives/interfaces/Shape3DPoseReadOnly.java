@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -79,15 +80,15 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param object  the query.
+    * @param geometry  the query.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof Shape3DPoseReadOnly))
+      if ( !(geometry instanceof Shape3DPoseReadOnly))
          return false;
-      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) object;
+      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().epsilonEquals(other.getShapePosition(), epsilon) && getShapeOrientation().epsilonEquals(other.getShapeOrientation(), epsilon);
    }
 
@@ -98,15 +99,15 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param object  the object to compare to.
+    * @param geometry  the object to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof Shape3DPoseReadOnly))
+      if ( !(geometry instanceof Shape3DPoseReadOnly))
          return false;
-      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) object;
+      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().geometricallyEquals(other.getShapePosition(), epsilon)
             && getShapeOrientation().geometricallyEquals(other.getShapeOrientation(), epsilon);
    }

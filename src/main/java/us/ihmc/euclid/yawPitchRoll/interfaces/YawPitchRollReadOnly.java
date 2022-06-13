@@ -1,6 +1,7 @@
 package us.ihmc.euclid.yawPitchRoll.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -390,18 +391,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
     * two different orientations.
     *
-    * @param object  the object to compare against this. Not modified.
+    * @param geometry  the object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof YawPitchRollReadOnly))
+      if (!(geometry instanceof YawPitchRollReadOnly))
          return false;
 
-      YawPitchRollReadOnly other = (YawPitchRollReadOnly) object;
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
             || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;

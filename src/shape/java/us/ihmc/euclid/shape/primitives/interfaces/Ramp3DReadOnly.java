@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -390,17 +391,17 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param object  the other object which pose and size is to be compared against this ramp pose and
+    * @param geometry  the other object which pose and size is to be compared against this ramp pose and
     *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Ramp3DReadOnly))
+      if (!(geometry instanceof Ramp3DReadOnly))
          return false;
-      Ramp3DReadOnly other = (Ramp3DReadOnly) object;
+      Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
@@ -410,16 +411,16 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Ramp3DReadOnly))
+      if (!(geometry instanceof Ramp3DReadOnly))
          return false;
-      Ramp3DReadOnly other = (Ramp3DReadOnly) object;
+      Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
       return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon)
             && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }

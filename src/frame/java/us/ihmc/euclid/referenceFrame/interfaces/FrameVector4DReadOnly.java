@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
@@ -24,7 +25,7 @@ public interface FrameVector4DReadOnly extends Vector4DReadOnly, FrameTuple4DRea
     * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
     * similar, i.e. the length of the distance between them is less than or equal to {@code epsilon}.
     *
-    * @param object  the frame vector to compare to. Not modified.
+    * @param geometry  the frame vector to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
     *         otherwise.
@@ -32,12 +33,12 @@ public interface FrameVector4DReadOnly extends Vector4DReadOnly, FrameTuple4DRea
     *                                         frame as {@code this}.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FrameVector4DReadOnly))
+      if (!(geometry instanceof FrameVector4DReadOnly))
          return false;
       
-      FrameVector4DReadOnly other = (FrameVector4DReadOnly) object;
+      FrameVector4DReadOnly other = (FrameVector4DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Vector4DReadOnly.super.geometricallyEquals(other, epsilon);

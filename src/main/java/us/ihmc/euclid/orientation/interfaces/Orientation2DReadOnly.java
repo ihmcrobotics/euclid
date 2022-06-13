@@ -205,16 +205,16 @@ public interface Orientation2DReadOnly extends EuclidGeometry
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
     *
-    * @param object  the query.
+    * @param geometry  the query.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Orientation2DReadOnly))
+      if (!(geometry instanceof Orientation2DReadOnly))
          return false;
-      Orientation2DReadOnly other = (Orientation2DReadOnly) object;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon);
    }
 
@@ -223,17 +223,17 @@ public interface Orientation2DReadOnly extends EuclidGeometry
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Orientation2DReadOnly))
+      if (!(geometry instanceof Orientation2DReadOnly))
          return false;
-      Orientation2DReadOnly other = (Orientation2DReadOnly) object;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
       return Math.abs(difference(other)) <= epsilon;
    }
 

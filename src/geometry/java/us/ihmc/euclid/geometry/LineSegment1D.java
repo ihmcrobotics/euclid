@@ -574,16 +574,16 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
    @Override
-   public boolean epsilonEquals(Object object, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof LineSegment1D))
+      if (!(geometry instanceof LineSegment1D))
          return false;
-      LineSegment1D other = (LineSegment1D) object;
+      LineSegment1D other = (LineSegment1D) geometry;
       if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
@@ -599,17 +599,17 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   public boolean geometricallyEquals(Object object, double epsilon)
+   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof LineSegment1D))
+      if (!(geometry instanceof LineSegment1D))
          return false;
-      LineSegment1D other = (LineSegment1D) object;
+      LineSegment1D other = (LineSegment1D) geometry;
       if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
             && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return true;

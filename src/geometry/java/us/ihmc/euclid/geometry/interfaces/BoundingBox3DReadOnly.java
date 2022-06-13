@@ -807,16 +807,16 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof BoundingBox3DReadOnly))
+      if (!(geometry instanceof BoundingBox3DReadOnly))
          return false;
-      BoundingBox3DReadOnly other = (BoundingBox3DReadOnly) object;
+      BoundingBox3DReadOnly other = (BoundingBox3DReadOnly) geometry;
       return getMinPoint().epsilonEquals(other.getMinPoint(), epsilon) && getMaxPoint().epsilonEquals(other.getMaxPoint(), epsilon);
    }
 
@@ -825,17 +825,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param object  the object to compare to. Not modified.
+    * @param geometry  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof BoundingBox3DReadOnly))
+      if (!(geometry instanceof BoundingBox3DReadOnly))
          return false;
-      BoundingBox3DReadOnly other = (BoundingBox3DReadOnly) object;
+      BoundingBox3DReadOnly other = (BoundingBox3DReadOnly) geometry;
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
    }
 

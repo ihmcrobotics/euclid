@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -137,17 +138,17 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param object  the object to compare against this.
+    * @param geometry  the object to compare against this.
     * @param epsilon the maximum length of the difference vector can be for the two vectors to be
     *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Vector2DReadOnly))
+      if (!(geometry instanceof Vector2DReadOnly))
          return false;
-      Vector2DReadOnly other = (Vector2DReadOnly) object;
+      Vector2DReadOnly other = (Vector2DReadOnly) geometry;
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       return EuclidCoreTools.norm(dx, dy) <= epsilon;

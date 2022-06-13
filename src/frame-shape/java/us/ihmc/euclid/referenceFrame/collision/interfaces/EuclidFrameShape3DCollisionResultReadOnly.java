@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.collision.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
@@ -41,16 +42,16 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param object  the object result to compare against this. Not modified.
+    * @param geometry  the object result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof EuclidFrameShape3DCollisionResultReadOnly))
+      if (!(geometry instanceof EuclidFrameShape3DCollisionResultReadOnly))
          return false;
-      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) object;
+      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) geometry;
       if ((getPointOnA().getReferenceFrame() != other.getPointOnA().getReferenceFrame())
             || (getPointOnB().getReferenceFrame() != other.getPointOnB().getReferenceFrame())
             || (getNormalOnA().getReferenceFrame() != other.getNormalOnA().getReferenceFrame())
@@ -62,7 +63,7 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
     *
-    * @param object  the object result to compare against this. Not modified.
+    * @param geometry  the object result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each feature.
     * @return {@code true} if the two collision results are considered geometrically similar,
     *         {@code false} otherwise.
@@ -70,11 +71,11 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
     *                                         as {@code this}.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof EuclidFrameShape3DCollisionResultReadOnly))
+      if (!(geometry instanceof EuclidFrameShape3DCollisionResultReadOnly))
          return false;
-      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) object;
+      EuclidFrameShape3DCollisionResultReadOnly other = (EuclidFrameShape3DCollisionResultReadOnly) geometry;
       return geometricallyEquals(other, epsilon, epsilon, epsilon);
    }
 

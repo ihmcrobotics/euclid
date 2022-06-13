@@ -842,11 +842,11 @@ public interface Line2DReadOnly extends EuclidGeometry
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof Line2DReadOnly))
+      if ( !(geometry instanceof Line2DReadOnly))
          return false;
-      Line2DReadOnly other = (Line2DReadOnly) object;
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
       if (!getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
          return false;
 
@@ -865,11 +865,11 @@ public interface Line2DReadOnly extends EuclidGeometry
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(object instanceof Line2DReadOnly))
+      if ( !(geometry instanceof Line2DReadOnly))
          return false;
-      Line2DReadOnly other = (Line2DReadOnly) object;
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
       return isCollinear(other, epsilon);
    }
 

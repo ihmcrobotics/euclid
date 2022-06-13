@@ -123,17 +123,17 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof EuclidShape3DCollisionResultReadOnly))
+      if (!(geometry instanceof EuclidShape3DCollisionResultReadOnly))
          return false;
-      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) object;
+      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
       if ((getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()) || (areShapesColliding() != other.areShapesColliding())
             || !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
@@ -161,11 +161,11 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
     *         {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof EuclidShape3DCollisionResultReadOnly))
+      if (!(geometry instanceof EuclidShape3DCollisionResultReadOnly))
          return false;
-      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) object;
+      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
       return geometricallyEquals(other, epsilon, epsilon, epsilon);
    }
 

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -110,11 +111,11 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
     *                                         frame as {@code this}.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof FramePoint2DReadOnly))
+      if (!(geometry instanceof FramePoint2DReadOnly))
          return false;
-      FramePoint2DReadOnly other = (FramePoint2DReadOnly) object;
+      FramePoint2DReadOnly other = (FramePoint2DReadOnly) geometry;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Point2DReadOnly.super.geometricallyEquals(other, epsilon);

@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -196,16 +197,16 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Capsule3DReadOnly))
+      if (!(geometry instanceof Capsule3DReadOnly))
          return false;
-      Capsule3DReadOnly other = (Capsule3DReadOnly) object;
+      Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
@@ -214,16 +215,16 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
     * similar.
     *
-    * @param object  the other object to compare against this. Not modified.
+    * @param geometry  the other object to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
     */
    @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Capsule3DReadOnly))
+      if (!(geometry instanceof Capsule3DReadOnly))
          return false;
-      Capsule3DReadOnly other = (Capsule3DReadOnly) object;
+      Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) || !EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 

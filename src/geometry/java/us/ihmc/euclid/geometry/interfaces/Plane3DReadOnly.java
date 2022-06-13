@@ -486,16 +486,16 @@ public interface Plane3DReadOnly extends EuclidGeometry
     * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
     * physically the same but this method returns {@code false}.
     *
-    * @param object  the query. Not modified.
+    * @param geometry  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two planes are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object object, double epsilon)
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(object instanceof Plane3DReadOnly))
+      if (!(geometry instanceof Plane3DReadOnly))
          return false;
-      Plane3DReadOnly other = (Plane3DReadOnly) object;
+      Plane3DReadOnly other = (Plane3DReadOnly) geometry;
       return other.getNormal().epsilonEquals(getNormal(), epsilon) && other.getPoint().epsilonEquals(getPoint(), epsilon);
    }
 
