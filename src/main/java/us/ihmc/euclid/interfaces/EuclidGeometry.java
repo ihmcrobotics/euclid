@@ -1,6 +1,8 @@
 package us.ihmc.euclid.interfaces;
 
 /**
+ * Interface used for geometry objects to provide basic comparison and print methods for convenience.
+ * 
  * @author joh
  *
  */

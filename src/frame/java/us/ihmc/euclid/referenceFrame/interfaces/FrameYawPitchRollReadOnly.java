@@ -104,6 +104,19 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
       return YawPitchRollReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Gets a representative {@code String} of {@code yawPitchRoll} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 ) - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
    @Override
    default String toString(String format)
    {
