@@ -4,6 +4,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
@@ -215,8 +216,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
    @Override
    public String toString()
    {
-      // TODO: ask SUPER
-      return FrameYawPitchRollBasics.super.toString(null);
+      return FrameYawPitchRollBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

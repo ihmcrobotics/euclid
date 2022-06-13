@@ -18,9 +18,4 @@ import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
  */
 public interface FrameUnitVector2DReadOnly extends FrameVector2DReadOnly, UnitVector2DReadOnly
 {
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      return FrameVector2DReadOnly.super.geometricallyEquals(object, epsilon);
-   }
 }

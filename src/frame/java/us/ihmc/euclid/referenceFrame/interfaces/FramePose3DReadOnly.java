@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 /**
@@ -262,5 +263,11 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
          return false;
 
       return Pose3DReadOnly.super.equals(other);
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFramePose3DString(format, this);
    }
 }

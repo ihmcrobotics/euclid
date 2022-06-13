@@ -303,19 +303,6 @@ public class FrameQuaternion implements FrameQuaternionBasics
    }
 
    /**
-    * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
-    * s)-worldFrame.
-    * 
-    * @param format the format to be used.
-    * @return the {@code String} representing this frame quaternion.
-    */
-   @Override
-   public String toString(String format)
-   {
-      return FrameQuaternionBasics.super.toString(format);
-   }
-
-   /**
     * Calculates and returns a hash code value from the value of each component of this frame
     * quaternion.
     *

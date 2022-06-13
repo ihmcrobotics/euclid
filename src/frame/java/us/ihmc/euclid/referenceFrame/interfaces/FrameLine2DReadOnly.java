@@ -10,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -1792,10 +1793,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
       if (!(object instanceof FrameLine2DReadOnly))
          return false;
       FrameLine2DReadOnly other = (FrameLine2DReadOnly) object;
-      if ((getReferenceFrame() != other.getReferenceFrame()) || !getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
+      if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-
-      return true;
+      return Line2DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -1840,5 +1840,11 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
          return false;
       else
          return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameLine2DString(format, this);
    }
 }

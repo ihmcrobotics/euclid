@@ -2214,4 +2214,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       matrixTransformed.setReferenceFrame(getReferenceFrame());
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
+
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      if (!(object instanceof FrameOrientation3DReadOnly))
+         return false;
+      FrameOrientation3DReadOnly other = (FrameOrientation3DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      return Orientation3DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
 }

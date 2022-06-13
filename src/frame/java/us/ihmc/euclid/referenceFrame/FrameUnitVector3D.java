@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DBasics;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -250,7 +251,7 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics
    @Override
    public String toString()
    {
-      return FrameUnitVector3DBasics.super.toString(null);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

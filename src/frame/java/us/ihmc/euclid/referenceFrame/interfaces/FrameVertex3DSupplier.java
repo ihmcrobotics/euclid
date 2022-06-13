@@ -5,6 +5,7 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Implement this interface to create a custom supplier of 3D frame vertices or use the static
@@ -29,6 +30,21 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, ReferenceFrameH
       public int getNumberOfVertices()
       {
          return 0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof FrameVertex3DSupplier)
+            return equals((FrameVertex3DSupplier) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -74,16 +90,88 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, ReferenceFrameH
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
-   default boolean epsilonEquals(FrameVertex3DSupplier other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (getNumberOfVertices() != other.getNumberOfVertices())
+      if (object == this)
+      {
+         return true;
+      }
+      else if (object instanceof FrameVertex3DSupplier)
+      {
+         FrameVertex3DSupplier other = (FrameVertex3DSupplier) object;
+
+         if (getNumberOfVertices() != other.getNumberOfVertices())
+            return false;
+
+         for (int i = 0; i < getNumberOfVertices(); i++)
+         {
+            if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+               return false;
+         }
+
+         return true;
+      }
+      else
+      {
          return false;
+      }
+   }
+
+   /**
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * <p>
+    * The difference with {@link #epsilonEquals(Object, double)} is this method relies on
+    * {@link FramePoint3DReadOnly#geometricallyEquals(Object, double)}.
+    * </p>
+    *
+    * @param object  the other supplier to compare against this.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two suppliers are equal.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      if (object == this)
+      {
+         return true;
+      }
+      else if (object instanceof FrameVertex3DSupplier)
+      {
+         FrameVertex3DSupplier other = (FrameVertex3DSupplier) object;
+
+         if (getNumberOfVertices() != other.getNumberOfVertices())
+            return false;
+
+         for (int i = 0; i < getNumberOfVertices(); i++)
+         {
+            if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
+               return false;
+         }
+
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default String toString(String format)
+   {
+      StringBuilder sb = new StringBuilder("Frame vertex 3D Supplier: [");
+
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
-            return false;
+         if (i > 0)
+            sb.append(", ");
+         sb.append(getVertex(i).toString(format));
       }
-      return true;
+
+      sb.append(']');
+
+      return sb.toString();
    }
 
    /**
@@ -196,9 +284,18 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, ReferenceFrameH
          }
 
          @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVertex3DSupplier)
+               return equals((FrameVertex3DSupplier) object);
+            else
+               return false;
+         }
+
+         @Override
          public String toString()
          {
-            return "Vertex 3D Supplier: " + vertices.subList(startIndex, startIndex + numberOfVertices).toString();
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -796,8 +797,12 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameLine3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameLine3DReadOnly))
+         return false;
+      FrameLine3DReadOnly other = (FrameLine3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Line3DReadOnly.super.epsilonEquals(other, epsilon);
@@ -816,9 +821,14 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameLine3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      checkReferenceFrameMatch(other);
+      if (!(object instanceof FrameLine3DReadOnly))
+         return false;
+      FrameLine3DReadOnly other = (FrameLine3DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Line3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
@@ -840,5 +850,11 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
          return false;
       else
          return Line3DReadOnly.super.equals(other);
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameLine3DString(format, this);
    }
 }

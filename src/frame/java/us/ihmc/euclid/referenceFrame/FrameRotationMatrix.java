@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -420,7 +421,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
    @Override
    public String toString()
    {
-      return FrameRotationMatrixBasics.super.toString(null);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

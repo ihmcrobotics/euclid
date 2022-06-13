@@ -11,7 +11,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -183,7 +183,7 @@ public class FramePose3D implements FramePose3DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFramePose3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
@@ -196,6 +196,4 @@ public class FramePose3D implements FramePose3DBasics
    {
       return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
-
-
 }

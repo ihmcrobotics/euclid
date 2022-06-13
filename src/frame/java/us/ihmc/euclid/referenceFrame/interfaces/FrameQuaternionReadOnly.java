@@ -21,13 +21,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrientation3DReadOnly, QuaternionReadOnly
 {
-   /** {@inheritDoc} */
-   @Override
-   default String toString(String format)
-   {
-      return FrameTuple4DReadOnly.super.toString(format);
-   }
-
    /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
@@ -44,11 +37,6 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
    @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if (!(object instanceof FrameQuaternionReadOnly))
-         return false;
-      FrameQuaternionReadOnly other = (FrameQuaternionReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
+      return FrameOrientation3DReadOnly.super.geometricallyEquals(object, epsilon);
    }
 }

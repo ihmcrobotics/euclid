@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -1349,6 +1350,12 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return BoundingBox3DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameBoundingBox3DString(format, this);
    }
 
    /**

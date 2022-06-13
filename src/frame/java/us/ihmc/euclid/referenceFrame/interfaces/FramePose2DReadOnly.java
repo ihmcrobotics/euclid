@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 
 /**
  * Read-only interface for a 2D pose expressed in a given reference frame.
@@ -146,5 +147,11 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
          return false;
 
       return Pose2DReadOnly.super.equals(other);
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFramePose2DString(format, this);
    }
 }

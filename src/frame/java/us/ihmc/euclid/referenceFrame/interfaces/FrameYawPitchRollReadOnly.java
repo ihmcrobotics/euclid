@@ -81,30 +81,6 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
    }
 
    /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
-    * Returns false if reference frames don't match.
-    * </p>
-    *
-    * @param object  the object to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two orientations to be considered equal.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof FrameYawPitchRollReadOnly))
-         return false;
-      FrameYawPitchRollReadOnly other = (FrameYawPitchRollReadOnly) object;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return YawPitchRollReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Gets a representative {@code String} of {@code yawPitchRoll} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:

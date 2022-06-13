@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -1220,8 +1221,12 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameBoundingBox2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameBoundingBox2DReadOnly))
+         return false;
+      FrameBoundingBox2DReadOnly other = (FrameBoundingBox2DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return BoundingBox2DReadOnly.super.epsilonEquals(other, epsilon);
@@ -1267,5 +1272,11 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          return false;
       else
          return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameBoundingBox2DString(format, this);
    }
 }

@@ -1,14 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis2D;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector2DBasics;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -272,10 +268,9 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple2DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
-   
    /**
     * Calculates and returns a hash code value from the value of each component of this frame vector
     * 2D.

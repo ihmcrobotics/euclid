@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -249,7 +249,7 @@ public class FrameVector2D implements FrameVector2DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple2DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -11,6 +11,7 @@ import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -1959,5 +1960,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameConvexPolygon2DString(format, this);
    }
 }
