@@ -1395,8 +1395,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @return {@code true} if the two line segments are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameLineSegment2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameLineSegment2DReadOnly))
+         return false;
+      FrameLineSegment2DReadOnly other = (FrameLineSegment2DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return LineSegment2DReadOnly.super.epsilonEquals(other, epsilon);
@@ -1409,14 +1413,18 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * opposite direction.
     * </p>
     *
-    * @param other   the line to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameLineSegment2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameLineSegment2DReadOnly))
+         return false;
+      FrameLineSegment2DReadOnly other = (FrameLineSegment2DReadOnly) object;
       checkReferenceFrameMatch(other);
       return LineSegment2DReadOnly.super.geometricallyEquals(other, epsilon);
    }

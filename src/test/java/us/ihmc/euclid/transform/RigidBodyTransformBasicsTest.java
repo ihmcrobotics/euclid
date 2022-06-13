@@ -280,9 +280,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
       assertFalse(transform.getRotation().equals(identity().getRotation()));
       assertTrue(transform.epsilonEquals(identity(), corruptionFactor));
 
-      transform.normalizeRotationPart();
-      // TODO: need epsilon equals to compare rotation part.
-      assertTrue(transform.getRotation().equals(identity().getRotation()));
+      transform.normalizeRotationPart();    
+      assertTrue(transform.getRotation().epsilonEquals(identity().getRotation(), EPS));
    }
 
    @Test // moved from non-basic
@@ -797,8 +796,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
 
-         // TODO: need epsilon equals to compare rotation part.
-         assertTrue(actualTransform.getRotation().equals(expectedRotation));
+         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, EPS));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.0));
@@ -812,8 +810,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix(denseMatrix));
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         // TODO: need epsilon equals to compare rotation part.
-         assertTrue(actualTransform.getRotation().equals(expectedRotation));
+         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, EPS));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
@@ -826,8 +823,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(quaternion);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         // TODO: Need to use equals instead of geometrically equals but can't give epsilon in equals method...
-         assertTrue(actualTransform.getRotation().geometricallyEquals(expectedRotation, EPS));
+
+         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, EPS));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new Quaternion());
@@ -839,8 +836,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(expectedRotation);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         // TODO: need epsilon equals to compare rotation part.
-         assertTrue(actualTransform.getRotation().equals(expectedRotation));
+
+         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, EPS));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
@@ -854,8 +851,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          expectedRotation.setRotationVector(rotationVector);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         // TODO: need epsilon equals to compare rotation part.
-         assertTrue(actualTransform.getRotation().equals(expectedRotation));
+
+         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, EPS));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.getRotation().setRotationVector(new Vector3D());

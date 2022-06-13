@@ -112,10 +112,11 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
    @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof FramePoint2DReadOnly))
+      if (!(object instanceof FramePoint2DReadOnly))
          return false;
-      FramePoint2DReadOnly other= (FramePoint2DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      FramePoint2DReadOnly other = (FramePoint2DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Point2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

@@ -547,13 +547,17 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * If the two orientations have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameOrientation2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameOrientation2DReadOnly))
+         return false;
+      FrameOrientation2DReadOnly other = (FrameOrientation2DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Orientation2DReadOnly.super.epsilonEquals(other, epsilon);
@@ -564,16 +568,21 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param other   the orientation to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *                                         {@code this}.
     */
-   default boolean geometricallyEquals(FrameOrientation2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      checkReferenceFrameMatch(other);
+      if (!(object instanceof FrameOrientation2DReadOnly))
+         return false;
+      FrameOrientation2DReadOnly other = (FrameOrientation2DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Orientation2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

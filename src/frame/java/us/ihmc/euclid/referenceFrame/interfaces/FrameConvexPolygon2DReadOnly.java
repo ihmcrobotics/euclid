@@ -1921,6 +1921,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @see #epsilonEquals(ConvexPolygon2DReadOnly, double)
     */
+   @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameConvexPolygon2DReadOnly))
@@ -1949,12 +1950,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *                                         the same reference frame.
     * @see #geometricallyEquals(ConvexPolygon2DReadOnly, double)
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameConvexPolygon2DReadOnly))
          return false;
       FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

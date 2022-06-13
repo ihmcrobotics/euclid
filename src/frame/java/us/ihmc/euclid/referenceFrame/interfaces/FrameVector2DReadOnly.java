@@ -78,12 +78,14 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameVector2DReadOnly))
          return false;
       FrameVector2DReadOnly other = (FrameVector2DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Vector2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

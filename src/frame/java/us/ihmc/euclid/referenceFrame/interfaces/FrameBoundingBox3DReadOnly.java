@@ -1311,13 +1311,17 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * If the two bounding boxes have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameBoundingBox3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameBoundingBox3DReadOnly))
+         return false;
+      FrameBoundingBox3DReadOnly other = (FrameBoundingBox3DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -1336,12 +1340,14 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if ( !(object instanceof FrameBoundingBox3DReadOnly))
+      if (!(object instanceof FrameBoundingBox3DReadOnly))
          return false;
       FrameBoundingBox3DReadOnly other = (FrameBoundingBox3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return BoundingBox3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

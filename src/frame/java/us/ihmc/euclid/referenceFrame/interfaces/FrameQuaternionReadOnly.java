@@ -47,7 +47,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
       if (!(object instanceof FrameQuaternionReadOnly))
          return false;
       FrameQuaternionReadOnly other = (FrameQuaternionReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

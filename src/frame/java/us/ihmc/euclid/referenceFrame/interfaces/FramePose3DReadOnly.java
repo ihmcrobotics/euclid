@@ -209,6 +209,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
+   @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof FramePose3DReadOnly))
@@ -232,12 +233,14 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof FramePose3DReadOnly))
          return false;
       FramePose3DReadOnly other = (FramePose3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

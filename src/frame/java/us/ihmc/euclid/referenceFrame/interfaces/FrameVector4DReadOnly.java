@@ -35,11 +35,11 @@ public interface FrameVector4DReadOnly extends Vector4DReadOnly, FrameTuple4DRea
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameVector4DReadOnly))
-      {
          return false;
-      }
+      
       FrameVector4DReadOnly other = (FrameVector4DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Vector4DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

@@ -1781,18 +1781,18 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * If the two lines have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameLine2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
+      if (!(object instanceof FrameLine2DReadOnly))
          return false;
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
-         return false;
-      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+      FrameLine2DReadOnly other = (FrameLine2DReadOnly) object;
+      if ((getReferenceFrame() != other.getReferenceFrame()) || !getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
          return false;
 
       return true;
@@ -1805,15 +1805,20 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * opposite direction.
     * </p>
     *
-    * @param other   the line to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameLine2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      checkReferenceFrameMatch(other);
+      if (!(object instanceof FrameLine2DReadOnly))
+         return false;
+      FrameLine2DReadOnly other = (FrameLine2DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Line2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

@@ -46,7 +46,7 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param object  the other tuple to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -55,9 +55,8 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameTuple4DReadOnly))
-      {
          return false;
-      }
+
       FrameTuple4DReadOnly other = (FrameTuple4DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;

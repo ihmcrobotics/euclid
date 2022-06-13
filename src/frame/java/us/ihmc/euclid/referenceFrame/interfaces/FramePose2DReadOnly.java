@@ -88,13 +88,17 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other   the other pose to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing..
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
-   default boolean epsilonEquals(FramePose2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FramePose2DReadOnly))
+         return false;
+      FramePose2DReadOnly other = (FramePose2DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 
@@ -107,15 +111,20 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other   the pose to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
-   default boolean geometricallyEquals(FramePose2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      checkReferenceFrameMatch(other);
+      if (!(object instanceof FramePose2DReadOnly))
+         return false;
+      FramePose2DReadOnly other = (FramePose2DReadOnly) object;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Pose2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

@@ -152,15 +152,17 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
+   @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
       if (!(object instanceof FramePoint3DReadOnly))
          return false;
       FramePoint3DReadOnly other = (FramePoint3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return Point3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
-   
+
    /**
     * Provides a {@code String} representation of this frame point 3D as follows: (x, y, z)-worldFrame.
     *
@@ -171,5 +173,5 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
    {
       return EuclidFrameIOTools.getFrameTuple3DString(format, this);
    }
-  
+
 }

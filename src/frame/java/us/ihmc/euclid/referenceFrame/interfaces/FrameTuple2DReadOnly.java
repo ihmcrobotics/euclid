@@ -32,6 +32,7 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */
+   @Override
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof FrameTuple2DReadOnly))
@@ -64,17 +65,6 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
    }
 
    /**
-    * Provides a {@code String} representation of this tuple2D. as follows: (x, y)-referenceFrame.
-    *
-    * @return a string representation of this tuple2D.
-    */
-   @Override
-   default String toString(String format)
-   {
-      return EuclidFrameIOTools.getFrameTuple2DString(format, this);
-   }
-
-   /**
     * Tests if this tuple2D is geometrically equal to the given {@code object} to an {@code epsilon}.
     * <p>
     * If the two tuple2Ds have different frames, this method returns {@code false}.
@@ -95,4 +85,16 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
          return false;
       return distance(other) <= epsilon;
    }
+
+   /**
+    * Provides a {@code String} representation of this tuple2D. as follows: (x, y)-referenceFrame.
+    *
+    * @return a string representation of this tuple2D.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameTuple2DString(format, this);
+   }
+
 }

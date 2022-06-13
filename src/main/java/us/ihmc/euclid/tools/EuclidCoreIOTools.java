@@ -13,6 +13,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -56,7 +57,7 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(RigidBodyTransformReadOnly rigidBodyTransform)
+   public static String getRigidBodyTransformString(RigidBodyTransform rigidBodyTransform)
    {
       return getRigidBodyTransformString(DEFAULT_FORMAT, rigidBodyTransform);
    }
@@ -79,7 +80,7 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(String format, RigidBodyTransformReadOnly rigidBodyTransform)
+   public static String getRigidBodyTransformString(String format, RigidBodyTransform rigidBodyTransform)
    {
       if (rigidBodyTransform == null)
          return "null";
