@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
@@ -585,7 +584,7 @@ public class Torus3DTest
 
          BoundingBox3DReadOnly expectedBoundingBox = cylinder3D.getBoundingBox();
          BoundingBox3DReadOnly actualBoundingBox = torus3D.getBoundingBox();
-         EuclidGeometryTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 

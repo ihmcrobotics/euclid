@@ -24,7 +24,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190302_160115;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_111711;
@@ -1194,7 +1193,7 @@ public class ConvexPolytope3DTest
 
          EuclidShapeTestTools.assertEquals(null, expectedPolytope, actualPolytope, EPSILON);
          EuclidCoreTestTools.assertEquals(expectedPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
-         EuclidGeometryTestTools.assertEquals(null, expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
          {
@@ -1202,7 +1201,7 @@ public class ConvexPolytope3DTest
                                                     actualPolytope.getFace(faceIndex).getCentroid(),
                                                     EPSILON);
             EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, expectedPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            EuclidCoreTestTools.assertEquals(null, expectedPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
             assertEquals(expectedPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
          }
 
@@ -1210,7 +1209,7 @@ public class ConvexPolytope3DTest
 
          EuclidShapeTestTools.assertEquals(null, originalPolytope, actualPolytope, EPSILON);
          EuclidCoreTestTools.assertEquals(originalPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
-         EuclidGeometryTestTools.assertEquals(null, originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertEquals(null, originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
          {
@@ -1218,7 +1217,7 @@ public class ConvexPolytope3DTest
                                                     actualPolytope.getFace(faceIndex).getCentroid(),
                                                     EPSILON);
             EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
             assertEquals(originalPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
          }
       }
@@ -1236,7 +1235,7 @@ public class ConvexPolytope3DTest
          copyPolytope.set(originalPolytope);
 
          EuclidShapeTestTools.assertEquals(null, originalPolytope, copyPolytope, EPSILON);
-         EuclidGeometryTestTools.assertEquals(null, originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertEquals(null, originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
          EuclidCoreTestTools.assertEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
          assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
 
@@ -1249,7 +1248,7 @@ public class ConvexPolytope3DTest
 
             EuclidCoreTestTools.assertEquals(originalFace.getCentroid(), copyFace.getCentroid(), EPSILON);
             EuclidCoreTestTools.assertEquals(originalFace.getNormal(), copyFace.getNormal(), EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalFace.getBoundingBox(), copyFace.getBoundingBox(), EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalFace.getBoundingBox(), copyFace.getBoundingBox(), EPSILON);
             assertEquals(originalFace.getArea(), copyFace.getArea(), EPSILON);
          }
 
@@ -1275,10 +1274,10 @@ public class ConvexPolytope3DTest
             assertTrue(originalTwin != copyTwin);
             assertTrue(originalFace != copyFace);
 
-            EuclidGeometryTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalNext, copyNext, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalPrevious, copyPrevious, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalTwin, copyTwin, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalNext, copyNext, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalPrevious, copyPrevious, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalTwin, copyTwin, EPSILON);
             EuclidShapeTestTools.assertEquals(null, originalFace, copyFace, EPSILON);
          }
 
@@ -1295,7 +1294,7 @@ public class ConvexPolytope3DTest
                HalfEdge3D originalEdge = originalVertex.getAssociatedEdge(edgeIndex);
                HalfEdge3D copyEdge = copyVertex.getAssociatedEdge(edgeIndex);
                assertTrue(originalEdge != copyEdge);
-               EuclidGeometryTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
+               EuclidCoreTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
             }
          }
       }
@@ -1312,7 +1311,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D copyPolytope = new ConvexPolytope3D(originalPolytope);
 
          EuclidShapeTestTools.assertEquals(null, originalPolytope, copyPolytope, EPSILON);
-         EuclidGeometryTestTools.assertEquals(null, originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertEquals(null, originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
          EuclidCoreTestTools.assertEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
          assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
 
@@ -1325,7 +1324,7 @@ public class ConvexPolytope3DTest
 
             EuclidCoreTestTools.assertEquals(originalFace.getCentroid(), copyFace.getCentroid(), EPSILON);
             EuclidCoreTestTools.assertEquals(originalFace.getNormal(), copyFace.getNormal(), EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalFace.getBoundingBox(), copyFace.getBoundingBox(), EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalFace.getBoundingBox(), copyFace.getBoundingBox(), EPSILON);
             assertEquals(originalFace.getArea(), copyFace.getArea(), EPSILON);
          }
 
@@ -1351,10 +1350,10 @@ public class ConvexPolytope3DTest
             assertTrue(originalTwin != copyTwin);
             assertTrue(originalFace != copyFace);
 
-            EuclidGeometryTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalNext, copyNext, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalPrevious, copyPrevious, EPSILON);
-            EuclidGeometryTestTools.assertEquals(null, originalTwin, copyTwin, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalNext, copyNext, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalPrevious, copyPrevious, EPSILON);
+            EuclidCoreTestTools.assertEquals(null, originalTwin, copyTwin, EPSILON);
             EuclidShapeTestTools.assertEquals(null, originalFace, copyFace, EPSILON);
          }
 
@@ -1371,7 +1370,7 @@ public class ConvexPolytope3DTest
                HalfEdge3D originalEdge = originalVertex.getAssociatedEdge(edgeIndex);
                HalfEdge3D copyEdge = copyVertex.getAssociatedEdge(edgeIndex);
                assertTrue(originalEdge != copyEdge);
-               EuclidGeometryTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
+               EuclidCoreTestTools.assertEquals(null, originalEdge, copyEdge, EPSILON);
             }
          }
       }
@@ -1393,7 +1392,7 @@ public class ConvexPolytope3DTest
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
          convexPolytope3D.getVertices().forEach(vertex -> expectedBoundingBox.updateToIncludePoint(vertex));
-         EuclidGeometryTestTools.assertEquals(null, expectedBoundingBox, convexPolytope3D.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, convexPolytope3D.getBoundingBox(), EPSILON);
       }
    }
 

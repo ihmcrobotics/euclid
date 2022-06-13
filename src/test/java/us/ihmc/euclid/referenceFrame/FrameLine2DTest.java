@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
 {
@@ -74,7 +75,7 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
          FrameLine2D expected = new FrameLine2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

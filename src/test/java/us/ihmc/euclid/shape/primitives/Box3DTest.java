@@ -22,7 +22,6 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
@@ -1568,7 +1567,7 @@ public class Box3DTest
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
 
          BoundingBox3DReadOnly actualBoundingBox = box3D.getBoundingBox();
-         EuclidGeometryTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

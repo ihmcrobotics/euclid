@@ -22,6 +22,7 @@ import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
 {
@@ -83,7 +84,7 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
          FrameLine3D expected = new FrameLine3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 

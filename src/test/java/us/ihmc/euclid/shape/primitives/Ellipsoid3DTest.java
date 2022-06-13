@@ -17,7 +17,6 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
@@ -1282,7 +1281,7 @@ public class Ellipsoid3DTest
          expectedBoundingBox.updateToIncludePoint(ellipsoid3D.getSupportingVertex(supportDirection));
 
          BoundingBox3DReadOnly actualBoundingBox = ellipsoid3D.getBoundingBox();
-         EuclidGeometryTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

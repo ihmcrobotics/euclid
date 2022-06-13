@@ -12,7 +12,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -231,7 +230,7 @@ public class LineSegment2DTest
          RigidBodyTransform transform = new RigidBodyTransform();
          transform.getTranslation().set(x, y, 0.0);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -248,7 +247,7 @@ public class LineSegment2DTest
          RigidBodyTransform transform = new RigidBodyTransform();
          transform.getTranslation().set(translation.getX(), translation.getY(), 0.0);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expectedLineSegment, translatedLineSegment, EPSILON);
       }
    }
 

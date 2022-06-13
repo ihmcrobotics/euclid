@@ -23,6 +23,7 @@ import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
@@ -90,7 +91,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
          FramePose3D expected = new FramePose3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertEquals(null, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(null, expected, actual, EPSILON);
       }
    }
 
