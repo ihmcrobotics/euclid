@@ -34,7 +34,7 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    {
       FrameTypeCopier frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line2DReadOnly) line);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine2D;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilder,
