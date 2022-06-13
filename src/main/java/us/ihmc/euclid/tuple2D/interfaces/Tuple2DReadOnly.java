@@ -217,35 +217,6 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Calculates and returns the distance between this point and {@code other}.
-    *
-    * @param other the other point used to measure the distance. Not modified.
-    * @return the distance between the two points.
-    */
-   default double distance(Tuple2DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(distanceSquared(other));
-   }
-
-   /**
-    * Calculates and returns the square of the distance between this point and {@code other}.
-    * <p>
-    * This method is usually preferred over {@link #distance(Point2DReadOnly)} when calculation speed
-    * matters and knowledge of the actual distance does not, i.e. when comparing distances between
-    * several pairs of points.
-    * </p>
-    *
-    * @param other the other point used to measure the square of the distance. Not modified.
-    * @return the square of the distance between the two points.
-    */
-   default double distanceSquared(Tuple2DReadOnly other)
-   {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      return dx * dx + dy * dy;
-   }
-
-   /**
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *

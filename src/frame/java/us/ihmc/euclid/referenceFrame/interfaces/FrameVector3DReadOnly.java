@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -20,6 +21,17 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface FrameVector3DReadOnly extends Vector3DReadOnly, FrameTuple3DReadOnly
 {
+
+   default double differenceLengthSquared(FrameVector3DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Vector3DReadOnly.super.differenceLengthSquared(other);
+   }
+
+   default double differenceLength(FrameVector3DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
+   }
 
    /**
     * Calculates and returns the value of the dot product of this frame vector with {@code other}.

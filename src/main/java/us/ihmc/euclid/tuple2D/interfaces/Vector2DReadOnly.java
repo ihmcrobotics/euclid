@@ -62,6 +62,18 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       return dot(this);
    }
 
+   default double differenceLengthSquared(Vector2DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      return dx * dx + dy * dy;
+   }
+
+   default double distance(Vector2DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
+   }
+
    /**
     * Calculates and returns the value of the dot product of this vector with {@code other}.
     * <p>

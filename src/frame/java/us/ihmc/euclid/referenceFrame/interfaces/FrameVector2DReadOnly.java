@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
@@ -20,6 +21,18 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  */
 public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DReadOnly
 {
+
+   default double differenceLengthSquared(FrameVector2DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Vector2DReadOnly.super.differenceLengthSquared(other);
+   }
+
+   default double distance(FrameVector2DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
+   }
+
    /**
     * Calculates and returns the value of the dot product of this frame vector with {@code other}.
     * <p>
