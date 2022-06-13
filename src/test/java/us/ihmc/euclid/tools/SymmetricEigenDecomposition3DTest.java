@@ -17,6 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class SymmetricEigenDecomposition3DTest
 {
+   private static final boolean VERBOSE = false;
    private static final int ITERATIONS = 10000;
    private static final double EPSILON = 1.0e-12;
 
@@ -56,9 +57,10 @@ public class SymmetricEigenDecomposition3DTest
 
       double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS;
       double ejmlAverageMilllis = ejmlTotalTime / 1.0e6 / ITERATIONS;
-      System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
-                                       Double.toString(ejmlAverageMilllis),
-                                       Double.toString(euclidAverageMilllis)));
+      if (VERBOSE)
+         System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
+                                          Double.toString(ejmlAverageMilllis),
+                                          Double.toString(euclidAverageMilllis)));
    }
 
    @Test
