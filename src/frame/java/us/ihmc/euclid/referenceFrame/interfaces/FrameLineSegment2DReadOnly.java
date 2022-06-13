@@ -1425,7 +1425,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       if (!(object instanceof FrameLineSegment2DReadOnly))
          return false;
       FrameLineSegment2DReadOnly other = (FrameLineSegment2DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return LineSegment2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

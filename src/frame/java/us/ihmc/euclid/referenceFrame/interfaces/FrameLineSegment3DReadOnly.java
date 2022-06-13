@@ -712,7 +712,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
       if (!(object instanceof FrameLineSegment3DReadOnly))
          return false;
       FrameLineSegment3DReadOnly other = (FrameLineSegment3DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return LineSegment3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 

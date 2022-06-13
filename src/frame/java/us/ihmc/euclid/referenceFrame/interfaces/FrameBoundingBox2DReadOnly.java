@@ -1250,7 +1250,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
       if (!(object instanceof FrameBoundingBox2DReadOnly))
          return false;
       FrameBoundingBox2DReadOnly other = (FrameBoundingBox2DReadOnly) object;
-      checkReferenceFrameMatch(other);
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
       return BoundingBox2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
