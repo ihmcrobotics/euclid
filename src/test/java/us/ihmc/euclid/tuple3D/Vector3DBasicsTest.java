@@ -154,7 +154,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          actualVector.set(vector1);
          actualVector.cross(vector2);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedVector, actualVector, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedVector, actualVector, getEpsilon());
       }
    }
 
@@ -184,7 +184,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
             assertTrue(actualVector.clipToMaxLength(maxLength));
          }
 
-         EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i + ", maxLength: " + maxLength, expectedVector, actualVector, 5.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals("Iteration: " + i + ", maxLength: " + maxLength, expectedVector, actualVector, 5.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -220,7 +220,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          vector2.normalize();
          vector1.setAndScale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), vector2);
          vector1.normalize();
-         EuclidCoreTestTools.assertTuple3DEquals(vector1, vector2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vector1, vector2, getEpsilon());
 
          vector1.setToNaN();
          vector1.normalize();
@@ -244,7 +244,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          T vector3 = createEmptyTuple();
          vector3.setAndScale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), vector2);
          vector1.setAndNormalize(vector3);
-         EuclidCoreTestTools.assertTuple3DEquals(vector1, vector2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vector1, vector2, getEpsilon());
 
          vector3.setToNaN();
          vector1.setToZero();
@@ -270,7 +270,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -284,7 +284,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -298,7 +298,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 10.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 10.0 * getEpsilon());
       }
    }
 
@@ -318,7 +318,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 10.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 10.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -332,7 +332,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 10.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 10.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -346,7 +346,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 100.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 100.0 * getEpsilon());
       }
    }
 

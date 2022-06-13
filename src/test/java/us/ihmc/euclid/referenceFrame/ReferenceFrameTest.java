@@ -437,10 +437,10 @@ public class ReferenceFrameTest
          transform.transform(expected);
          initialFrame.transformFromThisToDesiredFrame(desiredFrame, actual);
 
-         EuclidCoreTestTools.assertTuple3DEquals("Iteration #" + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration #" + i, expected, actual, EPSILON);
 
          desiredFrame.transformFromThisToDesiredFrame(initialFrame, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(original, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(original, actual, EPSILON);
 
          ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try

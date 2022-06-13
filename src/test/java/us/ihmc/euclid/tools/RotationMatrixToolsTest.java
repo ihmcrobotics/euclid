@@ -44,11 +44,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyYawRotation(yaw, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyYawRotation(yaw, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -64,11 +64,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyYawRotation(yaw, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyYawRotation(yaw, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 
@@ -90,11 +90,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyPitchRotation(pitch, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyPitchRotation(pitch, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 
@@ -116,11 +116,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyRollRotation(roll, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyRollRotation(roll, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 

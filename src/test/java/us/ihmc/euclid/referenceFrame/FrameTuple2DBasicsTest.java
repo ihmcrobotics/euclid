@@ -54,7 +54,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
          actual.set(initialFrame, expected);
 
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          assertEquals(initialFrame, actual.getReferenceFrame());
 
          actual.set(createRandomFramelessTuple(random));
@@ -75,7 +75,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          catch (ReferenceFrameMismatchException e)
          {
             // good
-            EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
       }
 
@@ -93,7 +93,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
          actual.set(initialFrame, expected.getX(), expected.getY());
 
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          assertEquals(initialFrame, actual.getReferenceFrame());
 
          actual.set(createRandomFramelessTuple(random));
@@ -114,7 +114,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          catch (ReferenceFrameMismatchException e)
          {
             // good
-            EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
       }
    }
@@ -137,7 +137,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          frameTuple.setIncludingFrame(newFrame, x, y);
          tuple.set(x, y);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -150,7 +150,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          frameTuple.setIncludingFrame(newFrame, input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -163,7 +163,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          frameTuple.setIncludingFrame(newFrame, input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -193,7 +193,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -232,7 +232,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -268,7 +268,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -305,7 +305,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -343,7 +343,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -364,7 +364,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          frameTuple.setIncludingFrame(input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -377,7 +377,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          frameTuple.setIncludingFrame(input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertEquals(tuple, frameTuple, EPSILON);
       }
    }
 
@@ -398,7 +398,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
          assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
          frameGeometryObject.setToZero();
-         EuclidCoreTestTools.assertTuple2DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
 
          frameGeometryObject = createRandomFrameTuple(random, initialFrame);
          ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -407,7 +407,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
          frameGeometryObject.setToZero(newFrame);
          assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
       }
    }
 

@@ -89,10 +89,10 @@ public class EuclidShape3DCollisionResultTest
          assertEquals(original.areShapesColliding(), tested.areShapesColliding());
          assertEquals(original.getDistance(), tested.getDistance());
          assertEquals(original.getSignedDistance(), tested.getSignedDistance());
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -108,10 +108,10 @@ public class EuclidShape3DCollisionResultTest
          assertEquals(original.areShapesColliding(), tested.areShapesColliding());
          assertEquals(original.getDistance(), tested.getDistance());
          assertEquals(original.getSignedDistance(), tested.getSignedDistance());
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -127,10 +127,10 @@ public class EuclidShape3DCollisionResultTest
          assertEquals(expected, tested.areShapesColliding());
          assertEquals(original.getDistance(), tested.getDistance());
          assertEquals(original.getSignedDistance(), tested.getSignedDistance());
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -146,10 +146,10 @@ public class EuclidShape3DCollisionResultTest
          assertEquals(original.getShapeA(), tested.getShapeA());
          assertEquals(original.getShapeB(), tested.getShapeB());
          assertEquals(original.areShapesColliding(), tested.areShapesColliding());
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnA(), tested.getPointOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getPointOnB(), tested.getPointOnB(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnA(), tested.getNormalOnA(), 0.0);
+         EuclidCoreTestTools.assertEquals(original.getNormalOnB(), tested.getNormalOnB(), 0.0);
       }
    }
 

@@ -134,7 +134,7 @@ public class SymmetricEigenDecomposition3DTest
       String messagePrefix = "Iteration: " + i;
 
       EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, A, A_output, epsilon);
-      EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, lambdaejml, lambdaeuclid, epsilon);
+      EuclidCoreTestTools.assertEquals(messagePrefix, lambdaejml, lambdaeuclid, epsilon);
       if (EuclidCoreTools.epsilonEquals(lambdaejml.getX(), lambdaejml.getY(), epsilon))
       {
          if (!EuclidCoreTools.epsilonEquals(lambdaejml.getY(), lambdaejml.getZ(), epsilon))
@@ -143,7 +143,7 @@ public class SymmetricEigenDecomposition3DTest
             Vector3D zColumnEuclid = new Vector3D();
             Qejml.getColumn(2, zColumnEJML);
             Qeuclid.getColumn(2, zColumnEuclid);
-            EuclidCoreTestTools.assertTuple3DEquals(zColumnEJML, zColumnEuclid, epsilon);
+            EuclidCoreTestTools.assertEquals(zColumnEJML, zColumnEuclid, epsilon);
          }
       }
       else
@@ -158,7 +158,7 @@ public class SymmetricEigenDecomposition3DTest
             Vector3D xColumnEuclid = new Vector3D();
             Qejml.getColumn(0, xColumnEJML);
             Qeuclid.getColumn(0, xColumnEuclid);
-            EuclidCoreTestTools.assertTuple3DEquals(xColumnEJML, xColumnEuclid, epsilon);
+            EuclidCoreTestTools.assertEquals(xColumnEJML, xColumnEuclid, epsilon);
          }
       }
    }

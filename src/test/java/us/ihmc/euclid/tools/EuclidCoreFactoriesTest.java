@@ -1275,22 +1275,22 @@ public class EuclidCoreFactoriesTest
    public static void thoroughAssertionsTuple2D(Tuple2DReadOnly expected, Tuple2DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    public static void thoroughAssertionsTuple3D(Tuple3DReadOnly expected, Tuple3DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    public static void thoroughAssertionsTuple4D(Tuple4DReadOnly expected, Tuple4DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
-      EuclidCoreTestTools.assertTuple4DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    public static void thoroughAssertionsMatrix3D(Matrix3DReadOnly expected, Matrix3DReadOnly actual)

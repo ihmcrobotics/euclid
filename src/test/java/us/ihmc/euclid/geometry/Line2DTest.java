@@ -155,7 +155,7 @@ public class Line2DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
+         EuclidCoreTestTools.assertEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
       }
       catch (RuntimeException e)
       {
@@ -725,11 +725,11 @@ public class Line2DTest
          Point2D pointOnLine2 = new Point2D(expectedIntersection);
 
          Point2DBasics actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
 
          pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
 
       // Test when parallel but not collinear
@@ -766,11 +766,11 @@ public class Line2DTest
          Point2D pointOnLine2 = new Point2D(expectedIntersection);
 
          Point2DBasics actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
 
          pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
    }
 

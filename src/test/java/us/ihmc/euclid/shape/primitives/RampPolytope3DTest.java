@@ -73,7 +73,7 @@ public class RampPolytope3DTest
          }
 
          assertEquals(convexPolytope3D.getVolume(), rampPolytope3D.getVolume(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(rampPolytope3D.getCentroid(), convexPolytope3D.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(rampPolytope3D.getCentroid(), convexPolytope3D.getCentroid(), EPSILON);
 
          for (Face3DReadOnly rampFace : rampPolytope3D.getFaces())
          {

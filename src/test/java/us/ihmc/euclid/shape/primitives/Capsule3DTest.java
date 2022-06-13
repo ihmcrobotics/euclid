@@ -41,12 +41,12 @@ class Capsule3DTest
          Capsule3D capsule3D = new Capsule3D();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
          assertEquals(1.0, capsule3D.getLength());
          assertEquals(0.5, capsule3D.getHalfLength());
          assertEquals(0.5, capsule3D.getRadius());
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.5), capsule3D.getTopCenter(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, -0.5), capsule3D.getBottomCenter(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, 0.5), capsule3D.getTopCenter(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, -0.5), capsule3D.getBottomCenter(), EPSILON);
       }
 
       { // Capsule3D(double length, double radius)
@@ -57,12 +57,12 @@ class Capsule3DTest
             Capsule3D capsule3D = new Capsule3D(length, radius);
 
             EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-            EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
+            EuclidCoreTestTools.assertEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
             assertEquals(length, capsule3D.getLength());
             assertEquals(0.5 * length, capsule3D.getHalfLength());
             assertEquals(radius, capsule3D.getRadius());
-            EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.5 * length), capsule3D.getTopCenter(), EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, -0.5 * length), capsule3D.getBottomCenter(), EPSILON);
+            EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, 0.5 * length), capsule3D.getTopCenter(), EPSILON);
+            EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, -0.5 * length), capsule3D.getBottomCenter(), EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Capsule3D(-0.1, 1.0));
@@ -82,13 +82,13 @@ class Capsule3DTest
             Capsule3D capsule3D = new Capsule3D(position, axis, length, radius);
             axis.normalize();
 
-            EuclidCoreTestTools.assertTuple3DEquals(position, capsule3D.getPosition(), EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(axis, capsule3D.getAxis(), EPSILON);
+            EuclidCoreTestTools.assertEquals(position, capsule3D.getPosition(), EPSILON);
+            EuclidCoreTestTools.assertEquals(axis, capsule3D.getAxis(), EPSILON);
             assertEquals(length, capsule3D.getLength());
             assertEquals(0.5 * length, capsule3D.getHalfLength());
             assertEquals(radius, capsule3D.getRadius());
-            EuclidCoreTestTools.assertTuple3DEquals(expectedTopCenter, capsule3D.getTopCenter(), EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedBottomCenter, capsule3D.getBottomCenter(), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedTopCenter, capsule3D.getTopCenter(), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedBottomCenter, capsule3D.getBottomCenter(), EPSILON);
          }
 
          assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis3D.Z, -0.1, 1.0));
@@ -155,7 +155,7 @@ class Capsule3DTest
          capsule3D.setToZero();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getTopCenter());
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getBottomCenter());
          assertEquals(0.0, capsule3D.getLength());
@@ -341,8 +341,8 @@ class Capsule3DTest
          assertFalse(actualNormal.containsNaN());
 
          capsule3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -354,8 +354,8 @@ class Capsule3DTest
          assertFalse(actualNormal.containsNaN());
 
          capsule3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -367,8 +367,8 @@ class Capsule3DTest
          assertFalse(actualNormal.containsNaN());
 
          capsule3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -385,8 +385,8 @@ class Capsule3DTest
          expectedNormal.setAndNormalize(orthogonalToAxis);
 
          assertTrue(capsule3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -403,8 +403,8 @@ class Capsule3DTest
          expectedNormal.setAndNormalize(orthogonalToAxis);
 
          assertFalse(capsule3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -423,8 +423,8 @@ class Capsule3DTest
          expectedNormal.set(direction);
 
          assertTrue(capsule3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -444,8 +444,8 @@ class Capsule3DTest
          expectedNormal.set(direction);
 
          assertTrue(capsule3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -464,8 +464,8 @@ class Capsule3DTest
          expectedNormal.set(direction);
 
          assertFalse(capsule3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -485,8 +485,8 @@ class Capsule3DTest
          expectedNormal.set(direction);
 
          assertFalse(capsule3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -787,7 +787,7 @@ class Capsule3DTest
          pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
          expectedProjection.scaleAdd(capsule3D.getRadius(), orthogonalToAxis, pointOnAxis);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -835,7 +835,7 @@ class Capsule3DTest
          pointOutside.scaleAdd(distanceOffTopCenter, direction, capsule3D.getTopCenter());
          expectedProjection.scaleAdd(capsule3D.getRadius(), direction, capsule3D.getTopCenter());
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -853,7 +853,7 @@ class Capsule3DTest
          pointOutside.scaleAdd(distanceOffBottomCenter, direction, capsule3D.getBottomCenter());
          expectedProjection.scaleAdd(capsule3D.getRadius(), direction, capsule3D.getBottomCenter());
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, capsule3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
    }
 
@@ -876,7 +876,7 @@ class Capsule3DTest
 
          Vector3D actualNormal = new Vector3D();
          capsule.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(supportDirection, actualNormal, EPSILON);
       }
    }
 

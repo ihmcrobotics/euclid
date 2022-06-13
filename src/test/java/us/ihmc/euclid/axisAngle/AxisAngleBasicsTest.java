@@ -252,7 +252,7 @@ public abstract class AxisAngleBasicsTest<T extends AxisAngleBasics> extends Axi
          actualAxisAngle.set(expectedAxisAngle.getX(), expectedAxisAngle.getY(), expectedAxisAngle.getZ(), expectedAxisAngle.getAngle());
          axis.set(expectedAxisAngle.getX(), expectedAxisAngle.getY(), expectedAxisAngle.getZ());
 
-         EuclidCoreTestTools.assertTuple3DEquals(axis, actualAxisAngle.getAxis(), getEpsilon());
+         EuclidCoreTestTools.assertEquals(axis, actualAxisAngle.getAxis(), getEpsilon());
          assertTrue(expectedAxisAngle.getAngle() == actualAxisAngle.getAngle());
       }
    }

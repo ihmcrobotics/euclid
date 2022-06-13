@@ -109,7 +109,7 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(0.0, tetrahedron.distance(pointOnTetrahedron), EPSILON);
          assertEquals(cube.distance(tetrahedronClosest), separatingDistance, EPSILON);
 
-         EuclidCoreTestTools.assertTuple3DEquals(tetrahedronClosest, pointOnTetrahedron, EPSILON);
+         EuclidCoreTestTools.assertEquals(tetrahedronClosest, pointOnTetrahedron, EPSILON);
          assertEquals(tetrahedronClosest.getY(), pointOnCube.getY(), EPSILON);
          assertEquals(tetrahedronClosest.getZ(), pointOnCube.getZ(), EPSILON);
       }
@@ -137,7 +137,7 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(pointOnCube.distance(pointOnSingleton), -result.getSignedDistance(), EPSILON);
          assertEquals(cube.signedDistance(point), result.getSignedDistance(), EPSILON);
 
-         EuclidCoreTestTools.assertTuple3DEquals(point, pointOnSingleton, EPSILON);
+         EuclidCoreTestTools.assertEquals(point, pointOnSingleton, EPSILON);
          assertEquals(point.getY(), pointOnCube.getY(), EPSILON);
          assertEquals(point.getZ(), pointOnCube.getZ(), EPSILON);
 
@@ -158,7 +158,7 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
          assertEquals(0.0, tetrahedron.distance(pointOnSingleton), EPSILON);
 
-         EuclidCoreTestTools.assertTuple3DEquals(point, pointOnSingleton, EPSILON);
+         EuclidCoreTestTools.assertEquals(point, pointOnSingleton, EPSILON);
       }
    }
 
@@ -196,7 +196,7 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(pointOnCube.distance(pointOnTetrahedron), -result.getSignedDistance(), EPSILON);
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
          assertEquals(0.0, tetrahedron.distance(pointOnTetrahedron), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(tetrahedronClosest, pointOnTetrahedron, EPSILON);
+         EuclidCoreTestTools.assertEquals(tetrahedronClosest, pointOnTetrahedron, EPSILON);
 
          assertEquals(cube.signedDistance(tetrahedronClosest), result.getSignedDistance(), EPSILON);
          assertEquals(tetrahedronClosest.getY(), pointOnCube.getY(), EPSILON);
@@ -540,8 +540,8 @@ class ExpandingPolytopeAlgorithmTest
 
          assertEquals(0.0, polytopeA.distance(actualPointOnA), EPSILON);
          assertEquals(0.0, polytopeB.distance(actualPointOnB), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnA, actualPointOnA, 10.0 * EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnB, actualPointOnB, 10.0 * EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPointOnA, actualPointOnA, 10.0 * EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPointOnB, actualPointOnB, 10.0 * EPSILON);
       }
    }
 

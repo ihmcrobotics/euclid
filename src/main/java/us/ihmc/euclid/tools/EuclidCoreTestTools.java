@@ -17,7 +17,6 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -36,7 +35,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -97,92 +95,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts on a per component basis that the yaw-pitch-roll orientations are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected yaw-pitch-roll orientation. Not modified.
-    * @param actual   the actual yaw-pitch-roll orientation. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two yaw-pitch-rolls are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertYawPitchRollEquals(YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon)
-   {
-      assertYawPitchRollEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the yaw-pitch-roll orientations are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected yaw-pitch-roll orientation. Not modified.
-    * @param actual        the actual yaw-pitch-roll orientation. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two yaw-pitch-rolls are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertYawPitchRollEquals(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon)
-   {
-      assertYawPitchRollEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the yaw-pitch-roll orientations are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected yaw-pitch-roll orientation. Not modified.
-    * @param actual        the actual yaw-pitch-roll orientation. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two yaw-pitch-rolls are not equal. If only one of the arguments is
-    *                        equal to {@code null}.
-    */
-   public static void assertYawPitchRollEquals(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         YawPitchRoll difference = new YawPitchRoll();
-         difference.set(expected);
-         difference.addYaw(-actual.getYaw());
-         difference.addPitch(-actual.getPitch());
-         difference.addRoll(-actual.getRoll());
-         difference.absolute();
-         double maxDifference = EuclidCoreTools.max(difference.getYaw(), difference.getPitch(), difference.getRoll());
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(maxDifference), format);
-      }
-   }
-
-   /**
     * Asserts the yaw-pitch-roll orientations are geometrically equivalent to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
@@ -196,60 +108,7 @@ public class EuclidCoreTestTools
     */
    public static void assertYawPitchRollGeometricallyEquals(YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon)
    {
-      assertYawPitchRollGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts the yaw-pitch-roll orientations are geometrically equivalent to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected yaw-pitch-roll orientation. Not modified.
-    * @param actual        the actual yaw-pitch-roll orientation. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two yaw-pitch-roll do not represent the same geometry. If only one
-    *                        of the arguments is equal to {@code null}.
-    */
-   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon)
-   {
-      assertYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts the yaw-pitch-roll orientations are geometrically equivalent to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected yaw-pitch-roll orientation. Not modified.
-    * @param actual        the actual yaw-pitch-roll orientation. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two yaw-pitch-roll do not represent the same geometry. If only one
-    *                        of the arguments is equal to {@code null}.
-    */
-   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix,
-                                                            YawPitchRollReadOnly expected,
-                                                            YawPitchRollReadOnly actual,
-                                                            double epsilon,
-                                                            String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         double difference = expected.distance(actual);
-         difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
-      }
+      assertOrientation3DGeometricallyEquals(expected, actual, epsilon);
    }
 
    /**
@@ -331,79 +190,13 @@ public class EuclidCoreTestTools
 
       try
       {
-         assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, epsilon);
+         assertOrientation3DGeometricallyEquals(expectedQuaternion, actualQuaternion, epsilon);
       }
       catch (AssertionError e)
       {
          double difference = expectedQuaternion.distance(actualQuaternion);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
-      }
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected tuple. Not modified.
-    * @param actual   the actual tuple. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple2DEquals(Tuple2DReadOnly expected, Tuple2DReadOnly actual, double epsilon)
-   {
-      assertTuple2DEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the automated message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple2DEquals(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, double epsilon)
-   {
-      assertTuple2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the automated message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple2DEquals(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!TupleTools.epsilonEquals(expected, actual, epsilon))
-      {
-         Vector2D difference = new Vector2D(actual);
-         difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -532,72 +325,6 @@ public class EuclidCoreTestTools
       if (!expected.geometricallyEquals(actual, epsilon))
       {
          Vector2D difference = new Vector2D(actual);
-         difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
-      }
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected tuple. Not modified.
-    * @param actual   the actual tuple. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple3DEquals(Tuple3DReadOnly expected, Tuple3DReadOnly actual, double epsilon)
-   {
-      assertTuple3DEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple3DEquals(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, double epsilon)
-   {
-      assertTuple3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple3DEquals(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!TupleTools.epsilonEquals(expected, actual, epsilon))
-      {
-         Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
@@ -734,72 +461,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected tuple. Not modified.
-    * @param actual   the actual tuple. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple4DEquals(Tuple4DReadOnly expected, Tuple4DReadOnly actual, double epsilon)
-   {
-      assertTuple4DEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple4DEquals(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, double epsilon)
-   {
-      assertTuple4DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two tuples are equal to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected tuple. Not modified.
-    * @param actual        the actual tuple. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two tuples are not equal. If only one of the arguments is equal to
-    *                        {@code null}.
-    */
-   public static void assertTuple4DEquals(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!TupleTools.epsilonEquals(expected, actual, epsilon))
-      {
-         Vector4D difference = new Vector4D(actual);
-         difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
-      }
-   }
-
-   /**
     * Asserts that the two vectors represent the same geometry to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
@@ -928,81 +589,6 @@ public class EuclidCoreTestTools
          Matrix3D difference = new Matrix3D();
          difference.sub(expected, actual);
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(difference.maxAbsElement()), format);
-      }
-   }
-
-   /**
-    * Asserts that the two rotation matrices represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected rotation matrix. Not modified.
-    * @param actual   the actual rotation matrix. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two rotation matrices do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertRotationMatrixGeometricallyEquals(RotationMatrixReadOnly expected, RotationMatrixReadOnly actual, double epsilon)
-   {
-      assertRotationMatrixGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts that the two rotation matrices represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected rotation matrix. Not modified.
-    * @param actual        the actual rotation matrix. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two rotation matrices do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix,
-                                                              RotationMatrixReadOnly expected,
-                                                              RotationMatrixReadOnly actual,
-                                                              double epsilon)
-   {
-      assertRotationMatrixGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts that the two rotation matrices represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected rotation matrix. Not modified.
-    * @param actual        the actual rotation matrix. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two rotation matrices do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
-    */
-   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix,
-                                                              RotationMatrixReadOnly expected,
-                                                              RotationMatrixReadOnly actual,
-                                                              double epsilon,
-                                                              String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix,
-                                     expected,
-                                     actual,
-                                     "Difference of: " + Double.toString(expected.distance(actual)),
-                                     format);
       }
    }
 
@@ -1258,146 +844,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts that the two quaternions represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected quaternion. Not modified.
-    * @param actual   the actual quaternion. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two quaternions do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertQuaternionGeometricallyEquals(QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon)
-   {
-      assertQuaternionGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts that the two quaternions represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected quaternion. Not modified.
-    * @param actual        the actual quaternion. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two quaternions do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertQuaternionGeometricallyEquals(String messagePrefix, QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon)
-   {
-      assertQuaternionGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts that the two quaternions represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected quaternion. Not modified.
-    * @param actual        the actual quaternion. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two quaternions do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertQuaternionGeometricallyEquals(String messagePrefix,
-                                                          QuaternionReadOnly expected,
-                                                          QuaternionReadOnly actual,
-                                                          double epsilon,
-                                                          String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         double difference = expected.distance(actual);
-         difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
-      }
-   }
-
-   /**
-    * Asserts that the two axis-angles represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected axis-angle. Not modified.
-    * @param actual   the actual axis-angle. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two axis-angles do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertAxisAngleGeometricallyEquals(AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon)
-   {
-      assertAxisAngleGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts that the two axis-angles represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected axis-angle. Not modified.
-    * @param actual        the actual axis-angle. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two axis-angles do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertAxisAngleGeometricallyEquals(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon)
-   {
-      assertAxisAngleGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts that the two axis-angles represent the same geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected axis-angle. Not modified.
-    * @param actual        the actual axis-angle. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two axis-angles do not represent the same geometry. If only one of
-    *                        the arguments is equal to {@code null}.
-    */
-   public static void assertAxisAngleGeometricallyEquals(String messagePrefix,
-                                                         AxisAngleReadOnly expected,
-                                                         AxisAngleReadOnly actual,
-                                                         double epsilon,
-                                                         String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         double difference = expected.distance(actual);
-         difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
-      }
-   }
-
-   /**
     * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
     * 'equal'.
     *
@@ -1452,18 +898,6 @@ public class EuclidCoreTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
 
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix,
-                                                   Orientation3DReadOnly expected,
-                                                   Orientation3DReadOnly actual,
-                                                   String difference,
-                                                   String format)
-   {
-      // TODO NEEDS TESTING
-      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(expected);
-      String actualAsString = EuclidCoreIOTools.getOrientation3DString(actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    /**
@@ -2002,18 +1436,51 @@ public class EuclidCoreTestTools
       }
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
+   /**
+    * Throws a new {@code AssertionError} as follows:
+    *
+    * <pre>
+    * messagePrefix expected:
+    * expected.toString(format)
+    * but was:
+    * actual.toString(format)
+    * </pre>
+    *
+    * @param messagePrefix    prefix to add to the error message.
+    * @param expectedAsString the result that was expected.
+    * @param actualAsString   the result that was obtained.
+    */
+   public static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
    {
-      String expectedAsString = expected.toString(format);
-      String actualAsString = actual.toString(format);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      throwNotEqualAssertionError(messagePrefix, expected, actual, null, format);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String difference, String format)
+   /**
+    * Throws a new {@code AssertionError} as follows:
+    *
+    * <pre>
+    * messagePrefix expected:
+    * expected.toString(format)
+    * but was:
+    * actual.toString(format)
+    * Difference of: differenceAsString
+    * </pre>
+    *
+    * @param messagePrefix      prefix to add to the error message.
+    * @param expectedAsString   the result that was expected.
+    * @param actualAsString     the result that was obtained.
+    * @param differenceAsString a short comprehensible summary of the difference between the expected
+    *                           and obtained results.
+    */
+   public static void throwNotEqualAssertionError(String messagePrefix,
+                                                  EuclidGeometry expected,
+                                                  EuclidGeometry actual,
+                                                  String differenceAsString,
+                                                  String format)
    {
-      String expectedAsString = expected.toString(format);
-      String actualAsString = actual.toString(format);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
+      String expectedAsString = expected == null ? "null" : expected.toString(format);
+      String actualAsString = actual == null ? "null" : actual.toString(format);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, differenceAsString);
    }
 
    /**
@@ -2048,9 +1515,9 @@ public class EuclidCoreTestTools
     *
     * @param messagePrefix      prefix to add to the error message.
     * @param expectedAsString   the result that was expected in a {@code String} form.
+    * @param actualAsString     the result that was obtained in a {@code String} form.
     * @param differenceAsString a short comprehensible summary of the difference between the expected
     *                           and obtained results.
-    * @param actualAsString     the result that was obtained in a {@code String} form.
     */
    public static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
    {

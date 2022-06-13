@@ -152,7 +152,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          vector2.normalize();
          vector1.setAndScale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), vector2);
          vector1.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(vector1, vector2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vector1, vector2, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -171,7 +171,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          T vector3 = createEmptyTuple();
          vector3.setAndScale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), vector2);
          vector1.setAndNormalize(vector3);
-         EuclidCoreTestTools.assertTuple2DEquals(vector1, vector2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vector1, vector2, getEpsilon());
       }
    }
 
@@ -201,7 +201,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
             assertTrue(actualVector.clipToMaxLength(maxLength));
          }
 
-         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i + ", maxLength: " + maxLength, expectedVector, actualVector, 5.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals("Iteration: " + i + ", maxLength: " + maxLength, expectedVector, actualVector, 5.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -237,15 +237,15 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          rigidBodyTransform.transform(expected);
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
@@ -299,17 +299,17 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
          actual.applyInverseTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
          actual.applyInverseTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
          actual.applyInverseTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 

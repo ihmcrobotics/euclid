@@ -35,7 +35,7 @@ public class Line3DTest
       Line3D line3d = new Line3D();
       try
       {
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
       }
       catch (RuntimeException e)
       {
@@ -43,7 +43,7 @@ public class Line3DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
       }
       catch (RuntimeException e)
       {
@@ -55,8 +55,8 @@ public class Line3DTest
       expectedDirection.normalize();
 
       line3d = new Line3D(expectedPoint, expectedDirection);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
       assertTrue(expectedPoint != line3d.getPoint());
       assertTrue(expectedDirection != line3d.getDirection());
 
@@ -65,13 +65,13 @@ public class Line3DTest
       secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
 
       line3d = new Line3D(firstPointOnLine, secondPointOnLine);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
       Line3D otherLine = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
       line3d = new Line3D(otherLine);
-      EuclidCoreTestTools.assertTuple3DEquals(otherLine.getPoint(), line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(otherLine.getDirection(), line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(otherLine.getPoint(), line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(otherLine.getDirection(), line3d.getDirection(), EPSILON);
    }
 
    @Test
@@ -91,30 +91,30 @@ public class Line3DTest
       expectedDirection.normalize();
 
       line3d.setPoint(expectedPoint);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
       line3d.setDirection(direction);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
       expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       expectedDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
       expectedDirection.normalize();
 
       line3d.set(expectedPoint, expectedDirection);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
       Point3D firstPointOnLine = new Point3D(expectedPoint);
       Point3D secondPointOnLine = new Point3D();
       secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
 
       line3d.set(firstPointOnLine, secondPointOnLine);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
       line3d = new Line3D();
       line3d.set(new Line3D(expectedPoint, expectedDirection));
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
    }
 
    @Test
@@ -134,7 +134,7 @@ public class Line3DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.X, line3D.getDirection(), EPSILON);
+         EuclidCoreTestTools.assertEquals(Axis3D.X, line3D.getDirection(), EPSILON);
       }
       catch (RuntimeException e)
       {
@@ -218,8 +218,8 @@ public class Line3DTest
                                                                                         expectedClosestPointOnOtherLine);
          double actualDistance = line.closestPointsWith(otherLine, actualClosestPointOnLine, actualClosestPointOnOtherLine);
          assertEquals(expectedDistance, actualDistance, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPointOnLine, actualClosestPointOnLine, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPointOnOtherLine, actualClosestPointOnOtherLine, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPointOnLine, actualClosestPointOnLine, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPointOnOtherLine, actualClosestPointOnOtherLine, EPSILON);
       }
    }
 
@@ -260,8 +260,8 @@ public class Line3DTest
          expectedPoint.applyTransform(transform);
          expectedDirection.applyTransform(transform);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
       }
    }
 

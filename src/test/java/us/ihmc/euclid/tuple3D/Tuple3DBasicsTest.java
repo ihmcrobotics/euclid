@@ -104,7 +104,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
          tuple2.setZ(random.nextDouble());
 
          tuple1.set(tuple2);
-         EuclidCoreTestTools.assertTuple3DEquals(tuple1, tuple2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(tuple1, tuple2, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -116,7 +116,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
          tuple2.setZ(random.nextDouble());
 
          tuple1.set(tuple2);
-         EuclidCoreTestTools.assertTuple3DEquals(tuple1, tuple2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(tuple1, tuple2, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

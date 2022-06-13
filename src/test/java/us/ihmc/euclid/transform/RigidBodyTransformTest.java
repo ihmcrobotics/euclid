@@ -595,7 +595,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -603,7 +603,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = new Vector3D();
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -611,7 +611,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -622,7 +622,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -630,7 +630,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = new Vector3D();
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -638,7 +638,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -649,7 +649,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -657,7 +657,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = new Vector3D();
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -665,7 +665,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -1019,7 +1019,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
          actualTransform.getRotation().setYawPitchRoll(0.0, 0.0, 0.0);
          assertFalse(actualTransform.hasRotation());
@@ -1060,7 +1060,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
          actualTransform.getRotation().setToYawOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
@@ -1075,7 +1075,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
          actualTransform.getRotation().setToPitchOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
@@ -1090,7 +1090,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
          actualTransform.getRotation().setToRollOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
@@ -1156,7 +1156,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setRotationEulerAndZeroTranslation(VectorReadOnly eulerAngles)
@@ -1182,7 +1182,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
    }
 
@@ -1206,7 +1206,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
          actualTransform.getTranslation().setX(0.0);
          actualTransform.getTranslation().setY(0.0);
@@ -1236,7 +1236,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslation(double x, double y, double z)
@@ -1246,7 +1246,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslationAndIdentityRotation(TupleReadOnly translation)
@@ -1255,7 +1255,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertIdentity(actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslationAndIdentityRotation(double x, double y, double z)
@@ -1265,7 +1265,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertIdentity(actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
    }
 
@@ -1360,10 +1360,10 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       for (int row = 0; row < 3; row++)
          assertTrue(translation.getElement(row) == transform.getElement(row, 3));
 
-      EuclidCoreTestTools.assertTuple3DEquals(translation, transform.getTranslation(), EPS);
+      EuclidCoreTestTools.assertEquals(translation, transform.getTranslation(), EPS);
 
       translation.set(transform.getTranslationX(), transform.getTranslationY(), transform.getTranslationZ());
-      EuclidCoreTestTools.assertTuple3DEquals(translation, transform.getTranslation(), EPS);
+      EuclidCoreTestTools.assertEquals(translation, transform.getTranslation(), EPS);
    }
 
    @Test
@@ -1499,7 +1499,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          RotationMatrix expectedRotationPart = new RotationMatrix(transform.getRotation());
          Vector3D expectedTranslationPart = new Vector3D(transform.getTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationPart, transform.getRotation(), EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslationPart, transform.getTranslation(), EPS);
+         EuclidCoreTestTools.assertEquals(expectedTranslationPart, transform.getTranslation(), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1658,11 +1658,11 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       vectorExpected.addZ(vectorExpected.getS() * transform.getM23());
 
       transform.transform(vectorOriginal, vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       vectorActual.set(vectorOriginal);
       transform.transform(vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       // Try with EJML matrix
       DMatrixRMaj transformDenseMatrix = new DMatrixRMaj(4, 4);
@@ -1673,7 +1673,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       CommonOps_DDRM.mult(transformDenseMatrix, vectorOriginalDenseMatrix, vectorTransformedDenseMatrix);
       vectorExpected.set(vectorTransformedDenseMatrix);
 
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
    }
 
    @Test
@@ -1695,7 +1695,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointToTransform, boolean checkIfTransformInXYPlane)
@@ -1709,7 +1709,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed)
@@ -1722,7 +1722,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed, boolean checkIfTransformInXYPlane)
@@ -1735,7 +1735,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Vector2DBasics vectorToTransform)
@@ -1749,7 +1749,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
 
          vectorActual.set(vectorOriginal);
          transfom2D.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
 
       { // Test transform(Vector2DReadOnly vectorOriginal, Vector2DBasics vectorTransformed)
@@ -1762,7 +1762,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          vectorExpected.set(vector.getX(), vector.getY());
 
          transfom2D.transform(vectorOriginal, vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
    }
 

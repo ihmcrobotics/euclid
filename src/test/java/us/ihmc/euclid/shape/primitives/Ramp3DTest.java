@@ -49,7 +49,7 @@ public class Ramp3DTest
       { // Empty constructor
          Ramp3D ramp3D = new Ramp3D();
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), ramp3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(ramp3D.getPosition());
          EuclidCoreTestTools.assertIdentity(ramp3D.getOrientation(), EPSILON);
       }
@@ -57,7 +57,7 @@ public class Ramp3DTest
       { // Empty constructor
          Ramp3D ramp3D = new Ramp3D();
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), ramp3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(ramp3D.getPosition());
          EuclidCoreTestTools.assertIdentity(ramp3D.getOrientation(), EPSILON);
       }
@@ -69,7 +69,7 @@ public class Ramp3DTest
          double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
          Ramp3D ramp3D = new Ramp3D(sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(ramp3D.getPosition());
          EuclidCoreTestTools.assertIdentity(ramp3D.getOrientation(), EPSILON);
       }
@@ -83,8 +83,8 @@ public class Ramp3DTest
          RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
          Ramp3D ramp3D = new Ramp3D(position, orientation, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ramp3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ramp3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ramp3D.getOrientation(), EPSILON);
       }
 
@@ -98,8 +98,8 @@ public class Ramp3DTest
          Pose3D pose = new Pose3D(position, orientation);
          Ramp3D ramp3D = new Ramp3D(pose, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ramp3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ramp3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ramp3D.getOrientation(), EPSILON);
       }
 
@@ -113,8 +113,8 @@ public class Ramp3DTest
          RigidBodyTransform pose = new RigidBodyTransform(orientation, position);
          Ramp3D ramp3D = new Ramp3D(pose, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ramp3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), ramp3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ramp3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ramp3D.getOrientation(), EPSILON);
       }
 
@@ -478,8 +478,8 @@ public class Ramp3DTest
          ramp3D.transformToWorld(expectedClosestPoint);
          ramp3D.transformToWorld(expectedNormal);
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -498,8 +498,8 @@ public class Ramp3DTest
          ramp3D.transformToWorld(expectedClosestPoint);
          ramp3D.transformToWorld(expectedNormal);
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -522,8 +522,8 @@ public class Ramp3DTest
 
          ramp3D.transformToWorld(expectedClosestPoint);
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -545,8 +545,8 @@ public class Ramp3DTest
          ramp3D.transformToWorld(expectedClosestPoint);
          ramp3D.transformToWorld(expectedNormal);
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -568,8 +568,8 @@ public class Ramp3DTest
          ramp3D.transformToWorld(expectedClosestPoint);
          ramp3D.transformToWorld(expectedNormal);
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -593,8 +593,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -619,8 +619,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -645,8 +645,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -671,8 +671,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -698,8 +698,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -723,8 +723,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -749,8 +749,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -776,8 +776,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -804,8 +804,8 @@ public class Ramp3DTest
          expectedNormal.set(towardOutside);
 
          assertFalse(ramp3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -856,8 +856,8 @@ public class Ramp3DTest
          expectedNormal.set(closestPlane.getNormal());
 
          assertTrue(ramp3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -877,12 +877,12 @@ public class Ramp3DTest
          Point3DBasics[] vertices = ramp3D.getVertices();
          assertEquals(6, vertices.length);
          int vertexIndex = 0;
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, -sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(sizeX, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(sizeX, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(sizeX, sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(sizeX, -sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -899,7 +899,7 @@ public class Ramp3DTest
 
          for (int j = 0; j < 6; j++)
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedVertices[j], actualVertices[j], EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedVertices[j], actualVertices[j], EPSILON);
          }
       }
    }
@@ -996,7 +996,7 @@ public class Ramp3DTest
 
          Vector3D actualNormal = new Vector3D();
          ramp.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -1616,7 +1616,7 @@ public class Ramp3DTest
          if (isInside)
             assertNull(ramp3D.orthogonalProjectionCopy(point));
          else
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, ramp3D.orthogonalProjectionCopy(point), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, ramp3D.orthogonalProjectionCopy(point), EPSILON);
       }
    }
 

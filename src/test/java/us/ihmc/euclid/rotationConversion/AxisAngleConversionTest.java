@@ -71,7 +71,7 @@ public class AxisAngleConversionTest
          quaternion.setUnsafe(qx, qy, qz, qs);
          AxisAngleConversion.convertQuaternionToAxisAngle(quaternion, axisAngle);
 
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(originalAxisAngle, axisAngle, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(originalAxisAngle, axisAngle, EPSILON);
       }
 
       // Test with a quaternion that is not unitary
@@ -140,7 +140,7 @@ public class AxisAngleConversionTest
          double rz = expectedAxisAngle.getZ() * expectedAxisAngle.getAngle();
          AxisAngleConversion.convertRotationVectorToAxisAngle(rx, ry, rz, actualAxisAngle);
 
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
       }
 
       AxisAngleConversion.convertRotationVectorToAxisAngle(0.0, 0.0, 0.0, actualAxisAngle);
@@ -205,7 +205,7 @@ public class AxisAngleConversionTest
          rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
 
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -239,7 +239,7 @@ public class AxisAngleConversionTest
          rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
 
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
       }
 
       // Test edge cases
@@ -471,7 +471,7 @@ public class AxisAngleConversionTest
                AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, expectedAxisAngle);
                AxisAngleConversion.convertYawPitchRollToAxisAngle(yaw, pitch, roll, actualAxisAngle);
 
-               EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
+               EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedAxisAngle, actualAxisAngle, EPSILON);
             }
          }
       }

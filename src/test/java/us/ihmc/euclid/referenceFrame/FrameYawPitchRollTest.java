@@ -84,7 +84,7 @@ public class FrameYawPitchRollTest
          randomYawPitchRoll.get(array);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, array);
          assertTrue(frameYawPitchRoll.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertYawPitchRollEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -93,7 +93,7 @@ public class FrameYawPitchRollTest
          YawPitchRollReadOnly randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, randomYawPitchRoll);
          assertTrue(frameYawPitchRoll.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertYawPitchRollEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -102,7 +102,7 @@ public class FrameYawPitchRollTest
          RotationMatrixReadOnly randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          YawPitchRoll expectedYawPitchRoll = new YawPitchRoll(randomRotationMatrix);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, randomRotationMatrix);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -111,7 +111,7 @@ public class FrameYawPitchRollTest
          AxisAngleReadOnly randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          YawPitchRoll expectedYawPitchRoll = new YawPitchRoll(randomAxisAngle);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, randomAxisAngle);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -120,7 +120,7 @@ public class FrameYawPitchRollTest
          Vector3DReadOnly randomRotationVector = EuclidCoreRandomTools.nextVector3D(random);
          YawPitchRoll expectedYawPitchRoll = new YawPitchRoll(randomRotationVector);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, randomRotationVector);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -131,7 +131,7 @@ public class FrameYawPitchRollTest
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          YawPitchRoll expectedYawPitchRoll = new YawPitchRoll(yaw, pitch, roll);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame, yaw, pitch, roll);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -140,7 +140,7 @@ public class FrameYawPitchRollTest
          FrameYawPitchRoll randomFrameYawPitchRoll = EuclidFrameRandomTools.nextFrameYawPitchRoll(random, randomFrame);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrameYawPitchRoll);
          assertTrue(frameYawPitchRoll.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertYawPitchRollEquals(randomFrameYawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomFrameYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
    }
 
@@ -193,7 +193,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setIncludingFrame(newFrame, orientation);
          yawPitchRoll.set(orientation);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -206,7 +206,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setRotationVectorIncludingFrame(newFrame, rotationVector);
          yawPitchRoll.setRotationVector(rotationVector);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -219,7 +219,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setRotationVectorIncludingFrame(rotationVector);
          yawPitchRoll.setRotationVector(rotationVector);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -234,7 +234,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setYawPitchRollIncludingFrame(newFrame, yaw, pitch, roll);
          yawPitchRoll.setYawPitchRoll(yaw, pitch, roll);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -248,7 +248,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setEulerIncludingFrame(newFrame, eulerAngles);
          yawPitchRoll.setEuler(eulerAngles);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -263,7 +263,7 @@ public class FrameYawPitchRollTest
          frameYawPitchRoll.setEulerIncludingFrame(newFrame, rotX, rotY, rotZ);
          yawPitchRoll.setEuler(rotX, rotY, rotZ);
          assertEquals(newFrame, frameYawPitchRoll.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
+         EuclidCoreTestTools.assertEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
    }
 
@@ -367,7 +367,7 @@ public class FrameYawPitchRollTest
 
          actual.set(initialFrame, expected);
 
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          assertEquals(initialFrame, actual.getReferenceFrame());
 
          actual.set(EuclidCoreRandomTools.nextYawPitchRoll(random));
@@ -388,7 +388,7 @@ public class FrameYawPitchRollTest
          catch (ReferenceFrameMismatchException e)
          {
             // good
-            EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+            EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
          }
       }
    }
@@ -410,7 +410,7 @@ public class FrameYawPitchRollTest
          FrameYawPitchRoll actual = EuclidFrameRandomTools.nextFrameYawPitchRoll(random, initialFrame);
          actual.setFromReferenceFrame(anotherFrame);
          assertTrue(initialFrame == actual.getReferenceFrame());
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

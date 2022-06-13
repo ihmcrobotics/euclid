@@ -51,7 +51,7 @@ public class Box3DTest
       { // Empty constructor
          Box3D box3D = new Box3D();
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
          EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
       }
@@ -59,7 +59,7 @@ public class Box3DTest
       { // Empty constructor
          Box3D box3D = new Box3D();
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
          EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
       }
@@ -71,7 +71,7 @@ public class Box3DTest
          double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
          Box3D box3D = new Box3D(sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
          EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
       }
@@ -85,8 +85,8 @@ public class Box3DTest
          RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
          Box3D box3D = new Box3D(position, orientation, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, box3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
       }
 
@@ -100,8 +100,8 @@ public class Box3DTest
          Pose3D pose = new Pose3D(position, orientation);
          Box3D box3D = new Box3D(pose, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, box3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
       }
 
@@ -115,8 +115,8 @@ public class Box3DTest
          RigidBodyTransform pose = new RigidBodyTransform(orientation, position);
          Box3D box3D = new Box3D(pose, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, box3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
       }
 
@@ -479,8 +479,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Y faces
@@ -494,8 +494,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Z faces
@@ -509,8 +509,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
       }
 
@@ -540,8 +540,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Collinear to Y-axis
@@ -557,8 +557,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Collinear to Z-axis
@@ -574,8 +574,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
       }
 
@@ -605,8 +605,8 @@ public class Box3DTest
          box3D.transformToWorld(expectedClosestPoint);
          box3D.transformToWorld(expectedNormal);
          assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -641,8 +641,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Y faces
@@ -661,8 +661,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
 
          { // Z faces
@@ -681,8 +681,8 @@ public class Box3DTest
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
             assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
          }
       }
    }
@@ -707,9 +707,9 @@ public class Box3DTest
          for (int j = 0; j < vertices.length; j++)
          {
             Point3DBasics vertex = vertices[j];
-            EuclidCoreTestTools.assertTuple3DEquals(vertex, box3D.getVertex(j), EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, box3D.getVertex(j), EPSILON);
             vertex.absolute();
-            EuclidCoreTestTools.assertTuple3DEquals(expectedAbsoluteVertex, vertex, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedAbsoluteVertex, vertex, EPSILON);
          }
 
          double x = 0.5 * box3D.getSizeX();
@@ -717,14 +717,14 @@ public class Box3DTest
          double z = 0.5 * box3D.getSizeZ();
          int vertexIndex = 0;
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(-x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(-x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(-x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(-x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -741,7 +741,7 @@ public class Box3DTest
 
          for (int j = 0; j < 8; j++)
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedVertices[j], actualVertices[j], EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedVertices[j], actualVertices[j], EPSILON);
          }
       }
    }
@@ -1059,7 +1059,7 @@ public class Box3DTest
                                                                                                               TupleTools.dot(supportDirection, v2)))
                                                         .findFirst().get();
          Point3DReadOnly actualSupportingVertex = box.getSupportingVertex(supportDirection);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportingVertex, actualSupportingVertex, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSupportingVertex, actualSupportingVertex, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1079,7 +1079,7 @@ public class Box3DTest
 
          Vector3D actualNormal = new Vector3D();
          box.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -1308,7 +1308,7 @@ public class Box3DTest
             expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
 
          { // Y faces
@@ -1319,7 +1319,7 @@ public class Box3DTest
             expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
 
          { // Z faces
@@ -1330,7 +1330,7 @@ public class Box3DTest
             expectedProjection.set(pointOutside.getX(), pointOutside.getY(), zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
       }
 
@@ -1353,7 +1353,7 @@ public class Box3DTest
             expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
 
          { // Collinear to Y-axis
@@ -1365,7 +1365,7 @@ public class Box3DTest
             expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
 
          { // Collinear to Z-axis
@@ -1377,7 +1377,7 @@ public class Box3DTest
             expectedProjection.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
          }
       }
 
@@ -1400,7 +1400,7 @@ public class Box3DTest
          expectedProjection.set(xSign * halfSizeX, ySign * halfSizeY, zSign * halfSizeZ);
          box3D.transformToWorld(pointOutside);
          box3D.transformToWorld(expectedProjection);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1526,8 +1526,8 @@ public class Box3DTest
          box3D.transformToWorld(expectedIntersection1);
          box3D.transformToWorld(expectedIntersection2);
          assertEquals(2, box3D.intersectionWith(line, actualIntersection1, actualIntersection2));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection2, actualIntersection2, EPSILON);
       }
    }
 

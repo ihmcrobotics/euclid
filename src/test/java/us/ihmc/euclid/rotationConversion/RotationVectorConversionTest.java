@@ -54,7 +54,7 @@ public class RotationVectorConversionTest
       double uz = expectedRotationVector.getZ();
       double angle = expectedRotationVector.length();
       RotationVectorConversion.convertAxisAngleToRotationVectorImpl(ux, uy, uz, angle, actualRotationVector);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
 
       RotationVectorConversion.convertAxisAngleToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DIsSetToZero(actualRotationVector);
@@ -81,7 +81,7 @@ public class RotationVectorConversionTest
          angle = axisAngle.getAngle();
          RotationVectorConversion.convertAxisAngleToRotationVectorImpl(ux, uy, uz, angle, expectedRotationVector);
          RotationVectorConversion.convertAxisAngleToRotationVector(axisAngle, actualRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
          // Assert the parameter that does get modified
          assertTrue(axisAngle.equals(axisAngleCopy));
       }
@@ -114,7 +114,7 @@ public class RotationVectorConversionTest
 
          quaternion.setUnsafe(qx, qy, qz, qs);
          RotationVectorConversion.convertQuaternionToRotationVector(quaternion, actualRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
       }
 
       // test some very small angles
@@ -137,7 +137,7 @@ public class RotationVectorConversionTest
 
          quaternion.setUnsafe(qx, qy, qz, qs);
          RotationVectorConversion.convertQuaternionToRotationVector(quaternion, actualRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
       }
 
       quaternion.setUnsafe(0.0, 0.0, 0.0, 0.0);
@@ -208,7 +208,7 @@ public class RotationVectorConversionTest
          {
             actualRotationVector.negate();
          }
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
       }
 
       for (int i = 0; i < 10000; i++)
@@ -238,7 +238,7 @@ public class RotationVectorConversionTest
          m21 = uy * uz * (1.0 - cos(angle)) + ux * sin(angle);
 
          RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
       }
 
       // Test edge cases
@@ -428,7 +428,7 @@ public class RotationVectorConversionTest
          m22 = rotationMatrix.getM22();
          RotationVectorConversion.convertMatrixToRotationVector(rotationMatrix, actualRotationVector);
          RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, expectedRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
          // Assert the parameter that does get modified
          assertTrue(rotationMatrix.equals(rotationMatrixCopy));
       }
@@ -453,11 +453,11 @@ public class RotationVectorConversionTest
                QuaternionConversion.convertYawPitchRollToQuaternion(yaw, pitch, roll, quaternion);
                RotationVectorConversion.convertQuaternionToRotationVector(quaternion, expectedRotationVector);
                RotationVectorConversion.convertYawPitchRollToRotationVector(yaw, pitch, roll, actualRotationVector);
-               EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
 
                YawPitchRoll yawPitchRoll = new YawPitchRoll(yaw, pitch, roll);
                RotationVectorConversion.convertYawPitchRollToRotationVector(yawPitchRoll, actualRotationVector);
-               EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
                assertTrue(yawPitchRoll.getYaw() == yaw);
                assertTrue(yawPitchRoll.getPitch() == pitch);
                assertTrue(yawPitchRoll.getRoll() == roll);

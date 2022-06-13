@@ -62,7 +62,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
          Point3D32 point;
          Point3D32 point2 = EuclidCoreRandomTools.nextPoint3D32(random);
          point = new Point3D32(point2);
-         EuclidCoreTestTools.assertTuple3DEquals(point, point2, EPS);
+         EuclidCoreTestTools.assertEquals(point, point2, EPS);
       }
    }
 

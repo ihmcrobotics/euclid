@@ -87,7 +87,7 @@ public abstract class Tuple2DBasicsTest<T extends Tuple2DBasics> extends Tuple2D
          tuple2.setY(random.nextDouble());
 
          tuple1.set(tuple2);
-         EuclidCoreTestTools.assertTuple2DEquals(tuple1, tuple2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(tuple1, tuple2, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -98,7 +98,7 @@ public abstract class Tuple2DBasicsTest<T extends Tuple2DBasics> extends Tuple2D
          tuple2.setY(random.nextDouble());
 
          tuple1.set(tuple2);
-         EuclidCoreTestTools.assertTuple2DEquals(tuple1, tuple2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(tuple1, tuple2, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

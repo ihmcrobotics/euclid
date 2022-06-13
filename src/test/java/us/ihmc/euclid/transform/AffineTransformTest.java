@@ -402,21 +402,21 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          transform.setTranslationX(expected.getX());
          transform.setTranslationY(expected.getY());
          transform.setTranslationZ(expected.getZ());
-         EuclidCoreTestTools.assertTuple3DEquals(expected, transform.getTranslation(), EPS);
+         EuclidCoreTestTools.assertEquals(expected, transform.getTranslation(), EPS);
       }
 
       { // Test setTranslation(double x, double y, double z)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, 10.0);
          transform.setTranslation(expected.getX(), expected.getY(), expected.getZ());
-         EuclidCoreTestTools.assertTuple3DEquals(expected, transform.getTranslation(), EPS);
+         EuclidCoreTestTools.assertEquals(expected, transform.getTranslation(), EPS);
       }
 
       { // Test setTranslation(TupleReadOnly translation)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, 10.0);
          transform.setTranslation(expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, transform.getTranslation(), EPS);
+         EuclidCoreTestTools.assertEquals(expected, transform.getTranslation(), EPS);
       }
    }
 
@@ -925,7 +925,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          actual.set(original);
          actual.multiplyInvertThis(multipliedWith);
-         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPS, EuclidCoreTestTools.DEFAULT_FORMAT);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPS);
       }
    }
 
@@ -1307,11 +1307,11 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       vectorExpected.addZ(vectorExpected.getS() * transform.getM23());
 
       transform.transform(vectorOriginal, vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       vectorActual.set(vectorOriginal);
       transform.transform(vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       // Try with EJML matrix
       DMatrixRMaj transformDenseMatrix = new DMatrixRMaj(4, 4);
@@ -1322,7 +1322,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       CommonOps_DDRM.mult(transformDenseMatrix, vectorOriginalDenseMatrix, vectorTransformedDenseMatrix);
       vectorExpected.set(vectorTransformedDenseMatrix);
 
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
    }
 
    @Test
@@ -1345,7 +1345,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointToTransform, boolean checkIfTransformInXYPlane)
@@ -1359,7 +1359,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed)
@@ -1372,7 +1372,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed, boolean checkIfTransformInXYPlane)
@@ -1385,7 +1385,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Vector2DBasics vectorToTransform)
@@ -1399,7 +1399,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          vectorActual.set(vectorOriginal);
          transfom2D.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
 
       { // Test transform(Vector2DReadOnly vectorOriginal, Vector2DBasics vectorTransformed)
@@ -1412,7 +1412,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          vectorExpected.set(vector.getX(), vector.getY());
 
          transfom2D.transform(vectorOriginal, vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
    }
 

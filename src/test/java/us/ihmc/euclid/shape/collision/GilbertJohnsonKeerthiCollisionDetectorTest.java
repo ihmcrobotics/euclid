@@ -723,8 +723,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Point3D actualPointOnA = result.getPointOnA();
          Point3D actualPointOnB = result.getPointOnB();
 
-         EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, expectedPointOnA, actualPointOnA, 20.0 * EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, expectedPointOnB, actualPointOnB, 20.0 * EPSILON);
+         EuclidCoreTestTools.assertEquals(messagePrefix, expectedPointOnA, actualPointOnA, 20.0 * EPSILON);
+         EuclidCoreTestTools.assertEquals(messagePrefix, expectedPointOnB, actualPointOnB, 20.0 * EPSILON);
       }
    }
 

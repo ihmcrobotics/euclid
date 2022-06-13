@@ -10,119 +10,30 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.Orientation2D;
-import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.AffineTransform;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class EuclidCoreTestToolsTest
 {
    private static final String MESSAGE_PREFIX = "blop";
    private static final String FORMAT = EuclidCoreIOTools.getStringFormat(15, 12);
    private static final double EPSILON = 0.0001;
-
-   @Test
-   public void testAssertYawPitchRollEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertYawPitchRollEquals";
-      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
-
-      {
-         YawPitchRoll expected = null;
-         YawPitchRoll actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = null;
-         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = new YawPitchRoll(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertYawPitchRollGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertYawPitchRollGeometricallyEquals";
-      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
-
-      {
-         YawPitchRoll expected = null;
-         YawPitchRoll actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = null;
-         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         YawPitchRoll actual = new YawPitchRoll(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
 
    @Test
    public void testAssertRotationVectorGeometricallyEquals() throws Throwable
@@ -163,39 +74,77 @@ public class EuclidCoreTestToolsTest
    }
 
    @Test
-   public void testAssertTuple2DEquals() throws Throwable
+   public void testAssertEquals() throws Throwable
    {
       Random random = new Random(453453);
-      String methodName = "assertTuple2DEquals";
-      Class<Tuple2DReadOnly> argumentsClass = Tuple2DReadOnly.class;
+      String methodName = "assertEquals";
+      Class<EuclidGeometry> argumentsClass = EuclidGeometry.class;
 
       {
-         Vector2D expected = null;
-         Vector2D actual = null;
+         Vector3D expected = null;
+         Vector3D actual = null;
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
-         Vector2D actual = null;
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Vector2D expected = null;
-         Vector2D actual = EuclidCoreRandomTools.nextVector2D(random);
+         Vector3D expected = null;
+         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
-         Vector2D actual = EuclidCoreRandomTools.nextVector2D(random);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
-         Vector2D actual = new Vector2D(expected);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D actual = new Vector3D(expected);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAssertGeometricallyEquals() throws Throwable
+   {
+      Random random = new Random(453453);
+      String methodName = "assertGeometricallyEquals";
+      Class<EuclidGeometry> argumentsClass = EuclidGeometry.class;
+
+      {
+         Point3D expected = null;
+         Point3D actual = null;
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D actual = null;
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Point3D expected = null;
+         Point3D actual = EuclidCoreRandomTools.nextPoint3D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D actual = EuclidCoreRandomTools.nextPoint3D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D actual = new Point3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
@@ -277,44 +226,6 @@ public class EuclidCoreTestToolsTest
    }
 
    @Test
-   public void testAssertTuple3DEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertTuple3DEquals";
-      Class<Tuple3DReadOnly> argumentsClass = Tuple3DReadOnly.class;
-
-      {
-         Vector3D expected = null;
-         Vector3D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
-         Vector3D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector3D expected = null;
-         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
-         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
-         Vector3D actual = new Vector3D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
    public void testAssertPoint3DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
@@ -386,44 +297,6 @@ public class EuclidCoreTestToolsTest
       {
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertTuple4DEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertTuple4DEquals";
-      Class<Tuple4DReadOnly> argumentsClass = Tuple4DReadOnly.class;
-
-      {
-         Vector4D expected = null;
-         Vector4D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
-         Vector4D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector4D expected = null;
-         Vector4D actual = EuclidCoreRandomTools.nextVector4D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
-         Vector4D actual = EuclidCoreRandomTools.nextVector4D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
-         Vector4D actual = new Vector4D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
@@ -505,273 +378,7 @@ public class EuclidCoreTestToolsTest
    }
 
    @Test
-   public void testAssertRotationMatrixGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertRotationMatrixGeometricallyEquals";
-      Class<RotationMatrixReadOnly> argumentsClass = RotationMatrixReadOnly.class;
-
-      {
-         RotationMatrix expected = null;
-         RotationMatrix actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RotationMatrix expected = null;
-         RotationMatrix actual = EuclidCoreRandomTools.nextRotationMatrix(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix actual = EuclidCoreRandomTools.nextRotationMatrix(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix actual = new RotationMatrix(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertQuaternionEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertQuaternionEquals";
-      Class<QuaternionReadOnly> argumentsClass = QuaternionReadOnly.class;
-
-      {
-         Quaternion expected = null;
-         Quaternion actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = null;
-         Quaternion actual = EuclidCoreRandomTools.nextQuaternion(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = EuclidCoreRandomTools.nextQuaternion(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = new Quaternion(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertQuaternionGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertQuaternionGeometricallyEquals";
-      Class<QuaternionReadOnly> argumentsClass = QuaternionReadOnly.class;
-
-      {
-         Quaternion expected = null;
-         Quaternion actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = null;
-         Quaternion actual = EuclidCoreRandomTools.nextQuaternion(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = EuclidCoreRandomTools.nextQuaternion(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         Quaternion actual = new Quaternion(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertAxisAngleEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertAxisAngleEquals";
-      Class<AxisAngleReadOnly> argumentsClass = AxisAngleReadOnly.class;
-
-      {
-         AxisAngle expected = null;
-         AxisAngle actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = null;
-         AxisAngle actual = EuclidCoreRandomTools.nextAxisAngle(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = EuclidCoreRandomTools.nextAxisAngle(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = new AxisAngle(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertAxisAngleGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertAxisAngleGeometricallyEquals";
-      Class<AxisAngleReadOnly> argumentsClass = AxisAngleReadOnly.class;
-
-      {
-         AxisAngle expected = null;
-         AxisAngle actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = null;
-         AxisAngle actual = EuclidCoreRandomTools.nextAxisAngle(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = EuclidCoreRandomTools.nextAxisAngle(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle actual = new AxisAngle(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertOrientation2DEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertOrientation2DEquals";
-      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = new Orientation2D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertOrientation2DGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertOrientation2DGeometricallyEquals";
-      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
-         Orientation2D actual = new Orientation2D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertOrientation3DGeoMetricallyEquals() throws Throwable
+   public void testAssertOrientation3DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(345234);
       String methodName = "assertOrientation3DGeometricallyEquals";
@@ -802,244 +409,15 @@ public class EuclidCoreTestToolsTest
 
       {
          Orientation3DBasics expected = EuclidCoreRandomTools.nextOrientation3D(random);
-//         Orientation3DBasics actual = new Orientation3DReadOnly(expected);
+         //         Orientation3DBasics actual = new Orientation3DReadOnly(expected);
          AxisAngle actualAxisAngle = new AxisAngle(expected);
          RotationMatrix actualRotationMatrix = new RotationMatrix(expected);
-         Quaternion actualQuaternion= new Quaternion(expected);
-         YawPitchRoll actualYawPitchRoll= new YawPitchRoll(expected);
+         Quaternion actualQuaternion = new Quaternion(expected);
+         YawPitchRoll actualYawPitchRoll = new YawPitchRoll(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualAxisAngle, EPSILON);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualRotationMatrix, EPSILON);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualQuaternion, EPSILON);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualYawPitchRoll, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertRigidBodyTransformEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertRigidBodyTransformEquals";
-      Class<RigidBodyTransform> argumentsClass = RigidBodyTransform.class;
-
-      {
-         RigidBodyTransform expected = null;
-         RigidBodyTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = null;
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = new RigidBodyTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertRigidBodyTransformGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertRigidBodyTransformGeometricallyEquals";
-      Class<RigidBodyTransformReadOnly> argumentsClass = RigidBodyTransformReadOnly.class;
-
-      {
-         RigidBodyTransform expected = null;
-         RigidBodyTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = null;
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = new RigidBodyTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-
-   @Test
-   public void testAssertQuaternionBasedTransformEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertQuaternionBasedTransformEquals";
-      Class<QuaternionBasedTransform> argumentsClass = QuaternionBasedTransform.class;
-
-      {
-         QuaternionBasedTransform expected = null;
-         QuaternionBasedTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = null;
-         QuaternionBasedTransform actual = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = new QuaternionBasedTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertQuaternionBasedTransformGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertQuaternionBasedTransformGeometricallyEquals";
-      Class<QuaternionBasedTransform> argumentsClass = QuaternionBasedTransform.class;
-
-      {
-         QuaternionBasedTransform expected = null;
-         QuaternionBasedTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = null;
-         QuaternionBasedTransform actual = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
-         QuaternionBasedTransform actual = new QuaternionBasedTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertAffineTransformEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertAffineTransformEquals";
-      Class<AffineTransformReadOnly> argumentsClass = AffineTransformReadOnly.class;
-
-      {
-         AffineTransform expected = null;
-         AffineTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = null;
-         AffineTransform actual = EuclidCoreRandomTools.nextAffineTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = EuclidCoreRandomTools.nextAffineTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = new AffineTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertAffineTransformGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertAffineTransformGeometricallyEquals";
-      Class<AffineTransformReadOnly> argumentsClass = AffineTransformReadOnly.class;
-
-      {
-         AffineTransform expected = null;
-         AffineTransform actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = null;
-         AffineTransform actual = EuclidCoreRandomTools.nextAffineTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = EuclidCoreRandomTools.nextAffineTransform(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         AffineTransform expected = EuclidCoreRandomTools.nextAffineTransform(random);
-         AffineTransform actual = new AffineTransform(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
 

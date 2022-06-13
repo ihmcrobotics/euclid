@@ -84,13 +84,13 @@ public class Axis3DTest
    @Test
    public void testVectorValues()
    {
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 0, 0), Axis3D.X, 0.0);
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 1, 0), Axis3D.Y, 0.0);
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 0, 1), Axis3D.Z, 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(1, 0, 0), Axis3D.X, 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(0, 1, 0), Axis3D.Y, 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(0, 0, 1), Axis3D.Z, 0.0);
 
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(-1, 0, 0), Axis3D.X.negated(), 0.0);
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, -1, 0), Axis3D.Y.negated(), 0.0);
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 0, -1), Axis3D.Z.negated(), 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(-1, 0, 0), Axis3D.X.negated(), 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(0, -1, 0), Axis3D.Y.negated(), 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector3D(0, 0, -1), Axis3D.Z.negated(), 0.0);
    }
 
    @Test

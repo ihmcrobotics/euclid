@@ -46,7 +46,7 @@ public class Ellipsoid3DTest
       { // Empty constructor
          Ellipsoid3D ellipsoid3D = new Ellipsoid3D();
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), ellipsoid3D.getRadii(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getPosition());
          EuclidCoreTestTools.assertIdentity(ellipsoid3D.getOrientation(), EPSILON);
       }
@@ -58,7 +58,7 @@ public class Ellipsoid3DTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
          Ellipsoid3D ellipsoid3D = new Ellipsoid3D(radiusX, radiusY, radiusZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getPosition());
          EuclidCoreTestTools.assertIdentity(ellipsoid3D.getOrientation(), EPSILON);
       }
@@ -72,8 +72,8 @@ public class Ellipsoid3DTest
          RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
          Ellipsoid3D ellipsoid3D = new Ellipsoid3D(position, orientation, radiusX, radiusY, radiusZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ellipsoid3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
       }
 
@@ -87,8 +87,8 @@ public class Ellipsoid3DTest
          Pose3D pose = new Pose3D(position, orientation);
          Ellipsoid3D ellipsoid3D = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ellipsoid3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
       }
 
@@ -102,8 +102,8 @@ public class Ellipsoid3DTest
          RigidBodyTransform pose = new RigidBodyTransform(orientation, position);
          Ellipsoid3D ellipsoid3D = new Ellipsoid3D(pose, sizeX, sizeY, sizeZ);
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ellipsoid3D.getRadii(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Vector3D(sizeX, sizeY, sizeZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertEquals(position, ellipsoid3D.getPosition(), EPSILON);
          EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
       }
 
@@ -337,7 +337,7 @@ public class Ellipsoid3DTest
          // The normal should be pointing from the query to the closest point (toward the outside).
          expectedNormal.sub(actualClosestPointWorld, pointInside);
          expectedNormal.normalize();
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
 
          // The normal should be orthogonal to the ellipsoid surface at the closest point.
          expectedNormal.set(actualClosestPointLocal);
@@ -347,7 +347,7 @@ public class Ellipsoid3DTest
          expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
          expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -372,7 +372,7 @@ public class Ellipsoid3DTest
          // The normal should be pointing from the closest point to the query (toward the outside).
          expectedNormal.sub(pointOutside, actualClosestPointWorld);
          expectedNormal.normalize();
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
 
          // The normal should be orthogonal to the ellipsoid surface at the closest point.
          expectedNormal.set(actualClosestPointLocal);
@@ -382,7 +382,7 @@ public class Ellipsoid3DTest
          expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
          expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -402,7 +402,7 @@ public class Ellipsoid3DTest
                       EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()),
                       EPSILON,
                       "Iteration: " + i);
-         EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, actualClosestPointWorld, EPSILON);
+         EuclidCoreTestTools.assertEquals(pointOnSurface, actualClosestPointWorld, EPSILON);
          // The normal should be orthogonal to the ellipsoid surface at the closest point.
          expectedNormal.set(actualClosestPointLocal);
          double rxSquare = ellipsoid3D.getRadiusX() * ellipsoid3D.getRadiusX();
@@ -411,7 +411,7 @@ public class Ellipsoid3DTest
          expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
          expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -441,7 +441,7 @@ public class Ellipsoid3DTest
          expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
          expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -616,7 +616,7 @@ public class Ellipsoid3DTest
 
          Point3D expectedProjection = new Point3D();
          ellipsoid3D.evaluatePoint3DCollision(pointOutside, expectedProjection, new Vector3D());
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, ellipsoid3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, ellipsoid3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
    }
 
@@ -642,8 +642,8 @@ public class Ellipsoid3DTest
          Point3D actualIntersection1 = new Point3D();
          Point3D actualIntersection2 = new Point3D();
          assertEquals(2, ellipsoid3D.intersectionWith(line, actualIntersection1, actualIntersection2));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection2, actualIntersection2, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1253,7 +1253,7 @@ public class Ellipsoid3DTest
 
          Vector3D actualNormal = new Vector3D();
          ellipsoid.evaluatePoint3DCollision(supportingVertex, new Point3D(), actualNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(supportDirection, actualNormal, EPSILON);
       }
    }
 

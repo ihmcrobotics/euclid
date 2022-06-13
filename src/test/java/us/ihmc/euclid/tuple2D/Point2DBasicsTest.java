@@ -142,15 +142,15 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          rigidBodyTransform.transform(expected);
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
@@ -204,17 +204,17 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
          actual.applyInverseTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
          actual.applyInverseTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
          actual.applyInverseTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 

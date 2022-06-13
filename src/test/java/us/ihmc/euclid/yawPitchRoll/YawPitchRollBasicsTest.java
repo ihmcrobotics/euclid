@@ -186,7 +186,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          {
             expectedYPR = createRandomYawPitchRoll(random);
             actualYPR.set(expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(actualYPR, expectedYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(actualYPR, expectedYPR, getEpsilon());
          }
       }
 
@@ -195,7 +195,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          {
             expectedYPR = createRandomYawPitchRoll(random);
             actualYPR.set(expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(actualYPR, expectedYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(actualYPR, expectedYPR, getEpsilon());
          }
       }
 
@@ -205,7 +205,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             expectedYPR = createRandomYawPitchRoll(random);
             double[] axisAngleArray = new double[] {expectedYPR.getYaw(), expectedYPR.getPitch(), expectedYPR.getRoll()};
             actualYPR.set(axisAngleArray);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -217,7 +217,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             double[] axisAngleArray = new double[4 + startIndex + random.nextInt(10)];
             expectedYPR.get(startIndex, axisAngleArray);
             actualYPR.set(startIndex, axisAngleArray);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -253,7 +253,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
             actualYPR.set(quaternion);
             YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -263,7 +263,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
             actualYPR.set(matrix);
             YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -273,7 +273,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             Vector3D rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
             actualYPR.setRotationVector(rotationVector);
             YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -283,7 +283,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
             actualYPR.set(axisAngle);
             YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, expectedYPR);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 
@@ -295,7 +295,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
             double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
             actualYPR.setYawPitchRoll(yaw, pitch, roll);
             expectedYPR.set(yaw, pitch, roll);
-            EuclidCoreTestTools.assertYawPitchRollEquals(expectedYPR, actualYPR, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedYPR, actualYPR, getEpsilon());
          }
       }
 

@@ -59,7 +59,7 @@ public class Sphere3DTest
          Point3D center = EuclidCoreRandomTools.nextPoint3D(random);
          Sphere3D sphere3D = new Sphere3D(center, radius);
 
-         EuclidCoreTestTools.assertTuple3DEquals(center, sphere3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(center, sphere3D.getPosition(), EPSILON);
          assertEquals(radius, sphere3D.getRadius());
       }
 
@@ -69,7 +69,7 @@ public class Sphere3DTest
          Point3D center = EuclidCoreRandomTools.nextPoint3D(random);
          Sphere3D sphere3D = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
 
-         EuclidCoreTestTools.assertTuple3DEquals(center, sphere3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertEquals(center, sphere3D.getPosition(), EPSILON);
          assertEquals(radius, sphere3D.getRadius());
       }
 
@@ -221,8 +221,8 @@ public class Sphere3DTest
          expectedNormal.setAndNormalize(direction);
 
          assertTrue(sphere3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -236,8 +236,8 @@ public class Sphere3DTest
          expectedNormal.setAndNormalize(direction);
 
          assertFalse(sphere3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -392,7 +392,7 @@ public class Sphere3DTest
          Point3D expectedProjection = new Point3D();
          expectedProjection.scaleAdd(sphere3D.getRadius(), direction, sphere3D.getPosition());
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, sphere3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, sphere3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
    }
 
@@ -415,8 +415,8 @@ public class Sphere3DTest
          Point3D actualIntersection1 = new Point3D();
          Point3D actualIntersection2 = new Point3D();
          assertEquals(2, sphere3D.intersectionWith(line, actualIntersection1, actualIntersection2));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection2, actualIntersection2, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -536,7 +536,7 @@ public class Sphere3DTest
 
          Vector3D actualNormal = new Vector3D();
          sphere.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 

@@ -259,7 +259,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          RotationVectorConversion.convertQuaternionToRotationVector(quaternion, expectedRotationVector);
          quaternion.getRotationVector(actualRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, getEpsilon());
       }
    }
 
@@ -277,7 +277,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             quaternion.getEuler(eulerAngles);
             Vector3DBasics expectedEulerAngles = new Vector3D();
             YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, expectedEulerAngles);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedEulerAngles, eulerAngles, getEpsilon());
+            EuclidCoreTestTools.assertEquals(expectedEulerAngles, eulerAngles, getEpsilon());
          }
 
          { // Test getYaw()
@@ -316,7 +316,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.transform(quaternion, tuple, expectedTuple);
          quaternion.transform(actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -329,7 +329,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.transform(quaternion, tuple, expectedTuple);
          quaternion.transform(tuple, actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -342,7 +342,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.addTransform(quaternion, tuple, expectedTuple);
          quaternion.addTransform(actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -355,7 +355,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.addTransform(quaternion, tuple, expectedTuple);
          quaternion.addTransform(tuple, actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -370,13 +370,13 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.transform(quaternion, tuple, expectedTuple, false);
          quaternion.transform(actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          actualTuple.set(tuple);
          quaternion.transform(actualTuple, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          actualTuple.set(tuple);
          quaternion.transform(actualTuple, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -391,11 +391,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.transform(quaternion, tuple, expectedTuple, false);
          quaternion.transform(tuple, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          quaternion.transform(tuple, actualTuple, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          quaternion.transform(tuple, actualTuple, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       // Test exceptions
@@ -487,11 +487,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.transform(quaternion, vectorOriginal, vectorExpected);
 
          quaternion.transform(vectorOriginal, vectorActual);
-         EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, getEpsilon());
 
          vectorActual.set(vectorOriginal);
          quaternion.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -547,7 +547,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple);
          quaternion.inverseTransform(actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -560,7 +560,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple);
          quaternion.inverseTransform(tuple, actualTuple);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -575,13 +575,13 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple, false);
          quaternion.inverseTransform(actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          actualTuple.set(tuple);
          quaternion.inverseTransform(actualTuple, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          actualTuple.set(tuple);
          quaternion.inverseTransform(actualTuple, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -596,11 +596,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple, false);
          quaternion.inverseTransform(tuple, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          quaternion.inverseTransform(tuple, actualTuple, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
          quaternion.inverseTransform(tuple, actualTuple, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
       // Test exceptions
@@ -672,7 +672,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, original, expected);
          quaternion.inverseTransform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -684,7 +684,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, original, expected);
          quaternion.inverseTransform(original, actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -696,7 +696,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, original, expected);
          quaternion.inverseTransform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -708,7 +708,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          QuaternionTools.inverseTransform(quaternion, original, expected);
          quaternion.inverseTransform(original, actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -820,7 +820,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Quaternion actual = new Quaternion();
       actual.setUnsafe(0.0, 0.0, 0.0, 0.0);
       actual.normalize();
-      EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+      EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
       Quaternion q = new Quaternion();
       q.setUnsafe(1.0, 1.0, 1.0, 1.0);
@@ -1501,11 +1501,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          double alpha = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          qExpected.interpolate(q0, qf, alpha);
          qActual.interpolate(qf, q0, 1.0 - alpha);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(qExpected, qActual, epsilon);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(qExpected, qActual, epsilon);
 
          qActual.set(qf);
          qActual.interpolate(q0, 1.0 - alpha);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(qExpected, qActual, epsilon);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(qExpected, qActual, epsilon);
       }
 
       // Test with a different algorithm
@@ -1533,11 +1533,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          qExpected.multiply(q0, qDiff);
 
          qActual.interpolate(q0, qf, alpha);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(qExpected, qActual, epsilon);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(qExpected, qActual, epsilon);
 
          qActual.set(q0);
          qActual.interpolate(qf, alpha);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(qExpected, qActual, epsilon);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(qExpected, qActual, epsilon);
       }
    }
 
@@ -1557,7 +1557,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          expected.prepend(transform.getRotation());
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1571,7 +1571,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          expected.preMultiply(transform.getRotation());
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1585,7 +1585,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          expected.prepend(transform.getLinearTransform().getAsQuaternion());
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -1605,7 +1605,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1619,7 +1619,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1633,7 +1633,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
    }
 
