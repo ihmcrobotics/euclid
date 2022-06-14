@@ -537,26 +537,6 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Eucli
    }
 
    /**
-    * Tests if this orientation 2D is exactly equal to {@code other}.
-    * <p>
-    * Note that this method performs number comparison and not an angle comparison, such that:
-    * -<i>pi</i> &ne; <i>pi</i>.
-    * </p>
-    *
-    * @param other the other orientation 2D to compare against this. Not modified.
-    * @return {@code true} if the two orientations are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameOrientation2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation2DReadOnly.super.equals(other);
-   }
-
-   /**
     * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:

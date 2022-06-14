@@ -83,26 +83,6 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, EuclidFrameGeometry
       return getOrientationDistance(other.getOrientation());
    }
 
-   /**
-    * Tests if this pose is exactly equal to {@code other}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other pose to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   default boolean equals(FramePose2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose2DReadOnly.super.equals(other);
-   }
-
    @Override
    default String toString(String format)
    {

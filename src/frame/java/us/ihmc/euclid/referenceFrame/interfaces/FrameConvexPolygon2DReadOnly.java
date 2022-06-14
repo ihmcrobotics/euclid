@@ -1908,50 +1908,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
          return ConvexPolygon2DReadOnly.super.equals(other);
    }
 
-   /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * The method returns {@code false} if the two polygons have different size.
-    * </p>
-    * <p>
-    * The method returns {@code false} if the two polygons are expressed in different frames.
-    * </p>
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    * @see #epsilonEquals(EuclidGeometry, double)
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(geometry instanceof FrameConvexPolygon2DReadOnly))
-         return false;
-      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolygon2DReadOnly.super.epsilonEquals(other, epsilon);
+
+      return ConvexPolygon2DReadOnly.super.epsilonEquals(geometry, epsilon);
    }
 
-   /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
-    * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible shift
-    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
-    * counter-clockwise order, are considered geometrically equal even if they do not start with the
-    * same vertex.
-    * </p>
-    *
-    * @param geometry the convex polygon to compare to.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
-    *                                         the same reference frame.
-    * @see #geometricallyEquals(EuclidGeometry, double)
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

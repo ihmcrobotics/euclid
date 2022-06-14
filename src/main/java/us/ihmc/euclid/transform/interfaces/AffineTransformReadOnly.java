@@ -375,8 +375,8 @@ public interface AffineTransformReadOnly extends Transform
     * translation vector are geometrically equal. Returns false by default if incoming object is not a
     * type of AffineTransform.
     *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two transforms are equal, {@code false} otherwise.
     */
    @Override
@@ -390,14 +390,7 @@ public interface AffineTransformReadOnly extends Transform
             && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis if this transform and {@code other} are equal to an
-    * {@code epsilon}. Returns false by default if incoming object is not a type of affineTransform.
-    *
-    * @param geometry  the object to compare against this.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
@@ -408,24 +401,16 @@ public interface AffineTransformReadOnly extends Transform
       return getLinearTransform().epsilonEquals(other.getLinearTransform(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part, the scale part, and the
-    * translation part of this transform and {@code other} are exactly equal.
-    * <p>
-    * The method returns {@code false} if the given transform is {@code null}.
-    * </p>
-    *
-    * @param other the other transform to compare against this. Not modified.
-    * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
-    */
-   default boolean equals(AffineTransformReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null || !(geometry instanceof AffineTransformReadOnly))
          return false;
-      else
-         return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());
+      AffineTransformReadOnly other = (AffineTransformReadOnly) geometry;
+      return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());
    }
 
    @Override

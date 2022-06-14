@@ -84,13 +84,8 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeom
       return true;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
+   @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
@@ -118,17 +113,7 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeom
       }
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    * <p>
-    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
-    * {@link FramePoint2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
-    * </p>
-    *
-    * @param geometry the other supplier to compare against this.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

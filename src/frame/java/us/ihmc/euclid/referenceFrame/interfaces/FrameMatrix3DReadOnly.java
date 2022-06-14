@@ -1013,29 +1013,6 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, EuclidFrameGeom
    }
 
    /**
-    * Tests on a per component basis if this matrix is exactly equal to {@code other}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    * <p>
-    * The method returns {@code false} if the given matrix is {@code null}.
-    * </p>
-    *
-    * @param other the other matrix to compare against this. Not modified.
-    * @return {@code true} if the two matrices are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameMatrix3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Matrix3DReadOnly.super.equals(other);
-   }
-
-   /**
     * Gets a representative {@code String} of {@code matrix} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:

@@ -34,41 +34,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  */
 public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, YawPitchRollReadOnly
 {
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
-    * orientations.
-    * <p>
-    * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
-    * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameYawPitchRollReadOnly other)
-   {
-      if (other == this)
-         return true;
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return YawPitchRollReadOnly.super.equals(other);
-   }
-
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    * <p>
-    * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {

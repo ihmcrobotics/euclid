@@ -1772,26 +1772,6 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, EuclidFrameGeometry
       return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
    }
 
-   /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    * <p>
-    * If the two lines have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameLine2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
-   }
-
    @Override
    default String toString(String format)
    {

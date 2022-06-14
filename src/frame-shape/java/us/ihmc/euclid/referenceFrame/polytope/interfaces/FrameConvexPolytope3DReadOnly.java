@@ -197,69 +197,6 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    FixedFrameShape3DBasics copy();
 
    /**
-    * Tests on a per component basis if this convex polytope and {@code other} are equal to an
-    * {@code epsilon}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameConvexPolytope3DReadOnly))
-         return false;
-      FrameConvexPolytope3DReadOnly other = (FrameConvexPolytope3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolytope3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
-    * similar.
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameConvexPolytope3DReadOnly))
-         return false;
-      FrameConvexPolytope3DReadOnly other = (FrameConvexPolytope3DReadOnly) geometry;
-      checkReferenceFrameMatch(other);
-      return ConvexPolytope3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other convex polytope 3D to compare against this. Not modified.
-    * @return {@code true} if the two convex polytopes are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameConvexPolytope3DReadOnly other)
-   {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolytope3DReadOnly.super.equals(other);
-   }
-
-   /**
     * Gets the representative {@code String} of {@code convexPolytope3D} given a specific format to
     * use.
     * <p>

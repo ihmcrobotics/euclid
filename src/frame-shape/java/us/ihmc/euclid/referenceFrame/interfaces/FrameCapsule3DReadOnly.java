@@ -1,10 +1,8 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
@@ -85,78 +83,31 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    @Override
    FixedFrameCapsule3DBasics copy();
 
-   /**
-    * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
-    * <p>
-    * If the two capsules have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two capsules are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+   default boolean equals(EuclidFrameGeometry geometry)
    {
-      if (!(geometry instanceof FrameCapsule3DReadOnly))
-         return false;
-      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Capsule3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
-    * similar.
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameCapsule3DReadOnly))
-         return false;
-      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Capsule3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this capsule 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two capsules have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other capsule 3D to compare against this. Not modified.
-    * @return {@code true} if the two capsules are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameCapsule3DReadOnly other)
-   {
-      if (other == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (other == null)
+      else if (geometry == null || !(geometry instanceof FrameCapsule3DReadOnly))
       {
          return false;
       }
-      else
-      {
-         if ((getReferenceFrame() != other.getReferenceFrame()) || (getLength() != other.getLength()) || (getRadius() != other.getRadius())
-               || !getPosition().equals(other.getPosition()))
-            return false;
-         if (!getAxis().equals(other.getAxis()))
-            return false;
-         return true;
-      }
+
+      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      if (getLength() != other.getLength())
+         return false;
+      if (getRadius() != other.getRadius())
+         return false;
+      if (!getPosition().equals(other.getPosition()))
+         return false;
+      if (!getAxis().equals(other.getAxis()))
+         return false;
+      return true;
    }
 
    /**

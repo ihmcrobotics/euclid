@@ -1089,22 +1089,20 @@ public interface Matrix3DReadOnly extends EuclidGeometry
       return Matrix3DFeatures.equals(this, other);
    }
 
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param geometry the object to compare against this. Not modified.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
       if (!(geometry instanceof Matrix3DReadOnly))
          return false;
       Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon) || !EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getM02(), other.getM02(), epsilon) || !EuclidCoreTools.epsilonEquals(getM10(), other.getM10(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM02(), other.getM02(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM10(), other.getM10(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getM11(), other.getM11(), epsilon))
          return false;

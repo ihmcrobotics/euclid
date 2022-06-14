@@ -1310,24 +1310,4 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Eucli
    {
       return EuclidFrameIOTools.getFrameBoundingBox3DString(format, this);
    }
-
-   /**
-    * Tests on a per component basis, if this bounding box 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other bounding box 3D to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameBoundingBox3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
-   }
 }

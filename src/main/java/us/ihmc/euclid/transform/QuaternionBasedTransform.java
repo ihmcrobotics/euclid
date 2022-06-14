@@ -436,16 +436,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
          return false;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are exactly equal.
-    * <p>
-    * The method returns {@code false} if the given transform is {@code null}.
-    * </p>
-    *
-    * @param geometry the geometry to compare against this. Not modified.
-    * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean equals(EuclidGeometry geometry)
    {
@@ -457,14 +448,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
       return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);
    }
 
-   /**
-    * Two quaternion based transforms are considered geometrically equal if both the rotation-scale
-    * matrices and translation vectors are equal.
-    *
-    * @param geometry the object to compare against this.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two quaternion based transforms are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

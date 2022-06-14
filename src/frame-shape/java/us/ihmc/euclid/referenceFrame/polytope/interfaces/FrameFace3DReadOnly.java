@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
@@ -484,56 +485,16 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return getSupportingVertex((Vector3DReadOnly) supportDirection);
    }
 
-   /**
-    * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other face to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two faces are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FrameFace3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidFrameGeometry geometry)
    {
-      checkReferenceFrameMatch(other);
-      return Face3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
-    * similar.
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameFace3DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Face3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other convex polytope 3D to compare against this. Not modified.
-    * @return {@code true} if the two convex polytopes are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameFace3DReadOnly other)
-   {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (geometry == null || getReferenceFrame() != geometry.getReferenceFrame())
          return false;
+
+      FrameFace3DReadOnly other = (FrameFace3DReadOnly) geometry;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -544,7 +505,7 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       }
       return true;
    }
-   
+
    /**
     * Gets the representative {@code String} of {@code face3D} given a specific format to use.
     * <p>

@@ -434,26 +434,6 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    FixedFrameBox3DBasics copy();
 
    /**
-    * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other box 3D to compare against this. Not modified.
-    * @return {@code true} if the two boxes are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameBox3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
-   }
-
-   /**
     * Gets the representative {@code String} of {@code box3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:

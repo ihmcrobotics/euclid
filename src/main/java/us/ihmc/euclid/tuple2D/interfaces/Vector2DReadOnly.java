@@ -127,22 +127,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       return tuple1.getX() * tuple2.getY() - tuple1.getY() * tuple2.getX();
    }
 
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

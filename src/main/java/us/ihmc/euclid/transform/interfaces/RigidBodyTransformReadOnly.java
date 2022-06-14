@@ -383,14 +383,7 @@ public interface RigidBodyTransformReadOnly extends Transform
       translationToPack.set(getTranslation());
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param geometry  the object to compare against this.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
@@ -400,14 +393,7 @@ public interface RigidBodyTransformReadOnly extends Transform
       return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
-   /**
-    * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
-    * translation vectors are equal.
-    *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

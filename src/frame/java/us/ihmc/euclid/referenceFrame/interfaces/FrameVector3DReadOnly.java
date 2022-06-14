@@ -64,15 +64,7 @@ public interface FrameVector3DReadOnly extends Vector3DReadOnly, FrameTuple3DRea
       return Vector3DReadOnly.super.angle(other);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
-    * similar, i.e. the length of the distance between them is less than or equal to {@code epsilon}.
-    *
-    * @param geometry the EuclidGeometry to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

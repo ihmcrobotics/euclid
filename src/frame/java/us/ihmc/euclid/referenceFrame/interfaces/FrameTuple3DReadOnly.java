@@ -20,27 +20,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, EuclidFrameGeometry
 {
-
-   /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameTuple3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple3DReadOnly.super.equals(other);
-   }
-
    @Override
    default String toString(String format)
    {

@@ -248,14 +248,7 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       tupleMatrixToPack.unsafe_set(startRow, column, getZ());
    }
 
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param geometry the object to compare against this.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
@@ -265,12 +258,7 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

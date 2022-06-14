@@ -1384,26 +1384,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Eucli
    }
 
    /**
-    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
-    * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other line segment 2D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameLineSegment2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return LineSegment2DReadOnly.super.equals(other);
-   }
-
-   /**
     * Gets a representative {@code String} of {@code lineSegment2D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:

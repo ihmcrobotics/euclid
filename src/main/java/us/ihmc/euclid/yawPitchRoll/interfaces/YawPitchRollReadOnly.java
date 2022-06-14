@@ -367,15 +367,8 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       YawPitchRollTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
 
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
-    * orientations.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
+   @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
@@ -386,16 +379,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
    }
 
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    *
-    * @param geometry the object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {

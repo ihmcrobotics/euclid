@@ -1295,8 +1295,8 @@ public abstract class ReferenceFrame
       if (changedListeners != null)
       {
          FrameChange change = new FrameChange(type, target, targetParent);
-         for (ReferenceFrameChangedListener changedListener : changedListeners)
-            changedListener.changed(change);
+         for (int i = 0; i < changedListeners.size(); i++)
+            changedListeners.get(i).changed(change);
       }
 
       if (parentFrame != null)

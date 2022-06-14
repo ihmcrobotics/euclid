@@ -979,16 +979,7 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
          return false;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are exactly equal.
-    * <p>
-    * The method returns {@code false} if the given transform is {@code null}.
-    * </p>
-    *
-    * @param geometry the geometry to compare against this. Not modified.
-    * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean equals(EuclidGeometry geometry)
    {

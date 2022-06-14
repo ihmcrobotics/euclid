@@ -77,6 +77,7 @@ public interface FrameHalfEdge3DReadOnly extends HalfEdge3DReadOnly, FrameLineSe
     * @return {@code true} if the two half-edges are exactly equal component-wise and are expressed in
     *         the same reference frame, {@code false} otherwise.
     */
+   // TODO: Overriding this is tricky . . .
    default boolean equals(FrameHalfEdge3DReadOnly other)
    {
       if (other == this)

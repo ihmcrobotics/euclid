@@ -308,12 +308,7 @@ public interface Tuple4DReadOnly extends EuclidGeometry
       return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ() + getS() * other.getS();
    }
 
-   /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
@@ -325,18 +320,7 @@ public interface Tuple4DReadOnly extends EuclidGeometry
       return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
    }
 
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry the other tuple to compare against this. Not modified.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {

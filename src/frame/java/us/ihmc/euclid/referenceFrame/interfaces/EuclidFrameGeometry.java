@@ -29,7 +29,7 @@ public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolde
       if (getReferenceFrame() != frameGeometry.getReferenceFrame())
          return false;
 
-      return equals((Object) frameGeometry);
+      return equals((EuclidGeometry) frameGeometry);
    }
 
    /**

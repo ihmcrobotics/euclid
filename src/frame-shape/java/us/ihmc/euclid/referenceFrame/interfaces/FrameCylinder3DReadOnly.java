@@ -360,8 +360,8 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * If the two cylinders have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise and are expressed in the same
     *         reference frame, {@code false} otherwise.
     */
@@ -380,8 +380,8 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
@@ -397,35 +397,32 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       return Cylinder3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this cylinder 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two cylinders have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other cylinder 3D to compare against this. Not modified.
-    * @return {@code true} if the two cylinders are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameCylinder3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidFrameGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (other == null)
+      else if (geometry == null || !(geometry instanceof FrameCylinder3DReadOnly))
       {
          return false;
       }
-      else
-      {
-         if ((getReferenceFrame() != other.getReferenceFrame()) || (getLength() != other.getLength()) || (getRadius() != other.getRadius())
-               || !getPosition().equals(other.getPosition()))
-            return false;
-         if (!getAxis().equals(other.getAxis()))
-            return false;
-         return true;
-      }
+
+      FrameCylinder3DReadOnly other = (FrameCylinder3DReadOnly) geometry;
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      if (getLength() != other.getLength())
+         return false;
+      if (getRadius() != other.getRadius())
+         return false;
+      if (!getPosition().equals(other.getPosition()))
+         return false;
+      if (!getAxis().equals(other.getAxis()))
+         return false;
+
+      return true;
    }
 
    @Override

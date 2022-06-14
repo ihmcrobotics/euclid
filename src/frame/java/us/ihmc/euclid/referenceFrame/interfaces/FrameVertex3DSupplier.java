@@ -68,6 +68,7 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeom
     * @param other the other supplier to compare against this.
     * @return {@code true} if the two suppliers are equal.
     */
+   // TODO: Keep or Remove?
    default boolean equals(FrameVertex3DSupplier other)
    {
       if (other == this)
@@ -84,13 +85,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeom
       return true;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
+   @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
@@ -109,7 +105,6 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeom
             if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
                return false;
          }
-
          return true;
       }
       else
@@ -118,17 +113,7 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeom
       }
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    * <p>
-    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
-    * {@link FramePoint3DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
-    * </p>
-    *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {

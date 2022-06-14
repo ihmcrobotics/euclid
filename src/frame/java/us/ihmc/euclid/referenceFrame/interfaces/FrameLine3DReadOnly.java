@@ -782,26 +782,6 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, EuclidFrameGeometry
       Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
-   /**
-    * Tests on a per component basis, if this line 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two lines have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other line 3D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameLine3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return Line3DReadOnly.super.equals(other);
-   }
-
    @Override
    default String toString(String format)
    {
