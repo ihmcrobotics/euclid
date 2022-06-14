@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -22,7 +21,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
  * using methods requiring {@code FramePose3DReadOnly}.
  * </p>
  */
-public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
+public interface FramePose3DReadOnly extends Pose3DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -212,52 +211,6 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    default double getOrientationDistance(FramePose3DReadOnly other)
    {
       return getOrientationDistance(other.getOrientation());
-   }
-
-   /**
-    * Tests if this pose is equal to the given {@code other} to an {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing..
-    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FramePose3DReadOnly))
-         return false;
-      FramePose3DReadOnly other = (FramePose3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FramePose3DReadOnly))
-         return false;
-      FramePose3DReadOnly other = (FramePose3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

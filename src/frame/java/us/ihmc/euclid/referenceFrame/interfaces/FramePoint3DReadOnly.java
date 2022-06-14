@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -139,27 +138,5 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
    {
       checkReferenceFrameMatch(framePoint2DReadOnly);
       return Point3DReadOnly.super.distanceXYSquared(framePoint2DReadOnly);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
-    * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
-    *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two frame points represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FramePoint3DReadOnly))
-         return false;
-      FramePoint3DReadOnly other = (FramePoint3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Point3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

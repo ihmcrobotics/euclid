@@ -61,8 +61,13 @@ public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolde
     */
    default boolean equals(EuclidFrameGeometry frameGeometry)
    {
+      if (frameGeometry == this)
+         return true;
+      if (frameGeometry == null)
+         return false;
       if (getReferenceFrame() != frameGeometry.getReferenceFrame())
          return false;
+      
       return equals((Object) frameGeometry);
    }
 }

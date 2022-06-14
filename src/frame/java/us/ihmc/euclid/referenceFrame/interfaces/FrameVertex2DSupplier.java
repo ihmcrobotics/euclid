@@ -14,7 +14,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameHolder
+public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeometry
 {
    /**
     * A supplier with no vertices.
@@ -125,8 +125,8 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
     * {@link FramePoint2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
+    * @param geometry the other supplier to compare against this.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
@@ -171,7 +171,6 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
       }
 
       sb.append(']');
-      
 
       return sb.toString();
    }

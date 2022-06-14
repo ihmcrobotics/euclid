@@ -64,21 +64,15 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(geometry instanceof FrameYawPitchRollReadOnly))
-         return false;
-      FrameYawPitchRollReadOnly other = (FrameYawPitchRollReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return YawPitchRollReadOnly.super.epsilonEquals(other, epsilon);
+      return YawPitchRollReadOnly.super.epsilonEquals(geometry, epsilon);
    }
 
    /**

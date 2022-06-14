@@ -14,7 +14,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameVertex3DSupplier extends Vertex3DSupplier, ReferenceFrameHolder
+public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeometry
 {
    /**
     * A supplier with no vertices.

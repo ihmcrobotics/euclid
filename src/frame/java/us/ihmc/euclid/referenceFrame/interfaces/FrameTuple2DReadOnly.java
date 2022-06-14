@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -21,29 +20,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  */
 public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, EuclidFrameGeometry
 {
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameTuple2DReadOnly))
-         return false;
-      FrameTuple2DReadOnly other = (FrameTuple2DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
 
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.

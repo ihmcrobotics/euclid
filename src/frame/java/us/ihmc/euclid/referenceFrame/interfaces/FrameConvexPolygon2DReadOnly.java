@@ -26,7 +26,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, EuclidFrameGeometry, FrameVertex2DSupplier
+public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, FrameVertex2DSupplier
 {
    /** {@inheritDoc} */
    @Override
@@ -1955,12 +1955,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, E
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(geometry instanceof FrameConvexPolygon2DReadOnly))
-         return false;
-      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
+      return ConvexPolygon2DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 
    @Override

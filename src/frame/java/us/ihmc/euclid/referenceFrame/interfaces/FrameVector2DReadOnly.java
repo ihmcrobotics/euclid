@@ -23,12 +23,20 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DReadOnly
 {
 
+   /**
+    * @param other other frame vector2D to compare to.
+    * @return ||<i>V<SUB>this</SUB> - V<SUB>other</SUB></i> ||<SUP>2</SUP>
+    */
    default double differenceLengthSquared(FrameVector2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       return Vector2DReadOnly.super.differenceLengthSquared(other);
    }
 
+   /**
+    * @param other other frame vector2D to compare to.
+    * @return ||<i>V<SUB>this</SUB> - V<SUB>other</SUB></i> ||
+    */
    default double distance(FrameVector2DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
@@ -85,8 +93,8 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
     * similar, i.e. the length of the distance between them is less than or equal to {@code epsilon}.
     *
-    * @param geometry  the object to compare to.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
@@ -95,11 +103,6 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!(geometry instanceof FrameVector2DReadOnly))
-         return false;
-      FrameVector2DReadOnly other = (FrameVector2DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Vector2DReadOnly.super.geometricallyEquals(other, epsilon);
+      return Vector2DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

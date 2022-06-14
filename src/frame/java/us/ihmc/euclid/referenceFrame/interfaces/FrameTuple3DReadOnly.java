@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -19,31 +18,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * using methods requiring {@code FrameTuple3DReadOnly}.
  * </p>
  */
-public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHolder
+public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, EuclidFrameGeometry
 {
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameTuple3DReadOnly))
-         return false;
-      FrameTuple3DReadOnly other = (FrameTuple3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
 
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.

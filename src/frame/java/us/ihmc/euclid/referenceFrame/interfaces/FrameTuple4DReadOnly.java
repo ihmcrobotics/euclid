@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
@@ -20,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * using methods requiring {@code FrameTuple4DReadOnly}.
  * </p>
  */
-public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHolder
+public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, EuclidFrameGeometry
 {
    /**
     * Calculates and returns the value of the dot product of this tuple with {@code other}.
@@ -38,30 +37,6 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
    {
       checkReferenceFrameMatch(other);
       return Tuple4DReadOnly.super.dot(other);
-   }
-
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameTuple4DReadOnly))
-         return false;
-
-      FrameTuple4DReadOnly other = (FrameTuple4DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Tuple4DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
