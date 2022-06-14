@@ -432,9 +432,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object which pose and size is to be compared against this box pose and
-    *                size. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object which pose and size is to be compared against this box pose and
+    *                 size. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -450,8 +450,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -476,17 +476,18 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.
     *
-    * @param other the other box 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two boxes are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Box3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Box3DReadOnly))
          return false;
-      else
-         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
+      return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
    }
 
    /**

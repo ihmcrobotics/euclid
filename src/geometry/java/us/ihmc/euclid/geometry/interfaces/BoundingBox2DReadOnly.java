@@ -343,7 +343,8 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean intersectsEpsilon(BoundingBox2DReadOnly other, double epsilon)
    {
       checkBounds();
-      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon
+            || other.getMaxY() <= getMinY() - epsilon)
          return false;
 
       return true;
@@ -617,20 +618,21 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
     *
-    * @param other the other bounding box 2D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(BoundingBox2DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof BoundingBox2DReadOnly))
          return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
+      return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
    }
-   
+
    @Override
    default String toString(String format)
    {

@@ -80,13 +80,14 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param geometry  the query.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
     */
+   @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof Shape3DPoseReadOnly))
+      if (!(geometry instanceof Shape3DPoseReadOnly))
          return false;
       Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().epsilonEquals(other.getShapePosition(), epsilon) && getShapeOrientation().epsilonEquals(other.getShapeOrientation(), epsilon);
@@ -99,13 +100,14 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param geometry  the object to compare to.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
     */
+   @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof Shape3DPoseReadOnly))
+      if (!(geometry instanceof Shape3DPoseReadOnly))
          return false;
       Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().geometricallyEquals(other.getShapePosition(), epsilon)
@@ -115,23 +117,24 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
     *
-    * @param other the other shape pose 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Shape3DPoseReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Shape3DPoseReadOnly))
          return false;
-      else
-         return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
+      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
+      return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
    }
-   
+
    @Override
    default String toString(String format)
    {
       return EuclidShapeIOTools.getShape3DPoseString(format, this);
-   
+
    }
 }

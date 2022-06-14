@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -433,51 +432,6 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    /** {@inheritDoc} */
    @Override
    FixedFrameBox3DBasics copy();
-
-   /**
-    * Tests separately and on a per component basis if the pose and the size of this box and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * <p>
-    * If the two boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other box which pose and size is to be compared against this box pose and
-    *                size. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameBox3DReadOnly))
-         return false;
-      FrameBox3DReadOnly other = (FrameBox3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return Box3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param other   the box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof FrameBox3DReadOnly))
-         return false;
-      FrameBox3DReadOnly other = (FrameBox3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Box3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
 
    /**
     * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.

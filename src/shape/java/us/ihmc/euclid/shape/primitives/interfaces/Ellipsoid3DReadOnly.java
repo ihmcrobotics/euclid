@@ -334,9 +334,9 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object which pose and radii is to be compared against this ellipsoid
-    *                pose and radii. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object which pose and radii is to be compared against this ellipsoid
+    *                 pose and radii. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -353,8 +353,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -442,18 +442,19 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this ellipsoid 3D is exactly equal to {@code other}.
     *
-    * @param other the other ellipsoid 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two ellipsoids are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(Ellipsoid3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Ellipsoid3DReadOnly))
          return false;
-      else
-         return getPose().equals(other.getPose()) && getRadii().equals(other.getRadii());
+      Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;
+      return getPose().equals(other.getPose()) && getRadii().equals(other.getRadii());
    }
 
    /**

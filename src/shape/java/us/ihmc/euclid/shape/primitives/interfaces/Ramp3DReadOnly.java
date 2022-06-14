@@ -391,9 +391,9 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object which pose and size is to be compared against this ramp pose and
-    *                size. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object which pose and size is to be compared against this ramp pose and
+    *                 size. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -411,8 +411,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -428,17 +428,18 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this ramp 3D is exactly equal to {@code other}.
     *
-    * @param other the other ramp 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two ramps are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Ramp3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Ramp3DReadOnly))
          return false;
-      else
-         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+      Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
+      return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
    }
 
    /**

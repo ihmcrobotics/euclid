@@ -440,18 +440,21 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * Tests on a per component basis, if this axis-angle is exactly equal to {@code other}. A failing
     * test does not necessarily mean that the two axis-angles represent two different orientations.
     *
-    * @param other the other axis-angle to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two axis-angles are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(AxisAngleReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getAngle() == other.getAngle();
+      if (!(geometry instanceof AxisAngleReadOnly))
+         return false;
+      AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
+      return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getAngle() == other.getAngle();
    }
 
    /**
@@ -459,8 +462,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
     * different orientations.
     *
-    * @param geometry  the object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -470,13 +473,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
          return false;
 
       AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getAngle(), other.getAngle(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon) || !EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon) || !EuclidCoreTools.epsilonEquals(getAngle(), other.getAngle(), epsilon))
          return false;
 
       return true;

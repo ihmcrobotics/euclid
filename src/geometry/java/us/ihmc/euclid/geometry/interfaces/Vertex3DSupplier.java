@@ -76,15 +76,16 @@ public interface Vertex3DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal.
     *
-    * @param other the other supplier to compare against this.
+    * @param geometry the EuclidGeometry to compare against this.
     * @return {@code true} if the two suppliers are equal.
     */
-   default boolean equals(Vertex3DSupplier other)
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null)
+      if ((geometry == null) || !(geometry instanceof Vertex3DSupplier))
          return false;
+      Vertex3DSupplier other = (Vertex3DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -98,8 +99,8 @@ public interface Vertex3DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
+    * @param geometry the other supplier to compare against this.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
@@ -137,8 +138,8 @@ public interface Vertex3DSupplier extends EuclidGeometry
     * {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
+    * @param geometry the other supplier to compare against this.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override

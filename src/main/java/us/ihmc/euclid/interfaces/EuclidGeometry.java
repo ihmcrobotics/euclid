@@ -9,6 +9,16 @@ package us.ihmc.euclid.interfaces;
 public interface EuclidGeometry
 {
    /**
+    * Tests if {@code this} is equal to {@code other}. The test is usually achieved on a per component
+    * basis. Sometimes a failing test does not necessarily mean that the two objects are different in a
+    * geometric way.
+    *
+    * @param geometry the geometry to compare against this. Not modified.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
+    */
+   boolean equals(EuclidGeometry geometry);
+
+   /**
     * Tests if {@code this} is equal to {@code other} to an {@code epsilon}. The test is usually
     * achieved on a per component basis. Sometimes a failing test does not necessarily mean that the
     * two objects are different in a geometric way.

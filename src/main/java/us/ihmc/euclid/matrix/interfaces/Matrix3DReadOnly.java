@@ -607,7 +607,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Tests if this matrix is symmetric:
-    * 
+    *
     * <pre>
     *     | a x y |
     * m = | x b z |
@@ -621,7 +621,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * {@link Matrix3DFeatures#EPS_CHECK_SYMMETRIC}.
     * </ul>
     * </p>
-    * 
+    *
     * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
     */
    default boolean isMatrixSymmetric()
@@ -631,7 +631,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Tests if this matrix is symmetric:
-    * 
+    *
     * <pre>
     *     | a x y |
     * m = | x b z |
@@ -644,7 +644,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/- {@code epsilon}.
     * </ul>
     * </p>
-    * 
+    *
     * @param epsilon the tolerance to use.
     * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
     */
@@ -655,7 +655,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Returns the value of the element that has the maximum value.
-    * 
+    *
     * @return the value of the element that has the maximum value.
     */
    default double maxElement()
@@ -665,7 +665,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Returns the value of the element that has the maximum absolute value.
-    * 
+    *
     * @return the value of the element that has the maximum absolute value.
     */
    default double maxAbsElement()
@@ -675,7 +675,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Returns the value of the element that has the minimum value.
-    * 
+    *
     * @return the value of the element that has the minimum value.
     */
    default double minElement()
@@ -685,7 +685,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
    /**
     * Returns the value of the element that has the minimum absolute value.
-    * 
+    *
     * @return the value of the element that has the minimum absolute value.
     */
    default double minAbsElement()
@@ -1074,12 +1074,18 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * The method returns {@code false} if the given matrix is {@code null}.
     * </p>
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two matrices are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(Matrix3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
+      if (geometry == this)
+         return true;
+      if ((geometry == null) || !(geometry instanceof Matrix3DReadOnly))
+         return false;
+      Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
       return Matrix3DFeatures.equals(this, other);
    }
 
@@ -1087,8 +1093,8 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param geometry  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this. Not modified.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override
@@ -1097,13 +1103,8 @@ public interface Matrix3DReadOnly extends EuclidGeometry
       if (!(geometry instanceof Matrix3DReadOnly))
          return false;
       Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getM02(), other.getM02(), epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getM10(), other.getM10(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon) || !EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getM02(), other.getM02(), epsilon) || !EuclidCoreTools.epsilonEquals(getM10(), other.getM10(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getM11(), other.getM11(), epsilon))
          return false;
@@ -1125,8 +1126,8 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param geometry  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this. Not modified.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override

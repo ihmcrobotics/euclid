@@ -258,8 +258,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this cylinder and {@code other} are equal to an
     * {@code epsilon}.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -276,8 +276,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -286,7 +286,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
-      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
+      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon
+            || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
@@ -295,26 +296,25 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this cylinder 3D is exactly equal to {@code other}.
     *
-    * @param other the other cylinder 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two cylinders are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(Cylinder3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
-      {
+      if (geometry == this)
          return true;
-      }
-      else if (other == null)
-      {
+      if ((geometry == null) || !(geometry instanceof Cylinder3DReadOnly))
          return false;
-      }
-      else
-      {
-         if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition()) || !getAxis().equals(other.getAxis()))
-            return false;
-         return true;
-      }
+
+      Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
+
+      if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition())
+            || !getAxis().equals(other.getAxis()))
+         return false;
+      return true;
+
    }
 
    /**

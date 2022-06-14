@@ -251,9 +251,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
    {
       double alpha = (point - firstEndpoint) / (secondEndpoint - firstEndpoint);
 
-      if (alpha < epsilon)
-         return false;
-      if (alpha > 1.0 - epsilon)
+      if ((alpha < epsilon) || (alpha > 1.0 - epsilon))
          return false;
 
       return true;
@@ -574,8 +572,8 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param geometry  the query. Not modified.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query. Not modified.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
    @Override
@@ -584,9 +582,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon))
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
+      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon) || !EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return false;
       return true;
    }
@@ -599,8 +595,8 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */
@@ -610,11 +606,9 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
-            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
-         return true;
-      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
-            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon))
+      if ((EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon)) || (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon)))
          return true;
       return false;
    }
@@ -648,6 +642,22 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
    {
       if (object instanceof LineSegment1D)
          return equals((LineSegment1D) object);
+      else
+         return false;
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(LineSegment1D)}, it returns {@code false} otherwise.
+    *
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(EuclidGeometry geometry)
+   {
+      if (geometry instanceof LineSegment1D)
+         return equals((LineSegment1D) geometry);
       else
          return false;
    }

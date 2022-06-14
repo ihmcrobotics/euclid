@@ -132,8 +132,8 @@ public interface Triangle3DReadOnly extends EuclidGeometry
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
     *
-    * @param geometry  the query. Not modified.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query. Not modified.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
     */
    @Override
@@ -150,17 +150,17 @@ public interface Triangle3DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis if this triangle is exactly equal to {@code other}.
     *
-    * @param other the other triangle to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the triangle are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Triangle3DReadOnly other)
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Triangle3DReadOnly))
          return false;
-      else
-         return getA().equals(other.getA()) && getB().equals(other.getB()) && getC().equals(other.getC());
+      Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
+      return getA().equals(other.getA()) && getB().equals(other.getB()) && getC().equals(other.getC());
    }
 
    /**
@@ -171,8 +171,8 @@ public interface Triangle3DReadOnly extends EuclidGeometry
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */
    @Override

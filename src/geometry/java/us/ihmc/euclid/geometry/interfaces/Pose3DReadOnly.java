@@ -241,8 +241,8 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}. Returns false by default if incoming object is not a type of pose3D.
     *
-    * @param geometry  the query.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
    @Override
@@ -262,8 +262,8 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
     * Returns false by default if incoming object is not a type of Pose3D.
     * </p>
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -278,17 +278,18 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
    /**
     * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
     *
-    * @param other the other pose 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Pose3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Pose3DReadOnly))
          return false;
-      else
-         return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
+      Pose3DReadOnly other = (Pose3DReadOnly) geometry;
+      return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
 
    /**

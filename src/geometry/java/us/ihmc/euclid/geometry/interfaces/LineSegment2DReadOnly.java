@@ -797,8 +797,8 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param geometry  the query. Not modified.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query. Not modified.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
    @Override
@@ -813,18 +813,19 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
     *
-    * @param other the other line segment 2D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(LineSegment2DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof LineSegment2DReadOnly))
          return false;
-      else
-         return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
+      return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
    }
 
    /**
@@ -835,8 +836,8 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.
     */

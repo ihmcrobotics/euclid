@@ -252,8 +252,8 @@ public interface Tuple3DReadOnly extends EuclidGeometry
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
    @Override
@@ -262,23 +262,24 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       if (!(geometry instanceof Tuple3DReadOnly))
          return false;
       Tuple3DReadOnly other = (Tuple3DReadOnly) geometry;
-      return TupleTools.epsilonEquals(this, (Tuple3DReadOnly) other, epsilon);
+      return TupleTools.epsilonEquals(this, other, epsilon);
    }
 
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Tuple3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Tuple3DReadOnly))
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+      Tuple3DReadOnly other = (Tuple3DReadOnly) geometry;
+      return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
    }
 
    @Override

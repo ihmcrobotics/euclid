@@ -509,8 +509,8 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
     *         otherwise.
     */
@@ -536,8 +536,8 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
     * similar.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
     *         otherwise.
     */
@@ -572,16 +572,21 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
     *
-    * @param other the other convex polytope 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two convex polytopes are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(ConvexPolytope3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
+      if ((geometry == null) || !(geometry instanceof ConvexPolytope3DReadOnly))
+         return false;
 
-      if ((other == null) || (getNumberOfFaces() != other.getNumberOfFaces()))
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
+
+      if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
 
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)

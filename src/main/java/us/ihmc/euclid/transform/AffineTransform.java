@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -40,11 +41,10 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * object is transformed with the {@link LinearTransform3D}. It is NOT translated.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
-public class AffineTransform
-      implements AffineTransformBasics, Settable<AffineTransform>
+public class AffineTransform implements AffineTransformBasics, Settable<AffineTransform>
 {
    /** The rotation plus scaling part of this transform. */
    private final LinearTransform3D linearTransform = new LinearTransform3D();
@@ -152,7 +152,7 @@ public class AffineTransform
     * scales set to 1. The returned quaternion is linked to this transform, i.e. it is automatically
     * updated when this transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of the linear part of this transform as a pure orientation.
     */
    public QuaternionReadOnly getRotationView()
@@ -419,8 +419,25 @@ public class AffineTransform
    }
 
    /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(AffineTransformReadOnly)}, it returns {@code false} otherwise or if the
+    * {@code object} is {@code null}.
+    *
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(EuclidGeometry geometry)
+   {
+      if (geometry instanceof AffineTransformReadOnly)
+         return equals((AffineTransformReadOnly) geometry);
+      else
+         return false;
+   }
+
+   /**
     * Provides a {@code String} representation of this transform as follows:
-    * 
+    *
     * <pre>
     *  0.596  0.630  0.930 | -0.435
     * -0.264  0.763  0.575 | -0.464

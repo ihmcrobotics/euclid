@@ -11,6 +11,28 @@ import us.ihmc.euclid.interfaces.EuclidGeometry;
 public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolder
 {
    /**
+    * Tests if {@code this} is equal to {@code other}. The test is usually achieved on a per component
+    * basis. Sometimes a failing test does not necessarily mean that the two objects are different in a
+    * geometric way. The method checks if the frame matches. If the frames match, it returns
+    * {@code true}. Otherwise, redirects to {@link #equals(Object)}.
+    *
+    * @param frameGeometry the frameGeometry to compare against this. Not modified.
+    * @param epsilon       tolerance to use when comparing each component.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
+    */
+   default boolean equals(EuclidFrameGeometry frameGeometry)
+   {
+      if (frameGeometry == this)
+         return true;
+      if (frameGeometry == null)
+         return false;
+      if (getReferenceFrame() != frameGeometry.getReferenceFrame())
+         return false;
+
+      return equals((Object) frameGeometry);
+   }
+
+   /**
     * Tests if {@code this} is equal to {@code other} to an {@code epsilon}. The test is usually
     * achieved on a per component basis. Sometimes a failing test does not necessarily mean that the
     * two objects are different in a geometric way. The method checks if the frame matches. If the
@@ -47,27 +69,5 @@ public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolde
       if (getReferenceFrame() != frameGeometry.getReferenceFrame())
          return false;
       return geometricallyEquals((EuclidGeometry) frameGeometry, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} is equal to {@code other}. The test is usually achieved on a per component
-    * basis. Sometimes a failing test does not necessarily mean that the two objects are different in a
-    * geometric way. The method checks if the frame matches. If the frames match, it returns
-    * {@code true}. Otherwise, redirects to {@link #equals(Object)}.
-    *
-    * @param frameGeometry the frameGeometry to compare against this. Not modified.
-    * @param epsilon       tolerance to use when comparing each component.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(EuclidFrameGeometry frameGeometry)
-   {
-      if (frameGeometry == this)
-         return true;
-      if (frameGeometry == null)
-         return false;
-      if (getReferenceFrame() != frameGeometry.getReferenceFrame())
-         return false;
-      
-      return equals((Object) frameGeometry);
    }
 }

@@ -76,6 +76,5 @@ public interface SupportingVertexHolder extends EuclidGeometry
     *         unchanged.
     */
    boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack);
-   
-   
+
 }

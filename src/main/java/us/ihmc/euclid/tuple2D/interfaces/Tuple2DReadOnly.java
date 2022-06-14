@@ -220,8 +220,8 @@ public interface Tuple2DReadOnly extends EuclidGeometry
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the object to compare against this.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
    @Override
@@ -237,17 +237,18 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Tuple2DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Tuple2DReadOnly))
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY();
+      Tuple2DReadOnly other = (Tuple2DReadOnly) geometry;
+      return getX() == other.getX() && getY() == other.getY();
    }
 
    /**

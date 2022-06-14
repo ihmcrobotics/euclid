@@ -137,25 +137,25 @@ public interface Pose2DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
     *
-    * @param other the other pose 2D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Pose2DReadOnly other)
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Pose2DReadOnly))
          return false;
-      else
-         return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
+      Pose2DReadOnly other = (Pose2DReadOnly) geometry;
+      return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
 
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
     *
-    * @param geometry  the query. Not modified.
-    * @param epsilon the tolerance to use.
+    * @param geometry the query. Not modified.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
    @Override
@@ -173,8 +173,8 @@ public interface Pose2DReadOnly extends EuclidGeometry
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override

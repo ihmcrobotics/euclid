@@ -77,15 +77,17 @@ public interface Vertex2DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal.
     *
-    * @param other the other supplier to compare against this.
+    * @param geometry the geometry to compare against this.
     * @return {@code true} if the two suppliers are equal.
     */
-   default boolean equals(Vertex2DSupplier other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null)
+      if ((geometry == null) || !(geometry instanceof Vertex2DSupplier))
          return false;
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -99,8 +101,8 @@ public interface Vertex2DSupplier extends EuclidGeometry
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
+    * @param geometry the other supplier to compare against this.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override
@@ -138,8 +140,8 @@ public interface Vertex2DSupplier extends EuclidGeometry
     * {@link Point2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
     *
-    * @param geometry  the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
+    * @param geometry the other supplier to compare against this.
+    * @param epsilon  the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
    @Override

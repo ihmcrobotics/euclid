@@ -372,18 +372,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
     * orientations.
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(YawPitchRollReadOnly other)
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof YawPitchRollReadOnly))
          return false;
-      else
-         return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
+      return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
    }
 
    /**
@@ -391,8 +391,8 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
     * two different orientations.
     *
-    * @param geometry  the object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
     */

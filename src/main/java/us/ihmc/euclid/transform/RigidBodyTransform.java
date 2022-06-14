@@ -3,6 +3,7 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
@@ -985,22 +986,23 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
     * The method returns {@code false} if the given transform is {@code null}.
     * </p>
     *
-    * @param other the other transform to compare against this. Not modified.
+    * @param geometry the geometry to compare against this. Not modified.
     * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
     */
-   public boolean equals(RigidBodyTransform other)
+   @Override
+   public boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof RigidBodyTransform))
          return false;
-      else
-         return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
+      RigidBodyTransform other = (RigidBodyTransform) geometry;
+      return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
 
    /**
     * Provides a {@code String} representation of this transform as follows:
-    * 
+    *
     * <pre>
     *  0.596  0.630  0.930 | -0.435
     * -0.264  0.763  0.575 | -0.464

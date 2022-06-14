@@ -222,9 +222,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
     * {@code other}'s pose and radius are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object which pose and radius is to be compared against this radius pose
-    *                and radius. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object which pose and radius is to be compared against this radius pose
+    *                 and radius. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -240,8 +240,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
     * to an {@code epsilon}.
     *
-    * @param geometry  the object to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the object to compare to. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -256,18 +256,19 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis, if this sphere 3D is exactly equal to {@code other}.
     *
-    * @param other the other sphere 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two spheres are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(Sphere3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Sphere3DReadOnly))
          return false;
-      else
-         return getPosition().equals(other.getPosition()) && getRadius() == other.getRadius();
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
+      return getPosition().equals(other.getPosition()) && getRadius() == other.getRadius();
    }
 
    /**

@@ -844,7 +844,7 @@ public interface Line2DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof Line2DReadOnly))
+      if (!(geometry instanceof Line2DReadOnly))
          return false;
       Line2DReadOnly other = (Line2DReadOnly) geometry;
       if (!getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
@@ -867,7 +867,7 @@ public interface Line2DReadOnly extends EuclidGeometry
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof Line2DReadOnly))
+      if (!(geometry instanceof Line2DReadOnly))
          return false;
       Line2DReadOnly other = (Line2DReadOnly) geometry;
       return isCollinear(other, epsilon);
@@ -876,17 +876,18 @@ public interface Line2DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
     *
-    * @param other the other line 2D to compare against this. Not modified.
+    * @param geometry the geometry to compare against this. Not modified.
     * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Line2DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Line2DReadOnly))
          return false;
-      else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
+      return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
    }
 
    @Override

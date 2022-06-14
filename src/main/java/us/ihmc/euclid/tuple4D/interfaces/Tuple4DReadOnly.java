@@ -311,17 +311,18 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Tuple4DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if ((geometry == null) || !(geometry instanceof Tuple4DReadOnly))
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
+      Tuple4DReadOnly other = (Tuple4DReadOnly) geometry;
+      return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
    }
 
    /**
@@ -331,8 +332,8 @@ public interface Tuple4DReadOnly extends EuclidGeometry
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param geometry  the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
+    * @param geometry the other tuple to compare against this. Not modified.
+    * @param epsilon  the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
     */

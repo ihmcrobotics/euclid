@@ -47,6 +47,21 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    }
 
    @Override
+   public boolean equals(EuclidGeometry geometry)
+   {
+      if (!(geometry instanceof SupportingVertexTransformer))
+         return false;
+      if (geometry instanceof SupportingVertexHolder)
+      {
+         SupportingVertexHolder other = (SupportingVertexHolder) geometry;
+         return original.equals(other);
+      }
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
+      return transform.equals(other);
+
+   }
+
+   @Override
    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
       if (!(geometry instanceof SupportingVertexTransformer))

@@ -123,8 +123,8 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
     */
@@ -138,16 +138,10 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
             || !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
 
-      if (getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
-         return false;
-
-      if (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
-         return false;
-
-      if (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
-         return false;
-
-      if (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
+      if ((getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+            || (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
+            || (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+            || (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon)))
          return false;
       return true;
    }
@@ -172,7 +166,7 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
     *
-    * @param object                 the other object to compare against this. Not modified.
+    * @param other                  the other collision result to compare against this. Not modified.
     * @param distanceEpsilon        tolerance to use when comparing the distance feature.
     * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
     *                               {@code pointOnB} in the plane perpendicular to the collision
@@ -204,9 +198,7 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
       Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
 
-      if (getShapeA() != otherShapeA)
-         return false;
-      if (getShapeB() != otherShapeB)
+      if ((getShapeA() != otherShapeA) || (getShapeB() != otherShapeB))
          return false;
 
       if (getPointOnA().containsNaN() || getPointOnB().containsNaN() || distanceEpsilon == pointTangentialEpsilon)
@@ -253,37 +245,34 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    /**
     * Tests on a per component basis, if this collision result is exactly equal to {@code other}.
     *
-    * @param other the other collision result to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two collision results are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(EuclidShape3DCollisionResultReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
       {
          return true;
       }
-      else if (other == null)
+      else if (geometry == null || !(geometry instanceof EuclidShape3DCollisionResultReadOnly))
       {
          return false;
       }
       else
       {
+         EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
          if ((areShapesColliding() != other.areShapesColliding()) || (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
                || (getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()))
             return false;
-         if (!getPointOnA().equals(other.getPointOnA()))
-            return false;
-         if (!getNormalOnA().equals(other.getNormalOnA()))
-            return false;
-         if (!getPointOnB().equals(other.getPointOnB()))
-            return false;
-         if (!getNormalOnB().equals(other.getNormalOnB()))
+         if (!getPointOnA().equals(other.getPointOnA()) || !getNormalOnA().equals(other.getNormalOnA()) || !getPointOnB().equals(other.getPointOnB())
+               || !getNormalOnB().equals(other.getNormalOnB()))
             return false;
          return true;
       }
    }
-   
+
    /**
     * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
     * format to use.

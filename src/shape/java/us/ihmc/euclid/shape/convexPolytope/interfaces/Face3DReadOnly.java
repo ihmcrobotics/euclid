@@ -729,8 +729,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
     */
    @Override
@@ -753,8 +753,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
     *
-    * @param geometry  the other object to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param geometry the other object to compare against this. Not modified.
+    * @param epsilon  the tolerance of the comparison.
     * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
     */
    @Override
@@ -799,14 +799,20 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests on a per component basis, if this face 3D is exactly equal to {@code other}.
     *
-    * @param other the other face 3D to compare against this. Not modified.
+    * @param geometry the EuclidGeometry to compare against this. Not modified.
     * @return {@code true} if the two faces are exactly equal component-wise, {@code false} otherwise.
     */
-   default boolean equals(Face3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if ((other == null) || (getNumberOfEdges() != other.getNumberOfEdges()))
+      if ((geometry == null) || !(geometry instanceof Face3DReadOnly))
+         return false;
+
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
+
+      if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
       for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
@@ -816,7 +822,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       }
       return true;
    }
-   
+
    /**
     * Gets the representative {@code String} of {@code face3D} given a specific format to use.
     * <p>
