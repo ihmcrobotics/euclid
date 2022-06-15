@@ -448,7 +448,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(actual.hasRotation());
          actual.appendYawRotation(yaw);
          assertTrue(actual.hasRotation());
-         assertTrue(expected.epsilonEquals(actual, getEpsilon()));
+
+         assertTrue(expected.geometricallyEquals(actual, getEpsilon()));
 
          original.setToZero();
          yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -474,6 +475,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
 
       for (int i = 0; i < ITERATIONS; i++)
       { // appendPitchRotation(double pitch)
+
          T original = createRandomTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getRotation());
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -482,11 +484,12 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(expected.hasRotation());
 
          actual.set(original);
+
          assertTrue(actual.hasRotation());
          actual.appendPitchRotation(pitch);
          assertTrue(actual.hasRotation());
-         assertTrue(expected.equals(actual));
 
+         assertTrue(expected.geometricallyEquals(actual, getEpsilon()));
          original.setToZero();
          pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          actual.set(original);
@@ -506,6 +509,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actual.set(original);
          assertTrue(actual.hasRotation());
          actual.appendPitchRotation(pitch);
+
          assertFalse(actual.hasRotation());
       }
 
@@ -522,7 +526,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(actual.hasRotation());
          actual.appendRollRotation(roll);
          assertTrue(actual.hasRotation());
-         assertTrue(expected.equals(actual));
+         assertTrue(expected.geometricallyEquals(actual, getEpsilon()));
 
          original.setToZero();
          roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -790,15 +794,16 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
    {
       Random random = new Random(2342L);
       RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
-
+      RotationMatrix actualRotation = new RotationMatrix();
       { // Test setRotationAndZeroTranslation(AxisAngleReadOnly axisAngle)
          T actualTransform = createRandomTransform(random);
          AxisAngle axisAngle = new AxisAngle(expectedRotation);
          actualTransform.setRotationAndZeroTranslation(axisAngle);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
+         actualRotation.set(actualTransform.getRotation());
 
-         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, getEpsilon()));
+         assertTrue(actualRotation.epsilonEquals(expectedRotation, getEpsilon()));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.0));
@@ -812,7 +817,9 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix(denseMatrix));
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, getEpsilon()));
+         actualRotation.set(actualTransform.getRotation());
+
+         assertTrue(actualRotation.epsilonEquals(expectedRotation, getEpsilon()));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
@@ -825,8 +832,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(quaternion);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-
-         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, getEpsilon()));
+         actualRotation.set(actualTransform.getRotation());
+         assertTrue(actualRotation.epsilonEquals(expectedRotation, getEpsilon()));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new Quaternion());
@@ -838,8 +845,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actualTransform.setRotationAndZeroTranslation(expectedRotation);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-
-         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, getEpsilon()));
+         actualRotation.set(actualTransform.getRotation());
+         assertTrue(actualRotation.epsilonEquals(expectedRotation, getEpsilon()));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
@@ -853,8 +860,8 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          expectedRotation.setRotationVector(rotationVector);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-
-         assertTrue(actualTransform.getRotation().epsilonEquals(expectedRotation, getEpsilon()));
+         actualRotation.set(actualTransform.getRotation());
+         assertTrue(actualRotation.epsilonEquals(expectedRotation, getEpsilon()));
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.getRotation().setRotationVector(new Vector3D());
@@ -923,8 +930,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actual.multiply(multipliedWith);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
-
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
 
          multipliedWithRigidBody.set(actual);
          multipliedWithRigidBody.invert();
@@ -932,8 +938,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertFalse(actual.hasRotation());
          assertFalse(actual.hasTranslation());
          expected.setToZero();
-
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
       }
    }
 
@@ -1344,14 +1349,13 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
 
          actual.multiplyInvertThis(new AffineTransform(actual));
          assertFalse(actual.hasRotation());
          assertFalse(actual.hasTranslation());
          expected.setToZero();
-
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
       }
    }
 
@@ -1382,14 +1386,13 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
 
          actual.multiplyInvertOther(new AffineTransform(actual));
          assertFalse(actual.hasRotation());
          assertFalse(actual.hasTranslation());
          expected.setToZero();
-
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
       }
    }
 
@@ -1587,7 +1590,6 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
       // Test against multiply(RigidBodyTransform)
       for (int i = 0; i < ITERATIONS; i++)
       {
-//System.out.println("1");
          T original = createRandomTransform(random);
          T expected = createRandomTransform(random);
          T actual = createRandomTransform(random);
@@ -1595,7 +1597,6 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          T multipliedWithRigidBody = createRandomTransform(random);
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
          multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-//System.out.println("2");
          expected.set(original);
          expected.preMultiply(multipliedWithRigidBody);
          actual.set(original);
@@ -1604,23 +1605,16 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actual.preMultiply(multipliedWith);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
-         
+
          assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
-//System.out.println("3");
          multipliedWithRigidBody.set(actual);
          multipliedWithRigidBody.invert();
          actual.preMultiply(new AffineTransform(multipliedWithRigidBody));
-//System.out.println("4");         
-//System.out.println("actual = \n" + actual.toString() +"\nexpected = \n" +expected.toString());      
          assertFalse(actual.hasRotation());
-//System.out.println("5");         
          assertFalse(actual.hasTranslation());
-//System.out.println("6");
          expected.setToZero();
-//System.out.println("7");
-//System.out.println("actual = \n" + actual.toString() +"\nexpected = \n" +expected.toString());         
          assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
-         
+
       }
    }
 
@@ -2007,13 +2001,13 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          expected.preMultiply(multipliedWithRigidBody);
          actual.set(original);
          actual.preMultiplyInvertThis(multipliedWith);
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
 
          actual.preMultiplyInvertThis(new AffineTransform(actual));
          assertFalse(actual.hasRotation());
          assertFalse(actual.hasTranslation());
          expected.setToZero();
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
       }
    }
 
@@ -2039,7 +2033,7 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          expected.preMultiply(inverseOfMultipliedWithRigidBody);
          actual.set(original);
          actual.preMultiplyInvertOther(multipliedWith);
-         assertTrue(actual.epsilonEquals(expected, getEpsilon()));
+         assertTrue(actual.geometricallyEquals(expected, getEpsilon()));
       }
    }
 

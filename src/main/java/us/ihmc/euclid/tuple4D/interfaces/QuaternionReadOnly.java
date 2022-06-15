@@ -61,7 +61,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Override
    default boolean isZeroOrientation(double epsilon)
    {
-      return QuaternionTools.isNeutralQuaternion(this, epsilon);
+      return QuaternionTools.isNeutralQuaternion(this, epsilon, true);
    }
 
    /**
