@@ -1912,7 +1912,6 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-
       return ConvexPolygon2DReadOnly.super.epsilonEquals(geometry, epsilon);
    }
 

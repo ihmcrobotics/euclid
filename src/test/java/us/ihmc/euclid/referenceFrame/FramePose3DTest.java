@@ -22,7 +22,11 @@ import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
@@ -63,6 +67,12 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
       signaturesToIgnore.add(new MethodSignature("equals", Pose3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Pose3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Pose3D.class, Double.TYPE));
+      for (Method method : Transform.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformReadOnly.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformBasics.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
