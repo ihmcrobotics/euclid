@@ -46,5 +46,5 @@ testDependencies {
    api(ihmc.sourceSetProject("frame-shape"))
 
    api("org.ejml:ejml-ddense:0.39")
-   api("us.ihmc:ihmc-commons-testing:0.30.6")
+   api("us.ihmc:ihmc-commons-testing:0.31.0")
 }
