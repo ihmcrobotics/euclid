@@ -4127,6 +4127,12 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
    }
    
    @Override
+   public double getEpsilon()
+   {
+      return EPS;
+   }
+   
+   @Override
    public RigidBodyTransform createRandomTransform(Random random)
    {
       return EuclidCoreRandomTools.nextRigidBodyTransform(random);

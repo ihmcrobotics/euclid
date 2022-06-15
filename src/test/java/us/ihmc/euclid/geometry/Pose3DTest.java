@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -84,6 +85,12 @@ public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
    }
 
    @Override
+   public double getEpsilon()
+   {
+      return EPSILON;
+   }
+
+   @Override
    public Pose3D createRandomTransform(Random random)
    {
       return createRandomPose3D(random);
@@ -92,7 +99,6 @@ public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
    @Override
    public Pose3D createRandomTransform2D(Random random)
    {
-      // TODO Auto-generated method stub
       Pose3D pose2D = new Pose3D();
       pose2D.getRotation().setToYawOrientation(2.0 * Math.PI * random.nextDouble() - Math.PI);
       pose2D.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random));
@@ -102,7 +108,7 @@ public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
    @Override
    public Pose3D copy(Pose3D original)
    {
-      return new Pose3D(original);
+      return copy( (Pose3DReadOnly) original);
 
    }
 

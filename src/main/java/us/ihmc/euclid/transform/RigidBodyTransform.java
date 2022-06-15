@@ -990,6 +990,16 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
       RigidBodyTransform other = (RigidBodyTransform) geometry;
       return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
+   
+    /** {@inheritDoc} */
+    @Override
+    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+    {
+       if (!(geometry instanceof RigidBodyTransformReadOnly))
+          return false;
+       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
+       return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
+    }
 
    /**
     * Provides a {@code String} representation of this transform as follows:

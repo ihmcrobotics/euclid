@@ -385,16 +385,6 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /** {@inheritDoc} */
    @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof RigidBodyTransformReadOnly))
-         return false;
-      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
-      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
       if (!(geometry instanceof RigidBodyTransformReadOnly))
