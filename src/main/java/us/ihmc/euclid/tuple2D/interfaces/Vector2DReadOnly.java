@@ -75,7 +75,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
-      return EuclidCoreTools.norm(dx, dy);
+      return dx * dx + dy * dy;
    }
 
    /**
