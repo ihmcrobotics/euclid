@@ -12,6 +12,7 @@ package us.ihmc.euclid.interfaces;
  * @author Sylvain Bertrand
  * @param <T> the final type of the geometry implementing this interface.
  */
+@Deprecated
 public interface GeometricallyComparable<T>
 {
    /**

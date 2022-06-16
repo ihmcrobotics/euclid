@@ -2,12 +2,12 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.AffineTransformBasics;
@@ -43,7 +43,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class AffineTransform implements AffineTransformBasics, Settable<AffineTransform>
+public class AffineTransform implements AffineTransformBasics
 {
    /** The rotation plus scaling part of this transform. */
    private final LinearTransform3D linearTransform = new LinearTransform3D();
@@ -131,17 +131,6 @@ public class AffineTransform implements AffineTransformBasics, Settable<AffineTr
    public AffineTransform(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       set(orientation, translation);
-   }
-
-   /**
-    * Sets this affine transform to the {@code other}.
-    *
-    * @param other the other affine transform to copy the values from. Not modified.
-    */
-   @Override
-   public void set(AffineTransform other)
-   {
-      set((AffineTransformReadOnly) other);
    }
 
    /**
@@ -432,7 +421,7 @@ public class AffineTransform implements AffineTransformBasics, Settable<AffineTr
    @Override
    public String toString()
    {
-      return AffineTransformBasics.super.toString(null);
+      return AffineTransformBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    @Override

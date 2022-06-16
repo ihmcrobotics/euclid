@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tools.Matrix3DTools;
@@ -1298,5 +1299,20 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    default void preMultiplyInvertOther(RotationMatrixReadOnly other)
    {
       Matrix3DTools.multiplyInvertLeft(other, this, this);
+   }
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
+    * </p>
+    *
+    * @param geometry  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      return epsilonEquals(geometry, epsilon);
    }
 }

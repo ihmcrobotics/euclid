@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.collision;
 
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
@@ -13,7 +12,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
  *
  * @author Sylvain Bertrand
  */
-public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResultBasics, Settable<EuclidShape3DCollisionResult>
+public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResultBasics
 {
    /** Whether the shapes are colliding. */
    private boolean shapesAreColliding;
@@ -50,13 +49,6 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
    public EuclidShape3DCollisionResult(EuclidShape3DCollisionResultReadOnly other)
    {
       set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(EuclidShape3DCollisionResult other)
-   {
-      EuclidShape3DCollisionResultBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

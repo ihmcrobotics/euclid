@@ -83,7 +83,7 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    @Override
    public String toString(String format)
    {
-      return original.toString(format) + transform.toString(format);
+      return "Original: " + original.toString(format) + "\nTransform: " + transform.toString(format);
    }
 
 }

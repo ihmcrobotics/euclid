@@ -4,7 +4,6 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -18,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents a finite-length 1D line segment defined by its two 1D endpoints.
  */
-public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EuclidGeometry
+public class LineSegment1D implements Clearable, EuclidGeometry
 {
    /** The first endpoint defining this line segment. */
    private double firstEndpoint = Double.NaN;
@@ -368,7 +367,11 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
       secondEndpoint = 0.0;
    }
 
-   @Override
+   /**
+    * Sets this line segment to the other segment.
+    *
+    * @param other the other LineSegement1D to set this to.
+    */
    public void set(LineSegment1D other)
    {
       set(other.firstEndpoint, other.secondEndpoint);
@@ -582,7 +585,8 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon) || !EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
+      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
+            || !EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return false;
       return true;
    }
@@ -607,8 +611,9 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Euclid
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
       if ((EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
-            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon)) || (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
-            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon)))
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
+            || (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
+                  && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon)))
          return true;
       return false;
    }

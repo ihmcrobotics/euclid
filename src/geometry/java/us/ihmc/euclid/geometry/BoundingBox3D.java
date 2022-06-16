@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -15,7 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box.
  */
-public class BoundingBox3D implements BoundingBox3DBasics, Settable<BoundingBox3D>
+public class BoundingBox3D implements BoundingBox3DBasics
 {
    /** The minimum coordinates of this bounding box. */
    private final Point3D minPoint = new Point3D();
@@ -121,12 +120,6 @@ public class BoundingBox3D implements BoundingBox3DBasics, Settable<BoundingBox3
    public BoundingBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
       set(minX, minY, minZ, maxX, maxY, maxZ);
-   }
-
-   @Override
-   public void set(BoundingBox3D other)
-   {
-      BoundingBox3DBasics.super.set(other);
    }
 
    /**

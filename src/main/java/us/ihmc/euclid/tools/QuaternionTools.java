@@ -83,7 +83,9 @@ public class QuaternionTools
     * @param qz        the z-component of the quaternion. Not modified.
     * @param qs        the s-component of the quaternion. Not modified.
     * @param epsilon   the tolerance used for the comparison.
-    * @param limitToPi boolean to limit the angle to [<i>-pi, pi</i>]
+    * @param limitToPi when {@code true} the quaternion {@code (0, 0, 0, -1)} is also considered as the
+    *                  neutral quaternion, otherwise only {@code (0, 0, 0, 1)} represents the neutral
+    *                  quaternion.
     * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
     */
    public static boolean isNeutralQuaternion(double qx, double qy, double qz, double qs, double epsilon, boolean limitToPi)

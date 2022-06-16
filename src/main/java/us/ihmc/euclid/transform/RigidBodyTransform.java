@@ -4,7 +4,6 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -52,7 +51,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<RigidBodyTransform>
+public class RigidBodyTransform implements RigidBodyTransformBasics
 {
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
@@ -266,17 +265,6 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
    {
       getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       getTranslation().set(m03, m13, m23);
-   }
-
-   /**
-    * Sets this rigid-body transform to {@code other}.
-    *
-    * @param other the other rigid-body transform to copy the values from. Not modified.
-    */
-   @Override
-   public void set(RigidBodyTransform other)
-   {
-      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -990,16 +978,16 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
       RigidBodyTransform other = (RigidBodyTransform) geometry;
       return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
-   
-    /** {@inheritDoc} */
-    @Override
-    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-    {
-       if (!(geometry instanceof RigidBodyTransformReadOnly))
-          return false;
-       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
-       return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
-    }
+
+   /** {@inheritDoc} */
+   @Override
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
+         return false;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
+      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
+   }
 
    /**
     * Provides a {@code String} representation of this transform as follows:
@@ -1016,7 +1004,30 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
    @Override
    public String toString()
    {
-      return RigidBodyTransformBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code rigidBodyTransform} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the {@code String} representing this transform.
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
    }
 
    @Override

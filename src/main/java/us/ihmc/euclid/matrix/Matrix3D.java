@@ -285,20 +285,4 @@ public class Matrix3D implements Matrix3DBasics
    {
       return EuclidHashCodeTools.toIntHashCode(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
-
-   /**
-    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
-    * <p>
-    * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
-    * </p>
-    *
-    * @param geometry  the object to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return Matrix3DBasics.super.epsilonEquals(geometry, epsilon);
-   }
 }
