@@ -5,6 +5,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.UnitVector3D32;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
@@ -200,6 +201,17 @@ public class AxisAngle32 implements AxisAngleBasics
          return equals((AxisAngleReadOnly) object);
       else
          return false;
+   }
+
+   /**
+    * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
+    *
+    * @return the {@code String} representing this axis-angle.
+    */
+   @Override
+   public String toString()
+   {
+      return AxisAngleBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

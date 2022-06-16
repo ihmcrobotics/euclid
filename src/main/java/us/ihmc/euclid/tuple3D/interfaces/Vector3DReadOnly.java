@@ -62,6 +62,14 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
 
+   /**
+    * <p>
+    * Calculates the norm squared of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
+    */
    default double differenceLengthSquared(Vector3DReadOnly other)
    {
       double dx = getX() - other.getX();
@@ -70,6 +78,14 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       return EuclidCoreTools.normSquared(dx, dy, dz);
    }
 
+   /**
+    * <p>
+    * Calculates the norm of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
+    */
    default double differenceLength(Vector3DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
@@ -93,7 +109,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
    /**
     * Calculates and returns the angle in radians from this vector to {@code other}.
     * <p>
-    * The computed angle is in the range [0; <i>pi</i>].
+    * The computed angle is in the range [0, <i>pi</i>].
     * </p>
     *
     * @param other the other vector used to compute the angle. Not modified.
@@ -106,12 +122,11 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default boolean geometricallyEquals(EuclidGeometry other, double epsilon)
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if( !(other instanceof Vector3DReadOnly))
-      {
+      if (!(geometry instanceof Vector3DReadOnly))
          return false;
-      }
+      Vector3DReadOnly other = (Vector3DReadOnly) geometry;
       return differenceLength((Vector3DReadOnly) other) <= epsilon;
    }
 }

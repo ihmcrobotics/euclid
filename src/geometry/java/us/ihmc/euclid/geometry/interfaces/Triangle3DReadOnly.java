@@ -141,9 +141,15 @@ public interface Triangle3DReadOnly extends EuclidGeometry
    {
       if (!(geometry instanceof Triangle3DReadOnly))
          return false;
+      
       Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
-      if (!getA().epsilonEquals(other.getA(), epsilon) || !getB().epsilonEquals(other.getB(), epsilon) || !getC().epsilonEquals(other.getC(), epsilon))
+      if (!getA().epsilonEquals(other.getA(), epsilon))
          return false;
+      if (!getB().epsilonEquals(other.getB(), epsilon))
+         return false;
+      if (!getC().epsilonEquals(other.getC(), epsilon))
+         return false;
+
       return true;
    }
 

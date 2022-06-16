@@ -4,7 +4,6 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -215,26 +214,6 @@ public class Plane3D implements Plane3DBasics
    public void setPoint(Point3DReadOnly pointOnPlane)
    {
       setPoint(pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ());
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two planes are geometrically similar.
-    * <p>
-    * Two planes are considered geometrically equal if they are coincident. Two planes that are
-    * geometrically equal can have normals pointing opposite direction.
-    * </p>
-    *
-    * @param geometry  the object to compare to.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the planes are coincident, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof Plane3D))
-         return false;
-      Plane3D other = (Plane3D) geometry;
-      return isCoincident(other, epsilon, epsilon);
    }
 
    /**

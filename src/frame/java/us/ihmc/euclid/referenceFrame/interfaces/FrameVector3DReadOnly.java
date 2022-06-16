@@ -22,12 +22,28 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface FrameVector3DReadOnly extends Vector3DReadOnly, FrameTuple3DReadOnly
 {
 
+   /**
+    * <p>
+    * Calculates the norm squared of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
+    */
    default double differenceLengthSquared(FrameVector3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       return Vector3DReadOnly.super.differenceLengthSquared(other);
    }
 
+   /**
+    * <p>
+    * Calculates the norm of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
+    */
    default double differenceLength(FrameVector3DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));

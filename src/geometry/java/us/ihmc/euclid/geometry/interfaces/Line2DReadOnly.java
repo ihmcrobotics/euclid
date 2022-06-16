@@ -847,7 +847,9 @@ public interface Line2DReadOnly extends EuclidGeometry
       if (!(geometry instanceof Line2DReadOnly))
          return false;
       Line2DReadOnly other = (Line2DReadOnly) geometry;
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+         return false;
+      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
          return false;
 
       return true;

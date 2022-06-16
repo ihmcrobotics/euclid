@@ -18,7 +18,7 @@ public interface Vertex3DSupplier extends EuclidGeometry
    /**
     * A supplier with no vertices.
     */
-   Vertex3DSupplier EMPTY_SUPPLIER = new Vertex3DSupplier()
+   static final Vertex3DSupplier EMPTY_SUPPLIER = new Vertex3DSupplier()
    {
       @Override
       public Point3DReadOnly getVertex(int index)
@@ -79,6 +79,7 @@ public interface Vertex3DSupplier extends EuclidGeometry
     * @param geometry the EuclidGeometry to compare against this.
     * @return {@code true} if the two suppliers are equal.
     */
+   @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)

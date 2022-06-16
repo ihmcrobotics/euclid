@@ -78,7 +78,7 @@ public class EuclidCoreIOTools
    {
       if (rigidBodyTransform == null)
          return "null";
-      return getHomogeneousTransformString(format, (Matrix3DReadOnly) rigidBodyTransform.getRotation(), rigidBodyTransform.getTranslation());
+      return getHomogeneousTransformString(format, rigidBodyTransform.getRotation(), rigidBodyTransform.getTranslation());
    }
 
    /**

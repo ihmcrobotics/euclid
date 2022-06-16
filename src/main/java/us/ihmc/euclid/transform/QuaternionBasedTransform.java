@@ -436,16 +436,6 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
       return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof QuaternionBasedTransform))
-         return false;
-      QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
-      return other.quaternion.geometricallyEquals(quaternion, epsilon) && other.translationVector.geometricallyEquals(translationVector, epsilon);
-   }
-
    /**
     * Provides a {@code String} representation of this transform as follows: <br>
     * Quaternion: (qx, qy, qz, qs) <br>

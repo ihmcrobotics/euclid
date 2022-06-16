@@ -52,7 +52,9 @@ public class QuaternionTools
     *
     * @param quaternion the query. Not modified.
     * @param epsilon    the tolerance used for the comparison.
-    * @param limitToPi  boolean to limit the angle to [<i>-pi, pi</i>]
+    * @param limitToPi  when {@code true} the quaternion {@code (0, 0, 0, -1)} is also considered as
+    *                   the neutral quaternion, otherwise only {@code (0, 0, 0, 1)} represents the
+    *                   neutral quaternion.
     * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
     */
    public static boolean isNeutralQuaternion(QuaternionReadOnly quaternion, double epsilon, boolean limitToPi)
@@ -61,7 +63,8 @@ public class QuaternionTools
    }
 
    /**
-    * Tests that the given quaternion is equal to the neutral quaternion on a per-component basis.
+    * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
+    * basis.
     *
     * @param qx      the x-component of the quaternion. Not modified.
     * @param qy      the y-component of the quaternion. Not modified.
@@ -76,7 +79,8 @@ public class QuaternionTools
    }
 
    /**
-    * Tests that the given quaternion is equal to the neutral quaternion on a per-component basis.
+    * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
+    * basis.
     *
     * @param qx        the x-component of the quaternion. Not modified.
     * @param qy        the y-component of the quaternion. Not modified.

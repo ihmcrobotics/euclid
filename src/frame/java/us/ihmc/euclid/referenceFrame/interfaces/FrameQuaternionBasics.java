@@ -45,16 +45,4 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    {
       setIncludingFrame(other.getReferenceFrame(), other);
    }
-   
-   /**
-    * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
-    * s)-worldFrame.
-    *
-    * @return the {@code String} representing this frame quaternion.
-    */
-   @Override
-   default String toString(String format)
-   {
-      return FixedFrameQuaternionBasics.super.toString(format);
-   }
 }

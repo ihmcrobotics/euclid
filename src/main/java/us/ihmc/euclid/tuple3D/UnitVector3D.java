@@ -139,12 +139,6 @@ public class UnitVector3D implements UnitVector3DBasics
    }
 
    /** {@inheritDoc} */
-   public void set(UnitVector3D other)
-   {
-      set((UnitVector3DReadOnly) other);
-   }
-
-   /** {@inheritDoc} */
    @Override
    public void set(UnitVector3DReadOnly other)
    {

@@ -201,10 +201,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean isInsideExclusive(double x, double y, double z)
    {
-      if (x <= getMinX() || x >= getMaxX() || y <= getMinY() || y >= getMaxY())
+      if (x <= getMinX())
          return false;
-
-      if (z <= getMinZ() || z >= getMaxZ())
+      if (x >= getMaxX())
+         return false;
+      if (y <= getMinY())
+         return false;
+      if (y >= getMaxY())
+         return false;
+      if (z <= getMinZ())
+         return false;
+      if (z >= getMaxZ())
          return false;
 
       return true;
@@ -242,10 +249,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean isInsideInclusive(double x, double y, double z)
    {
-      if (x < getMinX() || x > getMaxX() || y < getMinY() || y > getMaxY())
+      if (x < getMinX())
          return false;
-
-      if (z < getMinZ() || z > getMaxZ())
+      if (x > getMaxX())
+         return false;
+      if (y < getMinY())
+         return false;
+      if (y > getMaxY())
+         return false;
+      if (z < getMinZ())
+         return false;
+      if (z > getMaxZ())
          return false;
 
       return true;
@@ -342,7 +356,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean isXYInsideExclusive(double x, double y)
    {
-      if (x <= getMinX() || x >= getMaxX() || y <= getMinY() || y >= getMaxY())
+      if (x <= getMinX())
+         return false;
+      if (x >= getMaxX())
+         return false;
+      if (y <= getMinY())
+         return false;
+      if (y >= getMaxY())
          return false;
 
       return true;
@@ -380,7 +400,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean isXYInsideInclusive(double x, double y)
    {
-      if (x < getMinX() || x > getMaxX() || y < getMinY() || y > getMaxY())
+      if (x < getMinX())
+         return false;
+      if (x > getMaxX())
+         return false;
+      if (y < getMinY())
+         return false;
+      if (y > getMaxY())
          return false;
 
       return true;
@@ -434,7 +460,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean isXYInsideEpsilon(double x, double y, double epsilon)
    {
-      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon || y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
+      if (x <= getMinX() - epsilon)
+         return false;
+      if (x >= getMaxX() + epsilon)
+         return false;
+      if (y <= getMinY() - epsilon)
+         return false;
+      if (y >= getMaxY() + epsilon)
          return false;
 
       return true;
@@ -453,10 +485,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsExclusive(BoundingBox3DReadOnly other)
    {
-      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX() || other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+      if (other.getMinX() >= getMaxX())
          return false;
-
-      if (other.getMinZ() >= getMaxZ() || other.getMaxZ() <= getMinZ())
+      if (other.getMaxX() <= getMinX())
+         return false;
+      if (other.getMinY() >= getMaxY())
+         return false;
+      if (other.getMaxY() <= getMinY())
+         return false;
+      if (other.getMinZ() >= getMaxZ())
+         return false;
+      if (other.getMaxZ() <= getMinZ())
          return false;
 
       return true;
@@ -475,10 +514,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsInclusive(BoundingBox3DReadOnly other)
    {
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX() || other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (other.getMinX() > getMaxX())
          return false;
-
-      if (other.getMinZ() > getMaxZ() || other.getMaxZ() < getMinZ())
+      if (other.getMaxX() < getMinX())
+         return false;
+      if (other.getMinY() > getMaxY())
+         return false;
+      if (other.getMaxY() < getMinY())
+         return false;
+      if (other.getMinZ() > getMaxZ())
+         return false;
+      if (other.getMaxZ() < getMinZ())
          return false;
 
       return true;
@@ -504,11 +550,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsEpsilon(BoundingBox3DReadOnly other, double epsilon)
    {
-      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon
-            || other.getMaxY() <= getMinY() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon)
          return false;
-
-      if (other.getMinZ() >= getMaxZ() + epsilon || other.getMaxZ() <= getMinZ() - epsilon)
+      if (other.getMaxX() <= getMinX() - epsilon)
+         return false;
+      if (other.getMinY() >= getMaxY() + epsilon)
+         return false;
+      if (other.getMaxY() <= getMinY() - epsilon)
+         return false;
+      if (other.getMinZ() >= getMaxZ() + epsilon)
+         return false;
+      if (other.getMaxZ() <= getMinZ() - epsilon)
          return false;
 
       return true;
@@ -530,7 +582,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsExclusiveInXYPlane(BoundingBox2DReadOnly other)
    {
-      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX() || other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+      if (other.getMinX() >= getMaxX())
+         return false;
+      if (other.getMaxX() <= getMinX())
+         return false;
+      if (other.getMinY() >= getMaxY())
+         return false;
+      if (other.getMaxY() <= getMinY())
          return false;
 
       return true;
@@ -552,7 +610,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsInclusiveInXYPlane(BoundingBox2DReadOnly other)
    {
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX() || other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (other.getMinX() > getMaxX())
+         return false;
+      if (other.getMaxX() < getMinX())
+         return false;
+      if (other.getMinY() > getMaxY())
+         return false;
+      if (other.getMaxY() < getMinY())
          return false;
 
       return true;
@@ -582,8 +646,13 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
     */
    default boolean intersectsEpsilonInXYPlane(BoundingBox2DReadOnly other, double epsilon)
    {
-      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon
-            || other.getMaxY() <= getMinY() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon)
+         return false;
+      if (other.getMaxX() <= getMinX() - epsilon)
+         return false;
+      if (other.getMinY() >= getMaxY() + epsilon)
+         return false;
+      if (other.getMaxY() <= getMinY() - epsilon)
          return false;
 
       return true;

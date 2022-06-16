@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -514,5 +515,15 @@ public interface Plane3DReadOnly extends EuclidGeometry
          return false;
       Plane3DReadOnly other = (Plane3DReadOnly) geometry;
       return getPoint().equals(other.getPoint()) && getNormal().equals(other.getNormal());
+   }
+
+   /** {@inehritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (!(geometry instanceof Plane3D))
+         return false;
+      Plane3D other = (Plane3D) geometry;
+      return isCoincident(other, epsilon, epsilon);
    }
 }

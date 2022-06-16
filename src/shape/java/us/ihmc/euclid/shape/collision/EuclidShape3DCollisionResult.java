@@ -3,7 +3,7 @@ package us.ihmc.euclid.shape.collision;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -174,6 +174,6 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getEuclidShape3DCollisionResultString(this);
+      return EuclidShape3DCollisionResultBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

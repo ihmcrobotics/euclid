@@ -180,7 +180,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean isInsideExclusive(double x, double y)
    {
       checkBounds();
-      if (x <= getMinX() || x >= getMaxX() || y <= getMinY() || y >= getMaxY())
+      if (x <= getMinX())
+         return false;
+      if (x >= getMaxX())
+         return false;
+      if (y <= getMinY())
+         return false;
+      if (y >= getMaxY())
          return false;
 
       return true;
@@ -219,7 +225,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean isInsideInclusive(double x, double y)
    {
       checkBounds();
-      if (x < getMinX() || x > getMaxX() || y < getMinY() || y > getMaxY())
+      if (x < getMinX())
+         return false;
+      if (x > getMaxX())
+         return false;
+      if (y < getMinY())
+         return false;
+      if (y > getMaxY())
          return false;
 
       return true;
@@ -276,7 +288,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean isInsideEpsilon(double x, double y, double epsilon)
    {
       checkBounds();
-      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon || y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
+      if (x <= getMinX() - epsilon)
+         return false;
+      if (x >= getMaxX() + epsilon)
+         return false;
+      if (y <= getMinY() - epsilon)
+         return false;
+      if (y >= getMaxY() + epsilon)
          return false;
 
       return true;
@@ -295,7 +313,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean intersectsExclusive(BoundingBox2DReadOnly other)
    {
       checkBounds();
-      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX() || other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+      if (other.getMinX() >= getMaxX())
+         return false;
+      if (other.getMaxX() <= getMinX())
+         return false;
+      if (other.getMinY() >= getMaxY())
+         return false;
+      if (other.getMaxY() <= getMinY())
          return false;
 
       return true;
@@ -315,7 +339,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean intersectsInclusive(BoundingBox2DReadOnly other)
    {
       checkBounds();
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX() || other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (other.getMinX() > getMaxX())
+         return false;
+      if (other.getMaxX() < getMinX())
+         return false;
+      if (other.getMinY() > getMaxY())
+         return false;
+      if (other.getMaxY() < getMinY())
          return false;
 
       return true;
@@ -343,8 +373,13 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
    default boolean intersectsEpsilon(BoundingBox2DReadOnly other, double epsilon)
    {
       checkBounds();
-      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon || other.getMinY() >= getMaxY() + epsilon
-            || other.getMaxY() <= getMinY() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon)
+         return false;
+      if (other.getMaxX() <= getMinX() - epsilon)
+         return false;
+      if (other.getMinY() >= getMaxY() + epsilon)
+         return false;
+      if (other.getMaxY() <= getMinY() - epsilon)
          return false;
 
       return true;

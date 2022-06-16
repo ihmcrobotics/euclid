@@ -134,14 +134,21 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       if (!(geometry instanceof EuclidShape3DCollisionResultReadOnly))
          return false;
       EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
-      if ((getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()) || (areShapesColliding() != other.areShapesColliding())
-            || !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
+      if (getShapeA() != other.getShapeA())
          return false;
-
-      if ((getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
-            || (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
-            || (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
-            || (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon)))
+      if (getShapeB() != other.getShapeB())
+         return false;
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
+         return false;
+      if (getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+         return false;
+      if (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
+         return false;
+      if (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+         return false;
+      if (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
          return false;
       return true;
    }
@@ -198,7 +205,9 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
       Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
 
-      if ((getShapeA() != otherShapeA) || (getShapeB() != otherShapeB))
+      if (getShapeA() != otherShapeA)
+         return false;
+      if (getShapeB() != otherShapeB)
          return false;
 
       if (getPointOnA().containsNaN() || getPointOnB().containsNaN() || distanceEpsilon == pointTangentialEpsilon)
@@ -263,11 +272,21 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       else
       {
          EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
-         if ((areShapesColliding() != other.areShapesColliding()) || (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
-               || (getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()))
+         if (areShapesColliding() != other.areShapesColliding())
             return false;
-         if (!getPointOnA().equals(other.getPointOnA()) || !getNormalOnA().equals(other.getNormalOnA()) || !getPointOnB().equals(other.getPointOnB())
-               || !getNormalOnB().equals(other.getNormalOnB()))
+         if (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
+            return false;
+         if (getShapeA() != other.getShapeA())
+            return false;
+         if (getShapeB() != other.getShapeB())
+            return false;
+         if (!getPointOnA().equals(other.getPointOnA()))
+            return false;
+         if (!getNormalOnA().equals(other.getNormalOnA()))
+            return false;
+         if (!getPointOnB().equals(other.getPointOnB()))
+            return false;
+         if (!getNormalOnB().equals(other.getNormalOnB()))
             return false;
          return true;
       }

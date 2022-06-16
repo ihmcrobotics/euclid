@@ -67,16 +67,6 @@ public class Vector3D32 implements Vector3DBasics
    }
 
    /**
-    * Sets this vector to {@code other}.
-    *
-    * @param other the other vector to copy the values from. Not modified.
-    */
-   public void set(Vector3D32 other)
-   {
-      Vector3DBasics.super.set(other);
-   }
-
-   /**
     * Sets the x-component of this vector.
     *
     * @param x the x-component.

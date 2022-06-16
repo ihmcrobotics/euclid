@@ -5,8 +5,6 @@ import us.ihmc.euclid.interfaces.EuclidGeometry;
 /**
  * Interface used for geometry objects with reference frames to provide basic comparison methods for
  * convenience.
- * 
- * @author joh
  */
 public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolder
 {

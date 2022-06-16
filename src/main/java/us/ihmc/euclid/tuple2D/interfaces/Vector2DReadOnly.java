@@ -63,14 +63,30 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       return dot(this);
    }
 
+   /**
+    * <p>
+    * Calculates the norm squared of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
+    */
    default double differenceLengthSquared(Vector2DReadOnly other)
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
-      return dx * dx + dy * dy;
+      return EuclidCoreTools.norm(dx, dy);
    }
 
-   default double distance(Vector2DReadOnly other)
+   /**
+    * <p>
+    * Calculates the norm of the two vectors (this and other)
+    * </p>
+    * 
+    * @param other the other vector to compare to.
+    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
+    */
+   default double differenceLength(Vector2DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
    }
@@ -134,8 +150,6 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       if (!(geometry instanceof Vector2DReadOnly))
          return false;
       Vector2DReadOnly other = (Vector2DReadOnly) geometry;
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      return EuclidCoreTools.norm(dx, dy) <= epsilon;
+      return differenceLength(other) <= epsilon;
    }
 }
