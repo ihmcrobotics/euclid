@@ -37,7 +37,7 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * @param other other frame vector2D to compare to.
     * @return ||<i>V<SUB>this</SUB> - V<SUB>other</SUB></i> ||
     */
-   default double distance(FrameVector2DReadOnly other)
+   default double differenceLength(FrameVector2DReadOnly other)
    {
       return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
    }
