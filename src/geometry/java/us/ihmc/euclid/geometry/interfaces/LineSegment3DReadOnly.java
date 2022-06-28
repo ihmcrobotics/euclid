@@ -560,28 +560,27 @@ public interface LineSegment3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param geometry the line segment to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof LineSegment3DReadOnly))
          return false;
       LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;
-      if ((getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
+      if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
-            || (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
-                  && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)))
+         return true;
+      if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
          return true;
       return false;
    }

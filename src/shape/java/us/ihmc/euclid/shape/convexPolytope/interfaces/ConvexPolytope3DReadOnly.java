@@ -528,18 +528,14 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
-    * similar.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
       ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;

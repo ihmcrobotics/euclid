@@ -209,17 +209,14 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
-    * similar.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Capsule3DReadOnly))
          return false;
       Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;

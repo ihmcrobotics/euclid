@@ -269,22 +269,21 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
-   /**
-    * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
-    * similar.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
-      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon
-            || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
+      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon)
+         return false;
+
+      if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);

@@ -60,6 +60,10 @@ public interface Vector4DReadOnly extends Tuple4DReadOnly
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Vector4DReadOnly))
          return false;
       Vector4DReadOnly other = (Vector4DReadOnly) geometry;

@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -87,12 +86,5 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
    {
       checkReferenceFrameMatch(tuple);
       return Vector2DReadOnly.super.cross(tuple);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return Vector2DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

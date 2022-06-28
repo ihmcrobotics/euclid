@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -417,12 +416,5 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
    default String toString(String format)
    {
       return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return RotationMatrixReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

@@ -147,6 +147,10 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Vector2DReadOnly))
          return false;
       Vector2DReadOnly other = (Vector2DReadOnly) geometry;

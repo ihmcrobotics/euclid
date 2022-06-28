@@ -345,17 +345,14 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
-    * similar.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
       Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;

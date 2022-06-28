@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -1118,15 +1117,6 @@ public class LinearTransform3D implements LinearTransform3DBasics
          return equals((Matrix3DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Redirects to {@link #epsilonEquals(EuclidGeometry, double)}.
-    */
-   @Override
-   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return LinearTransform3DBasics.super.epsilonEquals(geometry, epsilon);
    }
 
    /**

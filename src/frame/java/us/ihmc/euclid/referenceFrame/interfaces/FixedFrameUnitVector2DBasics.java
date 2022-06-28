@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
@@ -33,11 +32,5 @@ public interface FixedFrameUnitVector2DBasics extends FixedFrameVector2DBasics, 
    {
       checkReferenceFrameMatch(other);
       set((UnitVector2DReadOnly) other);
-   }
-   
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return FixedFrameVector2DBasics.super.geometricallyEquals(geometry, epsilon);
    }
 }

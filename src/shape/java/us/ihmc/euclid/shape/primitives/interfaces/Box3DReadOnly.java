@@ -443,16 +443,14 @@ public interface Box3DReadOnly extends Shape3DReadOnly
             && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Box3DReadOnly))
          return false;
       Box3DReadOnly other = (Box3DReadOnly) geometry;

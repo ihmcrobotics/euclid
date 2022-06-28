@@ -1640,22 +1640,21 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * This method performs the comparison on a per vertex basis while accounting for a possible shift
     * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
     * counter-clockwise order, are considered geometrically equal even if they do not start with the
     * same vertex.
     * </p>
-    *
-    * @param other   the convex polygon to compare to.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof ConvexPolygon2DReadOnly))
          return false;
       ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;

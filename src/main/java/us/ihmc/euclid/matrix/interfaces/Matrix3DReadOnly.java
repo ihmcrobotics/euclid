@@ -1118,10 +1118,6 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * <p>
     * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
     * </p>
-    *
-    * @param geometry the object to compare against this. Not modified.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)

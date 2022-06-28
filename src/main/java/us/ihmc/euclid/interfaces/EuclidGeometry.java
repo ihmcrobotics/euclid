@@ -1,5 +1,7 @@
 package us.ihmc.euclid.interfaces;
 
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
+
 /**
  * Base interface used to represent geometry objects that are part the of the Euclid library.
  */
@@ -48,10 +50,11 @@ public interface EuclidGeometry
    boolean geometricallyEquals(EuclidGeometry geometry, double epsilon);
 
    /**
-    * Provides a {@code String} representation of this EuclidGeometry.
+    * Provides a {@code String} representation of this geometry.
     *
     * @param format the format to use for each number.
     * @return the {@code String} representing this tuple4D.
+    * @see EuclidCoreIOTools#DEFAULT_FORMAT
     */
    String toString(String format);
 }

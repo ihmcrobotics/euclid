@@ -150,17 +150,14 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       return true;
    }
 
-   /**
-    * Tests each feature of {@code this} against {@code other} for geometric similarity.
-    *
-    * @param other   the other collision result to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each feature.
-    * @return {@code true} if the two collision results are considered geometrically similar,
-    *         {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof EuclidShape3DCollisionResultReadOnly))
          return false;
       EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;

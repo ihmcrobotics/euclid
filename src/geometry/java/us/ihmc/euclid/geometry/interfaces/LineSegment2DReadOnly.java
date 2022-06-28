@@ -820,21 +820,19 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof LineSegment2DReadOnly))
          return false;
       LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;

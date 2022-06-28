@@ -165,20 +165,19 @@ public interface Triangle3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two triangle are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * Two triangles are geometrically similar 3 pairs geometrically equal vertices and the same
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Triangle3DReadOnly))
          return false;
       Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;

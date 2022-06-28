@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
@@ -21,10 +19,4 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  */
 public interface FrameVector4DReadOnly extends Vector4DReadOnly, FrameTuple4DReadOnly
 {
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return Vector4DReadOnly.super.geometricallyEquals(geometry, epsilon);
-   }
 }

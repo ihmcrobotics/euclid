@@ -858,19 +858,19 @@ public interface Line2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
+    * {@inheritDoc}
     * <p>
     * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
     * opposite direction.
     * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Line2DReadOnly))
          return false;
       Line2DReadOnly other = (Line2DReadOnly) geometry;

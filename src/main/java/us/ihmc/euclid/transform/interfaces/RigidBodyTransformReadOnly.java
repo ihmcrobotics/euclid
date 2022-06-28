@@ -385,6 +385,10 @@ public interface RigidBodyTransformReadOnly extends Transform
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof RigidBodyTransformReadOnly))
          return false;
       RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;

@@ -129,7 +129,11 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof Point2DReadOnly))
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Point2DReadOnly))
          return false;
       Point2DReadOnly other = (Point2DReadOnly) geometry;
       return distance(other) <= epsilon;

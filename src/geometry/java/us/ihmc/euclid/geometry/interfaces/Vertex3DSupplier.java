@@ -125,37 +125,29 @@ public interface Vertex3DSupplier extends EuclidGeometry
     * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
     * {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
-    *
-    * @param geometry the other supplier to compare against this.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
-      {
          return true;
-      }
-      else if (geometry instanceof Vertex3DSupplier)
-      {
-         Vertex3DSupplier other = (Vertex3DSupplier) geometry;
-
-         if (getNumberOfVertices() != other.getNumberOfVertices())
-            return false;
-
-         for (int i = 0; i < getNumberOfVertices(); i++)
-         {
-            if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
-               return false;
-         }
-
-         return true;
-      }
-      else
-      {
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Vertex3DSupplier))
+         return false;
+
+      Vertex3DSupplier other = (Vertex3DSupplier) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
+            return false;
       }
+
+      return true;
    }
 
    /** {@inheritDoc} */

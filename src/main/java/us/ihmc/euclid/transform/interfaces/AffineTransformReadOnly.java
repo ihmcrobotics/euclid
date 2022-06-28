@@ -370,18 +370,14 @@ public interface AffineTransformReadOnly extends Transform
       translationToPack.set(getTranslation());
    }
 
-   /**
-    * Two affine transforms are considered geometrically equal if both the linear transform and
-    * translation vector are geometrically equal. Returns false by default if incoming object is not a
-    * type of AffineTransform.
-    *
-    * @param geometry the object to compare against this.
-    * @param epsilon  the tolerance to use when comparing each component.
-    * @return {@code true} if the two transforms are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof AffineTransformReadOnly))
          return false;
 

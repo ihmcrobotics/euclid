@@ -163,11 +163,15 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
    {
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
-   
+
    /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Point3DReadOnly))
          return false;
       Point3DReadOnly other = (Point3DReadOnly) geometry;

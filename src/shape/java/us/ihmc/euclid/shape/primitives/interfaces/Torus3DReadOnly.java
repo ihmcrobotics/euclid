@@ -174,21 +174,23 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
             && getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
-   /**
-    * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Torus3DReadOnly))
          return false;
       Torus3DReadOnly other = (Torus3DReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) || !getPosition().geometricallyEquals(getPosition(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon))
+         return false;
+
+      if (!getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);

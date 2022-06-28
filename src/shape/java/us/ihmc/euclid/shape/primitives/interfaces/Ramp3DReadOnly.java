@@ -402,18 +402,14 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
             && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically similar,
-    * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
-    * are geometrically similar given {@code epsilon}.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Ramp3DReadOnly))
          return false;
       Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;

@@ -232,17 +232,14 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
-    * to an {@code epsilon}.
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Sphere3DReadOnly))
          return false;
       Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;

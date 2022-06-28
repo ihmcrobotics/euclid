@@ -90,27 +90,6 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
       return getShapePosition().epsilonEquals(other.getShapePosition(), epsilon) && getShapeOrientation().epsilonEquals(other.getShapeOrientation(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param geometry the object to compare to.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (!(geometry instanceof Shape3DPoseReadOnly))
-         return false;
-      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
-      return getShapePosition().geometricallyEquals(other.getShapePosition(), epsilon)
-            && getShapeOrientation().geometricallyEquals(other.getShapeOrientation(), epsilon);
-   }
-
    /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)

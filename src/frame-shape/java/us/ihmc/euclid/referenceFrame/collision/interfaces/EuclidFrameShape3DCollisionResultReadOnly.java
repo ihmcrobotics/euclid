@@ -65,21 +65,14 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
       return EuclidShape3DCollisionResultReadOnly.super.epsilonEquals(geometry, epsilon);
    }
 
-   /**
-    * Tests each feature of {@code this} against {@code other} for geometric similarity.
-    *
-    * @param geometry the geometry object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each feature.
-    * @return {@code true} if the two collision results are considered geometrically similar,
-    *         {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} does not hold the same reference frames
-    *                                         as {@code this}.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
          return true;
+      if (geometry == null)
+         return false;
 
       if (geometry instanceof EuclidFrameShape3DCollisionResultReadOnly)
          return geometricallyEquals((EuclidFrameShape3DCollisionResultReadOnly) geometry, epsilon, epsilon, epsilon);

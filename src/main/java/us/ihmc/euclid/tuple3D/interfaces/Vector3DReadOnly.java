@@ -124,6 +124,10 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Vector3DReadOnly))
          return false;
       Vector3DReadOnly other = (Vector3DReadOnly) geometry;

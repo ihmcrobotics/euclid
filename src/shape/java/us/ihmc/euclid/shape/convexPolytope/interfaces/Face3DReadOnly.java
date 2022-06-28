@@ -748,16 +748,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Face3DReadOnly))
          return false;
       Face3DReadOnly other = (Face3DReadOnly) geometry;

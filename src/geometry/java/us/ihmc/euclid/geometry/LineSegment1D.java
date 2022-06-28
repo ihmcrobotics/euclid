@@ -590,28 +590,27 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param geometry the object to compare to. Not modified.
-    * @param epsilon  the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      if ((EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
+      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
             && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
-            || (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
-                  && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon)))
+         return true;
+      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon))
          return true;
       return false;
    }

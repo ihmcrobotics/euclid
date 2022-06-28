@@ -126,37 +126,29 @@ public interface Vertex2DSupplier extends EuclidGeometry
     * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
     * {@link Point2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
     * </p>
-    *
-    * @param geometry the other supplier to compare against this.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
     */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
-      {
          return true;
-      }
-      else if (geometry instanceof Vertex2DSupplier)
-      {
-         Vertex2DSupplier other = (Vertex2DSupplier) geometry;
-
-         if (getNumberOfVertices() != other.getNumberOfVertices())
-            return false;
-
-         for (int i = 0; i < getNumberOfVertices(); i++)
-         {
-            if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
-               return false;
-         }
-
-         return true;
-      }
-      else
-      {
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Vertex2DSupplier))
+         return false;
+
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
+            return false;
       }
+
+      return true;
    }
 
    /** {@inheritDoc} */

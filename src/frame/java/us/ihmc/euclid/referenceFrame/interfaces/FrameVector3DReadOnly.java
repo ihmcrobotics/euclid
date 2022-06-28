@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -78,12 +77,5 @@ public interface FrameVector3DReadOnly extends Vector3DReadOnly, FrameTuple3DRea
    {
       checkReferenceFrameMatch(other);
       return Vector3DReadOnly.super.angle(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return Vector3DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

@@ -508,16 +508,22 @@ public interface Plane3DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Plane3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Plane3DReadOnly))
          return false;
       Plane3DReadOnly other = (Plane3DReadOnly) geometry;
       return getPoint().equals(other.getPoint()) && getNormal().equals(other.getNormal());
    }
 
-   /** {@inehritDoc} */
+   /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Plane3D))
          return false;
       Plane3D other = (Plane3D) geometry;
