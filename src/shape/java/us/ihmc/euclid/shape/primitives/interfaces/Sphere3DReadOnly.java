@@ -218,18 +218,14 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    Sphere3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the radius of this sphere and
-    * {@code other}'s pose and radius are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object which pose and radius is to be compared against this radius pose
-    *                 and radius. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Sphere3DReadOnly))
          return false;
       Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;

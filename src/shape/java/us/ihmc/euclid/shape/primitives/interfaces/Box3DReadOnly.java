@@ -428,18 +428,14 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    Box3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the size of this box and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object which pose and size is to be compared against this box pose and
-    *                 size. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Box3DReadOnly))
          return false;
       Box3DReadOnly other = (Box3DReadOnly) geometry;

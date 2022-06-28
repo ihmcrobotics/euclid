@@ -326,6 +326,10 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Tuple4DReadOnly))
          return false;
 

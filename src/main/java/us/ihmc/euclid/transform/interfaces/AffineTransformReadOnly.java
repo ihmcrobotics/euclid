@@ -394,6 +394,10 @@ public interface AffineTransformReadOnly extends Transform
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof AffineTransformReadOnly))
          return false;
 

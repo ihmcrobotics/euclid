@@ -571,22 +571,20 @@ public class LineSegment1D implements Clearable, EuclidGeometry
       return new LineSegment2D(firstEndpoint, secondEndpoint);
    }
 
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
-            || !EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
+      if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return false;
       return true;
    }
@@ -619,23 +617,6 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    }
 
    /**
-    * Tests on a per component basis, if this line segment 1D is exactly equal to {@code other}.
-    *
-    * @param other the other line segment 1D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(LineSegment1D other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return firstEndpoint == other.firstEndpoint && secondEndpoint == other.secondEndpoint;
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(LineSegment1D)}, it returns {@code false} otherwise.
     *
@@ -655,10 +636,14 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    @Override
    public boolean equals(EuclidGeometry geometry)
    {
-      if (geometry instanceof LineSegment1D)
-         return equals((LineSegment1D) geometry);
-      else
+      if (geometry == this)
+         return true;
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) geometry;
+      return firstEndpoint == other.firstEndpoint && secondEndpoint == other.secondEndpoint;
    }
 
    @Override

@@ -8,8 +8,8 @@ public interface EuclidGeometry
    /**
     * Tests if {@code this} is exactly equal to the given {@code geometry}.
     * <p>
-    * The test is usually achieved on a per component basis. A failing test does not necessarily mean
-    * that the two objects are different in a geometric way.
+    * The test is achieved on a per component basis. A failing test does not necessarily mean that the
+    * two objects are different in a geometric way.
     * </p>
     *
     * @param geometry the geometry to compare against {@code this}. Not modified.
@@ -22,9 +22,8 @@ public interface EuclidGeometry
     * Tests if {@code this} is approximately equal to {@code geometry} using the tolerance
     * {@code epsilon}.
     * <p>
-    * Similar to {@link #equals(EuclidGeometry)}, the test is usually achieved on a per component
-    * basis. A failing test does not necessarily mean that the two objects are different in a geometric
-    * way.
+    * Similar to {@link #equals(EuclidGeometry)}, the test is achieved on a per component basis. A
+    * failing test does not necessarily mean that the two objects are different in a geometric way.
     * </p>
     *
     * @param geometry the geometry to compare against {@code this}. Not modified.

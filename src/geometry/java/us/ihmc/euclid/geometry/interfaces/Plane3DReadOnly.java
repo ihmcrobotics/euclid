@@ -481,19 +481,21 @@ public interface Plane3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Tests on a per-component basis on the point and normal if this plane is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two planes are
-    * physically the same but either the point or vector of each plane is different. For instance, if
-    * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
-    * physically the same but this method returns {@code false}.
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two planes are equal, {@code false} otherwise.
+    * {@inheritDoc}
+    * <p>
+    * This method will return {@code false} if the two planes are physically the same but either the
+    * point or vector of each plane is different. For instance, if {@code this.point == other.point}
+    * and {@code this.normal == - other.normal}, the two planes are physically the same but this method
+    * returns {@code false}.
+    * </p>
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Plane3DReadOnly))
          return false;
       Plane3DReadOnly other = (Plane3DReadOnly) geometry;

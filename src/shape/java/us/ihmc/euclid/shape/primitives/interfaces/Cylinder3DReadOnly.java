@@ -254,17 +254,14 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    Cylinder3DBasics copy();
 
-   /**
-    * Tests on a per component basis if this cylinder and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;

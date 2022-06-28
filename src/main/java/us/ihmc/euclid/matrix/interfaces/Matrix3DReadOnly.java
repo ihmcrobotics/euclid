@@ -1084,6 +1084,10 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Matrix3DReadOnly))
          return false;
       Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;

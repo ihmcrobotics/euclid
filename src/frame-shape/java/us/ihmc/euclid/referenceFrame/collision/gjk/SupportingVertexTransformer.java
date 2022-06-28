@@ -61,6 +61,10 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    @Override
    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof SupportingVertexTransformer))
          return false;
       SupportingVertexTransformer other = (SupportingVertexTransformer) geometry;

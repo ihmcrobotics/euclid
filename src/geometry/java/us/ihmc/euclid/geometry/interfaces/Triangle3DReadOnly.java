@@ -128,17 +128,14 @@ public interface Triangle3DReadOnly extends EuclidGeometry
       return EuclidCoreTools.epsilonEquals(getCASquared(), getBCSquared(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
-    * tolerance {@code epsilon}.
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two triangles are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Triangle3DReadOnly))
          return false;
 

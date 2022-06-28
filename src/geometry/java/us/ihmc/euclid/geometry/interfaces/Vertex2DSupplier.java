@@ -95,39 +95,29 @@ public interface Vertex2DSupplier extends EuclidGeometry
       return true;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param geometry the other supplier to compare against this.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
       if (geometry == this)
-      {
          return true;
-      }
-      else if (geometry instanceof Vertex2DSupplier)
-      {
-         Vertex2DSupplier other = (Vertex2DSupplier) geometry;
-
-         if (getNumberOfVertices() != other.getNumberOfVertices())
-            return false;
-
-         for (int i = 0; i < getNumberOfVertices(); i++)
-         {
-            if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
-               return false;
-         }
-
-         return true;
-      }
-      else
-      {
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Vertex2DSupplier))
+         return false;
+
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
       }
+
+      return true;
    }
 
    /**

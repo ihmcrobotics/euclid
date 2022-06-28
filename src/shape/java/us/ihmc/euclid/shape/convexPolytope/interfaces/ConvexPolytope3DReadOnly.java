@@ -505,18 +505,14 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    Shape3DBasics copy();
 
-   /**
-    * Tests on a per component basis if this convex polytope and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
       ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;

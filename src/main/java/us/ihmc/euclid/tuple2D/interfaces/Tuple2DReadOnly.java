@@ -220,6 +220,10 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Tuple2DReadOnly))
          return false;
 

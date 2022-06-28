@@ -1584,18 +1584,20 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
       return copy;
    }
 
-   /**
-    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
-    *
-    * @param other the other polygon to compare against this. Not modified.
-    * @return {@code true} if the two polygons are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(ConvexPolygon2DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if ((other == null) || (getNumberOfVertices() != other.getNumberOfVertices()))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof ConvexPolygon2DReadOnly))
+         return false;
+
+      ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -1609,21 +1611,18 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    }
 
    /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    * <p>
-    * The method returns {@code false} if the two polygons have different size.
-    * </p>
+    * {@inheritDoc}
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof ConvexPolygon2DReadOnly))
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof ConvexPolygon2DReadOnly))
          return false;
       ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
@@ -1657,7 +1656,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if ( !(geometry instanceof ConvexPolygon2DReadOnly))
+      if (!(geometry instanceof ConvexPolygon2DReadOnly))
          return false;
       ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
@@ -1695,7 +1694,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
     * </pre>
     * </p>
     *
-    * @param format          the format to use for each number.
+    * @param format the format to use for each number.
     * @return the representative {@code String}.
     */
    @Override

@@ -726,16 +726,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   /**
-    * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Face3DReadOnly))
          return false;
       Face3DReadOnly other = (Face3DReadOnly) geometry;

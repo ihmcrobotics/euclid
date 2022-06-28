@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
@@ -60,86 +59,6 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier, EuclidFrameGeom
    default ReferenceFrame getReferenceFrame()
    {
       return isEmpty() ? null : getVertex(0).getReferenceFrame();
-   }
-
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param other the other supplier to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   // TODO: Keep or Remove?
-   default boolean equals(FrameVertex3DSupplier other)
-   {
-      if (other == this)
-         return true;
-      if (other == null)
-         return false;
-      if (getNumberOfVertices() != other.getNumberOfVertices())
-         return false;
-      for (int i = 0; i < getNumberOfVertices(); i++)
-      {
-         if (!getVertex(i).equals(other.getVertex(i)))
-            return false;
-      }
-      return true;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (geometry == this)
-      {
-         return true;
-      }
-      else if (geometry instanceof FrameVertex3DSupplier)
-      {
-         FrameVertex3DSupplier other = (FrameVertex3DSupplier) geometry;
-
-         if (getNumberOfVertices() != other.getNumberOfVertices())
-            return false;
-
-         for (int i = 0; i < getNumberOfVertices(); i++)
-         {
-            if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
-               return false;
-         }
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (geometry == this)
-      {
-         return true;
-      }
-      else if (geometry instanceof FrameVertex3DSupplier)
-      {
-         FrameVertex3DSupplier other = (FrameVertex3DSupplier) geometry;
-
-         if (getNumberOfVertices() != other.getNumberOfVertices())
-            return false;
-
-         for (int i = 0; i < getNumberOfVertices(); i++)
-         {
-            if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
-               return false;
-         }
-
-         return true;
-      }
-      else
-      {
-         return false;
-      }
    }
 
    /** {@inheritDoc} */

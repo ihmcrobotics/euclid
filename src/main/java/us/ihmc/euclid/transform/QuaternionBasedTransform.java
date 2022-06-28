@@ -392,15 +392,14 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
       return translationVector;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param geometry the object to compare against this.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof QuaternionBasedTransform))
          return false;
       QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;

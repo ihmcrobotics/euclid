@@ -533,17 +533,14 @@ public interface LineSegment3DReadOnly extends EuclidGeometry
       return EuclidGeometryTools.dotProduct(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint());
    }
 
-   /**
-    * Tests on a per component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof LineSegment3DReadOnly))
          return false;
       LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;

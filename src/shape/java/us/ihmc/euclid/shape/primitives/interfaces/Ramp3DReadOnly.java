@@ -387,18 +387,14 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    Ramp3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the size of this ramp and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object which pose and size is to be compared against this ramp pose and
-    *                 size. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Ramp3DReadOnly))
          return false;
       Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;

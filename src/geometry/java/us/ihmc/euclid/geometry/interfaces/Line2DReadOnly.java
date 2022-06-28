@@ -831,19 +831,21 @@ public interface Line2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
+    * {@inheritDoc}
+    * <p>
+    * This method will return {@code false} if the two lines are physically the same but either the
+    * point or vector of each line is different. For instance, if {@code this.point == other.point} and
+    * {@code this.direction == - other.direction}, the two lines are physically the same but this
+    * method returns {@code false}.
+    * </p>
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Line2DReadOnly))
          return false;
       Line2DReadOnly other = (Line2DReadOnly) geometry;

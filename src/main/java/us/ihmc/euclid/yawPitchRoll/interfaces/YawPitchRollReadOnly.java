@@ -383,6 +383,10 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof YawPitchRollReadOnly))
          return false;
 

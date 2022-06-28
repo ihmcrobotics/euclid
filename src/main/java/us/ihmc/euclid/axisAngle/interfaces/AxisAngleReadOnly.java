@@ -450,15 +450,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getAngle() == other.getAngle();
    }
 
-   /**
-    * Tests on a per component basis, if this axis-angle is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
-    * different orientations.
-    *
-    * @param geometry the geometry to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {

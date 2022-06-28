@@ -76,17 +76,14 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     */
    Vector3DReadOnly getZAxis();
 
-   /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param geometry the query.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Shape3DPoseReadOnly))
          return false;
       Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;

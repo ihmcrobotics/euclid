@@ -330,18 +330,14 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    Ellipsoid3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object which pose and radii is to be compared against this ellipsoid
-    *                 pose and radii. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
       Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;

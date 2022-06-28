@@ -194,16 +194,14 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    Capsule3DBasics copy();
 
-   /**
-    * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param geometry the other object to compare against this. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
-    * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Capsule3DReadOnly))
          return false;
       Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;

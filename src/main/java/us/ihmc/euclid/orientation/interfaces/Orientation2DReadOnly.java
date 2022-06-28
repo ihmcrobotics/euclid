@@ -198,20 +198,19 @@ public interface Orientation2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
-    * {@code other}.
+    * {@inheritDoc}
     * <p>
     * Note that this method performs number comparison and not an angle comparison, such that:
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
-    *
-    * @param geometry the query.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Orientation2DReadOnly))
          return false;
       Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;

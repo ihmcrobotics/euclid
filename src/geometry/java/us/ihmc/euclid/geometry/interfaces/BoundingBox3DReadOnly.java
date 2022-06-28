@@ -872,17 +872,14 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
       return intersectionBetweenRay3DAndBoundingBox3D(getMinPoint(), getMaxPoint(), rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    *
-    * @param geometry the query. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof BoundingBox3DReadOnly))
          return false;
       BoundingBox3DReadOnly other = (BoundingBox3DReadOnly) geometry;

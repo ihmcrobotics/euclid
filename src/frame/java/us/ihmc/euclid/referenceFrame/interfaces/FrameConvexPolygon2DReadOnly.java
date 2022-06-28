@@ -7,7 +7,6 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
@@ -1888,38 +1887,6 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
    {
       checkReferenceFrameMatch(translation);
       return translateCopy((Tuple2DReadOnly) translation);
-   }
-
-   /**
-    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
-    *
-    * @param other the other polygon to compare against this. Not modified.
-    * @return {@code true} if the two polygons are exactly equal component-wise and expressed in the
-    *         same frame reference frame, {@code false} otherwise.
-    * @see #equals(ConvexPolygon2DReadOnly)
-    */
-   default boolean equals(FrameConvexPolygon2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolygon2DReadOnly.super.equals(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return ConvexPolygon2DReadOnly.super.epsilonEquals(geometry, epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return ConvexPolygon2DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 
    @Override

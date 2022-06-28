@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -34,13 +33,6 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  */
 public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, YawPitchRollReadOnly
 {
-   /** {@inheritDoc} */
-   @Override
-   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      return YawPitchRollReadOnly.super.epsilonEquals(geometry, epsilon);
-   }
-
    /**
     * Gets a representative {@code String} of {@code yawPitchRoll} given a specific format to use.
     * <p>
