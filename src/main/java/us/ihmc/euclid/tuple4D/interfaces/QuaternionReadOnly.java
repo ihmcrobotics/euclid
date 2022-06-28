@@ -145,7 +145,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Deprecated
    default double getAngle()
    {
-      return QuaternionTools.angle(this);
+      return angle();
    }
 
    /** {@inheritDoc} */

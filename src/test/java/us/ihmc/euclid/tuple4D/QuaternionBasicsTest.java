@@ -188,7 +188,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             QuaternionReadOnly q2 = createRandomTuple(random);
             qDiff.difference(q1, q2);
 
-            double expectedAngle = qDiff.getAngle();
+            double expectedAngle = qDiff.angle();
             double actualAngle = q1.distance(q2);
             assertEquals(expectedAngle, actualAngle, getEpsilon());
             assertEquals(0.0, q1.distance(q1));
@@ -243,7 +243,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       double qs = c;
       q.setUnsafe(qx, qy, qz, qs);
 
-      assertEquals(expectedAngle, q.getAngle(), getEpsilon());
+      assertEquals(expectedAngle, q.angle(), getEpsilon());
    }
 
    @Test
@@ -979,13 +979,13 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          qExpected.setUnsafe(qx, qy, qz, qs);
          qActual.setUnsafe(qx, qy, qz, qs);
          qActual.normalizeAndLimitToPi();
-         if (Math.abs(qExpected.getAngle()) < Math.PI)
+         if (Math.abs(qExpected.angle()) < Math.PI)
          {
             EuclidCoreTestTools.assertEquals(qExpected, qActual, getEpsilon());
          }
          else
          {
-            assertTrue(Math.abs(qActual.getAngle()) < Math.PI);
+            assertTrue(Math.abs(qActual.angle()) < Math.PI);
             qExpected.negate();
             EuclidCoreTestTools.assertEquals(qExpected, qActual, getEpsilon());
          }
@@ -1651,7 +1651,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          quaternionB = createRandomTuple(random);
          quaternionC.difference(quaternionA, quaternionB);
 
-         double angle = quaternionC.getAngle();
+         double angle = quaternionC.angle();
          angle = EuclidCoreTools.trimAngleMinusPiToPi(angle);
 
          if (Math.abs(angle) <= getEpsilon())

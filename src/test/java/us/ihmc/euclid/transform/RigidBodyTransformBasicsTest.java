@@ -25,8 +25,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformBasics> extends TransformTest<T>
 {
-   private static final double EPS = 1.0e-14;
-
    @Override
    public abstract T createRandomTransform(Random random);
 

@@ -175,7 +175,7 @@ public class Plane3D implements Plane3DBasics
    @Deprecated
    public void setNormal(double normalX, double normalY, double normalZ)
    {
-      normal.set(normalX, normalY, normalZ);
+      getNormal().set(normalX, normalY, normalZ);
    }
 
    /**
@@ -187,7 +187,7 @@ public class Plane3D implements Plane3DBasics
    @Deprecated
    public void setNormal(Vector3DReadOnly planeNormal)
    {
-      setNormal(planeNormal.getX(), planeNormal.getY(), planeNormal.getZ());
+      getNormal().set(planeNormal);
    }
 
    /**
@@ -201,7 +201,7 @@ public class Plane3D implements Plane3DBasics
    @Deprecated
    public void setPoint(double pointX, double pointY, double pointZ)
    {
-      point.set(pointX, pointY, pointZ);
+      getPoint().set(pointX, pointY, pointZ);
    }
 
    /**
@@ -213,7 +213,7 @@ public class Plane3D implements Plane3DBasics
    @Deprecated
    public void setPoint(Point3DReadOnly pointOnPlane)
    {
-      setPoint(pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ());
+      getPoint().set(pointOnPlane);
    }
 
    /**
