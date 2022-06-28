@@ -181,6 +181,11 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
     */
    default boolean geometricallyEquals(EuclidShape3DCollisionResultReadOnly other, double distanceEpsilon, double pointTangentialEpsilon, double normalEpsilon)
    {
+      if (other == this)
+         return true;
+      if (other == null)
+         return false;
+
       if ((areShapesColliding() != other.areShapesColliding()) || (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
             : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon)))
          return false;

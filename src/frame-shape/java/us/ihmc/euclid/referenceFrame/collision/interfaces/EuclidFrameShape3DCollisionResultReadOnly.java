@@ -103,6 +103,8 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    {
       if (other == this)
          return true;
+      if (other == null)
+         return false;
 
       boolean swap;
 
