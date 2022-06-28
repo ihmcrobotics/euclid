@@ -87,16 +87,4 @@ public interface Vertex3DReadOnly extends Point3DReadOnly
    {
       return TupleTools.dot(this, vector);
    }
-
-   /**
-    * Tests on a per component basis, if this vertex is exactly equal to {@code other}.
-    *
-    * @param other the other vertex to compare against this. Not modified.
-    * @return {@code true} if the two vertices are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(Vertex3DReadOnly other)
-   {
-      return Point3DReadOnly.super.equals(other);
-   }
 }

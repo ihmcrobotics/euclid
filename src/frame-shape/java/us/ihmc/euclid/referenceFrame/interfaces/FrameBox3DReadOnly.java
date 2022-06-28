@@ -434,7 +434,7 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    FixedFrameBox3DBasics copy();
 
    /**
-    * Gets the representative {@code String} of {@code box3D} given a specific format to use.
+    * Gets the representative {@code String} of this frame box 3D given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

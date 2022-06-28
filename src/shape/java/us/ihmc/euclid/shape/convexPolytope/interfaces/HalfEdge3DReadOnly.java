@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -108,18 +109,22 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     * @return {@code true} if the two half-edges are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean equals(HalfEdge3DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
-         return false;
-      else if (getOrigin() == null != (other.getOrigin() == null))
-         return false;
-      else if (getDestination() == null != (other.getDestination() == null))
-         return false;
-      else
-         return LineSegment3DReadOnly.super.equals(other);
+
+      if (geometry instanceof HalfEdge3DReadOnly)
+      {
+         HalfEdge3DReadOnly other = (HalfEdge3DReadOnly) geometry;
+         if (getOrigin() == null != (other.getOrigin() == null))
+            return false;
+         if (getDestination() == null != (other.getDestination() == null))
+            return false;
+      }
+
+      return LineSegment3DReadOnly.super.equals(geometry);
    }
 
    /**

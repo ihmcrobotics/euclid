@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
@@ -335,7 +334,7 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    FixedFrameSphere3DBasics copy();
 
    /**
-    * Gets a representative {@code String} of {@code sphere3D} given a specific format to use.
+    * Gets a representative {@code String} of this frame sphere 3D given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

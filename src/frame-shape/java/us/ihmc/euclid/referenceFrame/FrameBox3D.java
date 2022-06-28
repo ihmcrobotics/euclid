@@ -17,10 +17,10 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -494,6 +494,6 @@ public class FrameBox3D implements FrameBox3DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameBox3DString(this);
+      return FrameBox3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

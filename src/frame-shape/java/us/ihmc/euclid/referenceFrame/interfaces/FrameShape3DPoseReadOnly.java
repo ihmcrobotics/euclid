@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 
 /**
@@ -15,7 +16,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, ReferenceFrameHolder
+public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1449,5 +1450,21 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, Reference
       checkReferenceFrameMatch(poseOriginal);
       poseTransformed.setReferenceFrame(getReferenceFrame());
       Shape3DPoseReadOnly.super.inverseTransform(poseOriginal, poseTransformed);
+   }
+
+   /**
+    * Gets the representative {@code String} of this frame shape 3D pose as follows:
+    *
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)] - worldFrame
+    * </pre>
+    *
+    * @param shape3DPose the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFrameShape3DPoseString(format, this);
    }
 }

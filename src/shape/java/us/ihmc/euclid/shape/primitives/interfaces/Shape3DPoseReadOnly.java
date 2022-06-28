@@ -131,10 +131,23 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
       return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
    }
 
+   /**
+    * Gets the representative {@code String} of this shape 3D pose given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
+    * </pre>
+    * </p>
+    *
+    * @param format      the format to use for each number.
+    * @param shape3DPose the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    @Override
    default String toString(String format)
    {
       return EuclidShapeIOTools.getShape3DPoseString(format, this);
-
    }
 }

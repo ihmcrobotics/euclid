@@ -64,7 +64,7 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
    FixedFramePointShape3DBasics copy();
 
    /**
-    * Provides a {@code String} representation of this point shape 3D as follows:
+    * Provides a {@code String} representation of this frame point shape 3D as follows:
     *
     * <pre>
     * Point shape 3D: (-0.362, -0.617,  0.066 ) - worldFrame

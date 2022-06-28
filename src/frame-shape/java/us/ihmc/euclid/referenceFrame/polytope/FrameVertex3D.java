@@ -85,7 +85,7 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
    public boolean equals(Object object)
    {
       if (object instanceof FrameVertex3DReadOnly)
-         return equals((FrameVertex3DReadOnly) object);
+         return FrameVertex3DReadOnly.super.equals((FrameVertex3DReadOnly) object);
       else
          return false;
    }

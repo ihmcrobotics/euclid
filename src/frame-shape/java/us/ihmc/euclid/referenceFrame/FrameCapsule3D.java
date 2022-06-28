@@ -9,8 +9,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -271,6 +271,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameCapsule3DString(this);
+      return FrameCapsule3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

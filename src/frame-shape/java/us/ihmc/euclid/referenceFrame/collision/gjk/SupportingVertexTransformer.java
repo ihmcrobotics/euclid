@@ -55,7 +55,6 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
 
       SupportingVertexTransformer other = (SupportingVertexTransformer) geometry;
       return original.equals(other.original) && transform.equals(other.transform);
-
    }
 
    /** {@inheritDoc} */
@@ -85,5 +84,4 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    {
       return "Original: " + original.toString(format) + "\nTransform: " + transform.toString(format);
    }
-
 }

@@ -83,35 +83,8 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    @Override
    FixedFrameCapsule3DBasics copy();
 
-   /** {@inheritDoc} */
-   @Override
-   default boolean equals(EuclidFrameGeometry geometry)
-   {
-      if (geometry == this)
-      {
-         return true;
-      }
-      else if (geometry == null || !(geometry instanceof FrameCapsule3DReadOnly))
-      {
-         return false;
-      }
-
-      FrameCapsule3DReadOnly other = (FrameCapsule3DReadOnly) geometry;
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      if (getLength() != other.getLength())
-         return false;
-      if (getRadius() != other.getRadius())
-         return false;
-      if (!getPosition().equals(other.getPosition()))
-         return false;
-      if (!getAxis().equals(other.getAxis()))
-         return false;
-      return true;
-   }
-
    /**
-    * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
+    * Gets a representative {@code String} of this frame capsule 3D given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

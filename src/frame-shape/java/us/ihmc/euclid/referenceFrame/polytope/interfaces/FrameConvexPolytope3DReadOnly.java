@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame.polytope.interfaces;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DBasics;
@@ -197,8 +196,8 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    FixedFrameShape3DBasics copy();
 
    /**
-    * Gets the representative {@code String} of {@code convexPolytope3D} given a specific format to
-    * use.
+    * Gets the representative {@code String} of this frame convex polytope 3D given a specific format
+    * to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

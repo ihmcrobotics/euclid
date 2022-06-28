@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
@@ -485,29 +484,8 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return getSupportingVertex((Vector3DReadOnly) supportDirection);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   default boolean equals(EuclidFrameGeometry geometry)
-   {
-      if (geometry == this)
-         return true;
-      if (geometry == null || getReferenceFrame() != geometry.getReferenceFrame())
-         return false;
-
-      FrameFace3DReadOnly other = (FrameFace3DReadOnly) geometry;
-      if (getNumberOfEdges() != other.getNumberOfEdges())
-         return false;
-
-      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
-      {
-         if (!getEdge(edgeIndex).equals(other.getEdge(edgeIndex)))
-            return false;
-      }
-      return true;
-   }
-
    /**
-    * Gets the representative {@code String} of {@code face3D} given a specific format to use.
+    * Gets the representative {@code String} of this frame face 3D given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

@@ -19,11 +19,11 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -636,9 +636,20 @@ public class FrameRamp3D implements FrameRamp3DBasics
       return EuclidHashCodeTools.toIntHashCode(pose, size);
    }
 
+   /**
+    * Gets the representative {@code String} of this frame ramp 3D as follows:
+    *
+    * <pre>
+    * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameRamp3DString(this);
+      return FrameRamp3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

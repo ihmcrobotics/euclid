@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -189,7 +188,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
    FixedFrameRamp3DBasics copy();
 
    /**
-    * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
+    * Gets the representative {@code String} of this frame ramp 3D given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

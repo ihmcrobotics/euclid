@@ -11,8 +11,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 
@@ -253,6 +253,6 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameShape3DPoseString(this);
+      return FrameShape3DPoseBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }
