@@ -439,8 +439,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Box3DReadOnly))
          return false;
       Box3DReadOnly other = (Box3DReadOnly) geometry;
-      return getSize().epsilonEquals(other.getSize(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon)
-            && getPosition().epsilonEquals(other.getPosition(), epsilon);
+      return getSize().epsilonEquals(other.getSize(), epsilon) && getPose().epsilonEquals(other.getPose(), epsilon);
    }
 
    /** {@inheritDoc} */

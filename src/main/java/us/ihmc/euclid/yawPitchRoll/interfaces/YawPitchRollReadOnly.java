@@ -376,7 +376,14 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       if ((geometry == null) || !(geometry instanceof YawPitchRollReadOnly))
          return false;
       YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
-      return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
+      if (!EuclidCoreTools.equals(getYaw(), other.getYaw()))
+         return false;
+      if (!EuclidCoreTools.equals(getPitch(), other.getPitch()))
+         return false;
+      if (!EuclidCoreTools.equals(getRoll(), other.getRoll()))
+         return false;
+
+      return true;
    }
 
    /** {@inheritDoc} */
@@ -391,8 +398,11 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
          return false;
 
       YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;
 
       return true;

@@ -265,8 +265,15 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
-      return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
-            && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
+      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!getPosition().epsilonEquals(other.getPosition(), epsilon))
+         return false;
+      if (!other.getAxis().epsilonEquals(other.getAxis(), epsilon))
+         return false;
+      return true;
    }
 
    /** {@inheritDoc} */
@@ -280,9 +287,10 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
-      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon)
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
          return false;
-
+      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
+         return false;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
@@ -302,8 +310,13 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;
 
-      if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition())
-            || !getAxis().equals(other.getAxis()))
+      if (!EuclidCoreTools.equals(getRadius(), other.getRadius()))
+         return false;
+      if (!EuclidCoreTools.equals(getLength(), other.getLength()))
+         return false;
+      if (!getPosition().equals(other.getPosition()))
+         return false;
+      if (!getAxis().equals(other.getAxis()))
          return false;
       return true;
 

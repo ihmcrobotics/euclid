@@ -553,7 +553,9 @@ public interface LineSegment3DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof LineSegment3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment3DReadOnly))
          return false;
       LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;
       return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());

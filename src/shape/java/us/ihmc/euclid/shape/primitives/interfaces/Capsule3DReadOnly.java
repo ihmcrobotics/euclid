@@ -205,8 +205,15 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Capsule3DReadOnly))
          return false;
       Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;
-      return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
-            && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
+      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!getPosition().epsilonEquals(other.getPosition(), epsilon))
+         return false;
+      if (!other.getAxis().epsilonEquals(other.getAxis(), epsilon))
+         return false;
+      return true;
    }
 
    /** {@inheritDoc} */
@@ -220,8 +227,11 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Capsule3DReadOnly))
          return false;
       Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;
-      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) || !EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon)
-            || !getPosition().geometricallyEquals(other.getPosition(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
+         return false;
+      if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
@@ -239,8 +249,13 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
          return false;
       Capsule3DReadOnly other = (Capsule3DReadOnly) geometry;
 
-      if ((getLength() != other.getLength()) || (getRadius() != other.getRadius()) || !getPosition().equals(other.getPosition())
-            || !getAxis().equals(other.getAxis()))
+      if (!EuclidCoreTools.equals(getRadius(), other.getRadius()))
+         return false;
+      if (!EuclidCoreTools.equals(getLength(), other.getLength()))
+         return false;
+      if (!getPosition().equals(other.getPosition()))
+         return false;
+      if (!getAxis().equals(other.getAxis()))
          return false;
       return true;
 

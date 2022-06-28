@@ -1074,7 +1074,9 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Matrix3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Matrix3DReadOnly))
          return false;
       Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
       return Matrix3DFeatures.equals(this, other);

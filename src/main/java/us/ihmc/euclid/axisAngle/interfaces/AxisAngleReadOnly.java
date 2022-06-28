@@ -447,7 +447,16 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       if (!(geometry instanceof AxisAngleReadOnly))
          return false;
       AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
-      return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getAngle() == other.getAngle();
+      if (!EuclidCoreTools.equals(getX(), other.getX()))
+         return false;
+      if (!EuclidCoreTools.equals(getY(), other.getY()))
+         return false;
+      if (!EuclidCoreTools.equals(getZ(), other.getZ()))
+         return false;
+      if (!EuclidCoreTools.equals(getAngle(), other.getAngle()))
+         return false;
+
+      return true;
    }
 
    /** {@inheritDoc} */

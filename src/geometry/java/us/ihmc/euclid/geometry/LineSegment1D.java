@@ -642,7 +642,11 @@ public class LineSegment1D implements Clearable, EuclidGeometry
       if (!(geometry instanceof LineSegment1D))
          return false;
       LineSegment1D other = (LineSegment1D) geometry;
-      return firstEndpoint == other.firstEndpoint && secondEndpoint == other.secondEndpoint;
+      if (!EuclidCoreTools.equals(firstEndpoint, other.firstEndpoint))
+         return false;
+      if (!EuclidCoreTools.equals(secondEndpoint, other.secondEndpoint))
+         return false;
+      return true;
    }
 
    @Override

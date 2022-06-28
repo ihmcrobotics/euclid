@@ -243,10 +243,12 @@ public interface Orientation2DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Orientation2DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Orientation2DReadOnly))
          return false;
       Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
-      return getYaw() == other.getYaw();
+      return EuclidCoreTools.equals(getYaw(), other.getYaw());
    }
 
    /**

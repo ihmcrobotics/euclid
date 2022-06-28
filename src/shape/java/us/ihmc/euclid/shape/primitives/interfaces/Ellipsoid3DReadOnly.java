@@ -341,8 +341,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
       Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;
-      return getRadii().epsilonEquals(other.getRadii(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
-            && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+      return getRadii().epsilonEquals(other.getRadii(), epsilon) && getPose().epsilonEquals(other.getPose(), epsilon);
    }
 
    /** {@inheritDoc} */

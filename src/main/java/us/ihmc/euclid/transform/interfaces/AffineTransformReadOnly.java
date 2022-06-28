@@ -409,7 +409,7 @@ public interface AffineTransformReadOnly extends Transform
          return true;
       if (geometry == null)
          return false;
-      else if (!(geometry instanceof AffineTransformReadOnly))
+      if (!(geometry instanceof AffineTransformReadOnly))
          return false;
       AffineTransformReadOnly other = (AffineTransformReadOnly) geometry;
       return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());

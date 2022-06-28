@@ -398,8 +398,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Ramp3DReadOnly))
          return false;
       Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
-      return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
-            && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+      return getSize().epsilonEquals(other.getSize(), epsilon) && getPose().epsilonEquals(other.getPose(), epsilon);
    }
 
    /** {@inheritDoc} */
@@ -413,8 +412,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Ramp3DReadOnly))
          return false;
       Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
-      return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon)
-            && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
+      return getSize().epsilonEquals(other.getSize(), epsilon) && getPose().geometricallyEquals(other.getPose(), epsilon);
    }
 
    /** {@inheritDoc} */

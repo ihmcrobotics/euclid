@@ -813,7 +813,9 @@ public interface LineSegment2DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof LineSegment2DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment2DReadOnly))
          return false;
       LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
       return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());

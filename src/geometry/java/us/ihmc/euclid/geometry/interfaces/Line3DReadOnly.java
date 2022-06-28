@@ -386,7 +386,9 @@ public interface Line3DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Line3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Line3DReadOnly))
          return false;
       Line3DReadOnly other = (Line3DReadOnly) geometry;
       return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());

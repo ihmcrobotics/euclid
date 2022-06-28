@@ -257,7 +257,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Sphere3DReadOnly))
          return false;
       Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
-      return getPosition().equals(other.getPosition()) && getRadius() == other.getRadius();
+      return getPosition().equals(other.getPosition()) && EuclidCoreTools.equals(getRadius(), other.getRadius());
    }
 
    /**

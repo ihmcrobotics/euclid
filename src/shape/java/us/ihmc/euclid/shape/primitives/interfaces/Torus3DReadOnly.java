@@ -169,9 +169,15 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof Torus3DReadOnly))
          return false;
       Torus3DReadOnly other = (Torus3DReadOnly) geometry;
-      return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
-            && EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
-            && getAxis().epsilonEquals(other.getAxis(), epsilon);
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon))
+         return false;
+      if (!getPosition().epsilonEquals(other.getPosition(), epsilon))
+         return false;
+      if (!getAxis().epsilonEquals(other.getAxis(), epsilon))
+         return false;
+      return true;
    }
 
    /** {@inheritDoc} */
@@ -207,8 +213,13 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       else if (!(geometry instanceof Torus3DReadOnly))
          return false;
       Torus3DReadOnly other = (Torus3DReadOnly) geometry;
-      if ((getRadius() != other.getRadius()) || (getTubeRadius() != other.getTubeRadius()) || !getPosition().equals(other.getPosition())
-            || !getAxis().equals(other.getAxis()))
+      if (!EuclidCoreTools.equals(getRadius(), other.getRadius()))
+         return false;
+      if (!EuclidCoreTools.equals(getTubeRadius(), other.getTubeRadius()))
+         return false;
+      if (!getPosition().equals(other.getPosition()))
+         return false;
+      if (!getAxis().equals(other.getAxis()))
          return false;
       return true;
    }

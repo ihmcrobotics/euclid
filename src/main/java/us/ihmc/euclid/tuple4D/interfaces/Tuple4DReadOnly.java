@@ -319,7 +319,15 @@ public interface Tuple4DReadOnly extends EuclidGeometry
       if (!(geometry instanceof Tuple4DReadOnly))
          return false;
       Tuple4DReadOnly other = (Tuple4DReadOnly) geometry;
-      return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
+      if (!EuclidCoreTools.equals(getX(), other.getX()))
+         return false;
+      if (!EuclidCoreTools.equals(getY(), other.getY()))
+         return false;
+      if (!EuclidCoreTools.equals(getZ(), other.getZ()))
+         return false;
+      if (!EuclidCoreTools.equals(getS(), other.getS()))
+         return false;
+      return true;
    }
 
    /** {@inheritDoc} */

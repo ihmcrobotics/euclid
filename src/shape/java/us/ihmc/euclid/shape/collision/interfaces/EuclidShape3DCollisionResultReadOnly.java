@@ -262,7 +262,7 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
          EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
          if (areShapesColliding() != other.areShapesColliding())
             return false;
-         if (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
+         if (!EuclidCoreTools.equals(getSignedDistance(), other.getSignedDistance()))
             return false;
          if (getShapeA() != other.getShapeA())
             return false;
