@@ -650,13 +650,7 @@ public interface BoundingBox2DReadOnly extends EuclidGeometry
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

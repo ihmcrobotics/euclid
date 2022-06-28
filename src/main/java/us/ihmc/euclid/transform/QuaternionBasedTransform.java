@@ -430,7 +430,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof QuaternionBasedTransform))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof QuaternionBasedTransform))
          return false;
       QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
       return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);

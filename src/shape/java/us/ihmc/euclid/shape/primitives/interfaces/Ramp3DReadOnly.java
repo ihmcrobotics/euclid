@@ -425,18 +425,15 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
             && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this ramp 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two ramps are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Ramp3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Ramp3DReadOnly))
          return false;
       Ramp3DReadOnly other = (Ramp3DReadOnly) geometry;
       return getPose().equals(other.getPose()) && getSize().equals(other.getSize());

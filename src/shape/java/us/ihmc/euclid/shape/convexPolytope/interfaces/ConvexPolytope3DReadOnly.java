@@ -569,19 +569,15 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return thisFacesStack.isEmpty();
    }
 
-   /**
-    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two convex polytopes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof ConvexPolytope3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
 
       ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;

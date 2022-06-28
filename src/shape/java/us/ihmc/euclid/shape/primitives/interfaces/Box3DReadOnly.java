@@ -473,18 +473,15 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return result;
    }
 
-   /**
-    * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two boxes are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Box3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Box3DReadOnly))
          return false;
       Box3DReadOnly other = (Box3DReadOnly) geometry;
       return getPose().equals(other.getPose()) && getSize().equals(other.getSize());

@@ -233,7 +233,9 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Tuple2DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Tuple2DReadOnly))
          return false;
       Tuple2DReadOnly other = (Tuple2DReadOnly) geometry;
       return getX() == other.getX() && getY() == other.getY();

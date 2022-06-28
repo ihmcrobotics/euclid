@@ -134,12 +134,8 @@ public interface Pose2DReadOnly extends EuclidGeometry
       return getOrientation().distance(other.getOrientation());
    }
 
-   /**
-    * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
+   @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)

@@ -141,7 +141,7 @@ public interface Triangle3DReadOnly extends EuclidGeometry
    {
       if (!(geometry instanceof Triangle3DReadOnly))
          return false;
-      
+
       Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
       if (!getA().epsilonEquals(other.getA(), epsilon))
          return false;
@@ -153,17 +153,15 @@ public interface Triangle3DReadOnly extends EuclidGeometry
       return true;
    }
 
-   /**
-    * Tests on a per component basis if this triangle is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the triangle are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
+   @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Triangle3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Triangle3DReadOnly))
          return false;
       Triangle3DReadOnly other = (Triangle3DReadOnly) geometry;
       return getA().equals(other.getA()) && getB().equals(other.getB()) && getC().equals(other.getC());

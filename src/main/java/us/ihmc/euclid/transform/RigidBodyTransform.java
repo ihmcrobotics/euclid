@@ -973,7 +973,9 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof RigidBodyTransform))
+      if (geometry == null)
+         return false;
+      else if (!(geometry instanceof RigidBodyTransform))
          return false;
       RigidBodyTransform other = (RigidBodyTransform) geometry;
       return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());

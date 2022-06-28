@@ -275,18 +275,15 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
       return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Pose3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Pose3DReadOnly))
          return false;
       Pose3DReadOnly other = (Pose3DReadOnly) geometry;
       return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());

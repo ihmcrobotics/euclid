@@ -436,15 +436,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       AxisAngleTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
 
-   /**
-    * Tests on a per component basis, if this axis-angle is exactly equal to {@code geometry}. A
-    * failing test does not necessarily mean that the two axis-angles represent two different
-    * orientations.
-    *
-    * @param geometry the geometry to compare against this. Not modified.
-    * @return {@code true} if the two axis-angles are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

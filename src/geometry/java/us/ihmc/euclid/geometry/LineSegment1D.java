@@ -651,13 +651,7 @@ public class LineSegment1D implements Clearable, EuclidGeometry
          return false;
    }
 
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(LineSegment1D)}, it returns {@code false} otherwise.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    public boolean equals(EuclidGeometry geometry)
    {

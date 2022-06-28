@@ -114,18 +114,15 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
             && getShapeOrientation().geometricallyEquals(other.getShapeOrientation(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Shape3DPoseReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Shape3DPoseReadOnly))
          return false;
       Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());

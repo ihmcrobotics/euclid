@@ -264,7 +264,9 @@ public interface Tuple3DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Tuple3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Tuple3DReadOnly))
          return false;
       Tuple3DReadOnly other = (Tuple3DReadOnly) geometry;
       return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();

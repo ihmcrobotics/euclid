@@ -251,13 +251,7 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       return true;
    }
 
-   /**
-    * Tests on a per component basis, if this collision result is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two collision results are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

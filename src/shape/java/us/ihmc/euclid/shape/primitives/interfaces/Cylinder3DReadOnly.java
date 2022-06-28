@@ -293,19 +293,15 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this cylinder 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two cylinders are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Cylinder3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Cylinder3DReadOnly))
          return false;
 
       Cylinder3DReadOnly other = (Cylinder3DReadOnly) geometry;

@@ -238,14 +238,11 @@ public interface Orientation2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Tests if this orientation 2D is exactly equal to {@code other}.
+    * {@inheritDoc}
     * <p>
     * Note that this method performs number comparison and not an angle comparison, such that:
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
-    *
-    * @param geometry the geometry to compare against this. Not modified.
-    * @return {@code true} if the two orientations are exactly equal, {@code false} otherwise.
     */
    @Override
    default boolean equals(EuclidGeometry geometry)

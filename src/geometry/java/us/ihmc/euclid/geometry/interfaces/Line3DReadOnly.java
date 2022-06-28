@@ -378,12 +378,7 @@ public interface Line3DReadOnly extends EuclidGeometry
       return isCollinear(other, epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this line 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

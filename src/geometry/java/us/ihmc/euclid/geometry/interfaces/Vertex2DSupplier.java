@@ -74,18 +74,15 @@ public interface Vertex2DSupplier extends EuclidGeometry
       return getNumberOfVertices() == 0;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param geometry the geometry to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Vertex2DSupplier))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex2DSupplier))
          return false;
       Vertex2DSupplier other = (Vertex2DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())

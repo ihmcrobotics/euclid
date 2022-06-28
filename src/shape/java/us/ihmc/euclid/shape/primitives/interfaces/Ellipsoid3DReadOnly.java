@@ -439,19 +439,15 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
-   /**
-    * Tests on a per component basis, if this ellipsoid 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two ellipsoids are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Ellipsoid3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Ellipsoid3DReadOnly))
          return false;
       Ellipsoid3DReadOnly other = (Ellipsoid3DReadOnly) geometry;
       return getPose().equals(other.getPose()) && getRadii().equals(other.getRadii());

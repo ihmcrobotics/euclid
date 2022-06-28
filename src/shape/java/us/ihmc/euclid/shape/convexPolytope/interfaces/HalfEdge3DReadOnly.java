@@ -102,13 +102,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getOrigin(), getDestination());
    }
 
-   /**
-    * Tests on a per component basis, if this half-edge 3D is exactly equal to {@code other}.
-    *
-    * @param other the other half-edge 3D to compare against this. Not modified.
-    * @return {@code true} if the two half-edges are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

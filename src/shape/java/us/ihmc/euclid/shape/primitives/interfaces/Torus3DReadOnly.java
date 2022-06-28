@@ -198,18 +198,15 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this torus 3D is exactly equal to {@code other}.
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two tori are exactly equal component-wise, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Torus3DReadOnly))
+      if (geometry == null)
+         return false;
+      else if (!(geometry instanceof Torus3DReadOnly))
          return false;
       Torus3DReadOnly other = (Torus3DReadOnly) geometry;
       if ((getRadius() != other.getRadius()) || (getTubeRadius() != other.getTubeRadius()) || !getPosition().equals(other.getPosition())

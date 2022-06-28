@@ -1068,16 +1068,7 @@ public interface Matrix3DReadOnly extends EuclidGeometry
       Matrix3DTools.inverseTransform(this, vectorOriginal, vectorTransformed);
    }
 
-   /**
-    * Tests on a per component basis if this matrix is exactly equal to {@code other}.
-    * <p>
-    * The method returns {@code false} if the given matrix is {@code null}.
-    * </p>
-    *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
-    * @return {@code true} if the two matrices are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {

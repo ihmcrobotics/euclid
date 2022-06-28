@@ -73,18 +73,15 @@ public interface Vertex3DSupplier extends EuclidGeometry
       return getNumberOfVertices() == 0;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param geometry the EuclidGeometry to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
+   /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Vertex3DSupplier))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex3DSupplier))
          return false;
       Vertex3DSupplier other = (Vertex3DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
