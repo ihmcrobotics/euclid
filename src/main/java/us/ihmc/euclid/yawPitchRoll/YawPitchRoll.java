@@ -183,6 +183,6 @@ public class YawPitchRoll implements YawPitchRollBasics
    @Override
    public String toString()
    {
-      return YawPitchRollBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

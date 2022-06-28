@@ -226,7 +226,7 @@ public class UnitVector3D implements UnitVector3DBasics
    @Override
    public String toString()
    {
-      return UnitVector3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

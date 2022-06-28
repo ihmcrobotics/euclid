@@ -650,6 +650,6 @@ public class FrameRamp3D implements FrameRamp3DBasics
    @Override
    public String toString()
    {
-      return FrameRamp3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

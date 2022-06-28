@@ -101,6 +101,6 @@ public class Triangle3D implements Triangle3DBasics
    @Override
    public String toString()
    {
-      return Triangle3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

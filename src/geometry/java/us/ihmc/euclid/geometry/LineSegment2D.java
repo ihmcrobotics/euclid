@@ -108,7 +108,7 @@ public class LineSegment2D implements LineSegment2DBasics
    @Override
    public String toString()
    {
-      return LineSegment2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

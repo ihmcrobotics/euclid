@@ -325,6 +325,6 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    @Override
    public String toString()
    {
-      return FrameConvexPolytope3DReadOnly.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

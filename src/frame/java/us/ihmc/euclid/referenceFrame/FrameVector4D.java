@@ -237,7 +237,7 @@ public class FrameVector4D implements FrameVector4DBasics
    @Override
    public String toString()
    {
-      return FrameVector4DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

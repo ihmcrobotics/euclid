@@ -428,6 +428,6 @@ public class Ramp3D implements Ramp3DBasics
    @Override
    public String toString()
    {
-      return Ramp3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

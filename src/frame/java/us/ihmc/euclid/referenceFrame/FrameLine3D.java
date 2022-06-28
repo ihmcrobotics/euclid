@@ -311,7 +311,7 @@ public class FrameLine3D implements FrameLine3DBasics
    @Override
    public String toString()
    {
-      return FrameLine3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -264,7 +264,7 @@ public class FrameLine2D implements FrameLine2DBasics
    @Override
    public String toString()
    {
-      return FrameLine2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

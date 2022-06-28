@@ -5,8 +5,8 @@ import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Class for holding the result of a collision query between two shapes and their respective
@@ -167,6 +167,6 @@ public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DColl
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getEuclidFrameShape3DCollisionResultString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

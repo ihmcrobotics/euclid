@@ -105,6 +105,6 @@ public class FrameHalfEdge3D extends AbstractHalfEdge3D<FrameVertex3D, FrameHalf
    @Override
    public String toString()
    {
-      return FrameHalfEdge3DReadOnly.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

@@ -304,6 +304,6 @@ public class Box3D implements Box3DBasics
    @Override
    public String toString()
    {
-      return Box3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

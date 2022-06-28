@@ -271,6 +271,6 @@ public class FrameCylinder3D implements FrameCylinder3DBasics
    @Override
    public String toString()
    {
-      return FrameCylinder3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

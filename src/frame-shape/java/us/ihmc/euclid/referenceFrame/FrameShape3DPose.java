@@ -253,6 +253,6 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics
    @Override
    public String toString()
    {
-      return FrameShape3DPoseBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

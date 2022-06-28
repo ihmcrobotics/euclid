@@ -122,7 +122,7 @@ public class Pose2D implements Pose2DBasics
    @Override
    public String toString()
    {
-      return Pose2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

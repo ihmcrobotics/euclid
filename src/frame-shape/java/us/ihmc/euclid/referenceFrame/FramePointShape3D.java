@@ -184,6 +184,6 @@ public class FramePointShape3D implements FramePointShape3DBasics
    @Override
    public String toString()
    {
-      return FramePointShape3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

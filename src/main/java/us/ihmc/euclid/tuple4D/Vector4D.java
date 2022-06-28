@@ -177,7 +177,7 @@ public class Vector4D implements Vector4DBasics
    @Override
    public String toString()
    {
-      return Vector4DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

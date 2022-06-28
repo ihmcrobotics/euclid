@@ -213,6 +213,6 @@ public class FrameSphere3D implements FrameSphere3DBasics
    @Override
    public String toString()
    {
-      return FrameSphere3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

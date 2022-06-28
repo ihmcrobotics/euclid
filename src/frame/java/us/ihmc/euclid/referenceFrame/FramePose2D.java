@@ -188,7 +188,7 @@ public class FramePose2D implements FramePose2DBasics
    @Override
    public String toString()
    {
-      return FramePose2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

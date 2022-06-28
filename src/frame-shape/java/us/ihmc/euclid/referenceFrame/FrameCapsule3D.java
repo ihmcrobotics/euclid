@@ -271,6 +271,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
    @Override
    public String toString()
    {
-      return FrameCapsule3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

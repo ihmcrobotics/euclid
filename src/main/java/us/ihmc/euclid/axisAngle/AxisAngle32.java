@@ -201,7 +201,7 @@ public class AxisAngle32 implements AxisAngleBasics
    @Override
    public String toString()
    {
-      return AxisAngleBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

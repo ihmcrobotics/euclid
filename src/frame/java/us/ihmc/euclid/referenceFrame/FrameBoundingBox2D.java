@@ -167,6 +167,6 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
    @Override
    public String toString()
    {
-      return FrameBoundingBox2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

@@ -241,7 +241,7 @@ public class FramePoint3D implements FramePoint3DBasics
    @Override
    public String toString()
    {
-      return FramePoint3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

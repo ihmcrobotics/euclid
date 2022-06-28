@@ -172,7 +172,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -218,7 +218,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -271,7 +271,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -324,7 +324,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -442,7 +442,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -518,7 +518,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -576,7 +576,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -663,7 +663,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
       };
@@ -763,7 +763,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -859,7 +859,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1007,7 +1007,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1087,7 +1087,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1208,7 +1208,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1287,7 +1287,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1410,7 +1410,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1551,7 +1551,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1674,7 +1674,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1814,7 +1814,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -2012,7 +2012,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -2241,7 +2241,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -2441,7 +2441,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -2557,7 +2557,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

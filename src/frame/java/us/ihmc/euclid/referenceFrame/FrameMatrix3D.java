@@ -265,7 +265,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics
    @Override
    public String toString()
    {
-      return FrameMatrix3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

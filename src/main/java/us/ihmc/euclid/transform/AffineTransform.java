@@ -421,7 +421,7 @@ public class AffineTransform implements AffineTransformBasics
    @Override
    public String toString()
    {
-      return AffineTransformBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    @Override

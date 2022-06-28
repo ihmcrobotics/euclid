@@ -224,6 +224,6 @@ public class Cylinder3D implements Cylinder3DBasics
    @Override
    public String toString()
    {
-      return Cylinder3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

@@ -127,7 +127,7 @@ public class Orientation2D implements Orientation2DBasics
    @Override
    public String toString()
    {
-      return Orientation2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -245,7 +245,7 @@ public class FramePoint2D implements FramePoint2DBasics
    @Override
    public String toString()
    {
-      return FramePoint2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

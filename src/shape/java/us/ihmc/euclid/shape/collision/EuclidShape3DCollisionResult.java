@@ -174,6 +174,6 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
    @Override
    public String toString()
    {
-      return EuclidShape3DCollisionResultBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

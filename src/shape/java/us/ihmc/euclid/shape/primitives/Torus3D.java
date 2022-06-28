@@ -3,7 +3,7 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -173,6 +173,6 @@ public class Torus3D implements Torus3DBasics
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getTorus3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

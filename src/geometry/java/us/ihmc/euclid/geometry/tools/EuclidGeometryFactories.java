@@ -14,6 +14,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -62,7 +63,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override
@@ -108,7 +109,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override
@@ -154,7 +155,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override
@@ -200,7 +201,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override
@@ -319,7 +320,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override
@@ -438,7 +439,7 @@ public class EuclidGeometryFactories
          @Override
          public String toString()
          {
-            return EuclidGeometryIOTools.getBoundingBox3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
 
          @Override

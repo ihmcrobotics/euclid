@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -272,7 +271,7 @@ public class Matrix3D implements Matrix3DBasics
    @Override
    public String toString()
    {
-      return Matrix3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

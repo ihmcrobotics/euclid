@@ -174,7 +174,7 @@ public class Vector2D32 implements Vector2DBasics
    @Override
    public String toString()
    {
-      return Vector2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

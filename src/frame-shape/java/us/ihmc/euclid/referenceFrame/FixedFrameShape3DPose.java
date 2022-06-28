@@ -222,6 +222,6 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics
    @Override
    public String toString()
    {
-      return FixedFrameShape3DPoseBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

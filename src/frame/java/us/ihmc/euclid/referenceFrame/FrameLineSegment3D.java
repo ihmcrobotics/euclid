@@ -144,7 +144,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics
    @Override
    public String toString()
    {
-      return FrameLineSegment3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

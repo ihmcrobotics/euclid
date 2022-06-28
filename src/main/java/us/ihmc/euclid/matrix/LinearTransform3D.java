@@ -151,7 +151,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple4DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -1133,7 +1133,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
    @Override
    public String toString()
    {
-      return LinearTransform3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

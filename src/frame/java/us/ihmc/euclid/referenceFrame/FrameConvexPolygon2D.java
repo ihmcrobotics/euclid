@@ -443,6 +443,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
    @Override
    public String toString()
    {
-      return FrameConvexPolygon2DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

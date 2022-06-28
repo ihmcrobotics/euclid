@@ -105,7 +105,7 @@ public class LineSegment3D implements LineSegment3DBasics
    @Override
    public String toString()
    {
-      return LineSegment3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

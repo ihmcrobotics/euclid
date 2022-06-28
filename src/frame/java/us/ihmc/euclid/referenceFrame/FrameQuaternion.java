@@ -299,7 +299,7 @@ public class FrameQuaternion implements FrameQuaternionBasics
    @Override
    public String toString()
    {
-      return FrameQuaternionBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -494,6 +494,6 @@ public class FrameBox3D implements FrameBox3DBasics
    @Override
    public String toString()
    {
-      return FrameBox3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

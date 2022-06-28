@@ -150,7 +150,7 @@ public class Line3D implements Line3DBasics
    @Override
    public String toString()
    {
-      return Line3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

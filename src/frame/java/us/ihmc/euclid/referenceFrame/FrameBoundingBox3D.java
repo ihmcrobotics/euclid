@@ -169,6 +169,6 @@ public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
    @Override
    public String toString()
    {
-      return FrameBoundingBox3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

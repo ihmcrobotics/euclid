@@ -219,7 +219,7 @@ public class Vector3D32 implements Vector3DBasics
    @Override
    public String toString()
    {
-      return Vector3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

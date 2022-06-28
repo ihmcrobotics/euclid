@@ -197,7 +197,7 @@ public class Quaternion32 implements QuaternionBasics
    @Override
    public String toString()
    {
-      return QuaternionBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

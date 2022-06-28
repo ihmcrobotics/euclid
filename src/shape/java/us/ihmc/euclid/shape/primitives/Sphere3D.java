@@ -149,6 +149,6 @@ public class Sphere3D implements Sphere3DBasics
    @Override
    public String toString()
    {
-      return Sphere3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

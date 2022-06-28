@@ -163,7 +163,7 @@ public class AxisAngle implements AxisAngleBasics
     */
    public String toString()
    {
-      return AxisAngleBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

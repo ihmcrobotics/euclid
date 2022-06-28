@@ -145,7 +145,7 @@ public class Pose3D implements Pose3DBasics
    @Override
    public String toString()
    {
-      return Pose3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

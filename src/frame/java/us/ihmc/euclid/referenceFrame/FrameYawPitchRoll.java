@@ -216,7 +216,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
    @Override
    public String toString()
    {
-      return FrameYawPitchRollBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
