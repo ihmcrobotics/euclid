@@ -151,7 +151,7 @@ public class AxisAngle implements AxisAngleBasics
    public boolean equals(Object object)
    {
       if (object instanceof AxisAngleReadOnly)
-         return equals((AxisAngleReadOnly) object);
+         return AxisAngleBasics.super.equals((AxisAngleReadOnly) object);
       else
          return false;
    }

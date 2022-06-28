@@ -437,10 +437,11 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Tests on a per component basis, if this axis-angle is exactly equal to {@code other}. A failing
-    * test does not necessarily mean that the two axis-angles represent two different orientations.
+    * Tests on a per component basis, if this axis-angle is exactly equal to {@code geometry}. A
+    * failing test does not necessarily mean that the two axis-angles represent two different
+    * orientations.
     *
-    * @param geometry the EuclidGeometry to compare against this. Not modified.
+    * @param geometry the geometry to compare against this. Not modified.
     * @return {@code true} if the two axis-angles are exactly equal component-wise, {@code false}
     *         otherwise.
     */
@@ -462,13 +463,17 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
     * different orientations.
     *
-    * @param geometry the object to compare against this. Not modified.
+    * @param geometry the geometry to compare against this. Not modified.
     * @param epsilon  tolerance to use when comparing each component.
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof AxisAngleReadOnly))
          return false;
 
@@ -486,10 +491,19 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
+    * Gets a representative {@code String} of this axis-angle given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param format the format to use for each number.
-    * @return the {@code String} representing this axis-angle.
+    * <pre>
+    * ( 0.674,  0.455,  0.582,  0.593 )
+    * </pre>
+    * </p>
+    *
+    * @param format    the format to use for each number.
+    * @param axisAngle the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

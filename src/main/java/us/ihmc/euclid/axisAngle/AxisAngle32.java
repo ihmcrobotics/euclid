@@ -114,16 +114,6 @@ public class AxisAngle32 implements AxisAngleBasics
    }
 
    /**
-    * Sets this axis-angle to the same value as the given axis-angle {@code other}.
-    *
-    * @param other the other axis-angle. Not modified.
-    */
-   public void set(AxisAngle32 other)
-   {
-      AxisAngleBasics.super.set(other);
-   }
-
-   /**
     * Sets this axis-angle to represent a new rotation of axis ({@code x}, {@code y}, {@code z}) and
     * angle of {@code angle}.
     *
@@ -198,7 +188,7 @@ public class AxisAngle32 implements AxisAngleBasics
    public boolean equals(Object object)
    {
       if (object instanceof AxisAngleReadOnly)
-         return equals((AxisAngleReadOnly) object);
+         return AxisAngleBasics.super.equals((AxisAngleReadOnly) object);
       else
          return false;
    }
