@@ -3,7 +3,7 @@ package us.ihmc.euclid.interfaces;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
- * Base interface used to represent geometry objects that are part the of the Euclid library.
+ * Base interface used to represent all the geometry objects in the Euclid library.
  */
 public interface EuclidGeometry
 {
