@@ -50,6 +50,10 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
    @Override
    public boolean equals(EuclidGeometry geometry)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof SupportingVertexTransformer))
          return false;
 
