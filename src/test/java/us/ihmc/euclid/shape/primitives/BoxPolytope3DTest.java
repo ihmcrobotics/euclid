@@ -80,7 +80,7 @@ public class BoxPolytope3DTest
          }
 
          assertEquals(boxPolytope3D.getVolume(), convexPolytope3D.getVolume(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(convexPolytope3D.getCentroid(), boxPolytope3D.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(convexPolytope3D.getCentroid(), boxPolytope3D.getCentroid(), EPSILON);
 
          for (Face3DReadOnly boxFace : boxPolytope3D.getFaces())
          {

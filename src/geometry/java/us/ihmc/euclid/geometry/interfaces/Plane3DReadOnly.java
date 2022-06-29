@@ -1,6 +1,10 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
@@ -10,7 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Read-only interface for an infinitely wide and long 3D plane defined by a 3D point and a 3D
  * unit-vector.
  */
-public interface Plane3DReadOnly
+public interface Plane3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the point through which this plane is going.
@@ -479,35 +483,69 @@ public interface Plane3DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on the point and normal if this plane is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two planes are
-    * physically the same but either the point or vector of each plane is different. For instance, if
-    * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
-    * physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two planes are equal, {@code false} otherwise.
+    * {@inheritDoc}
+    * <p>
+    * This method will return {@code false} if the two planes are physically the same but either the
+    * point or vector of each plane is different. For instance, if {@code this.point == other.point}
+    * and {@code this.normal == - other.normal}, the two planes are physically the same but this method
+    * returns {@code false}.
+    * </p>
     */
-   default boolean epsilonEquals(Plane3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Plane3DReadOnly))
+         return false;
+      Plane3DReadOnly other = (Plane3DReadOnly) geometry;
       return other.getNormal().epsilonEquals(getNormal(), epsilon) && other.getPoint().epsilonEquals(getPoint(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this plane 3D is exactly equal to {@code other}.
-    *
-    * @param other the other plane 3D to compare against this. Not modified.
-    * @return {@code true} if the two planes are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Plane3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getPoint().equals(other.getPoint()) && getNormal().equals(other.getNormal());
+      if (!(geometry instanceof Plane3DReadOnly))
+         return false;
+      Plane3DReadOnly other = (Plane3DReadOnly) geometry;
+      return getPoint().equals(other.getPoint()) && getNormal().equals(other.getNormal());
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Plane3D))
+         return false;
+      Plane3D other = (Plane3D) geometry;
+      return isCoincident(other, epsilon, epsilon);
+   }
+
+   /**
+    * Gets a representative {@code String} of this plane 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getPlane3DString(format, this);
+   }
 }

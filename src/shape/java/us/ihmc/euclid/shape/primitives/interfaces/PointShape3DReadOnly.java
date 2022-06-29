@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -128,4 +129,17 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 
    @Override
    PointShape3DBasics copy();
+
+   /**
+    * Provides a {@code String} representation of this point shape 3D as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 )
+    * </pre>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getPointShape3DString(format, this);
+   }
 }

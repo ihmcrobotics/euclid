@@ -74,7 +74,7 @@ public class FixedFrameShape3DPoseTest
    @Test
    public void testConsistencyWithShape3DPose()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       methodFilter = methodFilter.and(m -> !m.getName().contains("ChangeListener"));
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, shape3DPose) -> new FixedFrameShape3DPose(() -> frame, (Shape3DPose) shape3DPose),

@@ -168,7 +168,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -182,7 +182,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -196,7 +196,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -216,7 +216,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -230,7 +230,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -245,7 +245,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
    }
 

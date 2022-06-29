@@ -3,7 +3,10 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -216,47 +219,62 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    Sphere3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the radius of this sphere and
-    * {@code other}'s pose and radius are equal to an {@code epsilon}.
-    *
-    * @param other   the other sphere which pose and radius is to be compared against this radius pose
-    *                and radius. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Sphere3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Sphere3DReadOnly))
+         return false;
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
-    * to an {@code epsilon}.
-    *
-    * @param other   the sphere to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Sphere3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Sphere3DReadOnly))
+         return false;
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this sphere 3D is exactly equal to {@code other}.
-    *
-    * @param other the other sphere 3D to compare against this. Not modified.
-    * @return {@code true} if the two spheres are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(Sphere3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getPosition().equals(other.getPosition()) && getRadius() == other.getRadius();
+      if (!(geometry instanceof Sphere3DReadOnly))
+         return false;
+      Sphere3DReadOnly other = (Sphere3DReadOnly) geometry;
+      return getPosition().equals(other.getPosition()) && EuclidCoreTools.equals(getRadius(), other.getRadius());
+   }
+
+   /**
+    * Gets a representative {@code String} of this sphere sphere 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getSphere3DString(format, this);
    }
 }

@@ -3,7 +3,10 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -16,7 +19,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
  * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
  * </p>
  */
-public interface LineSegment2DReadOnly
+public interface LineSegment2DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -793,57 +796,75 @@ public interface LineSegment2DReadOnly
       pointToPack.interpolate(getFirstEndpoint(), getSecondEndpoint(), percentage);
    }
 
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(LineSegment2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment2DReadOnly))
+         return false;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
       return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line segment 2D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(LineSegment2DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
+      if (!(geometry instanceof LineSegment2DReadOnly))
+         return false;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
+      return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param other   the line segment to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
-   default boolean geometricallyEquals(LineSegment2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment2DReadOnly))
+         return false;
+      LineSegment2DReadOnly other = (LineSegment2DReadOnly) geometry;
       if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
          return true;
       if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
          return true;
+
       return false;
+   }
+
+   /**
+    * Gets a representative {@code String} of this line segment 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment2DString(format, this);
    }
 }

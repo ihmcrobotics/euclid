@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.tools;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
@@ -522,9 +523,9 @@ public class EuclidShapeTools
       double dot = supportDirection.dot(capsule3DAxis);
       double capsule3DHalfLength = dot > 0.0 ? 0.5 * capsule3DLength : -0.5 * capsule3DLength;
 
-      supportingVertexToPack.setAndScale(capsule3DRadius / supportDirection.length(), supportDirection);
+      supportingVertexToPack.setAndScale(capsule3DRadius / supportDirection.norm(), supportDirection);
       supportingVertexToPack.add(capsule3DPosition);
-      supportingVertexToPack.scaleAdd(capsule3DHalfLength / capsule3DAxis.length(), capsule3DAxis, supportingVertexToPack);
+      supportingVertexToPack.scaleAdd(capsule3DHalfLength / capsule3DAxis.norm(), capsule3DAxis, supportingVertexToPack);
    }
 
    /**
@@ -895,7 +896,7 @@ public class EuclidShapeTools
    {
       supportingVertexToPack.set(supportDirection);
 
-      double axisNormInverse = 1.0 / cylinder3DAxis.length();
+      double axisNormInverse = 1.0 / cylinder3DAxis.norm();
       double dot = supportDirection.dot(cylinder3DAxis) * axisNormInverse;
       supportingVertexToPack.setAndScale(dot * axisNormInverse, cylinder3DAxis);
       supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
@@ -933,7 +934,7 @@ public class EuclidShapeTools
       // From https://iquilezles.org/www/articles/diskbbox/diskbbox.htm
       double cylinder3DHalfLength = 0.5 * cylinder3DLength;
 
-      double invNormSquared = 1.0 / cylinder3DAxis.lengthSquared();
+      double invNormSquared = 1.0 / cylinder3DAxis.normSquared();
       double capMinMaxX = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() * invNormSquared));
       double capMinMaxY = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() * invNormSquared));
       double capMinMaxZ = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() * invNormSquared));
@@ -1995,7 +1996,7 @@ public class EuclidShapeTools
                                                double sphere3DRadius,
                                                Point3DBasics supportingVertexToPack)
    {
-      supportingVertexToPack.scaleAdd(sphere3DRadius / supportDirection.length(), supportDirection, sphere3DPosition);
+      supportingVertexToPack.scaleAdd(sphere3DRadius / supportDirection.norm(), supportDirection, sphere3DPosition);
    }
 
    /**
@@ -2363,7 +2364,7 @@ public class EuclidShapeTools
    {
       supportingVertexToPack.set(supportDirection);
       double dot = supportDirection.dot(circle3DAxis);
-      supportingVertexToPack.setAndScale(dot / circle3DAxis.lengthSquared(), circle3DAxis);
+      supportingVertexToPack.setAndScale(dot / circle3DAxis.normSquared(), circle3DAxis);
       supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
       double distanceSquaredFromCenter = supportingVertexToPack.distanceFromOriginSquared();
 
@@ -2426,7 +2427,7 @@ public class EuclidShapeTools
       // This re-using the supporting vertex computation for a circle 3D, when the circle represents the center of the torus' tube.
       supportingVertexToPack.setAndNegate(supportDirection);
       double dot = TupleTools.dot(supportingVertexToPack, torus3DAxis);
-      supportingVertexToPack.setAndScale(dot / torus3DAxis.lengthSquared(), torus3DAxis);
+      supportingVertexToPack.setAndScale(dot / torus3DAxis.normSquared(), torus3DAxis);
       supportingVertexToPack.add(supportDirection);
       supportingVertexToPack.negate();
       double distanceSquaredFromCenter = supportingVertexToPack.distanceFromOriginSquared();
@@ -2665,7 +2666,7 @@ public class EuclidShapeTools
    }
 
    /**
-    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
     *
@@ -2691,7 +2692,7 @@ public class EuclidShapeTools
    }
 
    /**
-    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
     *

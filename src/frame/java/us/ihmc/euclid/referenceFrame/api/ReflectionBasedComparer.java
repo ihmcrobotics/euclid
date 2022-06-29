@@ -1,28 +1,16 @@
 package us.ihmc.euclid.referenceFrame.api;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.ejml.data.DMatrix;
 import org.ejml.ops.MatrixFeatures_D;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 
 class ReflectionBasedComparer
 {
-   private static final String EPSILON_EQUALS = "epsilonEquals";
-   private static final Predicate<Method> epsilonEqualsMethodFilter = m ->
-   {
-      if (!m.getName().equals(EPSILON_EQUALS) || m.getParameterCount() != 2)
-         return false;
-      return m.getParameterTypes()[1] == double.class || m.getParameterTypes()[1] == float.class;
-   };
-
    static <T> boolean epsilonEquals(Object framelessParameter, Object frameParameter, double epsilon)
    {
       if (framelessParameter == null && frameParameter == null)
@@ -37,35 +25,15 @@ class ReflectionBasedComparer
             return true;
       }
 
-      List<Method> epsilonEqualsMethods = Stream.of(frameParameter.getClass().getMethods()).filter(epsilonEqualsMethodFilter).collect(Collectors.toList());
-
-      if (!epsilonEqualsMethods.isEmpty())
+      if (framelessParameter instanceof EuclidGeometry)
       {
-         Method epsilonEqualsMethod = epsilonEqualsMethods.stream().filter(m -> m.getParameterTypes()[0] != Object.class) // Filters the method from FrameGeometryObject.
-                                                          .filter(m -> m.getParameterTypes()[0].isAssignableFrom(framelessParameter.getClass())).findAny()
-                                                          .orElse(null);
-         if (epsilonEqualsMethod != null)
-         {
-            try
-            {
-               boolean epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
-               return epsilonEqualsResult;
-            }
-            catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-            {
-               System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
-               System.err.println("Objects used as parameters: "
-                     + MethodSignature.getMethodSimpleName(boolean.class, EPSILON_EQUALS, framelessParameter.getClass(), double.class));
-               e.printStackTrace();
-               throw new AssertionError(e);
-            }
-         }
+         return ((EuclidGeometry) framelessParameter).epsilonEquals((EuclidGeometry) frameParameter, epsilon);
       }
 
       if (Double.TYPE.isInstance(framelessParameter) || Float.TYPE.isInstance(framelessParameter))
       {
          if (!Double.TYPE.isInstance(frameParameter) && !Float.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return EuclidCoreTools.epsilonEquals((double) framelessParameter, (double) frameParameter, epsilon);
       }
@@ -73,7 +41,7 @@ class ReflectionBasedComparer
       if (Integer.TYPE.isInstance(framelessParameter) || Long.TYPE.isInstance(framelessParameter))
       {
          if (!Integer.TYPE.isInstance(frameParameter) && !Long.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return (long) framelessParameter == (long) frameParameter;
       }
@@ -81,7 +49,7 @@ class ReflectionBasedComparer
       if (Double.class.isInstance(framelessParameter) || Float.class.isInstance(framelessParameter))
       {
          if (!Double.class.isInstance(frameParameter) && !Float.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          double framelessDouble = ((Number) framelessParameter).doubleValue();
          double frameDouble = ((Number) frameParameter).doubleValue();
@@ -91,7 +59,7 @@ class ReflectionBasedComparer
       if (Integer.class.isInstance(framelessParameter) || Long.class.isInstance(framelessParameter))
       {
          if (!Integer.class.isInstance(frameParameter) && !Long.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return ((Number) framelessParameter).longValue() == ((Number) frameParameter).longValue();
       }
@@ -99,7 +67,7 @@ class ReflectionBasedComparer
       if (Boolean.class.isInstance(framelessParameter))
       {
          if (!Boolean.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
 
          return (boolean) framelessParameter == (boolean) frameParameter;
       }
@@ -123,7 +91,7 @@ class ReflectionBasedComparer
          }
          else
          {
-            throw new RuntimeException("Reached unexpected state.");
+            throw new ReflectionBasedComparerException("Reached unexpected state.");
          }
       }
 
@@ -141,7 +109,7 @@ class ReflectionBasedComparer
       if (framelessParameter instanceof Class && frameParameter instanceof Class)
          return true;
 
-      throw new RuntimeException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
+      throw new ReflectionBasedComparerException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
             + frameParameter.getClass().getSimpleName());
    }
 
@@ -194,8 +162,8 @@ class ReflectionBasedComparer
             return true;
          }
 
-         throw new RuntimeException("Did not expect the following component types: " + framelessParameter.getClass().getComponentType().getSimpleName() + " & "
-               + frameParameter.getClass().getComponentType().getSimpleName());
+         throw new ReflectionBasedComparerException("Did not expect the following component types: "
+               + framelessParameter.getClass().getComponentType().getSimpleName() + " & " + frameParameter.getClass().getComponentType().getSimpleName());
       }
       else
       {
@@ -209,6 +177,30 @@ class ReflectionBasedComparer
                return false;
          }
          return true;
+      }
+   }
+
+   public static class ReflectionBasedComparerException extends RuntimeException
+   {
+      private static final long serialVersionUID = -6087778771648672668L;
+
+      public ReflectionBasedComparerException()
+      {
+      }
+
+      public ReflectionBasedComparerException(String message, Throwable cause)
+      {
+         super(message, cause);
+      }
+
+      public ReflectionBasedComparerException(String message)
+      {
+         super(message);
+      }
+
+      public ReflectionBasedComparerException(Throwable cause)
+      {
+         super(cause);
       }
    }
 }

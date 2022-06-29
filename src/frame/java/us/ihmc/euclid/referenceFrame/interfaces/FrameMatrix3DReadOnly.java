@@ -6,6 +6,8 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -29,7 +31,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameHolder
+public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, EuclidFrameGeometry
 {
    /**
     * Packs a column of this matrix into a 3D frame tuple.
@@ -1012,45 +1014,22 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Tests on a per component basis if this matrix is exactly equal to {@code other}.
+    * Gets a representative {@code String} of this matrix 3D given a specific format to use.
     * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    * <p>
-    * The method returns {@code false} if the given matrix is {@code null}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other the other matrix to compare against this. Not modified.
-    * @return {@code true} if the two matrices are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameMatrix3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Matrix3DReadOnly.super.equals(other);
-   }
-
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameMatrix3DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Matrix3DReadOnly.super.epsilonEquals(other, epsilon);
+      return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
    }
 }

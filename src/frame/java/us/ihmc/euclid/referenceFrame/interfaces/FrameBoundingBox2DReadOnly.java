@@ -4,6 +4,8 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -11,7 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Read-only interface for a 2D axis-aligned bounding box expressed in a given reference frame.
  */
-public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, ReferenceFrameHolder
+public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1209,59 +1211,19 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
    }
 
    /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
+    * Gets a representative {@code String} of this bounding box 2D given a specific format to use.
     * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 ), worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameBoundingBox2DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return BoundingBox2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameBoundingBox2DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return BoundingBox2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other bounding box 2D to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameBoundingBox2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+      return EuclidFrameIOTools.getFrameBoundingBox2DString(format, this);
    }
 }

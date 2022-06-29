@@ -38,9 +38,9 @@ class EuclidPolytopeFactoriesTest
          assertEquals(30, icosahedron.getNumberOfEdges());
 
          icosahedron.getVertices().forEach(vertex -> assertEquals(radius, vertex.distanceFromOrigin(), EPSILON));
-         icosahedron.getHalfEdges().forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).length(), EPSILON));
+         icosahedron.getHalfEdges().forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).norm(), EPSILON));
          assertEquals(EuclidShapeTools.icosahedronVolume(EuclidShapeTools.icosahedronEdgeLength(radius)), icosahedron.getVolume(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), icosahedron.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(), icosahedron.getCentroid(), EPSILON);
       }
    }
 
@@ -56,7 +56,7 @@ class EuclidPolytopeFactoriesTest
          ConvexPolytope3D icoSphere = EuclidPolytopeFactories.newIcoSphere(radius, recursionLevel);
 
          icoSphere.getVertices().forEach(vertex -> assertEquals(radius, vertex.distanceFromOrigin(), EPSILON));
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), icoSphere.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(), icoSphere.getCentroid(), EPSILON);
       }
    }
 
@@ -85,7 +85,7 @@ class EuclidPolytopeFactoriesTest
          Vector3D baseNormal = new Vector3D(0, 0, -1);
          assertEquals(1, cone.getFaces().stream().filter(face -> face.getNormal().epsilonEquals(baseNormal, EPSILON)).count());
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.25 * height), cone.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, 0.25 * height), cone.getCentroid(), EPSILON);
       }
    }
 
@@ -106,9 +106,9 @@ class EuclidPolytopeFactoriesTest
          Point3D absoluteVertex = new Point3D(edgeLength, edgeLength, edgeLength);
          absoluteVertex.scale(0.5);
          cube.getVertices().stream().map(Point3D::new).peek(Point3D::absolute)
-             .forEach(vertex -> EuclidCoreTestTools.assertTuple3DEquals(vertex, absoluteVertex, EPSILON));
+             .forEach(vertex -> EuclidCoreTestTools.assertEquals(vertex, absoluteVertex, EPSILON));
          assertEquals(edgeLength * edgeLength * edgeLength, cube.getVolume(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), cube.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(), cube.getCentroid(), EPSILON);
 
          for (Face3D face : cube.getFaces())
          {
@@ -117,21 +117,21 @@ class EuclidPolytopeFactoriesTest
                Vector3D expectedNormal = new Vector3D(Axis3D.X);
                if (face.getCentroid().getX() < 0.0)
                   expectedNormal.negate();
-               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getY()), EPSILON))
             {
                Vector3D expectedNormal = new Vector3D(Axis3D.Y);
                if (face.getCentroid().getY() < 0.0)
                   expectedNormal.negate();
-               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getZ()), EPSILON))
             {
                Vector3D expectedNormal = new Vector3D(Axis3D.Z);
                if (face.getCentroid().getZ() < 0.0)
                   expectedNormal.negate();
-               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else
             {
@@ -167,7 +167,7 @@ class EuclidPolytopeFactoriesTest
                assertEquals(0.0, face.getNormal().getZ(), EPSILON);
                Vector3D expectedNormal = new Vector3D(face.getCentroid());
                expectedNormal.normalize();
-               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+               EuclidCoreTestTools.assertEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else if (EuclidCoreTools.epsilonEquals(0.0, face.getCentroid().distanceXY(new Point2D()), EPSILON))
             {
@@ -182,7 +182,7 @@ class EuclidPolytopeFactoriesTest
             }
          }
 
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), cylinder.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(), cylinder.getCentroid(), EPSILON);
       }
    }
 
@@ -211,7 +211,7 @@ class EuclidPolytopeFactoriesTest
                 .forEach(baseVertex -> assertEquals(0.0, baseVertex.getZ(), EPSILON));
 
          assertEquals(EuclidShapeTools.pyramidVolume(height, baseLength, baseWidth), pyramid.getVolume(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.25 * height), pyramid.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point3D(0.0, 0.0, 0.25 * height), pyramid.getCentroid(), EPSILON);
 
       }
    }

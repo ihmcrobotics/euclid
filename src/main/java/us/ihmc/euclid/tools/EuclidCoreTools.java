@@ -71,13 +71,12 @@ public class EuclidCoreTools
       public int hashCode()
       {
          return 1;
-         
       }
 
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple2DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -122,7 +121,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -161,7 +160,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple2DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -206,7 +205,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -257,7 +256,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple4DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -330,7 +329,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getMatrix3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
 
       @Override
@@ -412,7 +411,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getMatrix3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
 
       @Override
@@ -888,6 +887,22 @@ public class EuclidCoreTools
          else
             return b;
       }
+   }
+
+   /**
+    * Test if the two values are equal with the special case of considering
+    * {@code Double.NaN == Double.NaN}.
+    * 
+    * @param expectedValue the first value to compare.
+    * @param actualValue   the second value to compare.
+    * @return {@code true} if the two values are considered to be equal, {@code false otherwise}.
+    */
+   public static boolean equals(double expectedValue, double actualValue)
+   {
+      if (expectedValue == actualValue)
+         return true;
+      else
+         return Double.isNaN(expectedValue) && Double.isNaN(actualValue);
    }
 
    /**

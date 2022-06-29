@@ -5,6 +5,8 @@ import org.ejml.data.DMatrix;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.Matrix3DTools;
@@ -20,7 +22,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Matrix3DReadOnly
+public interface Matrix3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the 1st row 1st column coefficient of this matrix.
@@ -605,7 +607,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Tests if this matrix is symmetric:
-    * 
+    *
     * <pre>
     *     | a x y |
     * m = | x b z |
@@ -619,7 +621,7 @@ public interface Matrix3DReadOnly
     * {@link Matrix3DFeatures#EPS_CHECK_SYMMETRIC}.
     * </ul>
     * </p>
-    * 
+    *
     * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
     */
    default boolean isMatrixSymmetric()
@@ -629,7 +631,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Tests if this matrix is symmetric:
-    * 
+    *
     * <pre>
     *     | a x y |
     * m = | x b z |
@@ -642,7 +644,7 @@ public interface Matrix3DReadOnly
     * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/- {@code epsilon}.
     * </ul>
     * </p>
-    * 
+    *
     * @param epsilon the tolerance to use.
     * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
     */
@@ -653,7 +655,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Returns the value of the element that has the maximum value.
-    * 
+    *
     * @return the value of the element that has the maximum value.
     */
    default double maxElement()
@@ -663,7 +665,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Returns the value of the element that has the maximum absolute value.
-    * 
+    *
     * @return the value of the element that has the maximum absolute value.
     */
    default double maxAbsElement()
@@ -673,7 +675,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Returns the value of the element that has the minimum value.
-    * 
+    *
     * @return the value of the element that has the minimum value.
     */
    default double minElement()
@@ -683,7 +685,7 @@ public interface Matrix3DReadOnly
 
    /**
     * Returns the value of the element that has the minimum absolute value.
-    * 
+    *
     * @return the value of the element that has the minimum absolute value.
     */
    default double minAbsElement()
@@ -1066,31 +1068,31 @@ public interface Matrix3DReadOnly
       Matrix3DTools.inverseTransform(this, vectorOriginal, vectorTransformed);
    }
 
-   /**
-    * Tests on a per component basis if this matrix is exactly equal to {@code other}.
-    * <p>
-    * The method returns {@code false} if the given matrix is {@code null}.
-    * </p>
-    *
-    * @param other the other matrix to compare against this. Not modified.
-    * @return {@code true} if the two matrices are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(Matrix3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Matrix3DReadOnly))
+         return false;
+      Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
       return Matrix3DFeatures.equals(this, other);
    }
 
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Matrix3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Matrix3DReadOnly))
+         return false;
+      Matrix3DReadOnly other = (Matrix3DReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getM00(), other.getM00(), epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(getM01(), other.getM01(), epsilon))
@@ -1111,5 +1113,35 @@ public interface Matrix3DReadOnly
          return false;
 
       return true;
+   }
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(EuclidGeometry, double)}.
+    * </p>
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      return epsilonEquals(geometry, epsilon);
+   }
+
+   /**
+    * Gets a representative {@code String} of this matrix 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getMatrix3DString(format, this);
    }
 }

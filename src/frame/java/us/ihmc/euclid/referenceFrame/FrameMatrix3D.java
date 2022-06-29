@@ -1,13 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
@@ -27,7 +25,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * requiring {@code FrameMatrix3D}.
  * </p>
  */
-public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameMatrix3D>
+public class FrameMatrix3D implements FrameMatrix3DBasics
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -76,19 +74,6 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    public FrameMatrix3D(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       setIncludingFrame(referenceFrame, matrix3DReadOnly);
-   }
-
-   /**
-    * Sets this frame matrix to {@code other}.
-    *
-    * @param other the other frame matrix to set this to. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public void set(FrameMatrix3D other)
-   {
-      FrameMatrix3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -246,40 +231,6 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    }
 
    /**
-    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
-    * <p>
-    * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
-    * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameMatrix3D other, double epsilon)
-   {
-      return epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameMatrix3D other, double epsilon)
-   {
-      return FrameMatrix3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -314,7 +265,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameMatrix3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

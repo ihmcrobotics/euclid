@@ -12,6 +12,8 @@ import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
@@ -191,6 +193,60 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
 
       assertFalse(tuple.epsilonEquals(createTuple(x, y + 1.001 * epsilon), epsilon));
       assertFalse(tuple.epsilonEquals(createTuple(x, y - 1.001 * epsilon), epsilon));
+   }
+
+   @Test
+   public void testNorm()
+   {
+      Random random = new Random(312310L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double norm1 = tuple1.norm();
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY());
+         double expectedLength2 = scalar * norm1;
+         double actualLength2 = tuple2.norm();
+         assertEquals(expectedLength2, actualLength2, 2.0 * getEpsilon());
+      }
+   }
+
+   @Test
+   public void testNormSquared()
+   {
+      Random random = new Random(312310L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double norm1 = tuple1.norm();
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY());
+         double expectedNorm2 = scalar * norm1;
+         double actualNorm2 = tuple2.normSquared();
+         assertEquals(expectedNorm2, EuclidCoreTools.squareRoot(actualNorm2), 2.0 * getEpsilon());
+      }
+   }
+
+   @Test
+   public void testDot()
+   {
+      Random random = new Random(56461L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         double x = EuclidCoreTools.cos(angle) * tuple1.getX() - EuclidCoreTools.sin(angle) * tuple1.getY();
+         double y = EuclidCoreTools.sin(angle) * tuple1.getX() + EuclidCoreTools.cos(angle) * tuple1.getY();
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0);
+         T tuple2 = createTuple(scalar * x, scalar * y);
+
+         double expectedDot = tuple1.norm() * tuple2.norm() * EuclidCoreTools.cos(angle);
+         double actualDot = tuple1.dot(tuple2);
+         assertEquals(expectedDot, actualDot, getEpsilon());
+      }
    }
 
    @SuppressWarnings("unlikely-arg-type")

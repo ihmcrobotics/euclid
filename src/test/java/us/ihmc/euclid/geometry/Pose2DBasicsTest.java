@@ -156,7 +156,7 @@ public abstract class Pose2DBasicsTest<T extends Pose2DBasics>
          secondPose = copy(firstPose);
 
          translation = EuclidCoreRandomTools.nextVector2D(random);
-         length = translation.length();
+         length = translation.norm();
 
          secondPose.appendTranslation(translation);
 

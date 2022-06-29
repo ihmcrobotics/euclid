@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.polytope.interfaces;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 
 /**
@@ -67,26 +68,20 @@ public interface FrameHalfEdge3DReadOnly extends HalfEdge3DReadOnly, FrameLineSe
    }
 
    /**
-    * Tests on a per component basis, if this half-edge 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two half-edges have different frames, this method returns {@code false}.
-    * </p>
+    * Provides a {@code String} representation of this frame half-edge 3D as follows:
     *
-    * @param other the other half-edge 3D to compare against this. Not modified.
-    * @return {@code true} if the two half-edges are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    *    worldFrame
+    * </pre>
     */
-   default boolean equals(FrameHalfEdge3DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else if (getOrigin() == null != (other.getOrigin() == null))
-         return false;
-      else if (getDestination() == null != (other.getDestination() == null))
-         return false;
-      else
-         return FrameLineSegment3DReadOnly.super.equals(other);
+      return EuclidFrameShapeIOTools.getFrameHalfEdge3DString(format, this);
    }
 }

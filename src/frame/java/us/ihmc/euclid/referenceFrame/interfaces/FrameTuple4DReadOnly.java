@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
@@ -18,8 +20,46 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * using methods requiring {@code FrameTuple4DReadOnly}.
  * </p>
  */
-public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHolder
+public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, EuclidFrameGeometry
 {
+   /**
+    * Calculates the norm of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup> +
+    * ({@code this.s} - {@code other.s})<sup>2</sup>]
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   default double differenceNorm(FrameTuple4DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Tuple4DReadOnly.super.differenceNorm(other);
+   }
+
+   /**
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>
+    * +({@code this.s} - {@code other.s})<sup>2</sup>
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   default double differenceNormSquared(FrameTuple4DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Tuple4DReadOnly.super.differenceNormSquared(other);
+   }
+
    /**
     * Calculates and returns the value of the dot product of this tuple with {@code other}.
     * <p>
@@ -39,42 +79,19 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
    }
 
    /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
+    * Gets a representative {@code String} of this tuple 4D given a specific format to use.
     * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FrameTuple4DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple4DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
-    * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
+    * <pre>
+    * (-0.052, -0.173, -0.371,  0.087 ) - worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
     */
-   default boolean equals(FrameTuple4DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple4DReadOnly.super.equals(other);
+      return EuclidFrameIOTools.getFrameTuple4DString(format, this);
    }
 }

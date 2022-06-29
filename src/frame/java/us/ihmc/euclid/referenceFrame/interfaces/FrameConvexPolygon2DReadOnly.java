@@ -11,6 +11,8 @@ import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -24,7 +26,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, ReferenceFrameHolder, FrameVertex2DSupplier
+public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, FrameVertex2DSupplier
 {
    /** {@inheritDoc} */
    @Override
@@ -1889,66 +1891,22 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
-    *
-    * @param other the other polygon to compare against this. Not modified.
-    * @return {@code true} if the two polygons are exactly equal component-wise and expressed in the
-    *         same frame reference frame, {@code false} otherwise.
-    * @see #equals(ConvexPolygon2DReadOnly)
-    */
-   default boolean equals(FrameConvexPolygon2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolygon2DReadOnly.super.equals(other);
-   }
-
-   /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
+    * Gets a representative {@code String} of this convex polygon 2D given a specific format to use.
     * <p>
-    * The method returns {@code false} if the two polygons have different size.
-    * </p>
-    * <p>
-    * The method returns {@code false} if the two polygons are expressed in different frames.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    * @see #epsilonEquals(ConvexPolygon2DReadOnly, double)
-    */
-   default boolean epsilonEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return ConvexPolygon2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
-    * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible shift
-    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
-    * counter-clockwise order, are considered geometrically equal even if they do not start with the
-    * same vertex.
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
+    * worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the convex polygon to compare to.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
-    *                                         the same reference frame.
-    * @see #geometricallyEquals(ConvexPolygon2DReadOnly, double)
     */
-   default boolean geometricallyEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
+      return EuclidFrameIOTools.getFrameConvexPolygon2DString(format, this);
    }
 }

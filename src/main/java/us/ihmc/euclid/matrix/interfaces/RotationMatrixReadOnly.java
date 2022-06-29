@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -441,5 +442,23 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
          Matrix3DTools.multiplyTransposeLeft(this, matrixOriginal, matrixTransformed);
          Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
       }
+   }
+
+   /**
+    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
+    * </p>
+    *
+    * @param geometry  the object to compare against this.
+    * @param epsilon the maximum angle for the two orientations to be considered equal.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      return Orientation3DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

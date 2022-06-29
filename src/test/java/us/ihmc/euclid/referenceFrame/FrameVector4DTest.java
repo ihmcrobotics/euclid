@@ -21,7 +21,6 @@ import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -77,7 +76,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, randomTuple.getX(), randomTuple.getY(), randomTuple.getZ(), randomTuple.getS());
          assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, frameVector4D, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -88,7 +87,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          randomTuple.get(array);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, array);
          assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, frameVector4D, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -97,7 +96,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, randomTuple);
          assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, frameVector4D, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -106,8 +105,8 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          FrameVector4D randomTuple = EuclidFrameRandomTools.nextFrameVector4D(random, randomFrame);
          FrameVector4D frameVector4D = new FrameVector4D(randomTuple);
          assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
-         EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
-         EuclidFrameTestTools.assertFrameTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, frameVector4D, EPSILON);
+         EuclidCoreTestTools.assertEquals(randomTuple, frameVector4D, EPSILON);
       }
    }
 
@@ -145,7 +144,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
 
          actual.changeFrame(anotherFrame);
          assertTrue(anotherFrame == actual.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try

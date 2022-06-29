@@ -62,7 +62,7 @@ public class FrameEllipsoid3DTest
    public void testConsistencyWithEllipsoid3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, ellipsoid) -> new FrameEllipsoid3D(frame, (Ellipsoid3D) ellipsoid),
                                                                   EuclidShapeRandomTools::nextEllipsoid3D,

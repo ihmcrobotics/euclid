@@ -52,7 +52,7 @@ public class FrameRotationMatrixTest
    @Test
    public void testConsistencyWithRotationMatrix()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameRotationMatrix(frame, (RotationMatrix) box),
                                                                   EuclidCoreRandomTools::nextRotationMatrix,

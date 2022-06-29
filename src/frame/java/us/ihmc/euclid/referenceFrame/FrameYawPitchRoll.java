@@ -1,12 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
@@ -38,7 +36,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObject<FrameYawPitchRoll>
+public class FrameYawPitchRoll implements FrameYawPitchRollBasics
 {
    /** The reference frame is which this yaw-pitch-roll is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -135,12 +133,6 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    }
 
    @Override
-   public void set(FrameYawPitchRoll other)
-   {
-      FrameYawPitchRollBasics.super.set(other);
-   }
-
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -216,49 +208,6 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    }
 
    /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    * <p>
-    * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameYawPitchRoll other, double epsilon)
-   {
-      return FrameYawPitchRollBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two yaw-pitch-roll are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameYawPitchRoll other, double epsilon)
-   {
-      return FrameYawPitchRollBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
     * s)-worldFrame.
     *
@@ -267,7 +216,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameYawPitchRollString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -34,6 +34,20 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    @Override
    FixedFrameQuaternionBasics getOrientation();
 
+   /** {@inheritDoc} */
+   @Override
+   default FixedFramePoint3DBasics getTranslation()
+   {
+      return getPosition();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default FixedFrameQuaternionBasics getRotation()
+   {
+      return getOrientation();
+   }
+
    /**
     * Sets this pose 3D to represent the pose of the given {@code referenceFrame} expressed in
     * {@code this.getReferenceFrame()}.

@@ -17,6 +17,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
@@ -240,14 +241,14 @@ public class EuclidGeometryFactoriesTest
    public static void thoroughAssertionsBoundingBox2D(BoundingBox2DReadOnly expected, BoundingBox2DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidGeometryTestTools.assertBoundingBox2DEquals(expected, actual, EPSILON);
-      EuclidGeometryTestTools.assertBoundingBox2DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    public static void thoroughAssertionsBoundingBox3D(BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual)
    {
       assertObjectMethods(expected, actual);
-      EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
-      EuclidGeometryTestTools.assertBoundingBox3DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 }

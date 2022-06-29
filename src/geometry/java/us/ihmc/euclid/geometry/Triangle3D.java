@@ -2,8 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Triangle3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -13,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
+public class Triangle3D implements Triangle3DBasics
 {
    /** The first vertex defining this triangle. */
    private final Point3D a = new Point3D();
@@ -51,17 +50,6 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
       set(other);
    }
 
-   /**
-    * Sets this triangle to be the same as the given triangle.
-    *
-    * @param other the other triangle to copy. Not modified.
-    */
-   @Override
-   public void set(Triangle3D other)
-   {
-      Triangle3DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public Point3D getA()
@@ -81,38 +69,6 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    public Point3D getC()
    {
       return c;
-   }
-
-   /**
-    * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
-    * tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two triangles are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Triangle3D other, double epsilon)
-   {
-      return Triangle3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two triangle are geometrically
-    * similar.
-    * <p>
-    * Two triangles are geometrically similar 3 pairs geometrically equal vertices and the same
-    * ordering and winding, i.e. clockwise or counter-clockwise.
-    * </p>
-    *
-    * @param other   the triangle to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Triangle3D other, double epsilon)
-   {
-      return Triangle3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    @Override
@@ -145,6 +101,6 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getTriangle3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

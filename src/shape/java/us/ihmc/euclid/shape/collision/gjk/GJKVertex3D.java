@@ -132,6 +132,6 @@ public class GJKVertex3D implements Point3DReadOnly
    @Override
    public String toString()
    {
-      return "GJK Vertex 3D: " + EuclidCoreIOTools.getTuple3DString(this);
+      return "GJK Vertex 3D: " + toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

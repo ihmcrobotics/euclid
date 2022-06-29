@@ -36,7 +36,7 @@ public abstract class TransformTest<T extends Transform>
          pointActual.set(pointExpected);
          transform.transform(pointActual);
          transform.inverseTransform(pointActual);
-         EuclidCoreTestTools.assertTuple3DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test inverseTransform(PointReadOnly pointOriginal, PointBasics pointTransformed)
@@ -45,7 +45,7 @@ public abstract class TransformTest<T extends Transform>
 
          transform.inverseTransform(pointExpected, pointActual);
          transform.transform(pointActual);
-         EuclidCoreTestTools.assertTuple3DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test inverseTransform(VectorBasics vectorToTransform)
@@ -54,7 +54,7 @@ public abstract class TransformTest<T extends Transform>
          vectorActual.set(vectorExpected);
          transform.transform(vectorActual);
          transform.inverseTransform(vectorActual);
-         EuclidCoreTestTools.assertTuple3DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
 
       { // Test inverseTransform(VectorReadOnly vectorOriginal, VectorBasics vectorTransformed)
@@ -63,7 +63,7 @@ public abstract class TransformTest<T extends Transform>
 
          transform.inverseTransform(vectorExpected, vectorActual);
          transform.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple3DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
    }
 
@@ -79,7 +79,7 @@ public abstract class TransformTest<T extends Transform>
          pointActual.set(pointExpected);
          transfom2D.transform(pointActual);
          transfom2D.inverseTransform(pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test inverseTransform(Point2DReadOnly pointOriginal, Point2DBasics pointTransformed)
@@ -88,7 +88,7 @@ public abstract class TransformTest<T extends Transform>
 
          transfom2D.inverseTransform(pointExpected, pointActual);
          transfom2D.transform(pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test inverseTransform(VectorBasics vectorToTransform)
@@ -97,7 +97,7 @@ public abstract class TransformTest<T extends Transform>
          vectorActual.set(vectorExpected);
          transfom2D.transform(vectorActual);
          transfom2D.inverseTransform(vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
 
       { // Test inverseTransform(VectorReadOnly vectorOriginal, VectorBasics vectorTransformed)
@@ -106,7 +106,7 @@ public abstract class TransformTest<T extends Transform>
 
          transfom2D.inverseTransform(vectorExpected, vectorActual);
          transfom2D.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
    }
 
@@ -122,7 +122,7 @@ public abstract class TransformTest<T extends Transform>
          actual.set(expected);
          transform.transform(actual);
          transform.inverseTransform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       }
 
       { // Test inverseTransform(QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionTransformed)
@@ -130,7 +130,7 @@ public abstract class TransformTest<T extends Transform>
          Quaternion actual = new Quaternion();
          transform.inverseTransform(expected, actual);
          transform.transform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       }
    }
 
@@ -146,7 +146,7 @@ public abstract class TransformTest<T extends Transform>
          actual.set(expected);
          transform.transform(actual);
          transform.inverseTransform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       }
 
       { // Test inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -154,7 +154,7 @@ public abstract class TransformTest<T extends Transform>
          Vector4D actual = new Vector4D();
          transform.inverseTransform(expected, actual);
          transform.transform(actual);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       }
    }
 

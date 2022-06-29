@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 /**
@@ -20,7 +21,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
  * using methods requiring {@code FramePose3DReadOnly}.
  * </p>
  */
-public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
+public interface FramePose3DReadOnly extends Pose3DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -29,6 +30,20 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    /** {@inheritDoc} */
    @Override
    FrameQuaternionReadOnly getOrientation();
+
+   /** {@inheritDoc} */
+   @Override
+   default FramePoint3DReadOnly getTranslation()
+   {
+      return getPosition();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default FrameQuaternionReadOnly getRotation()
+   {
+      return getOrientation();
+   }
 
    /**
     * Gets the position and orientation.
@@ -199,59 +214,18 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Tests if this pose is equal to the given {@code other} to an {@code epsilon}.
+    * Gets a representative {@code String} of this pose 3D given a specific format to use.
     * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
-    * @param other   the other pose to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing..
-    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FramePose3DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 ), worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
     */
-   default boolean geometricallyEquals(FramePose3DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if this pose is exactly equal to {@code other}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other pose to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   default boolean equals(FramePose3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose3DReadOnly.super.equals(other);
+      return EuclidFrameIOTools.getFramePose3DString(format, this);
    }
 }

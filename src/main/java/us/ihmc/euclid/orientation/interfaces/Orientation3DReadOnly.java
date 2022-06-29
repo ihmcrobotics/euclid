@@ -2,6 +2,7 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -30,7 +31,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface Orientation3DReadOnly
+public interface Orientation3DReadOnly extends EuclidGeometry
 {
    /**
     * Default tolerance to use when testing if this orientation represents an orientation in the
@@ -788,21 +789,24 @@ public interface Orientation3DReadOnly
    }
 
    /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * {@inheritDoc}
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
     * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
     * </p>
-    *
-    * @param other   the other orientation to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two orientations to be considered equal.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
     */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Orientation3DReadOnly))
+         return false;
       if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
+      Orientation3DReadOnly other = (Orientation3DReadOnly) geometry;
       return distance(other, true) <= epsilon;
    }
 

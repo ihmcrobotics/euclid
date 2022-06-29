@@ -60,7 +60,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Override
    default boolean isZeroOrientation(double epsilon)
    {
-      return QuaternionTools.isNeutralQuaternion(this, epsilon);
+      return QuaternionTools.isNeutralQuaternion(this, epsilon, true);
    }
 
    /**
@@ -138,14 +138,14 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
 
    /**
     * Calculates and returns the angle of the rotation this quaternion represents.
-    * 
+    *
     * @deprecated Use {@link #angle()} instead.
     * @return the angle &in; [-2<i>pi</i>;2<i>pi</i>].
     */
    @Deprecated
    default double getAngle()
    {
-      return QuaternionTools.angle(this);
+      return angle();
    }
 
    /** {@inheritDoc} */

@@ -12,7 +12,12 @@ import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 {
@@ -176,6 +181,67 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getX() == matrix.get(2, 4));
          assertTrue(tuple.getY() == matrix.get(3, 4));
          assertTrue(tuple.getZ() == matrix.get(4, 4));
+      }
+   }
+
+   @Test
+   public void testNorm()
+   {
+      Random random = new Random(312310L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double norm1 = tuple1.norm();
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ());
+         double expectedNorm2 = scalar * norm1;
+         double actualNorm2 = tuple2.norm();
+         assertEquals(expectedNorm2, actualNorm2, 5.0 * getEpsilon());
+      }
+   }
+
+   @Test
+   public void testNormSquared()
+   {
+      Random random = new Random(312310L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double norm1 = tuple1.norm();
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ());
+         double expectedNorm2 = scalar * norm1;
+         double actualNorm2 = tuple2.normSquared();
+         assertEquals(expectedNorm2, EuclidCoreTools.squareRoot(actualNorm2), 5.0 * getEpsilon());
+      }
+   }
+
+   @Test
+   public void testDot()
+   {
+      Random random = new Random(5461L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T tuple1 = createRandomTuple(random);
+         double scalar = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         tuple1 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ());
+         Vector3DBasics axis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(tuple1), true);
+         double angle = EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI);
+         if (random.nextBoolean())
+            angle = -angle;
+
+         RotationMatrix rotationMatrix = new RotationMatrix(new AxisAngle(axis, angle));
+         Vector3D rotated_tuple1 = new Vector3D();
+         rotationMatrix.transform(tuple1, rotated_tuple1);
+         scalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0);
+         T tuple2 = createTuple(scalar * rotated_tuple1.getX(), scalar * rotated_tuple1.getY(), scalar * rotated_tuple1.getZ());
+
+         double expectedDot = tuple1.norm() * tuple2.norm() * EuclidCoreTools.cos(angle);
+         double actualDot = tuple1.dot(tuple2);
+         assertEquals(expectedDot, actualDot, 10.0 * getEpsilon());
       }
    }
 

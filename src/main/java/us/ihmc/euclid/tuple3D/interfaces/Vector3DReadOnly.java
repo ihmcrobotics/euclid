@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
-import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.TupleTools;
 
 /**
@@ -37,10 +37,12 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     * </p>
     *
     * @return the magnitude of this vector.
+    * @deprecated Use {@link Tuple3DReadOnly#norm()}.
     */
+   @Deprecated
    default double length()
    {
-      return EuclidCoreTools.squareRoot(lengthSquared());
+      return norm();
    }
 
    /**
@@ -55,31 +57,18 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     * </p>
     *
     * @return the square of the magnitude of this vector.
+    * @deprecated Use {@link Tuple3DReadOnly#normSquared()}.
     */
+   @Deprecated
    default double lengthSquared()
    {
-      return EuclidCoreTools.normSquared(getX(), getY(), getZ());
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:3</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    */
-   default double dot(Vector3DReadOnly other)
-   {
-      return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ();
+      return normSquared();
    }
 
    /**
     * Calculates and returns the angle in radians from this vector to {@code other}.
     * <p>
-    * The computed angle is in the range [0; <i>pi</i>].
+    * The computed angle is in the range [0, <i>pi</i>].
     * </p>
     *
     * @param other the other vector used to compute the angle. Not modified.
@@ -90,27 +79,17 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       return TupleTools.angle(this, other);
    }
 
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 3D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Vector3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vector3DReadOnly))
+         return false;
+      Vector3DReadOnly other = (Vector3DReadOnly) geometry;
+      return differenceNorm((Vector3DReadOnly) other) <= epsilon;
    }
 }

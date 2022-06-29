@@ -34,7 +34,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
-public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
+public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBodyTransform>
 {
    private static final double EPS = 1.0e-14;
 
@@ -60,13 +60,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test RigidBodyTransform(RigidBodyTransform other)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform(expected);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
       }
 
       { // Test RigidBodyTransform(QuaternionBasedTransform quaternionBasedTransform)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform(new QuaternionBasedTransform(expected));
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
          for (int row = 0; row < 4; row++)
          {
@@ -89,7 +89,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          }
 
          RigidBodyTransform actual = new RigidBodyTransform(denseMatrix);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
       }
 
       { // Test RigidBodyTransform(Matrix3DReadOnly rotationMatrix, TupleReadOnly translation)
@@ -110,7 +110,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          vector.set(0, 3, denseMatrix);
 
          RigidBodyTransform actual = new RigidBodyTransform(rotationMatrix, vector);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
       }
 
       { // Test RigidBodyTransform(QuaternionReadOnly quaternion, TupleReadOnly translation)
@@ -131,7 +131,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          vector.set(0, 3, denseMatrix);
 
          RigidBodyTransform actual = new RigidBodyTransform(new Quaternion(rotationMatrix), vector);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
 
       { // Test RigidBodyTransform(AxisAngleReadOnly axisAngle, TupleReadOnly translation)
@@ -152,7 +152,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          vector.set(0, 3, denseMatrix);
 
          RigidBodyTransform actual = new RigidBodyTransform(new AxisAngle(rotationMatrix), vector);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
 
       { // Test RigidBodyTransform(double[] transformArray)
@@ -167,7 +167,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          }
 
          RigidBodyTransform actual = new RigidBodyTransform(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
 
          for (int row = 0; row < 4; row++)
          {
@@ -195,159 +195,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double m23 = expected.getM23();
 
          RigidBodyTransform actual = new RigidBodyTransform(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
 
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
             {
                assertTrue(expected.getElement(row, column) == actual.getElement(row, column));
-            }
-         }
-      }
-   }
-
-   @Test
-   public void testResetRotation() throws Exception
-   {
-      Random random = new Random(42353L);
-      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      RigidBodyTransform transform = new RigidBodyTransform(original);
-
-      assertTrue(transform.hasRotation());
-      transform.setRotationToZero();
-      assertFalse(transform.hasRotation());
-
-      for (int row = 0; row < 4; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            if (column == 3)
-               assertTrue(transform.getElement(row, column) == original.getElement(row, column));
-            else if (row == column)
-               assertTrue(transform.getElement(row, column) == 1.0);
-            else
-               assertTrue(transform.getElement(row, column) == 0.0);
-         }
-      }
-   }
-
-   @Test
-   public void testResetTranslation() throws Exception
-   {
-      Random random = new Random(42353L);
-      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      RigidBodyTransform transform = new RigidBodyTransform(original);
-
-      assertTrue(transform.hasTranslation());
-      transform.setTranslationToZero();
-      assertFalse(transform.hasTranslation());
-
-      for (int row = 0; row < 4; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            if (column < 3)
-               assertTrue(transform.getElement(row, column) == original.getElement(row, column));
-            else if (row == column)
-               assertTrue(transform.getElement(row, column) == 1.0);
-            else
-               assertTrue(transform.getElement(row, column) == 0.0);
-         }
-      }
-   }
-
-   @Test
-   public void testNormalizeRotationPart() throws Exception
-   {
-      Random random = new Random(42353L);
-      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      RigidBodyTransform transform = new RigidBodyTransform(original);
-
-      double corruptionFactor = 0.1;
-      double m00 = original.getM00() + corruptionFactor * random.nextDouble();
-      double m01 = original.getM01() + corruptionFactor * random.nextDouble();
-      double m02 = original.getM02() + corruptionFactor * random.nextDouble();
-      double m10 = original.getM10() + corruptionFactor * random.nextDouble();
-      double m11 = original.getM11() + corruptionFactor * random.nextDouble();
-      double m12 = original.getM12() + corruptionFactor * random.nextDouble();
-      double m20 = original.getM20() + corruptionFactor * random.nextDouble();
-      double m21 = original.getM21() + corruptionFactor * random.nextDouble();
-      double m22 = original.getM22() + corruptionFactor * random.nextDouble();
-      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      transform.normalizeRotationPart();
-
-      Matrix3D rotation = new Matrix3D();
-      Vector3D vector1 = new Vector3D();
-      Vector3D vector2 = new Vector3D();
-
-      rotation.set(transform.getRotation());
-
-      // Test that each row & column vectors are unit-length
-      for (int j = 0; j < 3; j++)
-      {
-         rotation.getRow(j, vector1);
-         assertEquals(1.0, vector1.length(), EPS);
-
-         rotation.getColumn(j, vector1);
-         assertEquals(1.0, vector1.length(), EPS);
-      }
-
-      // Test that each pair of rows and each pair of columns are orthogonal
-      for (int j = 0; j < 3; j++)
-      {
-         rotation.getRow(j, vector1);
-         rotation.getRow((j + 1) % 3, vector2);
-         assertEquals(0.0, vector1.dot(vector2), EPS);
-
-         rotation.getColumn(j, vector1);
-         rotation.getColumn((j + 1) % 3, vector2);
-         assertEquals(0.0, vector1.dot(vector2), EPS);
-      }
-
-      corruptionFactor = 0.9e-12;
-      m00 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m01 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m02 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m10 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m11 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m12 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m20 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m21 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      m22 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      assertFalse(transform.hasRotation());
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int column = 0; column < 3; column++)
-         {
-            if (row == column)
-            {
-               assertEquals(1.0, transform.getElement(row, column), corruptionFactor);
-               assertFalse(1.0 == transform.getElement(row, column));
-            }
-            else
-            {
-               assertEquals(0.0, transform.getElement(row, column), corruptionFactor);
-               assertFalse(0.0 == transform.getElement(row, column));
-            }
-         }
-      }
-
-      transform.normalizeRotationPart();
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int column = 0; column < 3; column++)
-         {
-            if (row == column)
-            {
-               assertTrue(1.0 == transform.getElement(row, column));
-            }
-            else
-            {
-               assertTrue(0.0 == transform.getElement(row, column));
             }
          }
       }
@@ -397,7 +251,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double m22 = expected.getM22();
          double m23 = expected.getM23();
          actual.set(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -416,7 +270,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m22 = expected.getM22();
          m23 = expected.getM23();
          actual.set(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -435,7 +289,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m22 = expected.getM22();
          m23 = expected.getM23();
          actual.set(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -456,7 +310,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double m22 = expected.getM22();
          double m23 = expected.getM23();
          actual.setUnsafe(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -475,7 +329,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m22 = expected.getM22();
          m23 = expected.getM23();
          actual.setUnsafe(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -494,7 +348,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m22 = expected.getM22();
          m23 = expected.getM23();
          actual.setUnsafe(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -503,21 +357,21 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
          actual.set(expected);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
          expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          expected.setTranslationToZero();
          actual.set(expected);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
          expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          expected.setRotationToZero();
          actual.set(expected);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -526,7 +380,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
          actual.set(new QuaternionBasedTransform(expected));
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -543,7 +397,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             }
          }
          actual.set(denseMatrix);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -553,7 +407,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row, column, expected.getElement(row, column));
          actual.set(denseMatrix);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -563,7 +417,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row, column, expected.getElement(row, column));
          actual.set(denseMatrix);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -578,7 +432,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row + startRow, column + startColumn, expected.getElement(row, column));
          actual.set(denseMatrix, startRow, startColumn);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -588,7 +442,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row + startRow, column + startColumn, expected.getElement(row, column));
          actual.set(denseMatrix, startRow, startColumn);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -598,7 +452,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row + startRow, column + startColumn, expected.getElement(row, column));
          actual.set(denseMatrix, startRow, startColumn);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -611,7 +465,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -621,7 +475,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -631,7 +485,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -644,7 +498,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -654,7 +508,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -664,7 +518,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(row, column);
          actual.set(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -677,7 +531,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -687,7 +541,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -697,7 +551,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 0.0);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -710,7 +564,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -720,7 +574,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -730,7 +584,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
                transformArray[4 * row + column] = (float) expected.getElement(column, row);
          actual.setAsTranspose(transformArray);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, 1.0e-7);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, 1.0e-7);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -741,7 +595,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -749,7 +603,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = new Vector3D();
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -757,7 +611,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set((Matrix3DReadOnly) expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -768,7 +622,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -776,7 +630,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = new Vector3D();
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -784,7 +638,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedRotation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -795,7 +649,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
 
@@ -803,7 +657,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = new Vector3D();
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertTrue(actual.hasRotation());
          assertFalse(actual.hasTranslation());
 
@@ -811,7 +665,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
          actual.set(expectedOrientation, expectedTranslation);
          EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(expectedOrientation), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actual.getTranslation(), 0.0);
          assertFalse(actual.hasRotation());
          assertTrue(actual.hasTranslation());
       }
@@ -853,123 +707,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
-   public void testSetToZero() throws Exception
-   {
-      Random random = new Random(2342L);
-      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      assertTrue(transform.hasRotation());
-      assertTrue(transform.hasTranslation());
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            if (row == column)
-               assertFalse(transform.getElement(row, column) == 1.0);
-            else
-               assertFalse(transform.getElement(row, column) == 0.0);
-         }
-      }
-
-      transform.setToZero();
-      assertFalse(transform.hasRotation());
-      assertFalse(transform.hasTranslation());
-
-      for (int row = 0; row < 4; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            if (row == column)
-               assertTrue(transform.getElement(row, column) == 1.0);
-            else
-               assertTrue(transform.getElement(row, column) == 0.0);
-         }
-      }
-   }
-
-   @Test
-   public void testSetToNaN() throws Exception
-   {
-      Random random = new Random(2342L);
-      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      assertTrue(transform.hasRotation());
-      assertTrue(transform.hasTranslation());
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            assertFalse(Double.isNaN(transform.getElement(row, column)));
-         }
-      }
-
-      transform.setToNaN();
-      assertTrue(transform.hasRotation());
-      assertTrue(transform.hasTranslation());
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int column = 0; column < 4; column++)
-         {
-            assertTrue(Double.isNaN(transform.getElement(row, column)));
-         }
-      }
-
-      transform.setToZero();
-      assertFalse(transform.hasRotation());
-      assertFalse(transform.hasTranslation());
-      EuclidCoreTestTools.assertIdentity(transform.getRotation(), EPS);
-      EuclidCoreTestTools.assertTuple3DIsSetToZero(transform.getTranslation());
-
-      transform.setRotationToNaN();
-      assertTrue(transform.hasRotation());
-      assertFalse(transform.hasTranslation());
-      EuclidCoreTestTools.assertMatrix3DContainsOnlyNaN(transform.getRotation());
-      EuclidCoreTestTools.assertTuple3DIsSetToZero(transform.getTranslation());
-
-      transform.setToZero();
-      assertFalse(transform.hasRotation());
-      assertFalse(transform.hasTranslation());
-      transform.setTranslationToNaN();
-      assertFalse(transform.hasRotation());
-      assertTrue(transform.hasTranslation());
-      EuclidCoreTestTools.assertIdentity(transform.getRotation(), EPS);
-      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(transform.getTranslation());
-   }
-
-   @Test
-   public void testContainsNaN() throws Exception
-   {
-      RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertFalse(transform.containsNaN());
-      transform.setUnsafe(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0);
-      assertTrue(transform.containsNaN());
-      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN);
-      assertTrue(transform.containsNaN());
-   }
-
-   @Test
+   // Jae - ReadOnlyTest ? ? ?
    public void testIsMatrix2D() throws Exception
    {
       Random random = new Random(3242L);
@@ -990,6 +728,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   // Jae - ReadOnlyTest ? ? ?
    public void testCheckIfMatrix2D() throws Exception
    {
       Random random = new Random(3242L);
@@ -1019,6 +758,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetRotation() throws Exception
    {
       Random random = new Random(2342L);
@@ -1036,7 +779,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double m20 = expectedRotation.getM20();
          double m21 = expectedRotation.getM21();
          double m22 = expectedRotation.getM22();
-         actual.setRotation(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         actual.getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
 
@@ -1050,7 +793,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m20 = expectedRotation.getM20();
          m21 = expectedRotation.getM21();
          m22 = expectedRotation.getM22();
-         actual.setRotation(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         actual.getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertFalse(actual.hasRotation());
       }
@@ -1068,7 +811,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double m20 = expectedRotation.getM20();
          double m21 = expectedRotation.getM21();
          double m22 = expectedRotation.getM22();
-         actual.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         actual.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
 
@@ -1082,7 +825,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          m20 = expectedRotation.getM20();
          m21 = expectedRotation.getM21();
          m22 = expectedRotation.getM22();
-         actual.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         actual.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertFalse(actual.hasRotation());
       }
@@ -1091,13 +834,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AxisAngle axisAngle = new AxisAngle(expectedRotation);
-         actual.setRotation(axisAngle);
+         actual.getRotation().set(axisAngle);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), EPS);
          assertTrue(actual.hasRotation());
 
          axisAngle.setToZero();
          expectedRotation.set(axisAngle);
-         actual.setRotation(axisAngle);
+         actual.getRotation().set(axisAngle);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertFalse(actual.hasRotation());
       }
@@ -1107,13 +850,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          expectedRotation.get(denseMatrix);
-         actual.setRotation(denseMatrix);
+         actual.getRotation().set(denseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
 
          CommonOps_DDRM.setIdentity(denseMatrix);
          expectedRotation.set(denseMatrix);
-         actual.setRotation(denseMatrix);
+         actual.getRotation().set(denseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertFalse(actual.hasRotation());
       }
@@ -1122,13 +865,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Quaternion quaternion = new Quaternion(expectedRotation);
-         actual.setRotation(quaternion);
+         actual.getRotation().set(quaternion);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), EPS);
          assertTrue(actual.hasRotation());
 
          quaternion.setToZero();
          expectedRotation.set(quaternion);
-         actual.setRotation(quaternion);
+         actual.getRotation().set(quaternion);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertFalse(actual.hasRotation());
       }
@@ -1136,7 +879,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test setRotation(RotationMatrixReadOnly rotationMatrix)
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actual.setRotation(expectedRotation);
+         actual.getRotation().set(expectedRotation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
       }
@@ -1144,7 +887,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test setRotation(Matrix3DReadOnly rotationMatrix)
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actual.setRotation((Matrix3DReadOnly) expectedRotation);
+         actual.getRotation().set((Matrix3DReadOnly) expectedRotation);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
       }
@@ -1153,7 +896,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          Vector3D rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actual.setRotation(rotationVector);
+         actual.getRotation().setRotationVector(rotationVector);
          expectedRotation.setRotationVector(rotationVector);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
@@ -1161,6 +904,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testAppendTranslation() throws Exception
    {
       Random random = new Random(35454L);
@@ -1175,7 +922,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          double x = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
          double z = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
          double y = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
-         translationTransform.setTranslation(x, y, z);
+         translationTransform.getTranslation().set(x, y, z);
          expected.set(original);
          assertTrue(expected.hasTranslation());
          expected.multiply(translationTransform);
@@ -1186,7 +933,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          actual.appendTranslation(x, y, z);
          assertTrue(actual.hasTranslation());
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
          original.setToZero();
          actual.set(original);
@@ -1217,7 +964,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform translationTransform = new RigidBodyTransform();
          Tuple3DReadOnly translation = EuclidCoreRandomTools.nextPoint3D(random, 10.0, 10.0, 10.0);
-         translationTransform.setTranslation(translation);
+         translationTransform.getTranslation().set(translation);
          expected.set(original);
          assertTrue(expected.hasTranslation());
          expected.multiply(translationTransform);
@@ -1226,7 +973,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          actual.set(original);
          actual.appendTranslation(translation);
 
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
          original.setToZero();
          actual.set(original);
@@ -1252,388 +999,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
-   public void testAppendOrientation() throws Exception
-   {
-      Random random = new Random(46575);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
-
-         RigidBodyTransform expected = new RigidBodyTransform();
-         expected.set(original);
-         expected.multiply(orientationTransform);
-
-         RigidBodyTransform actual = new RigidBodyTransform();
-         actual.set(original);
-         actual.appendOrientation(orientation);
-
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testAppendYawPitchRoll() throws Exception
-   {
-      Random random = new Random(35454L);
-
-      RigidBodyTransform expected = new RigidBodyTransform();
-      RigidBodyTransform actual = new RigidBodyTransform();
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // appendYawRotation(double yaw)
-         RotationMatrix expectedRotation = new RotationMatrix();
-
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         expectedRotation.set(original.getRotation());
-         expectedRotation.appendYawRotation(yaw);
-         expected.set(expectedRotation, original.getTranslation());
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.appendYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         yaw = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-
-         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationYaw(-yaw);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendYawRotation(yaw);
-         assertFalse(actual.hasRotation());
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // appendPitchRotation(double pitch)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RotationMatrix expectedRotation = new RotationMatrix(original.getRotation());
-         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         expectedRotation.appendPitchRotation(pitch);
-         expected.set(expectedRotation, original.getTranslation());
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.appendPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         pitch = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-
-         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationPitch(-pitch);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendPitchRotation(pitch);
-         assertFalse(actual.hasRotation());
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // appendRollRotation(double roll)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RotationMatrix expectedRotation = new RotationMatrix(original.getRotation());
-         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         expectedRotation.appendRollRotation(roll);
-         expected.set(expectedRotation, original.getTranslation());
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendRollRotation(roll);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.appendRollRotation(roll);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         roll = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendRollRotation(roll);
-         assertTrue(actual.hasRotation());
-
-         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationRoll(-roll);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.appendRollRotation(roll);
-         assertFalse(actual.hasRotation());
-      }
-   }
-
-   @Test
-   public void testPrependTranslation() throws Exception
-   {
-      Random random = new Random(35454L);
-
-      RigidBodyTransform expected = new RigidBodyTransform();
-      RigidBodyTransform actual = new RigidBodyTransform();
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // prependTranslation(double x, double y, double z)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform translationTransform = new RigidBodyTransform();
-         double x = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
-         double z = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
-         double y = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
-         translationTransform.setTranslation(x, y, z);
-         expected.set(original);
-         assertTrue(expected.hasTranslation());
-         expected.preMultiply(translationTransform);
-         assertTrue(expected.hasTranslation());
-
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(x, y, z);
-         assertTrue(actual.hasTranslation());
-
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         actual.set(original);
-         assertFalse(actual.hasTranslation());
-         actual.prependTranslation(x, y, z);
-         assertTrue(actual.hasTranslation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(0.0, 0.0, 0.0);
-         assertTrue(actual.hasTranslation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Vector3D negateTranslation = new Vector3D(original.getTranslation());
-         negateTranslation.negate();
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(negateTranslation.getX(), negateTranslation.getY(), negateTranslation.getZ());
-         assertFalse(actual.hasTranslation());
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // prependTranslation(Tuple3DReadOnly translation)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform translationTransform = new RigidBodyTransform();
-         Tuple3DReadOnly translation = EuclidCoreRandomTools.nextPoint3D(random, 10.0, 10.0, 10.0);
-         translationTransform.setTranslation(translation);
-         expected.set(original);
-         assertTrue(expected.hasTranslation());
-         expected.preMultiply(translationTransform);
-         assertTrue(expected.hasTranslation());
-
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(translation);
-         assertTrue(actual.hasTranslation());
-
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         actual.set(original);
-         assertFalse(actual.hasTranslation());
-         actual.prependTranslation(translation);
-         assertTrue(actual.hasTranslation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(0.0, 0.0, 0.0);
-         assertTrue(actual.hasTranslation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Vector3D negateTranslation = new Vector3D(original.getTranslation());
-         negateTranslation.negate();
-         actual.set(original);
-         assertTrue(actual.hasTranslation());
-         actual.prependTranslation(negateTranslation);
-         assertFalse(actual.hasTranslation());
-      }
-   }
-
-   @Test
-   public void testPrependOrientation() throws Exception
-   {
-      Random random = new Random(3456);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
-
-         RigidBodyTransform expected = new RigidBodyTransform();
-         expected.set(original);
-         expected.preMultiply(orientationTransform);
-
-         RigidBodyTransform actual = new RigidBodyTransform();
-         actual.set(original);
-         actual.prependOrientation(orientation);
-
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPrependYawPitchRoll() throws Exception
-   {
-      Random random = new Random(35454L);
-
-      RigidBodyTransform expected = new RigidBodyTransform();
-      RigidBodyTransform actual = new RigidBodyTransform();
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // prependYawRotation(double yaw)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform yawTransform = new RigidBodyTransform();
-         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         yawTransform.setRotationYaw(yaw);
-         expected.set(original);
-         assertTrue(expected.hasRotation());
-         expected.preMultiply(yawTransform);
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.prependYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         yaw = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependYawRotation(yaw);
-         assertTrue(actual.hasRotation());
-
-         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationYaw(-yaw);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependYawRotation(yaw);
-         assertFalse(actual.hasRotation());
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // prependPitchRotation(double pitch)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform pitchTransform = new RigidBodyTransform();
-         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         pitchTransform.setRotationPitch(pitch);
-         expected.set(original);
-         expected.preMultiply(pitchTransform);
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.prependPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         pitch = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependPitchRotation(pitch);
-         assertTrue(actual.hasRotation());
-
-         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationPitch(-pitch);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependPitchRotation(pitch);
-         assertFalse(actual.hasRotation());
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // prependRollRotation(double roll)
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform rollTransform = new RigidBodyTransform();
-         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rollTransform.setRotationRoll(roll);
-         expected.set(original);
-         assertTrue(expected.hasRotation());
-         expected.preMultiply(rollTransform);
-         assertTrue(expected.hasRotation());
-
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependRollRotation(roll);
-         assertTrue(actual.hasRotation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         original.setToZero();
-         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         actual.set(original);
-         assertFalse(actual.hasRotation());
-         actual.prependRollRotation(roll);
-         assertTrue(actual.hasRotation());
-
-         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         roll = 0.0;
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependRollRotation(roll);
-         assertTrue(actual.hasRotation());
-
-         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         original.setRotationRoll(-roll);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         actual.prependRollRotation(roll);
-         assertFalse(actual.hasRotation());
-      }
-   }
-
-   @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetRotationYawPitchRoll() throws Exception
    {
       Random random = new Random(234L);
@@ -1645,14 +1014,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedRotation.set(yawPitchRoll);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
-         actualTransform.getTranslation(expectedTranslation);
-         actualTransform.setRotationYawPitchRoll(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll());
+         expectedTranslation.set(actualTransform.getTranslation());
+         actualTransform.getRotation().setYawPitchRoll(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
-         actualTransform.setRotationYawPitchRoll(0.0, 0.0, 0.0);
+         actualTransform.getRotation().setYawPitchRoll(0.0, 0.0, 0.0);
          assertFalse(actualTransform.hasRotation());
       }
 
@@ -1686,14 +1055,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedRotation.setToYawOrientation(yawPitchRoll.getYaw());
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
-         actualTransform.getTranslation(expectedTranslation);
-         actualTransform.setRotationYaw(yawPitchRoll.getYaw());
+         expectedTranslation.set(actualTransform.getTranslation());
+         actualTransform.getRotation().setToYawOrientation(yawPitchRoll.getYaw());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
-         actualTransform.setRotationYaw(0.0);
+         actualTransform.getRotation().setToYawOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
       }
 
@@ -1701,14 +1070,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedRotation.setToPitchOrientation(yawPitchRoll.getPitch());
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
-         actualTransform.getTranslation(expectedTranslation);
-         actualTransform.setRotationPitch(yawPitchRoll.getPitch());
+         expectedTranslation.set(actualTransform.getTranslation());
+         actualTransform.getRotation().setToPitchOrientation(yawPitchRoll.getPitch());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
-         actualTransform.setRotationPitch(0.0);
+         actualTransform.getRotation().setToPitchOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
       }
 
@@ -1716,14 +1085,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          expectedRotation.setToRollOrientation(yawPitchRoll.getRoll());
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
-         actualTransform.getTranslation(expectedTranslation);
-         actualTransform.setRotationRoll(yawPitchRoll.getRoll());
+         expectedTranslation.set(actualTransform.getTranslation());
+         actualTransform.getRotation().setToRollOrientation(yawPitchRoll.getRoll());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
-         actualTransform.setRotationRoll(0.0);
+         actualTransform.getRotation().setToRollOrientation(0.0);
          assertFalse(actualTransform.hasRotation());
       }
 
@@ -1768,79 +1137,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
-   public void testSetRotationAndZeroTranslation() throws Exception
-   {
-      Random random = new Random(2342L);
-      RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
-
-      { // Test setRotationAndZeroTranslation(AxisAngleReadOnly axisAngle)
-         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         AxisAngle axisAngle = new AxisAngle(expectedRotation);
-         actualTransform.setRotationAndZeroTranslation(axisAngle);
-         assertTrue(actualTransform.hasRotation());
-         assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
-
-         actualTransform.setRotationAndZeroTranslation(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.0));
-         assertFalse(actualTransform.hasRotation());
-      }
-
-      { // Test setRotationAndZeroTranslation(DMatrix matrix)
-         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DMatrix denseMatrix = new DMatrixRMaj(3, 3);
-         expectedRotation.get(denseMatrix);
-         actualTransform.setRotationAndZeroTranslation(denseMatrix);
-         assertTrue(actualTransform.hasRotation());
-         assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
-
-         actualTransform.setRotationAndZeroTranslation(CommonOps_DDRM.identity(3));
-         assertFalse(actualTransform.hasRotation());
-      }
-
-      { // Test setRotationAndZeroTranslation(QuaternionReadOnly quaternion)
-         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Quaternion quaternion = new Quaternion(expectedRotation);
-         actualTransform.setRotationAndZeroTranslation(quaternion);
-         assertTrue(actualTransform.hasRotation());
-         assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), EPS);
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
-
-         actualTransform.setRotationAndZeroTranslation(new Quaternion());
-         assertFalse(actualTransform.hasRotation());
-      }
-
-      { // Test setRotationAndZeroTranslation(Matrix3DReadOnly rotationMatrix)
-         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.setRotationAndZeroTranslation(expectedRotation);
-         assertTrue(actualTransform.hasRotation());
-         assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
-
-         actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
-         assertFalse(actualTransform.hasRotation());
-      }
-
-      { // Test setRotation(Vector3DReadOnly rotationVector)
-         Vector3D rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
-         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.setRotationAndZeroTranslation(rotationVector);
-         expectedRotation.setRotationVector(rotationVector);
-         assertTrue(actualTransform.hasRotation());
-         assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
-
-         actualTransform.setRotation(new Vector3D());
-         assertFalse(actualTransform.hasRotation());
-      }
-   }
-
-   @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testRotationEuler() throws Exception
    {
       Random random = new Random(42353L);
@@ -1849,19 +1149,19 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       { // Test setRotationEuler(VectorReadOnly eulerAngles)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getTranslation(expectedTranslation);
+         expectedTranslation.set(actualTransform.getTranslation());
          Vector3D eulerAngles = EuclidCoreRandomTools.nextRotationVector(random);
          expectedRotation.setEuler(eulerAngles);
-         actualTransform.setRotationEuler(eulerAngles);
+         actualTransform.getRotation().setEuler(eulerAngles);
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setRotationEulerAndZeroTranslation(VectorReadOnly eulerAngles)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getTranslation(expectedTranslation);
+         expectedTranslation.set(actualTransform.getTranslation());
          Vector3D eulerAngles = EuclidCoreRandomTools.nextRotationVector(random);
          expectedRotation.setEuler(eulerAngles);
          actualTransform.setRotationEulerAndZeroTranslation(eulerAngles);
@@ -1873,20 +1173,24 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       { // Test setRotationEuler(double rotX, double rotY, double rotZ)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getTranslation(expectedTranslation);
+         expectedTranslation.set(actualTransform.getTranslation());
          double rotX = Math.PI * random.nextDouble();
          double rotY = Math.PI * random.nextDouble();
          double rotZ = Math.PI * random.nextDouble();
          expectedRotation.setEuler(rotX, rotY, rotZ);
-         actualTransform.setRotationEuler(rotX, rotY, rotZ);
+         actualTransform.getRotation().setEuler(rotX, rotY, rotZ);
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetTranslation() throws Exception
    {
       Random random = new Random(243L);
@@ -1895,54 +1199,54 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       { // Test individual setTranslation(X/Y/Z)(double)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getRotation(expectedRotation);
-         actualTransform.setTranslationX(expectedTranslation.getX());
-         actualTransform.setTranslationY(expectedTranslation.getY());
-         actualTransform.setTranslationZ(expectedTranslation.getZ());
+         expectedRotation.set(actualTransform.getRotation());
+         actualTransform.getTranslation().setX(expectedTranslation.getX());
+         actualTransform.getTranslation().setY(expectedTranslation.getY());
+         actualTransform.getTranslation().setZ(expectedTranslation.getZ());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
 
-         actualTransform.setTranslationX(0.0);
-         actualTransform.setTranslationY(0.0);
-         actualTransform.setTranslationZ(0.0);
+         actualTransform.getTranslation().setX(0.0);
+         actualTransform.getTranslation().setY(0.0);
+         actualTransform.getTranslation().setZ(0.0);
          assertFalse(actualTransform.hasTranslation());
 
-         actualTransform.setTranslationX(1.0);
+         actualTransform.getTranslation().setX(1.0);
          assertTrue(actualTransform.hasTranslation());
-         actualTransform.setTranslationX(0.0);
+         actualTransform.getTranslation().setX(0.0);
          assertFalse(actualTransform.hasTranslation());
 
-         actualTransform.setTranslationY(1.0);
+         actualTransform.getTranslation().setY(1.0);
          assertTrue(actualTransform.hasTranslation());
-         actualTransform.setTranslationY(0.0);
+         actualTransform.getTranslation().setY(0.0);
          assertFalse(actualTransform.hasTranslation());
 
-         actualTransform.setTranslationZ(1.0);
+         actualTransform.getTranslation().setZ(1.0);
          assertTrue(actualTransform.hasTranslation());
-         actualTransform.setTranslationZ(0.0);
+         actualTransform.getTranslation().setZ(0.0);
          assertFalse(actualTransform.hasTranslation());
       }
 
       { // Test setTranslation(TupleReadOnly translation)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getRotation(expectedRotation);
-         actualTransform.setTranslation(expectedTranslation);
+         expectedRotation.set(actualTransform.getRotation());
+         actualTransform.getTranslation().set(expectedTranslation);
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslation(double x, double y, double z)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getRotation(expectedRotation);
-         actualTransform.setTranslation(expectedTranslation.getX(), expectedTranslation.getY(), expectedTranslation.getZ());
+         expectedRotation.set(actualTransform.getRotation());
+         actualTransform.getTranslation().set(expectedTranslation.getX(), expectedTranslation.getY(), expectedTranslation.getZ());
          assertTrue(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslationAndIdentityRotation(TupleReadOnly translation)
@@ -1951,17 +1255,17 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertIdentity(actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
 
       { // Test setTranslationAndIdentityRotation(double x, double y, double z)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         actualTransform.getRotation(expectedRotation);
+         expectedRotation.set(actualTransform.getRotation());
          actualTransform.setTranslationAndIdentityRotation(expectedTranslation.getX(), expectedTranslation.getY(), expectedTranslation.getZ());
          assertFalse(actualTransform.hasRotation());
          assertTrue(actualTransform.hasTranslation());
          EuclidCoreTestTools.assertIdentity(actualTransform.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
+         EuclidCoreTestTools.assertEquals(expectedTranslation, actualTransform.getTranslation(), 0.0);
       }
    }
 
@@ -1973,7 +1277,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       { // Test getRotation(Matrix3DBasics rotationMatrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         transform.getRotation((CommonMatrix3DBasics) rotationMatrix);
+         ((CommonMatrix3DBasics) rotationMatrix).set(transform.getRotation());
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
                assertTrue(rotationMatrix.getElement(row, column) == transform.getElement(row, column));
@@ -1981,7 +1285,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       { // Test getRotation(RotationMatrix rotationMatrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         transform.getRotation(rotationMatrix);
+         rotationMatrix.set(transform.getRotation());
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
                assertTrue(rotationMatrix.getElement(row, column) == transform.getElement(row, column));
@@ -1990,7 +1294,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test getRotation(DMatrix matrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          DMatrix denseMatrix = new DMatrixRMaj(3, 3);
-         transform.getRotation(denseMatrix);
+         transform.getRotation().get(denseMatrix);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
                assertTrue(denseMatrix.get(row, column) == transform.getElement(row, column));
@@ -1999,7 +1303,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test getRotation(QuaternionBasics quaternionToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Quaternion quaternion = new Quaternion();
-         transform.getRotation(quaternion);
+         quaternion.set(transform.getRotation());
          rotationMatrix.set(quaternion);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -2009,7 +1313,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test getRotation(AxisAngleBasics axisAngleToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AxisAngle axisAngle = new AxisAngle();
-         transform.getRotation(axisAngle);
+         axisAngle.set(transform.getRotation());
          rotationMatrix.set(axisAngle);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -2020,7 +1324,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double[] expected = new double[9];
          double[] actual = new double[9];
-         transform.getRotation(actual);
+         transform.getRotation().get(actual);
          transform.getRotation().get(expected);
          assertTrue(Arrays.equals(expected, actual));
       }
@@ -2028,7 +1332,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test getRotation(Vector3DBasics rotationVectorToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3DBasics rotationVector = new Vector3D();
-         transform.getRotation(rotationVector);
+         transform.getRotation().getRotationVector(rotationVector);
          rotationMatrix.setRotationVector(rotationVector);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -2038,7 +1342,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test getRotationEuler(Vector3DBasics eulerAngles)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3DBasics eulerAngles = new Vector3D();
-         transform.getRotationEuler(eulerAngles);
+         transform.getRotation().getEuler(eulerAngles);
          rotationMatrix.setEuler(eulerAngles);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -2052,14 +1356,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(2345L);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       Vector3D translation = new Vector3D();
-      transform.getTranslation(translation);
+      translation.set(transform.getTranslation());
       for (int row = 0; row < 3; row++)
          assertTrue(translation.getElement(row) == transform.getElement(row, 3));
 
-      EuclidCoreTestTools.assertTuple3DEquals(translation, transform.getTranslation(), EPS);
+      EuclidCoreTestTools.assertEquals(translation, transform.getTranslation(), EPS);
 
       translation.set(transform.getTranslationX(), transform.getTranslationY(), transform.getTranslationZ());
-      EuclidCoreTestTools.assertTuple3DEquals(translation, transform.getTranslation(), EPS);
+      EuclidCoreTestTools.assertEquals(translation, transform.getTranslation(), EPS);
    }
 
    @Test
@@ -2111,8 +1415,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Quaternion actualQuaternion = new Quaternion();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expectedQuaternion);
-         transform.getTranslation(expectedTranslation);
+         expectedQuaternion.set(transform.getRotation());
+         expectedTranslation.set(transform.getTranslation());
          transform.get(actualQuaternion, actualTranslation);
          assertEquals(expectedQuaternion, actualQuaternion);
          assertEquals(expectedTranslation, actualTranslation);
@@ -2124,8 +1428,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          AxisAngle actual = new AxisAngle();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expected);
-         transform.getTranslation(expectedTranslation);
+         expected.set(transform.getRotation());
+         expectedTranslation.set(transform.getTranslation());
          transform.get(actual, actualTranslation);
          assertEquals(expected, actual);
          assertEquals(expectedTranslation, actualTranslation);
@@ -2137,8 +1441,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Vector3D actual = new Vector3D();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expected);
-         transform.getTranslation(expectedTranslation);
+         transform.getRotation().getRotationVector(expected);
+         expectedTranslation.set(transform.getTranslation());
          transform.get(actual, actualTranslation);
          assertEquals(expected, actual);
          assertEquals(expectedTranslation, actualTranslation);
@@ -2150,8 +1454,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          Matrix3D actualMatrix = new Matrix3D();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expectedMatrix);
-         transform.getTranslation(expectedTranslation);
+         expectedMatrix.set(transform.getRotation());
+         expectedTranslation.set(transform.getTranslation());
          transform.get(actualMatrix, actualTranslation);
          assertEquals(expectedMatrix, actualMatrix);
          assertEquals(expectedTranslation, actualTranslation);
@@ -2163,8 +1467,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RotationMatrix actualMatrix = new RotationMatrix();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expectedMatrix);
-         transform.getTranslation(expectedTranslation);
+         expectedMatrix.set(transform.getRotation());
+         expectedTranslation.set(transform.getTranslation());
          transform.get(actualMatrix, actualTranslation);
          assertEquals(expectedMatrix, actualMatrix);
          assertEquals(expectedTranslation, actualTranslation);
@@ -2172,6 +1476,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // Tests for CommonOps_DDRM.invert after inlining.
    public void testInvert() throws Exception
    {
       Random random = new Random(3453L);
@@ -2194,7 +1499,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RotationMatrix expectedRotationPart = new RotationMatrix(transform.getRotation());
          Vector3D expectedTranslationPart = new Vector3D(transform.getTranslation());
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationPart, transform.getRotation(), EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslationPart, transform.getTranslation(), EPS);
+         EuclidCoreTestTools.assertEquals(expectedTranslationPart, transform.getTranslation(), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2203,1250 +1508,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform actualTransform = new RigidBodyTransform();
          actualTransform.setAndInvert(expectedTransform);
          expectedTransform.invert();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expectedTransform, actualTransform, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiply() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against invert
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverse = new RigidBodyTransform(transform);
-         inverse.invert();
-
-         assertTrue(transform.hasRotation());
-         assertTrue(transform.hasTranslation());
-         transform.multiply(inverse);
-         assertFalse(transform.hasRotation());
-         assertFalse(transform.hasTranslation());
-
-         for (int row = 0; row < 4; row++)
-         {
-            for (int column = 0; column < 4; column++)
-            {
-               if (row == column)
-                  assertEquals(transform.getElement(row, column), 1.0, EPS);
-               else
-                  assertEquals(transform.getElement(row, column), 0.0, EPS);
-            }
-         }
-      }
-
-      // Test against EJML
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         checkMultiplyAgainstEJML(t1, t2);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2.setRotation(t1.getRotation());
-         t2.invertRotation();
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         Vector3D negateTranslation = new Vector3D(t1.getTranslation());
-         negateTranslation.negate();
-         t1.inverseTransform(negateTranslation);
-         t2.setTranslation(negateTranslation);
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-      }
-   }
-
-   private static void checkMultiplyAgainstEJML(RigidBodyTransform t1, RigidBodyTransform t2)
-   {
-      RigidBodyTransform t3 = new RigidBodyTransform(t1);
-      t3.multiply(t2);
-
-      DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
-      DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
-      DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
-      t1.get(m1);
-      t2.get(m2);
-      CommonOps_DDRM.mult(m1, m2, m3);
-
-      for (int row = 0; row < 4; row++)
-         for (int column = 0; column < 4; column++)
-            assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
-   }
-
-   @Test
-   public void testMultiplyWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.multiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiply(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         multipliedWith.set(actual);
-         multipliedWith.invert();
-         actual.multiply(multipliedWith);
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.multiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiply(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         multipliedWithRigidBody.set(actual);
-         multipliedWithRigidBody.invert();
-         actual.multiply(new AffineTransform(multipliedWithRigidBody));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertThis() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         expected.set(original);
-         expected.invert();
-         expected.multiply(multipliedWith);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertThis(new RigidBodyTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform expected = new RigidBodyTransform();
-         RigidBodyTransform actual = new RigidBodyTransform();
-
-         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(t1.getRotation(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), t1.getTranslation());
-         expected.setAndInvert(t1);
-         expected.multiply(t2);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertOther() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWith = new RigidBodyTransform(multipliedWith);
-         inverseOfMultipliedWith.invert();
-
-         expected.set(original);
-         expected.multiply(inverseOfMultipliedWith);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertOther(new RigidBodyTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform expected = new RigidBodyTransform();
-         RigidBodyTransform actual = new RigidBodyTransform();
-
-         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2Inverse = new RigidBodyTransform();
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(t1.getRotation(), EuclidCoreRandomTools.nextVector3D(random));
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         Vector3D negateTranslation = new Vector3D(t1.getTranslation());
-         t1.inverseTransform(negateTranslation);
-         t2.transform(negateTranslation);
-         t2.setTranslation(negateTranslation);
-         t2Inverse.setAndInvert(t2);
-         expected.set(t1);
-         expected.multiply(t2Inverse);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.invert();
-         expected.multiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertThis(new QuaternionBasedTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
-         inverseOfMultipliedWithRigidBody.invert();
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.multiply(inverseOfMultipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertOther(new QuaternionBasedTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertThisWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.invert();
-         expected.multiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertThis(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertThis(new AffineTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testMultiplyInvertOtherWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
-         inverseOfMultipliedWithRigidBody.invert();
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.multiply(inverseOfMultipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.multiplyInvertOther(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.multiplyInvertOther(new AffineTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiply() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against invert
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverse = new RigidBodyTransform(transform);
-         inverse.invert();
-
-         assertTrue(transform.hasRotation());
-         assertTrue(transform.hasTranslation());
-         transform.preMultiply(inverse);
-         assertFalse(transform.hasRotation());
-         assertFalse(transform.hasTranslation());
-
-         for (int row = 0; row < 4; row++)
-         {
-            for (int column = 0; column < 4; column++)
-            {
-               if (row == column)
-                  assertEquals(transform.getElement(row, column), 1.0, EPS);
-               else
-                  assertEquals(transform.getElement(row, column), 0.0, EPS);
-            }
-         }
-      }
-
-      // Test against EJML
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform t3 = new RigidBodyTransform(t2);
-         t3.preMultiply(t1);
-
-         DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
-         DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
-         DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
-         t1.get(m1);
-         t2.get(m2);
-         CommonOps_DDRM.mult(m1, m2, m3);
-
-         for (int row = 0; row < 4; row++)
-            for (int column = 0; column < 4; column++)
-               assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform expected = new RigidBodyTransform();
-         RigidBodyTransform actual = new RigidBodyTransform();
-
-         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t1.setRotation(t2.getRotation());
-         t1.invertRotation();
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         Vector3D negateTranslation = new Vector3D(t2.getTranslation());
-         negateTranslation.negate();
-         t2.inverseTransform(negateTranslation);
-         t1.setTranslation(negateTranslation);
-         expected.set(t2);
-         expected.multiply(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.preMultiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         multipliedWith.set(actual);
-         multipliedWith.invert();
-         actual.preMultiply(multipliedWith);
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.preMultiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiply(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         multipliedWithRigidBody.set(actual);
-         multipliedWithRigidBody.invert();
-         actual.preMultiply(new AffineTransform(multipliedWithRigidBody));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertThis() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         expected.set(original);
-         expected.invert();
-         expected.preMultiply(multipliedWith);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.preMultiplyInvertThis(new RigidBodyTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform expected = new RigidBodyTransform();
-         RigidBodyTransform actual = new RigidBodyTransform();
-
-         RigidBodyTransform t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t1.setRotation(t2.getRotation());
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         Vector3D negateTranslation = new Vector3D(t2.getTranslation());
-         t2.inverseTransform(negateTranslation);
-         t1.transform(negateTranslation);
-         t1.setTranslation(negateTranslation);
-         expected.set(t2);
-         expected.multiplyInvertOther(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertOther() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWith = new RigidBodyTransform(multipliedWith);
-         inverseOfMultipliedWith.invert();
-
-         expected.set(original);
-         expected.preMultiply(inverseOfMultipliedWith);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.preMultiplyInvertOther(new RigidBodyTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform expected = new RigidBodyTransform();
-         RigidBodyTransform actual = new RigidBodyTransform();
-
-         RigidBodyTransform t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t1.setRotation(t2.getRotation());
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t1.setTranslation(t2.getTranslation());
-         expected.set(t2);
-         expected.multiplyInvertThis(t1);
-         actual.set(t1);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertOther(t2);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.invert();
-         expected.preMultiply(multipliedWithRigidBody);
-         actual.set(original);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         actual.preMultiplyInvertThis(multipliedWith);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.preMultiplyInvertThis(new QuaternionBasedTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
-         inverseOfMultipliedWithRigidBody.invert();
-         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
-
-         expected.set(original);
-         expected.preMultiply(inverseOfMultipliedWithRigidBody);
-         actual.set(original);
-         actual.preMultiplyInvertOther(multipliedWith);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.preMultiplyInvertOther(new QuaternionBasedTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertThisWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.invert();
-         expected.preMultiply(multipliedWithRigidBody);
-         actual.set(original);
-         actual.preMultiplyInvertThis(multipliedWith);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-
-         actual.preMultiplyInvertThis(new AffineTransform(actual));
-         assertFalse(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-         expected.setToZero();
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expectedTransform, actualTransform, EPS);
       }
    }
 
@@ -3461,14 +1523,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform tf = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
       actual.interpolate(t0, tf, 0.0);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(t0, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(t0, actual, EPS);
       actual.interpolate(tf, 0.0);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(t0, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(t0, actual, EPS);
       actual.interpolate(tf, 1.0);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(tf, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(tf, actual, EPS);
 
       actual.interpolate(t0, tf, 1.0);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(tf, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(tf, actual, EPS);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -3481,37 +1543,11 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          expected.set(interpolatedRotation, interpolatedVector);
          actual.interpolate(t0, tf, alpha);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
          actual.set(t0);
          actual.interpolate(tf, alpha);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
-      }
-   }
-
-   @Test
-   public void testPreMultiplyInvertOtherWithAffineTransform() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
-         inverseOfMultipliedWithRigidBody.invert();
-         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
-
-         expected.set(original);
-         expected.preMultiply(inverseOfMultipliedWithRigidBody);
-         actual.set(original);
-         actual.preMultiplyInvertOther(multipliedWith);
-         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
 
@@ -3593,15 +1629,15 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Quaternion quaternionExpected = new Quaternion();
       Quaternion quaternionActual = new Quaternion();
 
-      transform.getRotation(quaternionExpected);
+      quaternionExpected.set(transform.getRotation());
       quaternionExpected.multiply(quaternionOriginal);
 
       transform.transform(quaternionOriginal, quaternionActual);
-      EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPS);
+      EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPS);
 
       quaternionActual.set(quaternionOriginal);
       transform.transform(quaternionActual);
-      EuclidCoreTestTools.assertQuaternionEquals(quaternionExpected, quaternionActual, EPS);
+      EuclidCoreTestTools.assertEquals(quaternionExpected, quaternionActual, EPS);
    }
 
    @Test
@@ -3622,11 +1658,11 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       vectorExpected.addZ(vectorExpected.getS() * transform.getM23());
 
       transform.transform(vectorOriginal, vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       vectorActual.set(vectorOriginal);
       transform.transform(vectorActual);
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
 
       // Try with EJML matrix
       DMatrixRMaj transformDenseMatrix = new DMatrixRMaj(4, 4);
@@ -3637,7 +1673,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       CommonOps_DDRM.mult(transformDenseMatrix, vectorOriginalDenseMatrix, vectorTransformedDenseMatrix);
       vectorExpected.set(vectorTransformedDenseMatrix);
 
-      EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
+      EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
    }
 
    @Test
@@ -3645,8 +1681,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    {
       Random random = new Random(4353L);
       RigidBodyTransform transfom2D = new RigidBodyTransform();
-      transfom2D.setRotationYaw(2.0 * Math.PI * random.nextDouble() - Math.PI);
-      transfom2D.setTranslation(EuclidCoreRandomTools.nextVector3D(random));
+      transfom2D.getRotation().setToYawOrientation(2.0 * Math.PI * random.nextDouble() - Math.PI);
+      transfom2D.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random));
 
       { // Test transform(Point2DBasics pointToTransform)
          Point2D pointOriginal = EuclidCoreRandomTools.nextPoint2D(random);
@@ -3659,7 +1695,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointToTransform, boolean checkIfTransformInXYPlane)
@@ -3673,7 +1709,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          pointActual.set(pointOriginal);
          transfom2D.transform(pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed)
@@ -3686,7 +1722,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Point2DBasics pointOriginal, Point2DBasics pointTransformed, boolean checkIfTransformInXYPlane)
@@ -3699,7 +1735,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          pointExpected.set(point.getX(), point.getY());
 
          transfom2D.transform(pointOriginal, pointActual, true);
-         EuclidCoreTestTools.assertTuple2DEquals(pointExpected, pointActual, EPS);
+         EuclidCoreTestTools.assertEquals(pointExpected, pointActual, EPS);
       }
 
       { // Test transform(Vector2DBasics vectorToTransform)
@@ -3713,7 +1749,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          vectorActual.set(vectorOriginal);
          transfom2D.transform(vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
 
       { // Test transform(Vector2DReadOnly vectorOriginal, Vector2DBasics vectorTransformed)
@@ -3726,7 +1762,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          vectorExpected.set(vector.getX(), vector.getY());
 
          transfom2D.transform(vectorOriginal, vectorActual);
-         EuclidCoreTestTools.assertTuple2DEquals(vectorExpected, vectorActual, EPS);
+         EuclidCoreTestTools.assertEquals(vectorExpected, vectorActual, EPS);
       }
    }
 
@@ -3741,7 +1777,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       {
          Matrix3D m = new Matrix3D();
-         transform.getRotation(m);
+         m.set(transform.getRotation());
          matrixExpected.set(matrixOriginal);
          matrixExpected.preMultiply(m);
          matrixExpected.multiplyTransposeOther(m);
@@ -3764,7 +1800,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RotationMatrix matrixExpected = new RotationMatrix();
       RotationMatrix matrixActual = new RotationMatrix();
 
-      transform.getRotation(matrixExpected);
+      matrixExpected.set(transform.getRotation());
       matrixExpected.multiply(matrixOriginal);
 
       matrixActual.set(matrixOriginal);
@@ -3787,21 +1823,21 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       transform.transform(original, actual);
 
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
       actual.set(original);
       transform.transform(actual);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
 
       RigidBodyTransform inverse = new RigidBodyTransform(transform);
       inverse.invert();
 
       inverse.transform(original, expected);
       transform.inverseTransform(original, actual);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       actual.set(original);
       transform.inverseTransform(actual);
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
    }
 
    @Test
@@ -3821,21 +1857,21 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       expected.set(expectedRigidBodyTransform);
       transform.transform(original, actual);
 
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
       actual.set(original);
       transform.transform(actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
       RigidBodyTransform inverse = new RigidBodyTransform(transform);
       inverse.invert();
 
       inverse.transform(original, expected);
       transform.inverseTransform(original, actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       actual.set(original);
       transform.inverseTransform(actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
    }
 
    @Test
@@ -3859,21 +1895,21 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       expected.appendScale(scale);
       transform.transform(original, actual);
 
-      EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
       actual.set(original);
       transform.transform(actual);
-      EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
 
       RigidBodyTransform inverse = new RigidBodyTransform(transform);
       inverse.invert();
 
       inverse.transform(original, expected);
       transform.inverseTransform(original, actual);
-      EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
       actual.set(original);
       transform.inverseTransform(actual);
-      EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPS);
    }
 
    @Test
@@ -4183,7 +2219,192 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          previousHashCode = newHashCode;
       }
    }
+   
+   @Test // moved to basic
+   public void testResetRotation() throws Exception
+   {
+      super.testResetRotation();
+      Random random = new Random(42353L);
+      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      
+      RigidBodyTransform transform = new RigidBodyTransform(original);
+      
+      assertTrue(transform.hasRotation());
+      transform.setRotationToZero();
+      assertFalse(transform.hasRotation());
 
+      for (int row = 0; row < 4; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            if (column == 3)
+               assertTrue(transform.getElement(row, column) == original.getElement(row, column));
+            else if (row == column)
+               assertTrue(transform.getElement(row, column) == 1.0);
+            else
+               assertTrue(transform.getElement(row, column) == 0.0);
+         }
+      }
+   }
+   
+   @Test // moved from basic
+   public void testResetTranslation() throws Exception
+   {
+      super.testResetTranslation();
+      Random random = new Random(42353L);
+      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      RigidBodyTransform transform = new RigidBodyTransform(original);
+      
+      assertTrue(transform.hasTranslation());
+      transform.setTranslationToZero();
+      assertFalse(transform.hasTranslation());
+
+      for (int row = 0; row < 4; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            if (column < 3)
+               assertTrue(transform.getElement(row, column) == original.getElement(row, column));
+            else if (row == column)
+               assertTrue(transform.getElement(row, column) == 1.0);
+            else
+               assertTrue(transform.getElement(row, column) == 0.0);
+         }
+      }
+   }
+   @Test
+   public void testNormalizeRotationPart() throws Exception
+   {
+      super.testNormalizeRotationPart();
+      Random random = new Random(42353L);
+      RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      RigidBodyTransform transform = new RigidBodyTransform(original);
+
+      double corruptionFactor = 0.1;
+      double m00 = original.getM00() + corruptionFactor * random.nextDouble();
+      double m01 = original.getM01() + corruptionFactor * random.nextDouble();
+      double m02 = original.getM02() + corruptionFactor * random.nextDouble();
+      double m10 = original.getM10() + corruptionFactor * random.nextDouble();
+      double m11 = original.getM11() + corruptionFactor * random.nextDouble();
+      double m12 = original.getM12() + corruptionFactor * random.nextDouble();
+      double m20 = original.getM20() + corruptionFactor * random.nextDouble();
+      double m21 = original.getM21() + corruptionFactor * random.nextDouble();
+      double m22 = original.getM22() + corruptionFactor * random.nextDouble();
+      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      transform.normalizeRotationPart();
+
+      Matrix3D rotation = new Matrix3D();
+      Vector3D vector1 = new Vector3D();
+      Vector3D vector2 = new Vector3D();
+
+      rotation.set(transform.getRotation());
+
+      // Test that each row & column vectors are unit-length
+      for (int j = 0; j < 3; j++)
+      {
+         rotation.getRow(j, vector1);
+         assertEquals(1.0, vector1.norm(), EPS);
+
+         rotation.getColumn(j, vector1);
+         assertEquals(1.0, vector1.norm(), EPS);
+      }
+
+      // Test that each pair of rows and each pair of columns are orthogonal
+      for (int j = 0; j < 3; j++)
+      {
+         rotation.getRow(j, vector1);
+         rotation.getRow((j + 1) % 3, vector2);
+         assertEquals(0.0, vector1.dot(vector2), EPS);
+
+         rotation.getColumn(j, vector1);
+         rotation.getColumn((j + 1) % 3, vector2);
+         assertEquals(0.0, vector1.dot(vector2), EPS);
+      }
+
+      corruptionFactor = 0.9e-12;
+      m00 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m01 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m02 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m10 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m11 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m12 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m20 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m21 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      m22 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
+      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      assertFalse(transform.hasRotation());
+
+      for (int row = 0; row < 3; row++)
+      {
+         for (int column = 0; column < 3; column++)
+         {
+            if (row == column)
+            {
+               assertEquals(1.0, transform.getElement(row, column), corruptionFactor);
+               assertFalse(1.0 == transform.getElement(row, column));
+            }
+            else
+            {
+               assertEquals(0.0, transform.getElement(row, column), corruptionFactor);
+               assertFalse(0.0 == transform.getElement(row, column));
+            }
+         }
+      }
+
+      transform.normalizeRotationPart();
+
+      for (int row = 0; row < 3; row++)
+      {
+         for (int column = 0; column < 3; column++)
+         {
+            if (row == column)
+            {
+               assertTrue(1.0 == transform.getElement(row, column));
+            }
+            else
+            {
+               assertTrue(0.0 == transform.getElement(row, column));
+            }
+         }
+      }
+   }
+   
+   @Test // moved to basic
+   public void testSetToZero() throws Exception
+   {
+      super.testSetToZero();
+      Random random = new Random(2342L);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      assertTrue(transform.hasRotation());
+      assertTrue(transform.hasTranslation());
+
+      for (int row = 0; row < 3; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            if (row == column)
+               assertFalse(transform.getElement(row, column) == 1.0);
+            else
+               assertFalse(transform.getElement(row, column) == 0.0);
+         }
+      }
+
+      transform.setToZero();
+      assertFalse(transform.hasRotation());
+      assertFalse(transform.hasTranslation());
+
+      for (int row = 0; row < 4; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            if (row == column)
+               assertTrue(transform.getElement(row, column) == 1.0);
+            else
+               assertTrue(transform.getElement(row, column) == 0.0);
+         }
+      }
+   }
+   
    @Test
    public void testToString() throws Exception
    {
@@ -4208,7 +2429,1709 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertEquals(rbtA.toString(), rbtB.toString());
       }
    }
+   
+   @Test // moved to basic
+   public void testSetToNaN() throws Exception
+   {
+      super.testSetToNaN();
+      Random random = new Random(2342L);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      assertTrue(transform.hasRotation());
+      assertTrue(transform.hasTranslation());
 
+      for (int row = 0; row < 3; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            assertFalse(Double.isNaN(transform.getElement(row, column)));
+         }
+      }
+
+      transform.setToNaN();
+      assertTrue(transform.hasRotation());
+      assertTrue(transform.hasTranslation());
+
+      for (int row = 0; row < 3; row++)
+      {
+         for (int column = 0; column < 4; column++)
+         {
+            assertTrue(Double.isNaN(transform.getElement(row, column)));
+         }
+      }
+
+      transform.setToZero();
+      assertFalse(transform.hasRotation());
+      assertFalse(transform.hasTranslation());
+      EuclidCoreTestTools.assertIdentity(transform.getRotation(), EPS);
+      EuclidCoreTestTools.assertTuple3DIsSetToZero(transform.getTranslation());
+
+      transform.setRotationToNaN();
+      assertTrue(transform.hasRotation());
+      assertFalse(transform.hasTranslation());
+      EuclidCoreTestTools.assertMatrix3DContainsOnlyNaN(transform.getRotation());
+      EuclidCoreTestTools.assertTuple3DIsSetToZero(transform.getTranslation());
+
+      transform.setToZero();
+      assertFalse(transform.hasRotation());
+      assertFalse(transform.hasTranslation());
+      transform.setTranslationToNaN();
+      assertFalse(transform.hasRotation());
+      assertTrue(transform.hasTranslation());
+      EuclidCoreTestTools.assertIdentity(transform.getRotation(), EPS);
+      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(transform.getTranslation());
+   }
+   @Test // moved to basic
+   public void testContainsNaN() throws Exception
+   {
+      super.testContainsNaN();
+      RigidBodyTransform transform = new RigidBodyTransform();
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertFalse(transform.containsNaN());
+      transform.setUnsafe(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0);
+      assertTrue(transform.containsNaN());
+      transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN);
+      assertTrue(transform.containsNaN());
+   }
+   
+   @Test // moved to basic
+   public void testAppendOrientation() throws Exception
+   {
+      super.testAppendOrientation();
+      Random random = new Random(46575);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
+
+         RigidBodyTransform expected = new RigidBodyTransform();
+         expected.set(original);
+         expected.multiply(orientationTransform);
+
+         RigidBodyTransform actual = new RigidBodyTransform();
+         actual.set(original);
+         actual.appendOrientation(orientation);
+
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test // moved to basic
+   public void testAppendYawPitchRoll() throws Exception
+   {
+      super.testAppendYawPitchRoll();
+      Random random = new Random(35454L);
+
+      RigidBodyTransform expected = new RigidBodyTransform();
+      RigidBodyTransform actual = new RigidBodyTransform();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // appendYawRotation(double yaw)
+         RotationMatrix expectedRotation = new RotationMatrix();
+
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         expectedRotation.set(original.getRotation());
+         expectedRotation.appendYawRotation(yaw);
+         expected.set(expectedRotation, original.getTranslation());
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.appendYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         yaw = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+
+         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToYawOrientation(-yaw);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendYawRotation(yaw);
+         assertFalse(actual.hasRotation());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // appendPitchRotation(double pitch)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RotationMatrix expectedRotation = new RotationMatrix(original.getRotation());
+         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         expectedRotation.appendPitchRotation(pitch);
+         expected.set(expectedRotation, original.getTranslation());
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.appendPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         pitch = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+
+         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToPitchOrientation(-pitch);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendPitchRotation(pitch);
+         assertFalse(actual.hasRotation());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // appendRollRotation(double roll)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RotationMatrix expectedRotation = new RotationMatrix(original.getRotation());
+         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         expectedRotation.appendRollRotation(roll);
+         expected.set(expectedRotation, original.getTranslation());
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendRollRotation(roll);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.appendRollRotation(roll);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         roll = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendRollRotation(roll);
+         assertTrue(actual.hasRotation());
+
+         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToRollOrientation(-roll);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.appendRollRotation(roll);
+         assertFalse(actual.hasRotation());
+      }
+   }
+   
+   @Test // moved to basic
+   public void testPrependTranslation() throws Exception
+   {
+      super.testPrependTranslation();
+      
+      Random random = new Random(35454L);
+
+      RigidBodyTransform expected = new RigidBodyTransform();
+      RigidBodyTransform actual = new RigidBodyTransform();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // prependTranslation(double x, double y, double z)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform translationTransform = new RigidBodyTransform();
+         double x = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
+         double z = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
+         double y = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
+         translationTransform.getTranslation().set(x, y, z);
+         expected.set(original);
+         assertTrue(expected.hasTranslation());
+         expected.preMultiply(translationTransform);
+         assertTrue(expected.hasTranslation());
+
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(x, y, z);
+         assertTrue(actual.hasTranslation());
+
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         actual.set(original);
+         assertFalse(actual.hasTranslation());
+         actual.prependTranslation(x, y, z);
+         assertTrue(actual.hasTranslation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(0.0, 0.0, 0.0);
+         assertTrue(actual.hasTranslation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Vector3D negateTranslation = new Vector3D(original.getTranslation());
+         negateTranslation.negate();
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(negateTranslation.getX(), negateTranslation.getY(), negateTranslation.getZ());
+         assertFalse(actual.hasTranslation());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // prependTranslation(Tuple3DReadOnly translation)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform translationTransform = new RigidBodyTransform();
+         Tuple3DReadOnly translation = EuclidCoreRandomTools.nextPoint3D(random, 10.0, 10.0, 10.0);
+         translationTransform.getTranslation().set(translation);
+         expected.set(original);
+         assertTrue(expected.hasTranslation());
+         expected.preMultiply(translationTransform);
+         assertTrue(expected.hasTranslation());
+
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(translation);
+         assertTrue(actual.hasTranslation());
+
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         actual.set(original);
+         assertFalse(actual.hasTranslation());
+         actual.prependTranslation(translation);
+         assertTrue(actual.hasTranslation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(0.0, 0.0, 0.0);
+         assertTrue(actual.hasTranslation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Vector3D negateTranslation = new Vector3D(original.getTranslation());
+         negateTranslation.negate();
+         actual.set(original);
+         assertTrue(actual.hasTranslation());
+         actual.prependTranslation(negateTranslation);
+         assertFalse(actual.hasTranslation());
+      }
+   }
+   
+   @Test // moved to basic
+   public void testPrependOrientation() throws Exception
+   {
+      super.testPrependOrientation();
+      
+      Random random = new Random(3456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
+
+         RigidBodyTransform expected = new RigidBodyTransform();
+         expected.set(original);
+         expected.preMultiply(orientationTransform);
+
+         RigidBodyTransform actual = new RigidBodyTransform();
+         actual.set(original);
+         actual.prependOrientation(orientation);
+
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test // moved to basic
+   public void testPrependYawPitchRoll() throws Exception
+   {
+      super.testPrependYawPitchRoll();
+      
+      Random random = new Random(35454L);
+
+      RigidBodyTransform expected = new RigidBodyTransform();
+      RigidBodyTransform actual = new RigidBodyTransform();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // prependYawRotation(double yaw)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform yawTransform = new RigidBodyTransform();
+         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         yawTransform.getRotation().setToYawOrientation(yaw);
+         expected.set(original);
+         assertTrue(expected.hasRotation());
+         expected.preMultiply(yawTransform);
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.prependYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         yaw = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependYawRotation(yaw);
+         assertTrue(actual.hasRotation());
+
+         yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToYawOrientation(-yaw);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependYawRotation(yaw);
+         assertFalse(actual.hasRotation());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // prependPitchRotation(double pitch)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform pitchTransform = new RigidBodyTransform();
+         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         pitchTransform.getRotation().setToPitchOrientation(pitch);
+         expected.set(original);
+         expected.preMultiply(pitchTransform);
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.prependPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         pitch = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependPitchRotation(pitch);
+         assertTrue(actual.hasRotation());
+
+         pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToPitchOrientation(-pitch);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependPitchRotation(pitch);
+         assertFalse(actual.hasRotation());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // prependRollRotation(double roll)
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform rollTransform = new RigidBodyTransform();
+         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         rollTransform.getRotation().setToRollOrientation(roll);
+         expected.set(original);
+         assertTrue(expected.hasRotation());
+         expected.preMultiply(rollTransform);
+         assertTrue(expected.hasRotation());
+
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependRollRotation(roll);
+         assertTrue(actual.hasRotation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         original.setToZero();
+         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         actual.set(original);
+         assertFalse(actual.hasRotation());
+         actual.prependRollRotation(roll);
+         assertTrue(actual.hasRotation());
+
+         original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         roll = 0.0;
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependRollRotation(roll);
+         assertTrue(actual.hasRotation());
+
+         roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         original.getRotation().setToRollOrientation(-roll);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         actual.prependRollRotation(roll);
+         assertFalse(actual.hasRotation());
+      }
+   }
+   
+   @Test // moved to basic
+   public void testSetRotationAndZeroTranslation() throws Exception
+   {
+      super.testSetRotationAndZeroTranslation();
+      Random random = new Random(2342L);
+      RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+      { // Test setRotationAndZeroTranslation(AxisAngleReadOnly axisAngle)
+         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         AxisAngle axisAngle = new AxisAngle(expectedRotation);
+         actualTransform.setRotationAndZeroTranslation(axisAngle);
+         assertTrue(actualTransform.hasRotation());
+         assertFalse(actualTransform.hasTranslation());
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
+
+         actualTransform.setRotationAndZeroTranslation(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.0));
+         assertFalse(actualTransform.hasRotation());
+      }
+
+      { // Test setRotationAndZeroTranslation(DMatrix matrix)
+         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         DMatrix denseMatrix = new DMatrixRMaj(3, 3);
+         expectedRotation.get(denseMatrix);
+         actualTransform.setRotationAndZeroTranslation(denseMatrix);
+         assertTrue(actualTransform.hasRotation());
+         assertFalse(actualTransform.hasTranslation());
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
+
+         actualTransform.setRotationAndZeroTranslation(CommonOps_DDRM.identity(3));
+         assertFalse(actualTransform.hasRotation());
+      }
+
+      { // Test setRotationAndZeroTranslation(QuaternionReadOnly quaternion)
+         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Quaternion quaternion = new Quaternion(expectedRotation);
+         actualTransform.setRotationAndZeroTranslation(quaternion);
+         assertTrue(actualTransform.hasRotation());
+         assertFalse(actualTransform.hasTranslation());
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), EPS);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
+
+         actualTransform.setRotationAndZeroTranslation(new Quaternion());
+         assertFalse(actualTransform.hasRotation());
+      }
+
+      { // Test setRotationAndZeroTranslation(Matrix3DReadOnly rotationMatrix)
+         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         actualTransform.setRotationAndZeroTranslation(expectedRotation);
+         assertTrue(actualTransform.hasRotation());
+         assertFalse(actualTransform.hasTranslation());
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
+
+         actualTransform.setRotationAndZeroTranslation(new RotationMatrix());
+         assertFalse(actualTransform.hasRotation());
+      }
+
+      { // Test setRotation(Vector3DReadOnly rotationVector)
+         Vector3D rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
+         RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         actualTransform.setRotationAndZeroTranslation(rotationVector);
+         expectedRotation.setRotationVector(rotationVector);
+         assertTrue(actualTransform.hasRotation());
+         assertFalse(actualTransform.hasTranslation());
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
+
+         actualTransform.getRotation().setRotationVector(new Vector3D());
+         assertFalse(actualTransform.hasRotation());
+      }
+   }
+   
+   @Test // moved to basic
+   public void testMultiplyWithQuaternionBasedTransform() throws Exception
+   {
+      super.testMultiplyWithQuaternionBasedTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.multiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiply(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         multipliedWith.set(actual);
+         multipliedWith.invert();
+         actual.multiply(multipliedWith);
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test // moved to basic
+   public void testMultiplyWithAffineTransform() throws Exception
+   {
+      super.testMultiplyWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.multiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiply(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         multipliedWithRigidBody.set(actual);
+         multipliedWithRigidBody.invert();
+         actual.multiply(new AffineTransform(multipliedWithRigidBody));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test // moved to baisc
+   public void testMultiplyInvertThis() throws Exception
+   {
+      super.testMultiplyInvertThis();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.set(original);
+         expected.invert();
+         expected.multiply(multipliedWith);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertThis(new RigidBodyTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+
+      // Try different combinations with/without translation/rotation
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform expected = new RigidBodyTransform();
+         RigidBodyTransform actual = new RigidBodyTransform();
+
+         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(t1.getRotation(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), t1.getTranslation());
+         expected.setAndInvert(t1);
+         expected.multiply(t2);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test // moved to basic
+   public void testMultiplyInvertOther() throws Exception
+   {
+      super.testMultiplyInvertOther();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverseOfMultipliedWith = new RigidBodyTransform(multipliedWith);
+         inverseOfMultipliedWith.invert();
+
+         expected.set(original);
+         expected.multiply(inverseOfMultipliedWith);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertOther(new RigidBodyTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+
+      // Try different combinations with/without translation/rotation
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform expected = new RigidBodyTransform();
+         RigidBodyTransform actual = new RigidBodyTransform();
+
+         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2Inverse = new RigidBodyTransform();
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(t1.getRotation(), EuclidCoreRandomTools.nextVector3D(random));
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         Vector3D negateTranslation = new Vector3D(t1.getTranslation());
+         t1.inverseTransform(negateTranslation);
+         t2.transform(negateTranslation);
+         t2.getTranslation().set(negateTranslation);
+         t2Inverse.setAndInvert(t2);
+         expected.set(t1);
+         expected.multiply(t2Inverse);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
+   {
+      super.testMultiplyInvertThisWithQuaternionBasedTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.invert();
+         expected.multiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertThis(new QuaternionBasedTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
+   {
+      super.testMultiplyInvertOtherWithQuaternionBasedTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = createRandomTransform(random);
+         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
+         inverseOfMultipliedWithRigidBody.invert();
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.multiply(inverseOfMultipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertOther(new QuaternionBasedTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testMultiplyInvertThisWithAffineTransform() throws Exception
+   {
+      super.testMultiplyInvertThisWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.invert();
+         expected.multiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertThis(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertThis(new AffineTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testMultiplyInvertOtherWithAffineTransform() throws Exception
+   {
+      super.testMultiplyInvertOtherWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
+         inverseOfMultipliedWithRigidBody.invert();
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.multiply(inverseOfMultipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.multiplyInvertOther(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.multiplyInvertOther(new AffineTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   
+   @Test //moved to basic
+   public void testPreMultiply() throws Exception
+   {
+      super.testPreMultiply();
+      Random random = new Random(465416L);
+
+      // Test against invert
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverse = new RigidBodyTransform(transform);
+         inverse.invert();
+
+         assertTrue(transform.hasRotation());
+         assertTrue(transform.hasTranslation());
+         transform.preMultiply(inverse);
+         assertFalse(transform.hasRotation());
+         assertFalse(transform.hasTranslation());
+
+         for (int row = 0; row < 4; row++)
+         {
+            for (int column = 0; column < 4; column++)
+            {
+               if (row == column)
+                  assertEquals(transform.getElement(row, column), 1.0, EPS);
+               else
+                  assertEquals(transform.getElement(row, column), 0.0, EPS);
+            }
+         }
+      }
+
+      // Test against EJML
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform t3 = new RigidBodyTransform(t2);
+         t3.preMultiply(t1);
+
+         DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
+         DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
+         DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
+         t1.get(m1);
+         t2.get(m2);
+         CommonOps_DDRM.mult(m1, m2, m3);
+
+         for (int row = 0; row < 4; row++)
+            for (int column = 0; column < 4; column++)
+               assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
+      }
+
+      // Try different combinations with/without translation/rotation
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform expected = new RigidBodyTransform();
+         RigidBodyTransform actual = new RigidBodyTransform();
+
+         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t1.getRotation().set(t2.getRotation());
+         t1.invertRotation();
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         Vector3D negateTranslation = new Vector3D(t2.getTranslation());
+         negateTranslation.negate();
+         t2.inverseTransform(negateTranslation);
+         t1.getTranslation().set(negateTranslation);
+         expected.set(t2);
+         expected.multiply(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testPreMultiplyWithQuaternionBasedTransform() throws Exception
+   {
+      super.testPreMultiplyWithQuaternionBasedTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.preMultiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         multipliedWith.set(actual);
+         multipliedWith.invert();
+         actual.preMultiply(multipliedWith);
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testPreMultiplyWithAffineTransform() throws Exception
+   {
+      super.testPreMultiplyWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.preMultiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiply(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         multipliedWithRigidBody.set(actual);
+         multipliedWithRigidBody.invert();
+         actual.preMultiply(new AffineTransform(multipliedWithRigidBody));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testPreMultiplyInvertThis() throws Exception
+   {
+      super.testPreMultiplyInvertThis();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.set(original);
+         expected.invert();
+         expected.preMultiply(multipliedWith);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.preMultiplyInvertThis(new RigidBodyTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+
+      // Try different combinations with/without translation/rotation
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform expected = new RigidBodyTransform();
+         RigidBodyTransform actual = new RigidBodyTransform();
+
+         RigidBodyTransform t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t1.getRotation().set(t2.getRotation());
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         Vector3D negateTranslation = new Vector3D(t2.getTranslation());
+         t2.inverseTransform(negateTranslation);
+         t1.transform(negateTranslation);
+         t1.getTranslation().set(negateTranslation);
+         expected.set(t2);
+         expected.multiplyInvertOther(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved to basic
+   public void testPreMultiplyInvertOther() throws Exception
+   {
+      super.testPreMultiplyInvertOther();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverseOfMultipliedWith = new RigidBodyTransform(multipliedWith);
+         inverseOfMultipliedWith.invert();
+
+         expected.set(original);
+         expected.preMultiply(inverseOfMultipliedWith);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.preMultiplyInvertOther(new RigidBodyTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+
+      // Try different combinations with/without translation/rotation
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform expected = new RigidBodyTransform();
+         RigidBodyTransform actual = new RigidBodyTransform();
+
+         RigidBodyTransform t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         RigidBodyTransform t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t1.getRotation().set(t2.getRotation());
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertFalse(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
+         t1.getTranslation().set(t2.getTranslation());
+         expected.set(t2);
+         expected.multiplyInvertThis(t1);
+         actual.set(t1);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertOther(t2);
+         assertTrue(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   @Test //moved to basic
+   public void testPreMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
+   {
+      super.testPreMultiplyInvertThisWithQuaternionBasedTransform();
+      
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.invert();
+         expected.preMultiply(multipliedWithRigidBody);
+         actual.set(original);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         actual.preMultiplyInvertThis(multipliedWith);
+         assertTrue(actual.hasRotation());
+         assertTrue(actual.hasTranslation());
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.preMultiplyInvertThis(new QuaternionBasedTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+      }
+   }
+   
+   @Test //moved to basic
+   public void testPreMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
+   {
+      super.testPreMultiplyInvertOtherWithQuaternionBasedTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
+         inverseOfMultipliedWithRigidBody.invert();
+         QuaternionBasedTransform multipliedWith = new QuaternionBasedTransform(multipliedWithRigidBody);
+
+         expected.set(original);
+         expected.preMultiply(inverseOfMultipliedWithRigidBody);
+         actual.set(original);
+         actual.preMultiplyInvertOther(multipliedWith);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.preMultiplyInvertOther(new QuaternionBasedTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved from non-basic
+   public void testPreMultiplyInvertThisWithAffineTransform() throws Exception
+   {
+      super.testPreMultiplyInvertThisWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.invert();
+         expected.preMultiply(multipliedWithRigidBody);
+         actual.set(original);
+         actual.preMultiplyInvertThis(multipliedWith);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+
+         actual.preMultiplyInvertThis(new AffineTransform(actual));
+         assertFalse(actual.hasRotation());
+         assertFalse(actual.hasTranslation());
+         expected.setToZero();
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test //moved from non-basic
+   public void testPreMultiplyInvertOtherWithAffineTransform() throws Exception
+   {
+      super.testPreMultiplyInvertOtherWithAffineTransform();
+      Random random = new Random(465416L);
+
+      // Test against multiply(RigidBodyTransform)
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
+         inverseOfMultipliedWithRigidBody.invert();
+         AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+
+         expected.set(original);
+         expected.preMultiply(inverseOfMultipliedWithRigidBody);
+         actual.set(original);
+         actual.preMultiplyInvertOther(multipliedWith);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Override
+   public double getEpsilon()
+   {
+      return EPS;
+   }
+   
    @Override
    public RigidBodyTransform createRandomTransform(Random random)
    {
@@ -4216,11 +4139,29 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Override
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public RigidBodyTransform createRandomTransform2D(Random random)
    {
       RigidBodyTransform transfom2D = new RigidBodyTransform();
-      transfom2D.setRotationYaw(2.0 * Math.PI * random.nextDouble() - Math.PI);
-      transfom2D.setTranslation(EuclidCoreRandomTools.nextVector3D(random));
+      transfom2D.getRotation().setToYawOrientation(2.0 * Math.PI * random.nextDouble() - Math.PI);
+      transfom2D.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random));
       return transfom2D;
+   }
+
+   @Override
+   public RigidBodyTransform copy(RigidBodyTransform original)
+   {
+      return new RigidBodyTransform(original);
+   }
+
+   @Override
+   public RigidBodyTransform identity()
+   {
+      RigidBodyTransform identity = new RigidBodyTransform();
+      identity.setIdentity();
+      return identity;
    }
 }

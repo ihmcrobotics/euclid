@@ -42,7 +42,7 @@ public class EuclidShapeToolsTest
          Point3D actual = new Point3D();
          EuclidShapeTools.supportingVertexCapsule3D(supportDirection, capsule3DPosition, capsule3DAxis, capsule3DLength, capsule3DRadius, actual);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -67,7 +67,7 @@ public class EuclidShapeToolsTest
          Point3D actual = new Point3D();
          EuclidShapeTools.supportingVertexCylinder3D(supportDirection, cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, actual);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -94,7 +94,7 @@ public class EuclidShapeToolsTest
          EuclidShapeTools.supportingVertexCircle3D(supportDirection, circle3DPosition, circle3DAxis, circle3DRadius, actual);
 
          assertEquals(circle3DRadius, actual.distance(circle3DPosition), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -131,7 +131,7 @@ public class EuclidShapeToolsTest
                                                           closestPoint,
                                                           normal);
 
-         EuclidCoreTestTools.assertTuple3DEquals(closestPoint, supportingVertex, EPSILON);
+         EuclidCoreTestTools.assertEquals(closestPoint, supportingVertex, EPSILON);
          // Assert that the normal is pointing towards the axis of the torus, indication that this is the inner part of the torus.
          Vector3D towardsAxis = new Vector3D();
          towardsAxis.sub(torus3DPosition, closestPoint);
@@ -201,8 +201,8 @@ public class EuclidShapeToolsTest
                                                                                         actualNormal);
 
          assertEquals(expectedSignedDistance, actualSignedDistance, EPSILON, "Iteration " + i);
-         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expectedClosestPointOnSurface, actualClosestPointOnSurface, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expectedNormal, actualNormal, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expectedClosestPointOnSurface, actualClosestPointOnSurface, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expectedNormal, actualNormal, EPSILON);
       }
    }
 
@@ -221,7 +221,7 @@ public class EuclidShapeToolsTest
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(ramp3D.getVertices()));
          Point3D expectedCentroid = convexPolytope3D.getCentroid();
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, actualCentroid, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedCentroid, actualCentroid, EPSILON);
       }
    }
 

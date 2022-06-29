@@ -4,8 +4,10 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -333,59 +335,18 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    FixedFrameSphere3DBasics copy();
 
    /**
-    * Tests separately and on a per component basis if the pose and the radius of this sphere and
-    * {@code other}'s pose and radius are equal to an {@code epsilon}.
+    * Gets a representative {@code String} of this frame sphere 3D given a specific format to use.
     * <p>
-    * If the two spheres have different frames, this method returns {@code false}.
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906] - worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the other sphere which pose and radius is to be compared against this radius pose
-    *                and radius. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two spheres are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameSphere3DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return Sphere3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
-    * to an {@code epsilon}.
-    *
-    * @param other   the sphere to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameSphere3DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Sphere3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this sphere 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two spheres have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other sphere 3D to compare against this. Not modified.
-    * @return {@code true} if the two spheres are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameSphere3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getPosition().equals(other.getPosition()) && getRadius() == other.getRadius();
+      return EuclidFrameShapeIOTools.getFrameSphere3DString(format, this);
    }
 }

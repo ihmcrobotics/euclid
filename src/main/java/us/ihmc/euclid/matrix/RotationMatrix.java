@@ -3,7 +3,6 @@ package us.ihmc.euclid.matrix;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -34,7 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class RotationMatrix implements RotationMatrixBasics, GeometryObject<RotationMatrix>
+public class RotationMatrix implements RotationMatrixBasics
 {
    /** The 1st row 1st column coefficient of this matrix. */
    private double m00;
@@ -302,17 +301,6 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
     * @param other the other rotation matrix to copy the values from. Not modified.
     */
    @Override
-   public void set(RotationMatrix other)
-   {
-      set((RotationMatrixReadOnly) other);
-   }
-
-   /**
-    * Sets this rotation matrix to equal the given one {@code other}.
-    *
-    * @param other the other rotation matrix to copy the values from. Not modified.
-    */
-   @Override
    public void set(RotationMatrixReadOnly other)
    {
       m00 = other.getM00();
@@ -423,42 +411,6 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
    }
 
    /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(RotationMatrix other, double epsilon)
-   {
-      return RotationMatrixBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(RotationMatrix other, double epsilon)
-   {
-      return RotationMatrixBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this matrix as follows:
     *
     * <pre>
@@ -472,7 +424,7 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrix3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

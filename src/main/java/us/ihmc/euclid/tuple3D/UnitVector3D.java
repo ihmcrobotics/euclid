@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -24,8 +23,11 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVector3D>
+public class UnitVector3D implements UnitVector3DBasics
 {
+   /** Tolerance used on this vector's components to identify if it can be normalized. */
+   public static final double ZERO_TEST_EPSILON = 1.0e-16;
+
    /** The dirty flag for this unit vector indicating whether it needs to be normalized or not. */
    private boolean dirty = true;
    /** The x-component. */
@@ -141,13 +143,6 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
 
    /** {@inheritDoc} */
    @Override
-   public void set(UnitVector3D other)
-   {
-      set((UnitVector3DReadOnly) other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void set(UnitVector3DReadOnly other)
    {
       x = other.getRawX();
@@ -211,42 +206,6 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
    }
 
    /**
-    * Tests on a per component basis if this unit vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other unit vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(UnitVector3D other, double epsilon)
-   {
-      return UnitVector3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other unit vector 3D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(UnitVector3D other, double epsilon)
-   {
-      return UnitVector3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -270,7 +229,7 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

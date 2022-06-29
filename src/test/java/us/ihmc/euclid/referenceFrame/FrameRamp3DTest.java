@@ -62,7 +62,7 @@ public class FrameRamp3DTest
    public void testConsistencyWithRamp3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, ramp) -> new FrameRamp3D(frame, (Ramp3D) ramp),
                                                                   EuclidShapeRandomTools::nextRamp3D,

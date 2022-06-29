@@ -44,7 +44,7 @@ public class QuaternionConversionTest
          expectedQuaternion.setUnsafe(qx, qy, qz, qs);
 
          QuaternionConversion.convertAxisAngleToQuaternion(ux, uy, uz, angle, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
@@ -57,7 +57,7 @@ public class QuaternionConversionTest
       double uz = axisAngle.getZ();
       QuaternionConversion.convertAxisAngleToQuaternion(ux, uy, uz, angle, expectedQuaternion);
       QuaternionConversion.convertAxisAngleToQuaternion(scale * ux, scale * uy, scale * uz, angle, actualQuaternion);
-      EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
       EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
 
       QuaternionConversion.convertAxisAngleToQuaternion(0.0, 0.0, 0.0, 0.0, actualQuaternion);
@@ -86,7 +86,7 @@ public class QuaternionConversionTest
          uz = axisAngle.getZ();
          QuaternionConversion.convertAxisAngleToQuaternion(ux, uy, uz, angle, expectedQuaternion);
          QuaternionConversion.convertAxisAngleToQuaternion(axisAngle, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
          // Assert that the parameter does not get modified
          assertTrue(axisAngle.equals(axisAngleCopy));
@@ -129,7 +129,7 @@ public class QuaternionConversionTest
          rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
 
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
@@ -160,7 +160,7 @@ public class QuaternionConversionTest
 
          rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
@@ -392,7 +392,7 @@ public class QuaternionConversionTest
                rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
                QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, expectedQuaternion);
                QuaternionConversion.convertYawPitchRollToQuaternion(yaw, pitch, roll, actualQuaternion);
-               EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
+               EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expectedQuaternion, actualQuaternion, EPSILON);
                EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
             }
          }
@@ -428,7 +428,7 @@ public class QuaternionConversionTest
          // The axisangle->quaternion conversion is safe here as it is tested separately in testAxisAngleToQuaternion().
          QuaternionConversion.convertAxisAngleToQuaternion(axisAngle, expectedQuaternion);
          QuaternionConversion.convertRotationVectorToQuaternion(rx, ry, rz, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
@@ -458,7 +458,7 @@ public class QuaternionConversionTest
          double rz = rotationVector.getZ();
          QuaternionConversion.convertRotationVectorToQuaternion(rx, ry, rz, expectedQuaternion);
          QuaternionConversion.convertRotationVectorToQuaternion(rotationVector, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
          // Assert that the parameter does not get modified
          assertTrue(rotationVector.equals(rotationVectorCopy));
@@ -475,7 +475,7 @@ public class QuaternionConversionTest
          // The axisangle->quaternion conversion is safe here as it is tested separately in testAxisAngleToQuaternion().
          QuaternionConversion.convertAxisAngleToQuaternion(axisAngle, expectedQuaternion);
          QuaternionConversion.convertRotationVectorToQuaternion(rx, ry, rz, actualQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedQuaternion, actualQuaternion, EPSILON);
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
    }

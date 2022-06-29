@@ -31,6 +31,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
 public class SingularValueDecomposition3DTest
 {
+   private static final boolean VERBOSE = false;
    private static final int ITERATIONS = 10000;
    private static final double EPSILON = 1.0e-11;
 
@@ -128,9 +129,10 @@ public class SingularValueDecomposition3DTest
 
       double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS / generators.size();
       double ejmlAverageMilllis = ejmlTotalTime / 1.0e6 / ITERATIONS / generators.size();
-      System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
-                                       Double.toString(ejmlAverageMilllis),
-                                       Double.toString(euclidAverageMilllis)));
+      if (VERBOSE)
+         System.out.println(String.format("Average time in millisec:\n\t-EJML:%s\n\t-Euclid:%s",
+                                          Double.toString(ejmlAverageMilllis),
+                                          Double.toString(euclidAverageMilllis)));
    }
 
    public static void performGeneralAssertions(String messagePrefix, Matrix3DReadOnly A, SVD3DOutput outputToTest, boolean sorted, double epsilon)
@@ -210,7 +212,8 @@ public class SingularValueDecomposition3DTest
       }
 
       double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS / generators.size();
-      System.out.println(String.format("Average time in millisec:\n\t-Euclid:%s", Double.toString(euclidAverageMilllis)));
+      if (VERBOSE)
+         System.out.println(String.format("Average time in millisec:\n\t-Euclid:%s", Double.toString(euclidAverageMilllis)));
    }
 
    static double columnDot(int col, Matrix3DReadOnly a, Matrix3DReadOnly b)
@@ -278,8 +281,8 @@ public class SingularValueDecomposition3DTest
          sortedB.getColumn(0, cols[0]);
          sortedB.getColumn(1, cols[1]);
          sortedB.getColumn(2, cols[2]);
-         assertTrue(cols[0].length() > cols[1].length());
-         assertTrue(cols[1].length() > cols[2].length());
+         assertTrue(cols[0].norm() > cols[1].norm());
+         assertTrue(cols[1].norm() > cols[2].norm());
       }
    }
 
@@ -430,8 +433,8 @@ public class SingularValueDecomposition3DTest
       assertEquals(A.getM00(), svd.getW().getX());
       assertEquals(A.getM11(), svd.getW().getY());
       assertEquals(A.getM22(), svd.getW().getZ());
-      EuclidCoreTestTools.assertQuaternionEquals(new Quaternion(), svd.getU(), EPSILON);
-      EuclidCoreTestTools.assertQuaternionEquals(new Quaternion(), svd.getV(), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Quaternion(), svd.getU(), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Quaternion(), svd.getV(), EPSILON);
    }
 
    static void applyJacobiGivensRotation(Axis3D rotationAxis, double ch, double sh, Matrix3DBasics S)

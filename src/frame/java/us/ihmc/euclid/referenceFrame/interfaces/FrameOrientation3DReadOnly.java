@@ -36,7 +36,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, ReferenceFrameHolder
+public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, EuclidFrameGeometry
 {
    /**
     * Calculates and returns the angular distance between this(self) and other orientation.
@@ -2213,23 +2213,5 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       checkReferenceFrameMatch(matrixOriginal);
       matrixTransformed.setReferenceFrame(getReferenceFrame());
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two frame orientations are
-    * geometrically similar, i.e. the magnitude of their difference is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the frame orientation to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two frame orientations represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default boolean geometricallyEquals(FrameOrientation3DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return geometricallyEquals((Orientation3DReadOnly) other, epsilon);
    }
 }

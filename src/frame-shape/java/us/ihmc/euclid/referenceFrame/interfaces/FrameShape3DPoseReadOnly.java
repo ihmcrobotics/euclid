@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 
 /**
@@ -15,7 +16,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, ReferenceFrameHolder
+public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1452,61 +1453,15 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, Reference
    }
 
    /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
+    * Gets the representative {@code String} of this frame shape 3D pose as follows:
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two shape poses are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)] - worldFrame
+    * </pre>
     */
-   default boolean epsilonEquals(FrameShape3DPoseReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return Shape3DPoseReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the shape pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameShape3DPoseReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Shape3DPoseReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other shape pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameShape3DPoseReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
+      return EuclidFrameShapeIOTools.getFrameShape3DPoseString(format, this);
    }
 }

@@ -5,7 +5,9 @@ import java.util.Collection;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Read-only interface for a vertex 3D that belongs to a convex polytope 3D expressed in given
@@ -79,17 +81,22 @@ public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DRea
    }
 
    /**
-    * Tests on a per component basis, if this vertex is exactly equal to {@code other}.
+    * Gets the representative {@code String} of this frame vertex 3D given a specific format to use.
     * <p>
-    * If the two vertices have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
-    * @param other the other vertex to compare against this. Not modified.
-    * @return {@code true} if the two vertices are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * <pre>
+    * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
+    *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
+    *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
+    *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
+    *         worldFrame
+    * </pre>
+    * </p>
     */
-   default boolean equals(FrameVertex3DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      return FramePoint3DReadOnly.super.equals(other);
+      return EuclidFrameShapeIOTools.getFrameVertex3DString(format, this);
    }
 }

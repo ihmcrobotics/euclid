@@ -770,11 +770,23 @@ public class Matrix3DFeatures
       }
       else
       {
-         if (m1.getM00() != m2.getM00() || m1.getM01() != m2.getM01() || m1.getM02() != m2.getM02())
+         if (!EuclidCoreTools.equals(m1.getM00(), m2.getM00()))
             return false;
-         if (m1.getM10() != m2.getM10() || m1.getM11() != m2.getM11() || m1.getM12() != m2.getM12())
+         if (!EuclidCoreTools.equals(m1.getM01(), m2.getM01()))
             return false;
-         if (m1.getM20() != m2.getM20() || m1.getM21() != m2.getM21() || m1.getM22() != m2.getM22())
+         if (!EuclidCoreTools.equals(m1.getM02(), m2.getM02()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM10(), m2.getM10()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM11(), m2.getM11()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM12(), m2.getM12()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM20(), m2.getM20()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM21(), m2.getM21()))
+            return false;
+         if (!EuclidCoreTools.equals(m1.getM22(), m2.getM22()))
             return false;
          return true;
       }

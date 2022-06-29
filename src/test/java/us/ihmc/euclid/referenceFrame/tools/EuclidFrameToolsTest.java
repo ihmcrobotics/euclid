@@ -130,7 +130,7 @@ public class EuclidFrameToolsTest
 
          if (size != 0)
             assertEquals(referenceFrame, actual.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -190,7 +190,7 @@ public class EuclidFrameToolsTest
 
          if (size != 0)
             assertEquals(referenceFrame, actual.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 }

@@ -1,7 +1,11 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -13,7 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * A pose 3D represents a position and orientation in 3 dimensions.
  * </p>
  */
-public interface Pose3DReadOnly
+public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeometry
 {
    /**
     * Gets the read-only reference of the position part of this pose 3D.
@@ -28,6 +32,36 @@ public interface Pose3DReadOnly
     * @return the read-only orientation part of this pose 3D.
     */
    QuaternionReadOnly getOrientation();
+
+   /**
+    * Gets the read-only reference of the position part of this pose 3D.
+    * <p>
+    * Same as {@link #getPosition()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
+    *
+    * @return the read-only position part of this pose 3D.
+    */
+   @Override
+   default Point3DReadOnly getTranslation()
+   {
+      return getPosition();
+   }
+
+   /**
+    * Gets the read-only reference to the orientation part of this pose 3D.
+    * <p>
+    * Same as {@link #getOrientation()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
+    *
+    * @return the read-only orientation part of this pose 3D.
+    */
+   @Override
+   default QuaternionReadOnly getRotation()
+   {
+      return getOrientation();
+   }
 
    /**
     * Gets the x-coordinate of the position part of this pose 3D.
@@ -109,6 +143,7 @@ public interface Pose3DReadOnly
     *
     * @return {@code true} if this pose contains a {@link Double#NaN}, {@code false} otherwise.
     */
+   @Override
    default boolean containsNaN()
    {
       return getOrientation().containsNaN() || getPosition().containsNaN();
@@ -209,47 +244,49 @@ public interface Pose3DReadOnly
       transformToPack.set(getOrientation(), getPosition());
    }
 
-   /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Pose3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Pose3DReadOnly))
+         return false;
+
+      Pose3DReadOnly other = (Pose3DReadOnly) geometry;
       return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Pose3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Pose3DReadOnly))
+         return false;
+      Pose3DReadOnly other = (Pose3DReadOnly) geometry;
+      return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
 
    /**
-    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
+    * Gets a representative {@code String} of this pose 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other the other pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
     */
-   default boolean equals(Pose3DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
+      return EuclidGeometryIOTools.getPose3DString(format, this);
    }
 }

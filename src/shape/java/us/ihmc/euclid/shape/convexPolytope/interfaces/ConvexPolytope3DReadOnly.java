@@ -7,9 +7,12 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -509,20 +512,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    Shape3DBasics copy();
 
-   /**
-    * Tests on a per component basis if this convex polytope and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean epsilonEquals(ConvexPolytope3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (other == null)
+      if (geometry == this)
+         return true;
+      if (geometry == null)
          return false;
-
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
+         return false;
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
       if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
 
@@ -535,20 +535,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
-    * similar.
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   default boolean geometricallyEquals(ConvexPolytope3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (other == null)
+      if (geometry == this)
+         return true;
+      if (geometry == null)
          return false;
-
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
+         return false;
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
       if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
 
@@ -571,20 +568,18 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return thisFacesStack.isEmpty();
    }
 
-   /**
-    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
-    *
-    * @param other the other convex polytope 3D to compare against this. Not modified.
-    * @return {@code true} if the two convex polytopes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(ConvexPolytope3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-
-      if (other == null)
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof ConvexPolytope3DReadOnly))
+         return false;
+
+      ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
 
       if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
@@ -596,5 +591,45 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       }
 
       return true;
+   }
+
+   /**
+    * Gets the representative {@code String} of this convex polytope 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
+    * Face list:
+    *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
+    *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
+    *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
+    *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
+    * Edge list:
+    *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.674,  0.482,  0.712 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
+    * Vertex list:
+    *    ( 0.674,  0.482,  0.712 )
+    *    ( 0.870,  0.251,  0.229 )
+    *    ( 0.204, -0.803, -0.461 )
+    *    (-0.283, -0.207, -0.595 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getConvexPolytope3DString(format, this);
    }
 }

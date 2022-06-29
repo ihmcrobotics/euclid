@@ -3,9 +3,8 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -15,7 +14,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 /**
  * A {@code Pose3D} represents a position and orientation in 3 dimensions.
  */
-public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
+public class Pose3D implements Pose3DBasics
 {
    /** The position part of this pose 3D. */
    private final Point3D position = new Point3D();
@@ -109,15 +108,16 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
       return orientation;
    }
 
-   /**
-    * Sets this pose 3D to the {@code other} pose 3D.
-    *
-    * @param other the other pose 3D. Not modified.
-    */
    @Override
-   public void set(Pose3D other)
+   public Quaternion getRotation()
    {
-      Pose3DBasics.super.set(other);
+      return orientation;
+   }
+
+   @Override
+   public Point3D getTranslation()
+   {
+      return position;
    }
 
    /**
@@ -137,36 +137,6 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Pose3D other, double epsilon)
-   {
-      return Pose3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Pose3D other, double epsilon)
-   {
-      return Pose3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this pose 3D as follows:<br>
     * Pose 3D: position = (x, y, z), orientation = (qx, qy, qz, qs)
     *
@@ -175,7 +145,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getPose3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
@@ -188,4 +158,5 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    {
       return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
+
 }

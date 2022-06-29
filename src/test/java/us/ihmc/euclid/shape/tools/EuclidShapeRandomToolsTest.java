@@ -93,7 +93,7 @@ class EuclidShapeRandomToolsTest
          Point3D shapeCentroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Shape3DBasics next = EuclidShapeRandomTools.nextConvexShape3D(random, shapeCentroid);
 
-         EuclidCoreTestTools.assertTuple3DEquals(shapeCentroid, next.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(shapeCentroid, next.getCentroid(), EPSILON);
       }
    }
 

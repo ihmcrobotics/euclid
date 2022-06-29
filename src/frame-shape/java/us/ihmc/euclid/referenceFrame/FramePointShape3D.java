@@ -1,11 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -17,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FramePointShape3D implements FramePointShape3DBasics, GeometryObject<FramePointShape3D>
+public class FramePointShape3D implements FramePointShape3DBasics
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -74,13 +72,6 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
    public FramePointShape3D(FrameTuple3DReadOnly tuple3DReadOnly)
    {
       setIncludingFrame(tuple3DReadOnly);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(FramePointShape3D other)
-   {
-      FramePointShape3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -147,39 +138,6 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two point shapes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other point shape to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two point shapes are equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FramePointShape3D other, double epsilon)
-   {
-      return FramePointShape3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two point shapes are geometrically
-    * similar.
-    *
-    * @param other   the point shape to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the point shapes represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FramePointShape3D other, double epsilon)
-   {
-      return FramePointShape3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -224,6 +182,6 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFramePointShape3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

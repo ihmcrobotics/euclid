@@ -9,7 +9,6 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.LineSegment1D;
-import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
@@ -17,6 +16,7 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
@@ -529,7 +529,7 @@ public class EuclidGeometryIOTools
     * @param plane3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPlane3DString(Plane3D plane3D)
+   public static String getPlane3DString(Plane3DReadOnly plane3D)
    {
       return getPlane3DString(DEFAULT_FORMAT, plane3D);
    }
@@ -548,7 +548,7 @@ public class EuclidGeometryIOTools
     * @param plane3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPlane3DString(String format, Plane3D plane3D)
+   public static String getPlane3DString(String format, Plane3DReadOnly plane3D)
    {
       if (plane3D == null)
          return "null";

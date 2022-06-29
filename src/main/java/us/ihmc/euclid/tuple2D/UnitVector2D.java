@@ -1,13 +1,13 @@
 package us.ihmc.euclid.tuple2D;
 
 import us.ihmc.euclid.Axis2D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -24,8 +24,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVector2D>
+public class UnitVector2D implements UnitVector2DBasics
 {
+   /** Tolerance used on this vector's components to identify if it can be normalized. */
+   public static final double ZERO_TEST_EPSILON = UnitVector3D.ZERO_TEST_EPSILON;
+
    /** The dirty flag for this unit vector indicating whether it needs to be normalized or not. */
    private boolean dirty = true;
    /** The x-component. */
@@ -135,13 +138,6 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
 
    /** {@inheritDoc} */
    @Override
-   public void set(UnitVector2D other)
-   {
-      set((UnitVector2DReadOnly) other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void set(UnitVector2DReadOnly other)
    {
       x = other.getRawX();
@@ -186,42 +182,6 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
    }
 
    /**
-    * Tests on a per component basis if this unit vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other unit vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(UnitVector2D other, double epsilon)
-   {
-      return UnitVector2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other unit vector 2D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(UnitVector2D other, double epsilon)
-   {
-      return UnitVector2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -245,7 +205,7 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple2DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

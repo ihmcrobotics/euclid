@@ -4,7 +4,6 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Axis3D} can be used to provide a simple and readable way to refer the three main axes of a
@@ -127,7 +126,7 @@ public enum Axis3D implements UnitVector3DReadOnly
    }
 
    @Override
-   public double dot(Vector3DReadOnly other)
+   public double dot(Tuple3DReadOnly other)
    {
       return extract(other);
    }

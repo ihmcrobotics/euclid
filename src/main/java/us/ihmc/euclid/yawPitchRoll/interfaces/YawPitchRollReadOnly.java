@@ -1,12 +1,14 @@
 package us.ihmc.euclid.yawPitchRoll.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -365,41 +367,63 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       YawPitchRollTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
 
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
-    * orientations.
-    *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
-    * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(YawPitchRollReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
-   }
-
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean epsilonEquals(YawPitchRollReadOnly other, double epsilon)
-   {
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+      if (!(geometry instanceof YawPitchRollReadOnly))
+         return false;
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
+      if (!EuclidCoreTools.equals(getYaw(), other.getYaw()))
+         return false;
+      if (!EuclidCoreTools.equals(getPitch(), other.getPitch()))
+         return false;
+      if (!EuclidCoreTools.equals(getRoll(), other.getRoll()))
          return false;
 
       return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof YawPitchRollReadOnly))
+         return false;
+
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Gets a representative {@code String} of this yaw-pitch-roll given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getYawPitchRollString(format, this);
    }
 }

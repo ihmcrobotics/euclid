@@ -3,6 +3,8 @@ package us.ihmc.euclid.tuple2D.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -31,7 +33,7 @@ import us.ihmc.euclid.tools.TupleTools;
  *
  * @author Sylvain Bertrand
  */
-public interface Tuple2DReadOnly
+public interface Tuple2DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the x-component of this tuple.
@@ -215,31 +217,129 @@ public interface Tuple2DReadOnly
    }
 
    /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
+    * Calculates and returns the norm of this tuple.
+    * <p>
+    * norm = &radic;(x<sup>2</sup> + y<sup>2</sup>)
+    * </p>
     *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
+    * @return the norm's value of this tuple.
     */
-   default boolean epsilonEquals(Tuple2DReadOnly other, double epsilon)
+   default double norm()
    {
-      return TupleTools.epsilonEquals(this, other, epsilon);
+      return EuclidCoreTools.squareRoot(normSquared());
    }
 
    /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
+    * Calculates and returns the square of the norm of this tuple.
+    * <p>
+    * norm<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup>
+    * </p>
+    * <p>
+    * This method is usually preferred over {@link #norm()} when calculation speed matters and
+    * knowledge of the actual norm does not, i.e. when comparing several tuples by theirs norm.
+    * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
+    * @return the norm's value of this tuple.
     */
-   default boolean equals(Tuple2DReadOnly other)
+   default double normSquared()
    {
-      if (other == this)
+      return dot(this);
+   }
+
+   /**
+    * Calculates the norm of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup>]
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNorm(Tuple2DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceNormSquared(other));
+   }
+
+   /**
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup>
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNormSquared(Tuple2DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      return EuclidCoreTools.normSquared(dx, dy);
+   }
+
+   /**
+    * Calculates and returns the value of the dot product of this tuple with {@code other}.
+    * <p>
+    * For instance, the dot product of two tuples p and q is defined as: <br>
+    * p . q = &sum;<sub>i=1:2</sub>(p<sub>i</sub> * q<sub>i</sub>)
+    * </p>
+    *
+    * @param other the other tuple used for the dot product. Not modified.
+    * @return the value of the dot product.
+    */
+   default double dot(Tuple2DReadOnly other)
+   {
+      return getX() * other.getX() + getY() * other.getY();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY();
+      if (!(geometry instanceof Tuple2DReadOnly))
+         return false;
+
+      Tuple2DReadOnly other = (Tuple2DReadOnly) geometry;
+      return TupleTools.epsilonEquals(this, other, epsilon);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Tuple2DReadOnly))
+         return false;
+      Tuple2DReadOnly other = (Tuple2DReadOnly) geometry;
+      if (!EuclidCoreTools.equals(getX(), other.getX()))
+         return false;
+      if (!EuclidCoreTools.equals(getY(), other.getY()))
+         return false;
+      return true;
+   }
+
+   /**
+    * Gets a representative {@code String} of this tuple 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * (-0.675, -0.102 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getTuple2DString(format, this);
    }
 }

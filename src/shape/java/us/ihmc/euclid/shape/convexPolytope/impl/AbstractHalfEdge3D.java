@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.convexPolytope.impl;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
@@ -321,6 +321,6 @@ public abstract class AbstractHalfEdge3D<Vertex extends AbstractVertex3D<Vertex,
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getHalfEdge3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

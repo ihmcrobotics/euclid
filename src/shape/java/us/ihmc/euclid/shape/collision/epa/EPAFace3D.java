@@ -12,7 +12,7 @@ import us.ihmc.euclid.shape.collision.epa.EPATools.BarycentricCoordinatesOutput;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -392,6 +392,6 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
    @Override
    public String toString()
    {
-      return "EPA " + EuclidShapeIOTools.getFace3DString(this);
+      return "EPA " + toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

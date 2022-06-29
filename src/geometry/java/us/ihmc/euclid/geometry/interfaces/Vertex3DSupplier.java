@@ -3,6 +3,9 @@ package us.ihmc.euclid.geometry.interfaces;
 import java.util.Arrays;
 import java.util.List;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -11,7 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Vertex3DSupplier
+public interface Vertex3DSupplier extends EuclidGeometry
 {
    /**
     * A supplier with no vertices.
@@ -29,6 +32,27 @@ public interface Vertex3DSupplier
       {
          return 0;
       }
+
+      @Override
+      public int hashCode()
+      {
+         return 1;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vertex3DSupplier)
+            return equals((Vertex3DSupplier) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    };
 
    /**
@@ -44,7 +68,7 @@ public interface Vertex3DSupplier
     *
     * @return the number of vertices.
     */
-   public int getNumberOfVertices();
+   int getNumberOfVertices();
 
    /**
     * Tests whether this supplier is empty or not.
@@ -56,18 +80,17 @@ public interface Vertex3DSupplier
       return getNumberOfVertices() == 0;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param other the other supplier to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean equals(Vertex3DSupplier other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null)
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Vertex3DSupplier))
+         return false;
+      Vertex3DSupplier other = (Vertex3DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -78,23 +101,78 @@ public interface Vertex3DSupplier
       return true;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean epsilonEquals(Vertex3DSupplier other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex3DSupplier))
+         return false;
+
+      Vertex3DSupplier other = (Vertex3DSupplier) geometry;
+
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
+
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
             return false;
       }
+
       return true;
+   }
+
+   /**
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * <p>
+    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
+    * {@link Point3DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
+    * </p>
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex3DSupplier))
+         return false;
+
+      Vertex3DSupplier other = (Vertex3DSupplier) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default String toString(String format)
+   {
+      StringBuilder sb = new StringBuilder("Vertex 3D Supplier: [");
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (i > 0)
+            sb.append(", ");
+         sb.append(getVertex(i).toString(format));
+      }
+
+      sb.append(']');
+
+      return sb.toString();
    }
 
    /**
@@ -102,7 +180,7 @@ public interface Vertex3DSupplier
     *
     * @return the supplier.
     */
-   public static Vertex3DSupplier emptyVertex3DSupplier()
+   static Vertex3DSupplier emptyVertex3DSupplier()
    {
       return EMPTY_SUPPLIER;
    }
@@ -113,7 +191,7 @@ public interface Vertex3DSupplier
     * @param vertices the array by which the supplier will be backed.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly... vertices)
+   static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly... vertices)
    {
       return asVertex3DSupplier(Arrays.asList(vertices));
    }
@@ -126,7 +204,7 @@ public interface Vertex3DSupplier
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly[] vertices, int numberOfVertices)
+   static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly[] vertices, int numberOfVertices)
    {
       return asVertex3DSupplier(Arrays.asList(vertices), numberOfVertices);
    }
@@ -140,7 +218,7 @@ public interface Vertex3DSupplier
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly[] vertices, int startIndex, int numberOfVertices)
+   static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly[] vertices, int startIndex, int numberOfVertices)
    {
       if (numberOfVertices == 0)
          return emptyVertex3DSupplier();
@@ -157,7 +235,7 @@ public interface Vertex3DSupplier
     * @param vertices the list by which the supplier will be backed.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices)
+   static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices)
    {
       return asVertex3DSupplier(vertices, vertices.size());
    }
@@ -170,7 +248,7 @@ public interface Vertex3DSupplier
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
    {
       return asVertex3DSupplier(vertices, 0, numberOfVertices);
    }
@@ -184,7 +262,7 @@ public interface Vertex3DSupplier
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
-   public static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices, int startIndex, int numberOfVertices)
+   static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices, int startIndex, int numberOfVertices)
    {
       if (numberOfVertices == 0)
          return emptyVertex3DSupplier();
@@ -207,9 +285,29 @@ public interface Vertex3DSupplier
          }
 
          @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Vertex3DSupplier)
+               return equals((Vertex3DSupplier) object);
+            else
+               return false;
+         }
+
+         @Override
          public String toString()
          {
-            return "Vertex 3D Supplier: " + vertices.subList(startIndex, startIndex + numberOfVertices).toString();
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

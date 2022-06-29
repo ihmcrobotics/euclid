@@ -74,6 +74,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -297,7 +298,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -350,7 +351,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -409,7 +410,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -468,7 +469,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -539,7 +540,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -622,7 +623,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -724,7 +725,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -789,7 +790,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -916,7 +917,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -997,7 +998,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1090,7 +1091,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1183,7 +1184,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1341,7 +1342,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1521,7 +1522,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1603,7 +1604,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameOrientation2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1690,7 +1691,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1860,7 +1861,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1931,7 +1932,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
 
@@ -2004,7 +2005,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
 

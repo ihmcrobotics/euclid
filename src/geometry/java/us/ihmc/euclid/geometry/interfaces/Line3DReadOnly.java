@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -14,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * direction.
  * </p>
  */
-public interface Line3DReadOnly
+public interface Line3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the point through which this line is going.
@@ -334,55 +337,78 @@ public interface Line3DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
+    * {@inheritDoc}
+    * <p>
+    * This method will return {@code false} if the two lines are physically the same but either the
+    * point or vector of each line is different. For instance, if {@code this.point == other.point} and
+    * {@code this.direction == - other.direction}, the two lines are physically the same but this
+    * method returns {@code false}.
+    * </p>
     */
-   default boolean epsilonEquals(Line3DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+      if (geometry == this)
+         return true;
+      if (geometry == null)
          return false;
-      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+      if (!(geometry instanceof Line3DReadOnly))
+         return false;
+      Line3DReadOnly other = (Line3DReadOnly) geometry;
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon) || !getDirection().epsilonEquals(other.getDirection(), epsilon))
          return false;
 
       return true;
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
+    * {@inheritDoc}
     * <p>
     * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
     * opposite direction.
     * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Line3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Line3DReadOnly))
+         return false;
+      Line3DReadOnly other = (Line3DReadOnly) geometry;
       return isCollinear(other, epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this line 3D is exactly equal to {@code other}.
-    *
-    * @param other the other line 3D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Line3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+      if (!(geometry instanceof Line3DReadOnly))
+         return false;
+      Line3DReadOnly other = (Line3DReadOnly) geometry;
+      return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+   }
+
+   /**
+    * Gets a representative {@code String} of this line 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line 3D: point = ( 0.174,  0.732, -0.222 ), direction = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLine3DString(format, this);
    }
 }

@@ -20,7 +20,6 @@ import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -63,11 +62,11 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          polygon.addVertex(new Point2D(1.0, 1.0));
          polygon.update();
          EuclidCoreTestTools.assertTuple2DIsSetToZero(minPoint);
-         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.0), maxPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point2D(1.0, 1.0), maxPoint, EPSILON);
 
          polygon.translate(1.0, 1.0);
-         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.0), minPoint, EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(2.0, 2.0), maxPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point2D(1.0, 1.0), minPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(new Point2D(2.0, 2.0), maxPoint, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -186,10 +185,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       Point2DReadOnly threePrev = doubles.getPreviousVertexCCW(2); //(1.0, 0.0)
       Point2DReadOnly fourPrev = doubles.getPreviousVertexCCW(3); //(1.0, 1.0)
 
-      EuclidCoreTestTools.assertTuple2DEquals("Points should be equal", oneNext, threePrev, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("Points should be equal", twoNext, fourPrev, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("Points should be equal", threeNext, onePrev, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("Points should be equal", fourNext, twoPrev, EPSILON);
+      EuclidCoreTestTools.assertEquals("Points should be equal", oneNext, threePrev, EPSILON);
+      EuclidCoreTestTools.assertEquals("Points should be equal", twoNext, fourPrev, EPSILON);
+      EuclidCoreTestTools.assertEquals("Points should be equal", threeNext, onePrev, EPSILON);
+      EuclidCoreTestTools.assertEquals("Points should be equal", fourNext, twoPrev, EPSILON);
    }
 
    @Test
@@ -211,10 +210,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       Point2D three = new Point2D(-2.0, 2.0);
       Point2D four = new Point2D(-2.0, -2.0);
 
-      EuclidCoreTestTools.assertTuple2DEquals("These should be equal", oneNext, one, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("These should be equal", twoNext, two, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("These should be equal", threeNext, three, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals("These should be equal", fourNext, four, EPSILON);
+      EuclidCoreTestTools.assertEquals("These should be equal", oneNext, one, EPSILON);
+      EuclidCoreTestTools.assertEquals("These should be equal", twoNext, two, EPSILON);
+      EuclidCoreTestTools.assertEquals("These should be equal", threeNext, three, EPSILON);
+      EuclidCoreTestTools.assertEquals("These should be equal", fourNext, four, EPSILON);
    }
 
    @Test
@@ -259,43 +258,43 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Line2D ray1 = new Line2D(new Point2D(5.0, -3.0), new Vector2D(0.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(2.0, 0.0), polygon.getClosestPointWithRay(ray1), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(2.0, 0.0), polygon.getClosestPointWithRay(ray1), EPSILON);
 
       Line2D ray2 = new Line2D(new Point2D(1.0, 1.0), new Vector2D(0.5, 0.5));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(4.0 / 5.0, 3.0 / 5.0), polygon.getClosestPointWithRay(ray2), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(4.0 / 5.0, 3.0 / 5.0), polygon.getClosestPointWithRay(ray2), EPSILON);
 
       Line2D ray3 = new Line2D(new Point2D(1.0, 1.0), new Vector2D(-0.5, 0.1));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 1.0), polygon.getClosestPointWithRay(ray3), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, 1.0), polygon.getClosestPointWithRay(ray3), EPSILON);
 
       Line2D ray4 = new Line2D(new Point2D(-0.75, 0.75), new Vector2D(0.0, 0.1));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray4), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray4), EPSILON);
 
       Line2D ray5 = new Line2D(new Point2D(-0.75, 0.75), new Vector2D(0.3, 0.3));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray5), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray5), EPSILON);
 
       Line2D ray6 = new Line2D(new Point2D(-0.75, 0.75), new Vector2D(-0.3, -0.3));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray6), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray6), EPSILON);
 
       Line2D ray7 = new Line2D(new Point2D(-0.75, 0.75), new Vector2D(0.3, 0.31));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray7), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.5, 0.5), polygon.getClosestPointWithRay(ray7), EPSILON);
 
       Line2D ray8 = new Line2D(new Point2D(-0.75, 0.75), new Vector2D(0.3, 0.29));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 1.0), polygon.getClosestPointWithRay(ray8), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, 1.0), polygon.getClosestPointWithRay(ray8), EPSILON);
 
       Line2D ray9 = new Line2D(new Point2D(1.75, -0.75), new Vector2D(1.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -0.5), polygon.getClosestPointWithRay(ray9), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -0.5), polygon.getClosestPointWithRay(ray9), EPSILON);
 
       Line2D ray10 = new Line2D(new Point2D(1.75, -0.75), new Vector2D(-0.3, -0.3));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -0.5), polygon.getClosestPointWithRay(ray10), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -0.5), polygon.getClosestPointWithRay(ray10), EPSILON);
 
       Line2D ray11 = new Line2D(new Point2D(1.0, -1.2), new Vector2D(-2.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.getClosestPointWithRay(ray11), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.getClosestPointWithRay(ray11), EPSILON);
 
       Line2D ray12 = new Line2D(new Point2D(1.0, -1.2), new Vector2D(2.0, -1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.getClosestPointWithRay(ray12), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.getClosestPointWithRay(ray12), EPSILON);
 
       Line2D ray13 = new Line2D(new Point2D(-0.1, -0.7), new Vector2D(-2.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, -0.5), polygon.getClosestPointWithRay(ray13), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, -0.5), polygon.getClosestPointWithRay(ray13), EPSILON);
    }
 
    @Test
@@ -315,10 +314,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Line2D ray1 = new Line2D(new Point2D(5.0, -3.0), new Vector2D(0.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(vertex, polygon.getClosestPointWithRay(ray1), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex, polygon.getClosestPointWithRay(ray1), EPSILON);
 
       Line2D ray2 = new Line2D(new Point2D(0.0, 0.0), new Vector2D(1.0, 0.0));
-      EuclidCoreTestTools.assertTuple2DEquals(vertex, polygon.getClosestPointWithRay(ray2), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex, polygon.getClosestPointWithRay(ray2), EPSILON);
    }
 
    @Test
@@ -330,25 +329,25 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Line2D ray1 = new Line2D(new Point2D(1.0, -5.0), new Vector2D(1.0, 0.1));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(2.0, -5.0), polygon.getClosestPointWithRay(ray1), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(2.0, -5.0), polygon.getClosestPointWithRay(ray1), EPSILON);
 
       Line2D ray2 = new Line2D(new Point2D(1.25, -5.25), new Vector2D(0.75, 0.3));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(2.0, -5.0), polygon.getClosestPointWithRay(ray2), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(2.0, -5.0), polygon.getClosestPointWithRay(ray2), EPSILON);
 
       Line2D ray3 = new Line2D(new Point2D(1.25, -5.25), new Vector2D(0.75, 0.8));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray3), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray3), EPSILON);
 
       Line2D ray4 = new Line2D(new Point2D(1.25, -5.25), new Vector2D(1.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray4), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray4), EPSILON);
 
       Line2D ray5 = new Line2D(new Point2D(1.25, -5.25), new Vector2D(-1.0, -1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray5), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray5), EPSILON);
 
       Line2D ray6 = new Line2D(new Point2D(1.75, -5.75), new Vector2D(1.0, 1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray6), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray6), EPSILON);
 
       Line2D ray7 = new Line2D(new Point2D(1.75, -5.75), new Vector2D(-1.0, -1.0));
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray7), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.5, -5.5), polygon.getClosestPointWithRay(ray7), EPSILON);
    }
 
    @Test
@@ -391,14 +390,14 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       Point2D[] expected2 = new Point2D[] {new Point2D(1.0, 1.0)};
       assertPointsEqual(expected2, polygon.intersectionWith(line2), false);
       assertTrue(polygon.intersectionWith(line2, result1, result2) == 1);
-      EuclidCoreTestTools.assertTuple2DEquals(expected2[0], result1, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected2[0], result1, EPSILON);
 
       Line2D line3 = new Line2D(new Point2D(0.0, 1.0), new Vector2D(0.5, 0.0));
       Point2D[] expected3 = new Point2D[] {new Point2D(0.0, 1.0), new Point2D(1.0, 1.0)};
       assertPointsEqual(expected3, polygon.intersectionWith(line3), false);
       assertTrue(polygon.intersectionWith(line3, result1, result2) == 2);
-      EuclidCoreTestTools.assertTuple2DEquals(expected3[0], result1, EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expected3[1], result2, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected3[0], result1, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected3[1], result2, EPSILON);
 
       Line2D line4 = new Line2D(new Point2D(0.5, 10.0), new Vector2D(0.0, 0.1));
       Point2D[] expected4 = new Point2D[] {new Point2D(0.5, 1.0), new Point2D(0.5, 0.5)};
@@ -766,31 +765,31 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Point2D point1 = new Point2D(0.5, 0.5);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 0.0), polygon.orthogonalProjectionCopy(point1), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, 0.0), polygon.orthogonalProjectionCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(-0.25, -0.25);
       assertNull(polygon.orthogonalProjectionCopy(point2));
 
       Point2D point3 = new Point2D(-2.0, -2.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, -1.0), polygon.orthogonalProjectionCopy(point3), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, -1.0), polygon.orthogonalProjectionCopy(point3), EPSILON);
 
       Point2D point4 = new Point2D(-0.9, -2.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.9, -1.0), polygon.orthogonalProjectionCopy(point4), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.9, -1.0), polygon.orthogonalProjectionCopy(point4), EPSILON);
 
       Point2D point5 = new Point2D(-1.1, -2.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, -1.0), polygon.orthogonalProjectionCopy(point5), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, -1.0), polygon.orthogonalProjectionCopy(point5), EPSILON);
 
       Point2D point6 = new Point2D(1.8, -1.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point6), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point6), EPSILON);
 
       Point2D point7 = new Point2D(1.8, -0.8);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point7), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point7), EPSILON);
 
       Point2D point8 = new Point2D(0.5, 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.25, -0.25), polygon.orthogonalProjectionCopy(point8), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.25, -0.25), polygon.orthogonalProjectionCopy(point8), EPSILON);
 
       Point2D point9 = new Point2D(0.0, 0.5);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-0.25, 0.25), polygon.orthogonalProjectionCopy(point9), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-0.25, 0.25), polygon.orthogonalProjectionCopy(point9), EPSILON);
 
       Point2D point10 = new Point2D(0.0, 0.0);
       assertNull(polygon.orthogonalProjectionCopy(point10));
@@ -799,22 +798,22 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       assertNull(polygon.orthogonalProjectionCopy(point11));
 
       Point2D point12 = new Point2D(-1.1, 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, 0.0), polygon.orthogonalProjectionCopy(point12), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, 0.0), polygon.orthogonalProjectionCopy(point12), EPSILON);
 
       Point2D point13 = new Point2D(-1.5, 3.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, 1.0), polygon.orthogonalProjectionCopy(point13), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, 1.0), polygon.orthogonalProjectionCopy(point13), EPSILON);
 
       Point2D point14 = new Point2D(3.0, -1.5);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point14), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point14), EPSILON);
 
       Point2D point15 = new Point2D(1.6, -1.5);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point15), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, -1.0), polygon.orthogonalProjectionCopy(point15), EPSILON);
 
       Point2D point16 = new Point2D(-2.0, 0.9);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, 0.9), polygon.orthogonalProjectionCopy(point16), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, 0.9), polygon.orthogonalProjectionCopy(point16), EPSILON);
 
       Point2D point17 = new Point2D(-2.0, -0.9);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-1.0, -0.9), polygon.orthogonalProjectionCopy(point17), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-1.0, -0.9), polygon.orthogonalProjectionCopy(point17), EPSILON);
    }
 
    @Test
@@ -834,9 +833,9 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.addVertex(vertex);
       polygon.update();
 
-      EuclidCoreTestTools.assertTuple2DEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(0.0, 0.0)), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(1.0, -0.2)), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(1.0, 2.0)), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(0.0, 0.0)), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(1.0, -0.2)), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex, polygon.orthogonalProjectionCopy(new Point2D(1.0, 2.0)), EPSILON);
    }
 
    @Test
@@ -849,13 +848,13 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Point2D point1 = new Point2D(1.0, -1.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.0), polygon.orthogonalProjectionCopy(point1), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, 1.0), polygon.orthogonalProjectionCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(3.0, 2.1);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 2.0), polygon.orthogonalProjectionCopy(point2), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, 2.0), polygon.orthogonalProjectionCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(0.2, 1.2);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.2), polygon.orthogonalProjectionCopy(point3), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(1.0, 1.2), polygon.orthogonalProjectionCopy(point3), EPSILON);
    }
 
    @Test
@@ -1093,25 +1092,25 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       LineSegment2D edge4 = new LineSegment2D(vertex4, vertex1);
 
       Point2D point1 = new Point2D(0.5, 0.1);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge4, polygon.getClosestEdgeCopy(point1), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge4, polygon.getClosestEdgeCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(-0.5, -0.5);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(-0.5, 0.5);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point3), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point3), EPSILON);
 
       Point2D point4 = new Point2D(-0.5, 0.25);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point4), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point4), EPSILON);
 
       Point2D point5 = new Point2D(-0.1, 3.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point5), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge2, polygon.getClosestEdgeCopy(point5), EPSILON);
 
       Point2D point6 = new Point2D(0.1, 0.8);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge3, polygon.getClosestEdgeCopy(point6), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge3, polygon.getClosestEdgeCopy(point6), EPSILON);
 
       Point2D point7 = new Point2D(-0.11, 0.2);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point7), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point7), EPSILON);
    }
 
    @Test
@@ -1128,13 +1127,13 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       LineSegment2D edge1 = new LineSegment2D(vertex1, vertex2);
 
       Point2D point1 = new Point2D(0.5, 0.1);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point1), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(4.0, 4.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(1.0, 1.0);
-      EuclidGeometryTestTools.assertLineSegment2DGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point3), EPSILON);
+      EuclidCoreTestTools.assertGeometricallyEquals(edge1, polygon.getClosestEdgeCopy(point3), EPSILON);
    }
 
    @Test
@@ -1167,22 +1166,22 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       polygon.update();
 
       Point2D point1 = new Point2D(-1.0, -1.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex1, polygon.getClosestVertexCopy(point1), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex1, polygon.getClosestVertexCopy(point1), EPSILON);
 
       Point2D point2 = new Point2D(1.0, 1.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex1, polygon.getClosestVertexCopy(point2), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex1, polygon.getClosestVertexCopy(point2), EPSILON);
 
       Point2D point3 = new Point2D(10.0, 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex2, polygon.getClosestVertexCopy(point3), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex2, polygon.getClosestVertexCopy(point3), EPSILON);
 
       Point2D point4 = new Point2D(9.8, 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex2, polygon.getClosestVertexCopy(point4), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex2, polygon.getClosestVertexCopy(point4), EPSILON);
 
       Point2D point5 = new Point2D(10.0, 11.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex3, polygon.getClosestVertexCopy(point5), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex3, polygon.getClosestVertexCopy(point5), EPSILON);
 
       Point2D point6 = new Point2D(-3.0, 8.0);
-      EuclidCoreTestTools.assertTuple2DEquals(vertex3, polygon.getClosestVertexCopy(point6), EPSILON);
+      EuclidCoreTestTools.assertEquals(vertex3, polygon.getClosestVertexCopy(point6), EPSILON);
    }
 
    @Test
@@ -1634,7 +1633,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       {
          if (enforceOrder)
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expected[i], actual[i], EPSILON);
+            EuclidCoreTestTools.assertEquals(expected[i], actual[i], EPSILON);
             continue;
          }
 
@@ -1674,7 +1673,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
          for (int j = 0; j < vertices.size(); j++)
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertices.get(j), polygon.getVertexUnsafe(j), 0.0);
+            EuclidCoreTestTools.assertEquals(vertices.get(j), polygon.getVertexUnsafe(j), 0.0);
          }
       }
    }

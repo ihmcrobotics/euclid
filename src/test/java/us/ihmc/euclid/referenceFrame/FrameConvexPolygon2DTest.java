@@ -22,7 +22,7 @@ import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<FrameConvexPolygon2D>
 {
@@ -49,7 +49,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          FrameConvexPolygon2D secondPolygon = new FrameConvexPolygon2D(frameB);
          firstPolygon.setIncludingFrame(secondPolygon);
 
-         EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
+         EuclidCoreTestTools.assertEquals(firstPolygon, secondPolygon, EPSILON);
       }
 
       {
@@ -60,7 +60,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          FrameConvexPolygon2D secondPolygon = new FrameConvexPolygon2D(frameB);
          FrameConvexPolygon2D thirdPolygon = new FrameConvexPolygon2D(frameB);
          firstPolygon.setIncludingFrame(secondPolygon, thirdPolygon);
-         EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
+         EuclidCoreTestTools.assertEquals(firstPolygon, secondPolygon, EPSILON);
       }
    }
 
@@ -157,7 +157,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          newVertex.changeFrameAndProjectToXYPlane(frameB);
          expected.set(newVertex);
 
-         EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -173,7 +173,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          newVertex.changeFrame(frameB);
          expected.set(newVertex);
 
-         EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -189,7 +189,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          newVertex.changeFrame(frameB);
          expected.set(newVertex);
 
-         EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
+         EuclidCoreTestTools.assertGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
       }
    }
 

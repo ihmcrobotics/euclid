@@ -1,6 +1,5 @@
 package us.ihmc.euclid.tuple3D;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -16,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Point3D implements Point3DBasics, GeometryObject<Point3D>
+public class Point3D implements Point3DBasics
 {
    /** The x-coordinate. */
    private double x;
@@ -74,17 +73,6 @@ public class Point3D implements Point3DBasics, GeometryObject<Point3D>
    public Point3D(Tuple3DReadOnly other)
    {
       set(other);
-   }
-
-   /**
-    * Sets this point to {@code other}.
-    *
-    * @param other the other point to copy the values from. Not modified.
-    */
-   @Override
-   public void set(Point3D other)
-   {
-      Point3DBasics.super.set(other);
    }
 
    /**
@@ -170,41 +158,6 @@ public class Point3D implements Point3DBasics, GeometryObject<Point3D>
    }
 
    /**
-    * Tests on a per component basis if this point is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other point to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Point3D other, double epsilon)
-   {
-      return Point3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same point 3D to an {@code epsilon}.
-    * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other point 3D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
-    * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Point3D other, double epsilon)
-   {
-      return Point3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this point 3D as follows: (x, y, z).
     *
     * @return the {@code String} representing this point 3D.
@@ -212,7 +165,7 @@ public class Point3D implements Point3DBasics, GeometryObject<Point3D>
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

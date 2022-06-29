@@ -12,7 +12,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -225,13 +224,13 @@ public class LineSegment2DTest
          translatedLineSegment.translate(x, y);
 
          assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(originalLineSegment.direction(false), translatedLineSegment.direction(false), EPSILON);
+         EuclidCoreTestTools.assertEquals(originalLineSegment.direction(false), translatedLineSegment.direction(false), EPSILON);
 
          LineSegment2D expectedLineSegment = new LineSegment2D(originalLineSegment);
          RigidBodyTransform transform = new RigidBodyTransform();
-         transform.setTranslation(x, y, 0.0);
+         transform.getTranslation().set(x, y, 0.0);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertLineSegment2DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -242,13 +241,13 @@ public class LineSegment2DTest
          translatedLineSegment.translate(translation);
 
          assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(originalLineSegment.direction(false), translatedLineSegment.direction(false), EPSILON);
+         EuclidCoreTestTools.assertEquals(originalLineSegment.direction(false), translatedLineSegment.direction(false), EPSILON);
 
          LineSegment2D expectedLineSegment = new LineSegment2D(originalLineSegment);
          RigidBodyTransform transform = new RigidBodyTransform();
-         transform.setTranslation(translation.getX(), translation.getY(), 0.0);
+         transform.getTranslation().set(translation.getX(), translation.getY(), 0.0);
          expectedLineSegment.applyTransform(transform);
-         EuclidGeometryTestTools.assertLineSegment2DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }
    }
 
@@ -349,7 +348,7 @@ public class LineSegment2DTest
 
       assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line7));
       assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line8));
-      assertEquals(null, line1.intersectionWith(line9));
+      assertNull(line1.intersectionWith(line9));
    }
 
    @Test
@@ -487,15 +486,15 @@ public class LineSegment2DTest
       LineSegment2D lineSegment2 = new LineSegment2D(lineSegmentStart2, lineSegmentEnd2);
       LineSegment2D reverseLineSegment2 = new LineSegment2D(lineSegmentEnd2, lineSegmentStart2);
 
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, lineSegment1.intersectionWith(lineSegment2), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, lineSegment1.intersectionWith(reverseLineSegment2), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, reverseLineSegment1.intersectionWith(lineSegment2), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, reverseLineSegment1.intersectionWith(reverseLineSegment2), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, lineSegment1.intersectionWith(lineSegment2), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, lineSegment1.intersectionWith(reverseLineSegment2), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, reverseLineSegment1.intersectionWith(lineSegment2), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, reverseLineSegment1.intersectionWith(reverseLineSegment2), EPSILON);
 
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, lineSegment2.intersectionWith(lineSegment1), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, lineSegment2.intersectionWith(reverseLineSegment1), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, reverseLineSegment2.intersectionWith(lineSegment1), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, reverseLineSegment2.intersectionWith(reverseLineSegment1), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, lineSegment2.intersectionWith(lineSegment1), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, lineSegment2.intersectionWith(reverseLineSegment1), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, reverseLineSegment2.intersectionWith(lineSegment1), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedIntersection, reverseLineSegment2.intersectionWith(reverseLineSegment1), EPSILON);
    }
 
    @Test
@@ -518,17 +517,17 @@ public class LineSegment2DTest
 
          // Expecting intersection
          Point2DBasics actualIntersection = lineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          actualIntersection = reverseLineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection, expectedIntersection);
          actualIntersection = lineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          actualIntersection = reverseLineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
       }
 
       // Make the intersection happen outside the line segment
@@ -575,18 +574,18 @@ public class LineSegment2DTest
          expectedIntersection.set(lineSegmentStart);
          pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection, expectedIntersection);
          Point2DBasics actualIntersection = lineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          actualIntersection = reverseLineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          expectedIntersection.set(lineSegmentEnd);
          pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection, expectedIntersection);
          actualIntersection = lineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
 
          actualIntersection = reverseLineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, EPSILON);
       }
 
       // Make the line segment and the line parallel not collinear.
@@ -628,9 +627,9 @@ public class LineSegment2DTest
 
          pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection, pointOnLine);
          Point2DBasics actualIntersection = lineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentStart, actualIntersection, EPSILON);
          actualIntersection = reverseLineSegment.intersectionWith(new Line2D(pointOnLine, lineDirection));
-         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualIntersection, EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentEnd, actualIntersection, EPSILON);
       }
    }
 
@@ -826,21 +825,21 @@ public class LineSegment2DTest
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, expectedProjection);
          Point2DBasics actualProjection = lineSegment.orthogonalProjectionCopy(testPoint);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentStart);
          actualProjection = lineSegment.orthogonalProjectionCopy(testPoint);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentEnd);
          actualProjection = lineSegment.orthogonalProjectionCopy(testPoint);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -858,17 +857,17 @@ public class LineSegment2DTest
       Line2D line9 = new Line2D(new Point2D(10.1, 0.0), new Point2D(20.0, 0.0));
       Line2D line10 = new Line2D(new Point2D(10.0, 0.0), new Point2D(20.0, 1.0));
 
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line2), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line10), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line2), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line10), EPSILON);
 
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line3), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line4), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line3), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line4), EPSILON);
 
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line7), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line8), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line9), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line7), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line8), EPSILON);
+      EuclidCoreTestTools.assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line9), EPSILON);
    }
 
    @Test
@@ -916,7 +915,7 @@ public class LineSegment2DTest
 
       assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line7));
       assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line8));
-      assertEquals(null, line1.intersectionWith(line9));
+      assertNull(line1.intersectionWith(line9));
    }
 
    @Test

@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.collision.epa;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
@@ -231,6 +231,6 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
    @Override
    public String toString()
    {
-      return "EPA " + EuclidShapeIOTools.getHalfEdge3DString(this);
+      return "EPA " + toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

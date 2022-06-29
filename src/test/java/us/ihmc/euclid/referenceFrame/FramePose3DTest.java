@@ -14,7 +14,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
@@ -23,6 +22,10 @@ import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
@@ -39,7 +42,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
    {
       FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFramePose(frame, (Pose3DReadOnly) pose);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextPose3D;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilder,
@@ -63,6 +66,12 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
       signaturesToIgnore.add(new MethodSignature("equals", Pose3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Pose3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Pose3D.class, Double.TYPE));
+      for (Method method : Transform.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformReadOnly.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformBasics.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
@@ -90,7 +99,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
          FramePose3D expected = new FramePose3D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertPose3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 

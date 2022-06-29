@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
@@ -85,7 +86,7 @@ public class LineSegment1DTest
 
       assertEquals(intersectionLine1.getMaxPoint(), intersectionLine2.getMaxPoint(), 0.001);
       assertEquals(intersectionLine1.getMinPoint(), intersectionLine2.getMinPoint(), 0.001);
-      assertEquals(null, intersectionLine3);
+      assertNull(intersectionLine3);
 
       assertFalse(mainLine.isBetweenEndpointsExclusive(mainLine));
       assertTrue(mainLine.isBetweenEndpointsInclusive(mainLine));

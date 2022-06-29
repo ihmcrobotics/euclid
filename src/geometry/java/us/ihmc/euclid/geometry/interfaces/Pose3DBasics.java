@@ -7,6 +7,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -20,7 +21,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * A pose 3D represents a position and orientation in 3 dimensions.
  * </p>
  */
-public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
+public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, RigidBodyTransformBasics
 {
    /**
     * Sets the x-coordinate of the position.
@@ -67,6 +68,36 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    @Override
    QuaternionBasics getOrientation();
+
+   /**
+    * Gets the reference of the position part of this pose 3D.
+    * <p>
+    * Same as {@link #getPosition()}, it is needed only to comply to the
+    * {@code RigidBodyTransformBasics} interface.
+    * </p>
+    *
+    * @return the position part of this pose 3D.
+    */
+   @Override
+   default Point3DBasics getTranslation()
+   {
+      return getPosition();
+   }
+
+   /**
+    * Gets the reference to the orientation part of this pose 3D.
+    * <p>
+    * Same as {@link #getOrientation()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
+    *
+    * @return the orientation part of this pose 3D.
+    */
+   @Override
+   default QuaternionBasics getRotation()
+   {
+      return getOrientation();
+   }
 
    /**
     * Sets the position coordinates.
@@ -229,6 +260,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param rigidBodyTransform the transform use to set this pose 3D. Not modified.
     */
+   @Override
    default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getPosition().set(rigidBodyTransform.getTranslation());
@@ -359,6 +391,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
     */
+   @Override
    default void prependTranslation(double x, double y, double z)
    {
       getPosition().add(x, y, z);
@@ -374,6 +407,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
+   @Override
    default void prependTranslation(Tuple3DReadOnly translation)
    {
       prependTranslation(translation.getX(), translation.getY(), translation.getZ());
@@ -397,6 +431,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param yaw the angle to rotate about the z-axis.
     */
+   @Override
    default void prependYawRotation(double yaw)
    {
       RotationMatrixTools.applyYawRotation(yaw, getPosition(), getPosition());
@@ -409,6 +444,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param pitch the angle to rotate about the y-axis.
     */
+   @Override
    default void prependPitchRotation(double pitch)
    {
       RotationMatrixTools.applyPitchRotation(pitch, getPosition(), getPosition());
@@ -421,6 +457,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param roll the angle to rotate about the x-axis.
     */
+   @Override
    default void prependRollRotation(double roll)
    {
       RotationMatrixTools.applyRollRotation(roll, getPosition(), getPosition());
@@ -451,6 +488,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
     */
+   @Override
    default void appendTranslation(double x, double y, double z)
    {
       double thisX = getX();
@@ -471,6 +509,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
+   @Override
    default void appendTranslation(Tuple3DReadOnly translation)
    {
       appendTranslation(translation.getX(), translation.getY(), translation.getZ());
@@ -505,6 +544,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param yaw the angle to rotate about the z-axis.
     */
+   @Override
    default void appendYawRotation(double yaw)
    {
       getOrientation().appendYawRotation(yaw);
@@ -525,6 +565,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param pitch the angle to rotate about the y-axis.
     */
+   @Override
    default void appendPitchRotation(double pitch)
    {
       getOrientation().appendPitchRotation(pitch);
@@ -545,6 +586,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param roll the angle to rotate about the x-axis.
     */
+   @Override
    default void appendRollRotation(double roll)
    {
       getOrientation().appendRollRotation(roll);

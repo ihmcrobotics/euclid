@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
@@ -13,8 +11,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 
@@ -23,7 +21,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<FrameShape3DPose>
+public class FrameShape3DPose implements FrameShape3DPoseBasics
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -114,13 +112,6 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    public FrameShape3DPose(FrameShape3DPoseReadOnly pose)
    {
       setIncludingFrame(pose);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(FrameShape3DPose other)
-   {
-      FrameShape3DPoseBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -220,43 +211,6 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    }
 
    /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two shape poses are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameShape3DPose other, double epsilon)
-   {
-      return FrameShape3DPoseBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the shape pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameShape3DPose other, double epsilon)
-   {
-      return FrameShape3DPoseBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameShape3DPoseReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -299,6 +253,6 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameShape3DPoseString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

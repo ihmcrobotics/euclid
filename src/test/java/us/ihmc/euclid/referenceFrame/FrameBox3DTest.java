@@ -62,7 +62,7 @@ public class FrameBox3DTest
    public void testConsistencyWithBox3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameBox3D(frame, (Box3D) box),
                                                                   EuclidShapeRandomTools::nextBox3D,

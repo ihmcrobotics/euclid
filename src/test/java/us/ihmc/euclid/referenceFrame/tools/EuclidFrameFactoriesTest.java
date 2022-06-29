@@ -461,6 +461,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -512,6 +513,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -584,6 +586,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -635,6 +638,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -686,6 +690,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -737,6 +742,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -788,6 +794,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -839,6 +846,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -890,6 +898,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -941,6 +950,7 @@ public class EuclidFrameFactoriesTest
 
       EuclidFrameAPITester test = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("toString", String.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
       test.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier,
@@ -1893,49 +1903,49 @@ public class EuclidFrameFactoriesTest
    private void thoroughAssertionsFrameTuple2D(FrameTuple2DReadOnly expected, FrameTuple2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameTuple2DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameTuple3D(FrameTuple3DReadOnly expected, FrameTuple3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameTuple3DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameTuple4D(FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameTuple4DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameMatrix3D(FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameMatrix3DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameMatrix3DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameBoundingBox2D(FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameBoundingBox2DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameBoundingBox2DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameBoundingBox3D(FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameBoundingBox3DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameBoundingBox3DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 
    private void thoroughAssertionsFrameOrientation2D(FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual)
    {
       EuclidCoreFactoriesTest.assertObjectMethods(expected, actual);
-      EuclidFrameTestTools.assertFrameOrientation2DEquals(expected, actual, EPSILON);
-      EuclidFrameTestTools.assertFrameOrientation2DEquals(actual, expected, EPSILON);
+      EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+      EuclidCoreTestTools.assertEquals(actual, expected, EPSILON);
    }
 }

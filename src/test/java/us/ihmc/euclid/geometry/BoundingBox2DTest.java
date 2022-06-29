@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -41,16 +40,16 @@ public class BoundingBox2DTest
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox2D(min, max);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox2D(new BoundingBox2D(min, max));
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
@@ -61,16 +60,16 @@ public class BoundingBox2DTest
       min.get(minArray);
       max.get(maxArray);
       boundingBox = new BoundingBox2D(minArray, maxArray);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox2D(min.getX(), min.getY(), max.getX(), max.getY());
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Asserts exception is thrown when attempting to create a bad bounding box
       try
@@ -150,8 +149,8 @@ public class BoundingBox2DTest
       halfSize.sub(max, min);
       halfSize.scale(0.5);
       BoundingBox2D boundingBox = BoundingBox2D.createUsingCenterAndPlusMinusVector(center, halfSize);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -161,7 +160,7 @@ public class BoundingBox2DTest
          expected.combine(boundingBoxOne, boundingBoxTwo);
          BoundingBox2D actual = BoundingBox2D.union(boundingBoxOne, boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -174,15 +173,15 @@ public class BoundingBox2DTest
 
       min = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 0.0);
       boundingBox.setMin(min);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 0.0);
       boundingBox.setMin(new double[] {min.getX(), min.getY()});
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 0.0);
       boundingBox.setMin(min.getX(), min.getY());
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       // Check exceptions
       boundingBox.setToZero();
@@ -257,15 +256,15 @@ public class BoundingBox2DTest
 
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       boundingBox.setMax(max);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       boundingBox.setMax(new double[] {max.getX(), max.getY()});
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       boundingBox.setMax(max.getX(), max.getY());
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Check exceptions
       boundingBox.setToZero();
@@ -343,8 +342,8 @@ public class BoundingBox2DTest
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min.getX(), min.getY(), max.getX(), max.getY());
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
@@ -354,15 +353,15 @@ public class BoundingBox2DTest
       min.get(minArray);
       max.get(maxArray);
       boundingBox.set(minArray, maxArray);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min, max);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
@@ -374,15 +373,15 @@ public class BoundingBox2DTest
       halfSize.sub(max, min);
       halfSize.scale(0.5);
       boundingBox.set(center, halfSize);
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(new BoundingBox2D(min, max));
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Asserts exception is thrown when attempting to create a bad bounding box
       try
@@ -571,7 +570,7 @@ public class BoundingBox2DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox2DEquals(boundingBoxTwo, combined, EPSILON);
+         EuclidCoreTestTools.assertEquals(boundingBoxTwo, combined, EPSILON);
 
          boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          boundingBoxTwo.setToNaN();
@@ -579,7 +578,7 @@ public class BoundingBox2DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox2DEquals(boundingBoxOne, combined, EPSILON);
+         EuclidCoreTestTools.assertEquals(boundingBoxOne, combined, EPSILON);
       }
    }
 
@@ -629,14 +628,14 @@ public class BoundingBox2DTest
          boundingBox2D.set(center, halfSize);
          Point2D actualCenter = new Point2D();
          boundingBox2D.getCenterPoint(actualCenter);
-         EuclidCoreTestTools.assertTuple2DEquals(center, actualCenter, EPSILON);
+         EuclidCoreTestTools.assertEquals(center, actualCenter, EPSILON);
          Vector2D centerToMin = new Vector2D();
          centerToMin.sub(boundingBox2D.getMinPoint(), center);
          Vector2D centerToMax = new Vector2D();
          centerToMax.sub(boundingBox2D.getMaxPoint(), center);
 
          centerToMax.negate();
-         EuclidCoreTestTools.assertTuple2DEquals(centerToMax, centerToMin, EPSILON);
+         EuclidCoreTestTools.assertEquals(centerToMax, centerToMin, EPSILON);
       }
    }
 
@@ -654,7 +653,7 @@ public class BoundingBox2DTest
 
          expectedPoint.interpolate(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), alpha);
          boundingBox2D.getPointGivenParameters(alpha, alpha, actualPoint);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedPoint, actualPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPoint, actualPoint, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -689,7 +688,7 @@ public class BoundingBox2DTest
          Vector2D halfSize = EuclidCoreRandomTools.nextVector2D(random, 0.0, 10.0);
          BoundingBox2D boundingBox2D = new BoundingBox2D();
          boundingBox2D.set(center, halfSize);
-         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.normSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 
@@ -1125,7 +1124,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1135,7 +1134,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }
@@ -1172,7 +1171,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1182,7 +1181,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }
@@ -1220,7 +1219,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1230,7 +1229,7 @@ public class BoundingBox2DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }

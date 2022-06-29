@@ -11,7 +11,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.SupportingFrameVertexHolder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -484,63 +486,23 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
    }
 
    /**
-    * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
+    * Gets the representative {@code String} of this frame face 3D given a specific format to use.
     * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    *    worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the other face to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two faces are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameFace3DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return Face3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
-    * similar.
-    *
-    * @param other   the other convex polytope to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameFace3DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Face3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two polytopes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other convex polytope 3D to compare against this. Not modified.
-    * @return {@code true} if the two convex polytopes are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameFace3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      if (getNumberOfEdges() != other.getNumberOfEdges())
-         return false;
-
-      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
-      {
-         if (!getEdge(edgeIndex).equals(other.getEdge(edgeIndex)))
-            return false;
-      }
-      return true;
+      return EuclidFrameShapeIOTools.getFrameFace3DString(format, this);
    }
 }

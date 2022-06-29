@@ -82,11 +82,11 @@ public class Axis2DTest
    @Test
    public void testVectorValues()
    {
-      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1, 0), Axis2D.X, 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(0, 1), Axis2D.Y, 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector2D(1, 0), Axis2D.X, 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector2D(0, 1), Axis2D.Y, 0.0);
 
-      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(-1, 0), Axis2D.X.negated(), 0.0);
-      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(0, -1), Axis2D.Y.negated(), 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector2D(-1, 0), Axis2D.X.negated(), 0.0);
+      EuclidCoreTestTools.assertEquals(new Vector2D(0, -1), Axis2D.Y.negated(), 0.0);
    }
 
    @Test

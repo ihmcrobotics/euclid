@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -33,45 +35,19 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, YawPitchRollReadOnly
 {
    /**
-    * Tests on a per component basis, if this yaw-pitch-roll is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
-    * orientations.
+    * Gets a representative {@code String} of this yaw-pitch-roll given a specific format to use.
     * <p>
-    * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
-    * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameYawPitchRollReadOnly other)
-   {
-      if (other == this)
-         return true;
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return YawPitchRollReadOnly.super.equals(other);
-   }
-
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    * <p>
-    * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 ) - worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameYawPitchRollReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return YawPitchRollReadOnly.super.epsilonEquals(other, epsilon);
+      return EuclidFrameIOTools.getFrameYawPitchRollString(format, this);
    }
 }

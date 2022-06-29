@@ -235,10 +235,6 @@ public class YawPitchRollToolsTest
 
          double expectedNoLimit = QuaternionTools.distance(q1, q2, false);
          
-         
-         System.out.println("expectedNoLimit = " + expectedNoLimit * 180 / Math.PI + 
-                            "actual1 (limit) = " + actual1 * 180 / Math.PI );
-
          assertFalse(Math.abs(actual1 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual2 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual3 - expectedNoLimit) < EPSILON);
@@ -288,7 +284,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual);
          new RotationMatrix(ypr).transform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -301,7 +297,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr, tupleOriginal, actual);
          new RotationMatrix(ypr).transform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -314,7 +310,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.addTransform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual);
          new RotationMatrix(ypr).addTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -327,7 +323,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.addTransform(ypr, tupleOriginal, actual);
          new RotationMatrix(ypr).addTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -340,7 +336,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual, false);
          new RotationMatrix(ypr).transform(tupleOriginal, expected, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          assertExceptionIsThrown(() -> YawPitchRollTools.transform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual, true),
                                  NotAnOrientation2DException.class);
@@ -361,7 +357,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr, tupleOriginal, actual, false);
          new RotationMatrix(ypr).transform(tupleOriginal, expected, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          assertExceptionIsThrown(() -> YawPitchRollTools.transform(ypr, tupleOriginal, actual, true), NotAnOrientation2DException.class);
          ypr.setPitch(0.0);
@@ -432,7 +428,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual);
          new RotationMatrix(ypr).transform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -445,7 +441,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.transform(ypr, tupleOriginal, actual);
          new RotationMatrix(ypr).transform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -464,7 +460,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -477,7 +473,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr, tupleOriginal, actual);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -490,7 +486,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual, false);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          assertExceptionIsThrown(() -> YawPitchRollTools.inverseTransform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual, true),
                                  NotAnOrientation2DException.class);
@@ -511,7 +507,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr, tupleOriginal, actual, false);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          assertExceptionIsThrown(() -> YawPitchRollTools.inverseTransform(ypr, tupleOriginal, actual, true), NotAnOrientation2DException.class);
          ypr.setPitch(0.0);
@@ -582,7 +578,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr.getYaw(), ypr.getPitch(), ypr.getRoll(), tupleOriginal, actual);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -595,7 +591,7 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.inverseTransform(ypr, tupleOriginal, actual);
          new RotationMatrix(ypr).inverseTransform(tupleOriginal, expected);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -635,21 +631,21 @@ public class YawPitchRollToolsTest
 
             YawPitchRoll yprActual = new YawPitchRoll();
             YawPitchRollTools.multiply(ypr1, invert1, ypr2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
 
             YawPitchRollTools.multiply(aa1, invert1, ypr2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
             YawPitchRollTools.multiply(q1, invert1, ypr2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
             YawPitchRollTools.multiply(r1, invert1, ypr2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
 
             YawPitchRollTools.multiply(ypr1, invert1, aa2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
             YawPitchRollTools.multiply(ypr1, invert1, q2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
             YawPitchRollTools.multiply(ypr1, invert1, r2, invert2, yprActual);
-            EuclidCoreTestTools.assertYawPitchRollEquals(yprExpected, yprActual, EPSILON);
+            EuclidCoreTestTools.assertEquals(yprExpected, yprActual, EPSILON);
          }
       }
    }
@@ -673,7 +669,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.prependYawRotation(original, yaw, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -696,7 +692,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.appendYawRotation(original, yaw, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -719,7 +715,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.prependPitchRotation(original, pitch, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -742,7 +738,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.appendPitchRotation(original, pitch, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -765,7 +761,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.prependRollRotation(original, roll, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -788,7 +784,7 @@ public class YawPitchRollToolsTest
          expected.set(q);
 
          YawPitchRollTools.appendRollRotation(original, roll, actual);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 }

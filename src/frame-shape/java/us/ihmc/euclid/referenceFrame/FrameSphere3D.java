@@ -1,14 +1,12 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -16,7 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * {@code Sphere3D} represents a 3D sphere expressed in a given reference frame that is defined by
  * its radius and with its origin at its center.
  */
-public class FrameSphere3D implements FrameSphere3DBasics, GeometryObject<FrameSphere3D>
+public class FrameSphere3D implements FrameSphere3DBasics
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -171,47 +169,6 @@ public class FrameSphere3D implements FrameSphere3DBasics, GeometryObject<FrameS
       return new FrameSphere3D(this);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public void set(FrameSphere3D other)
-   {
-      FrameSphere3DBasics.super.set(other);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * If the two ellipsoids have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other sphere to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two spheres are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameSphere3D other, double epsilon)
-   {
-      return FrameSphere3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
-    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
-    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
-    *
-    * @param other   the sphere to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two spheres represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameSphere3D other, double epsilon)
-   {
-      return FrameSphere3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameSphere3DReadOnly)}, it returns {@code false} otherwise.
@@ -256,6 +213,6 @@ public class FrameSphere3D implements FrameSphere3DBasics, GeometryObject<FrameS
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameSphere3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }
