@@ -325,7 +325,7 @@ public interface Tuple4DReadOnly extends EuclidGeometry
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       double dz = getZ() - other.getZ();
-      double ds = getZ() - other.getS();
+      double ds = getS() - other.getS();
       return EuclidCoreTools.normSquared(dx, dy, dz, ds);
    }
 

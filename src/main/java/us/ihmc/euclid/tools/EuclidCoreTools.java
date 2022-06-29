@@ -903,7 +903,7 @@ public class EuclidCoreTools
       if (expectedValue == actualValue)
          return true;
       else
-         return Double.isNaN(expectedValue) == Double.isNaN(actualValue);
+         return Double.isNaN(expectedValue) && Double.isNaN(actualValue);
    }
 
    /**

@@ -373,7 +373,9 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof YawPitchRollReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof YawPitchRollReadOnly))
          return false;
       YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
       if (!EuclidCoreTools.equals(getYaw(), other.getYaw()))
