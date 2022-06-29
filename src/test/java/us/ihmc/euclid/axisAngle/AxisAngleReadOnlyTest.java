@@ -20,7 +20,6 @@ import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -104,51 +103,6 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       assertTrue(axisAngle.containsNaN());
       axisAngle = createAxisAngle(0.0, 0.0, 0.0, Double.NaN);
       assertTrue(axisAngle.containsNaN());
-   }
-
-   @Test
-   @Deprecated
-   public void testIsAxisUnitary() throws Exception
-   {
-      Random random = new Random(51651L);
-      AxisAngle axisAngle = new AxisAngle();
-
-      for (int i = 0; i < 20; i++)
-      {
-         double smallScale = EuclidCoreRandomTools.nextDouble(random, 0.90, 0.95);
-         double bigScale = EuclidCoreRandomTools.nextDouble(random, 1.05, 1.10);
-
-         double ux = EuclidCoreRandomTools.nextDouble(random, 1.0);
-         double uy = EuclidCoreRandomTools.nextDouble(random, 1.0);
-         double uz = EuclidCoreRandomTools.nextDouble(random, 1.0);
-         double angle = EuclidCoreRandomTools.nextDouble(random, 10.0);
-         double norm = EuclidCoreTools.norm(ux, uy, uz);
-
-         ux /= norm;
-         uy /= norm;
-         uz /= norm;
-
-         axisAngle.set(ux, uy, uz, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-
-         axisAngle.set(ux * smallScale, uy, uz, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy * smallScale, uz, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy, uz * smallScale, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy, uz, angle * smallScale);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-
-         axisAngle.set(ux * bigScale, uy, uz, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy * bigScale, uz, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy, uz * bigScale, angle);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-         axisAngle.set(ux, uy, uz, angle * bigScale);
-         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
-      }
    }
 
    @Test

@@ -84,48 +84,11 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     *
     * @param referenceFrame the new reference frame for this frame orientation.
     * @param rotationVector vector the rotation vector used to set this orientation. Not modified.
-    * @deprecated Use {@link #setRotationVectorIncludingFrame(ReferenceFrame,Vector3DReadOnly)} instead
-    */
-   @Deprecated
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
-   {
-      setRotationVectorIncludingFrame(referenceFrame, rotationVector);
-   }
-
-   /**
-    * Sets this frame orientation to the same orientation described by the given rotation vector
-    * {@code rotationVector} and sets the frame to the given {@code referenceFrame}.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param referenceFrame the new reference frame for this frame orientation.
-    * @param rotationVector vector the rotation vector used to set this orientation. Not modified.
     */
    default void setRotationVectorIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
       setReferenceFrame(referenceFrame);
       setRotationVector(rotationVector);
-   }
-
-   /**
-    * Sets this frame orientation to the same orientation described by the given rotation vector
-    * {@code rotationVector} and sets the frame to {@code rotationVector.getReferenceFrame()}.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVector vector the rotation vector used to set this orientation. Not modified.
-    * @deprecated Use {@link #setRotationVectorIncludingFrame(FrameVector3DReadOnly)} instead
-    */
-   @Deprecated
-   default void setIncludingFrame(FrameVector3DReadOnly rotationVector)
-   {
-      setRotationVectorIncludingFrame(rotationVector);
    }
 
    /**

@@ -13,7 +13,6 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
@@ -152,20 +151,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    default double axisNorm()
    {
       return getAxis().norm();
-   }
-
-   /**
-    * Tests if the axis of this axis-angle is of unit-length.
-    *
-    * @param epsilon tolerance to use in this test.
-    * @return {@code true} if the axis is unitary, {@code false} otherwise.
-    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
-    * @since 0.13.0
-    */
-   @Deprecated
-   default boolean isAxisUnitary(double epsilon)
-   {
-      return Math.abs(1.0 - axisNorm()) < epsilon;
    }
 
    /**

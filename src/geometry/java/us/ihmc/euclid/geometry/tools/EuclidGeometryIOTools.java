@@ -22,7 +22,6 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -458,68 +457,6 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code orientation2D} as follows:
-    *
-    * <pre>
-    * (0.174)
-    * </pre>
-    *
-    * @param orientation2D the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
-    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(Orientation2DReadOnly)} instead
-    */
-   @Deprecated
-   public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
-   {
-      return EuclidCoreIOTools.getOrientation2DString(orientation2D);
-   }
-
-   /**
-    * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
-    * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    *
-    * <pre>
-    * (0.174)
-    * </pre>
-    * </p>
-    *
-    * @param format        the format to use for each number.
-    * @param orientation2D the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
-    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,Orientation2DReadOnly)}
-    *             instead
-    */
-   @Deprecated
-   public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
-   {
-      return EuclidCoreIOTools.getOrientation2DString(format, orientation2D);
-   }
-
-   /**
-    * Gets a representative {@code String} of {@code orientation2DAngle} given a specific format to
-    * use.
-    * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    *
-    * <pre>
-    * (0.174)
-    * </pre>
-    * </p>
-    *
-    * @param format             the format to use for each number.
-    * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
-    *                           modified.
-    * @return the representative {@code String}.
-    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,double)} instead
-    */
-   @Deprecated
-   public static String getOrientation2DString(String format, double orientation2DAngle)
-   {
-      return EuclidCoreIOTools.getOrientation2DString(format, orientation2DAngle);
-   }
-
-   /**
     * Gets a representative {@code String} of {@code plane3D} as follows:
     *
     * <pre>
@@ -630,7 +567,7 @@ public class EuclidGeometryIOTools
     */
    public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
    {
-      return "Pose 2D: position = " + getTuple2DString(format, position) + ", orientation = " + getOrientation2DString(format, orientation);
+      return "Pose 2D: position = " + getTuple2DString(format, position) + ", orientation = " + EuclidCoreIOTools.getOrientation2DString(format, orientation);
    }
 
    /**

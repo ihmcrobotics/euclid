@@ -42,34 +42,6 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    FixedFrameUnitVector3DBasics getDirection();
 
    /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *                                         in the same reference frame.
-    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
-    */
-   @Deprecated
-   default void setPoint(FramePoint3DReadOnly pointOnLine)
-   {
-      getPoint().set(pointOnLine);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
-    *
-    * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *                                         expressed in the same reference frame.
-    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
-    */
-   @Deprecated
-   default void setDirection(FrameVector3DReadOnly lineDirection)
-   {
-      getDirection().set(lineDirection);
-   }
-
-   /**
     * Sets this line to be the same as the given line.
     * <p>
     * After calling this method this line is in the XY-plane.

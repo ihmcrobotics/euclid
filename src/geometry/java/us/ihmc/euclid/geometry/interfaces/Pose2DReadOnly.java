@@ -81,60 +81,6 @@ public interface Pose2DReadOnly extends EuclidGeometry
       transformToPack.getRotation().setToYawOrientation(getYaw());
    }
 
-   /**
-    * Computes the distance between the position of this pose 2D and the given {@code point}.
-    *
-    * @param point the other point used to measure the distance. Not modified.
-    * @return the distance between this pose and the given {@code point}.
-    * @deprecated Use {@code this.getPosition().distance(point)} instead.
-    */
-   @Deprecated
-   default double getPositionDistance(Point2DReadOnly point)
-   {
-      return getPosition().distance(point);
-   }
-
-   /**
-    * Computes the distances between the position part of the two poses.
-    *
-    * @param other the other pose used to measure the distance. Not modified.
-    * @return the distance between the position part of the two poses.
-    * @deprecated Use {@code this.getPosition().distance(other.getPosition())} instead.
-    */
-   @Deprecated
-   default double getPositionDistance(Pose2DReadOnly other)
-   {
-      return getPosition().distance(other.getPosition());
-   }
-
-   /**
-    * Computes the absolute angle difference between the orientation part of this pose 2D and the give
-    * {@code orientation}.
-    *
-    * @param other the orientation used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this} and {@code orientation}.
-    * @deprecated Use {@code this.getOrientation().distance(other))} instead.
-    */
-   @Deprecated
-   default double getOrientationDistance(Orientation2DReadOnly other)
-   {
-      return getOrientation().distance(other);
-   }
-
-   /**
-    * Computes the absolute angle difference between this pose 2D and {@code other}.
-    *
-    * @param other the other pose 2D used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this.orientation} and
-    *         {@code other.orientation}.
-    * @deprecated Use {@code this.getOrientation().distance(other.getOrientation())} instead.
-    */
-   @Deprecated
-   default double getOrientationDistance(Pose2DReadOnly other)
-   {
-      return getOrientation().distance(other.getOrientation());
-   }
-
    /** {@inheritDoc} */
    @Override
    default boolean equals(EuclidGeometry geometry)

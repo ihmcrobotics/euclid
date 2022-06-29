@@ -273,15 +273,15 @@ public class Ramp3DTest
          assertFalse(EuclidCoreTools.epsilonEquals(sizeX, ramp3D.getSizeX(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(sizeY, ramp3D.getSizeY(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(sizeZ, ramp3D.getSizeZ(), EPSILON));
-         ramp3D.setSize(sizeX, sizeY, sizeZ);
+         ramp3D.getSize().set(sizeX, sizeY, sizeZ);
          assertEquals(sizeX, ramp3D.getSizeX(), EPSILON);
          assertEquals(sizeY, ramp3D.getSizeY(), EPSILON);
          assertEquals(sizeZ, ramp3D.getSizeZ(), EPSILON);
       }
 
-      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().setSize(-0.1, 1.0, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().setSize(1.0, -0.1, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().setSize(1.0, 1.0, -0.1));
+      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().getSize().set(-0.1, 1.0, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().getSize().set(1.0, -0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ramp3D().getSize().set(1.0, 1.0, -0.1));
    }
 
    @Test

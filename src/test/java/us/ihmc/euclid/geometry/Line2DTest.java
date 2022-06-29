@@ -313,24 +313,6 @@ public class Line2DTest
    }
 
    @Test
-   public void testNegateDirection()
-   {
-      double delta = 1.0e-5;
-
-      Random random = new Random(2036L);
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Point2D firstPointOnLine = randomPoint(random);
-         Point2D secondPointOnLine = randomPoint(random);
-         Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVectorCopy = new Vector2D(line2d.getDirection());
-         line2d.negateDirection();
-         assertEquals(-normalizedVectorCopy.getX(), line2d.getDirection().getX(), delta);
-         assertEquals(-normalizedVectorCopy.getY(), line2d.getDirection().getY(), delta);
-      }
-   }
-
-   @Test
    public void testSetPointPoint()
    {
       double delta = 1.0e-5;
@@ -392,19 +374,6 @@ public class Line2DTest
       assertEquals(secondLine2d.getDirection().getX(), line2d.getDirection().getX(), delta);
       assertEquals(secondLine2d.getDirection().getY(), line2d.getDirection().getY(), delta);
       assertFalse(secondLine2d.getDirection() == line2d.getDirection());
-   }
-
-   @Test
-   public void testSetPoint2d()
-   {
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Point2D secondPointOnLine = new Point2D(1.0, 1.0);
-      Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D newPoint = new Point2D(11.0, 9.0);
-      line2d.setPoint(newPoint);
-
-      assertEquals(newPoint, line2d.getPoint());
-      assertFalse(newPoint == line2d.getPoint());
    }
 
    @Test
@@ -533,7 +502,7 @@ public class Line2DTest
       assertEquals(line2d.getDirection().getY(), interiorBisector.getDirection().getY(), delta);
 
       Line2D parallelLine2d = new Line2D(line2d);
-      parallelLine2d.setPoint(new Point2D(5.5, 18));
+      parallelLine2d.getPoint().set(new Point2D(5.5, 18));
       assertNull(line2d.interiorBisector(parallelLine2d));
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -688,7 +657,7 @@ public class Line2DTest
          Point2DBasics intersection = lineThroughEndPoint.intersectionWith(lineSegment2d);
          assertEquals(firstPoint.getX(), intersection.getX(), delta);
          assertEquals(firstPoint.getY(), intersection.getY(), delta);
-         lineThroughEndPoint.setPoint(secondPoint);
+         lineThroughEndPoint.getPoint().set(secondPoint);
          intersection = lineThroughEndPoint.intersectionWith(lineSegment2d);
 
          // TODO intersection is null, which is unexpected.
@@ -1121,11 +1090,11 @@ public class Line2DTest
       Point2DBasics[] intersections = line2d.intersectionWith(triangle);
       assertEquals(1, intersections.length);
 
-      line2d.setPoint(new Point2D(-0.5, 0));
+      line2d.getPoint().set(new Point2D(-0.5, 0));
       intersections = line2d.intersectionWith(triangle);
       assertEquals(2, intersections.length);
 
-      line2d.setPoint(new Point2D(0.5, 0));
+      line2d.getPoint().set(new Point2D(0.5, 0));
       intersections = line2d.intersectionWith(triangle);
       assertNull(intersections);
 
@@ -1436,13 +1405,13 @@ public class Line2DTest
 
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 0.99, direction, direction);
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 1.01, direction, direction);
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }

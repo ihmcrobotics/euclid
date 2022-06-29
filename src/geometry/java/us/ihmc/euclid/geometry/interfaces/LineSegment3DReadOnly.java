@@ -108,32 +108,6 @@ public interface LineSegment3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Test if the first endpoint of this line segment contains {@link Double#NaN}.
-    *
-    * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
-    *         otherwise.
-    * @deprecated Use {@code this.getFirstEndpoint().containsNaN()} instead.
-    */
-   @Deprecated
-   default boolean firstEndpointContainsNaN()
-   {
-      return getFirstEndpoint().containsNaN();
-   }
-
-   /**
-    * Test if the second endpoint of this line segment contains {@link Double#NaN}.
-    *
-    * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
-    *         otherwise.
-    * @deprecated Use {@code this.getSecondEndpoint().containsNaN()} instead.
-    */
-   @Deprecated
-   default boolean secondEndpointContainsNaN()
-   {
-      return getSecondEndpoint().containsNaN();
-   }
-
-   /**
     * Computes the length of this line segment.
     *
     * @return the length of this line segment.

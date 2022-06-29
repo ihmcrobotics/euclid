@@ -915,7 +915,7 @@ public class Face3DTest
 
       public void flipDirection()
       {
-         line.negateDirection();
+         line.getDirection().negate();
       }
 
       @Override

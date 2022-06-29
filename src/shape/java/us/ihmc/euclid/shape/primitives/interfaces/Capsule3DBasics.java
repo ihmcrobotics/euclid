@@ -66,18 +66,6 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
       setRadius(radius);
    }
 
-   /**
-    * Sets this capsule axis of revolution and normalizes it.
-    *
-    * @param axis the new axis. Not modified.
-    * @deprecated Use {@code this.getAxis().set(axis)} instead.
-    */
-   @Deprecated
-   default void setAxis(Vector3DReadOnly axis)
-   {
-      getAxis().set(axis);
-   }
-
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

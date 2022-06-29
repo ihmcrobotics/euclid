@@ -7,11 +7,9 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -95,35 +93,6 @@ public class Plane3D implements Plane3DBasics
    }
 
    /**
-    * Gets the direction defining this plane by storing its components in the given argument
-    * {@code planeNormalToPack}.
-    *
-    * @param planeNormalToPack vector in which the components of this plane's normal are stored.
-    *                          Modified.
-    * @deprecated Use {@code planeNormalToPack.set(this.getNormal())} instead.
-    */
-   @Deprecated
-   public void getNormal(Vector3DBasics planeNormalToPack)
-   {
-      planeNormalToPack.set(normal);
-   }
-
-   /**
-    * Returns a copy of this plane's normal.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return a copy of this plane's normal.
-    * @deprecated Use {@code new Vector3D(this.getNormal())} instead.
-    */
-   @Deprecated
-   public Vector3D getNormalCopy()
-   {
-      return new Vector3D(normal);
-   }
-
-   /**
     * Gets the read-only reference to the point through which this plane is going.
     *
     * @return the reference to the point.
@@ -132,87 +101,6 @@ public class Plane3D implements Plane3DBasics
    public Point3DBasics getPoint()
    {
       return point;
-   }
-
-   /**
-    * Gets the point defining this plane by storing its coordinates in the given argument
-    * {@code pointToPack}.
-    *
-    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored.
-    *                           Modified.
-    * @deprecated Use {@code pointOnPlaneToPack.set(this.getPoint())} instead.
-    */
-   @Deprecated
-   public void getPoint(Point3DBasics pointOnPlaneToPack)
-   {
-      pointOnPlaneToPack.set(point);
-   }
-
-   /**
-    * Returns a copy of the point defining this plane.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return a copy of this plane's point.
-    * @deprecated Use {@code new Point3D(this.getPoint())} instead.
-    */
-   @Deprecated
-   public Point3D getPointCopy()
-   {
-      return new Point3D(point);
-   }
-
-   /**
-    * Changes the normal of this plane by setting it to the normalized value of the given vector.
-    *
-    * @param normalX the new x-component of the normal of this normal.
-    * @param normalY the new y-component of the normal of this normal.
-    * @param normalZ the new z-component of the normal of this normal.
-    * @deprecated Use {@code this.getNormal().set(normalX, normalY, normalZ)} instead.
-    */
-   @Deprecated
-   public void setNormal(double normalX, double normalY, double normalZ)
-   {
-      getNormal().set(normalX, normalY, normalZ);
-   }
-
-   /**
-    * Changes the direction of this plane by setting it to the normalized value of the given vector.
-    *
-    * @param planeNormal new normal of this plane. Not modified.
-    * @deprecated Use {@code this.getNormal().set(planeNormal)} instead.
-    */
-   @Deprecated
-   public void setNormal(Vector3DReadOnly planeNormal)
-   {
-      getNormal().set(planeNormal);
-   }
-
-   /**
-    * Changes the point through which this plane has to go.
-    *
-    * @param pointX the new x-coordinate of the point on this plane.
-    * @param pointY the new y-coordinate of the point on this plane.
-    * @param pointZ the new z-coordinate of the point on this plane.
-    * @deprecated Use {@code this.getPoint().set(pointX, pointY, pointZ)} instead.
-    */
-   @Deprecated
-   public void setPoint(double pointX, double pointY, double pointZ)
-   {
-      getPoint().set(pointX, pointY, pointZ);
-   }
-
-   /**
-    * Changes the point through which this plane has to go.
-    *
-    * @param pointOnPlane new point on this plane. Not modified.
-    * @deprecated Use {@code this.getPoint().set(pointOnPlane)} instead.
-    */
-   @Deprecated
-   public void setPoint(Point3DReadOnly pointOnPlane)
-   {
-      getPoint().set(pointOnPlane);
    }
 
    /**

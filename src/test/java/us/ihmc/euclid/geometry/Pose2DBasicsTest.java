@@ -13,7 +13,6 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 
 public abstract class Pose2DBasicsTest<T extends Pose2DBasics>
@@ -94,7 +93,7 @@ public abstract class Pose2DBasicsTest<T extends Pose2DBasics>
 
          toSet = createRandomPose2D(random);
 
-         toSet.setPosition(x, y);
+         toSet.getPosition().set(x, y);
          toSet.setYaw(yaw);
 
          assertEquals(x, toSet.getX(), EPSILON);
@@ -121,8 +120,8 @@ public abstract class Pose2DBasicsTest<T extends Pose2DBasics>
 
          toSet = createRandomPose2D(random);
 
-         toSet.setPosition(tuple);
-         toSet.setOrientation(orientation);
+         toSet.getPosition().set(tuple);
+         toSet.getOrientation().set(orientation);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
@@ -138,60 +137,6 @@ public abstract class Pose2DBasicsTest<T extends Pose2DBasics>
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
          assertEquals(yaw, toSet.getYaw(), EPSILON);
-      }
-   }
-
-   @Test
-   public void testPointDistance()
-   {
-      Random random = new Random(41133L);
-      T firstPose, secondPose;
-      Point2D point = new Point2D();
-      Vector2D translation;
-      double length;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         firstPose = createRandomPose2D(random);
-         secondPose = copy(firstPose);
-
-         translation = EuclidCoreRandomTools.nextVector2D(random);
-         length = translation.norm();
-
-         secondPose.appendTranslation(translation);
-
-         assertEquals(length, firstPose.getPositionDistance(secondPose), EPSILON);
-
-         point.set(firstPose.getPosition());
-         point.add(translation);
-
-         assertEquals(length, firstPose.getPositionDistance(point), EPSILON);
-      }
-   }
-
-   @Test
-   public void testOrientationDistance()
-   {
-      Random random = new Random(59886L);
-      T firstPose, secondPose;
-      Orientation2D orientation = new Orientation2D();
-      double angleDiff;
-
-      for (int i = 0; i < ITERATIONS; ++i)
-      {
-         angleDiff = Math.PI - 2.0 * Math.PI * random.nextDouble();
-
-         firstPose = createRandomPose2D(random);
-         secondPose = copy(firstPose);
-
-         secondPose.appendRotation(angleDiff);
-
-         assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(secondPose), EPSILON);
-
-         orientation.set(firstPose.getOrientation());
-         orientation.add(angleDiff);
-
-         assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(orientation), EPSILON);
       }
    }
 

@@ -90,9 +90,9 @@ public class Line3DTest
       direction.set(expectedDirection);
       expectedDirection.normalize();
 
-      line3d.setPoint(expectedPoint);
+      line3d.getPoint().set(expectedPoint);
       EuclidCoreTestTools.assertEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      line3d.setDirection(direction);
+      line3d.getDirection().set(direction);
       EuclidCoreTestTools.assertEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
       expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -285,19 +285,19 @@ public class Line3DTest
             double element = line1.getPoint().getElement(j);
             point.set(line1.getPoint());
             point.setElement(j, element + 0.999 * epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             point.set(line1.getPoint());
             point.setElement(j, element - 0.999 * epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             point.set(line1.getPoint());
             point.setElement(j, element + 1.001 * epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
             assertFalse(line1.epsilonEquals(line2, epsilon));
             point.set(line1.getPoint());
             point.setElement(j, element - 1.001 * epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
 
@@ -349,12 +349,12 @@ public class Line3DTest
             double element = point.getElement(j);
 
             point.setElement(j, element + epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
 
             assertFalse(line1.equals(line2));
 
             point.setElement(j, element - epsilon);
-            line2.setPoint(point);
+            line2.getPoint().set(point);
 
             assertFalse(line1.equals(line2));
          }
@@ -368,12 +368,12 @@ public class Line3DTest
             double element = direction.getElement(j);
 
             direction.setElement(j, element + epsilon);
-            line2.setDirection(direction);
+            line2.getDirection().set(direction);
 
             assertFalse(line1.equals(line2));
 
             direction.setElement(j, element - epsilon);
-            line2.setDirection(direction);
+            line2.getDirection().set(direction);
 
             assertFalse(line1.equals(line2));
          }
@@ -425,7 +425,7 @@ public class Line3DTest
 
          direction.set(secondLine.getDirection());
          direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
@@ -433,7 +433,7 @@ public class Line3DTest
 
          direction.set(secondLine.getDirection());
          direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 1.01), new Vector3D()));
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }

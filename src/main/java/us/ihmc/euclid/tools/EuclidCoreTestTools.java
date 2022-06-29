@@ -23,7 +23,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
-import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -1092,62 +1091,6 @@ public class EuclidCoreTestTools
       if (!expected.equals(axisAngleToAssert))
       {
          String errorMessage = "The axis-angle has not been set to zero:\n" + getAxisAngleString(DEFAULT_FORMAT, axisAngleToAssert);
-         throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
-      }
-   }
-
-   /**
-    * Asserts that the length of the axis of the axis-angle is equal to {@code 1.0 +/- epsilon}.
-    *
-    * @param axisAngleToAssert the query. Not modified.
-    * @param epsilon           the tolerance to use.
-    * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
-    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
-    * @since 0.13.0
-    */
-   @Deprecated
-   public static void assertAxisUnitary(AxisAngleReadOnly axisAngleToAssert, double epsilon)
-   {
-      assertAxisUnitary(null, axisAngleToAssert, epsilon);
-   }
-
-   /**
-    * Asserts that the length of the axis of the axis-angle is equal to {@code 1.0 +/- epsilon}.
-    *
-    * @param messagePrefix     prefix to add to the error message.
-    * @param axisAngleToAssert the query. Not modified.
-    * @param epsilon           the tolerance to use.
-    * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
-    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
-    * @since 0.13.0
-    */
-   @Deprecated
-   public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon)
-   {
-      assertAxisUnitary(messagePrefix, axisAngleToAssert, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts that the length of the axis of the axis-angle is equal to {@code 1.0 +/- epsilon}.
-    *
-    * @param messagePrefix     prefix to add to the error message.
-    * @param axisAngleToAssert the query. Not modified.
-    * @param epsilon           the tolerance to use.
-    * @param format            the format to use for printing each component when an
-    *                          {@code AssertionError} is thrown.
-    * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
-    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
-    * @since 0.13.0
-    */
-   @Deprecated
-   public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon, String format)
-   {
-      if (axisAngleToAssert == null)
-         throw new AssertionError(addPrefixToMessage(messagePrefix, "The given axis-angle is null."));
-
-      if (!axisAngleToAssert.isAxisUnitary(epsilon))
-      {
-         String errorMessage = "The axis of the given axis-angle is not unitary: " + getAxisAngleString(format, axisAngleToAssert);
          throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
       }
    }

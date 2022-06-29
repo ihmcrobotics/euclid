@@ -5,13 +5,11 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * Write and read interface for a pose 2D.
@@ -114,79 +112,6 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    {
       getPosition().set(pose3DReadOnly.getPosition());
       getOrientation().set(pose3DReadOnly.getOrientation());
-   }
-
-   /**
-    * Sets the position coordinates.
-    *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
-    * @deprecated Use {@code this.getPosition().set(x, y)} instead.
-    */
-   @Deprecated
-   default void setPosition(double x, double y)
-   {
-      getPosition().set(x, y);
-   }
-
-   /**
-    * Sets the position to the given tuple.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @deprecated Use {@code this.getPosition().set(position)} instead.
-    */
-   @Deprecated
-   default void setPosition(Tuple2DReadOnly position)
-   {
-      getPosition().set(position);
-   }
-
-   /**
-    * Sets the position to the given tuple.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @deprecated Use {@code this.getPosition().set(position)} instead.
-    */
-   @Deprecated
-   default void setPosition(Tuple3DReadOnly position)
-   {
-      getPosition().set(position);
-   }
-
-   /**
-    * Sets the orientation angle value.
-    *
-    * @param yaw the orientation angle value.
-    * @deprecated Use {@code this.getOrientation().setYaw(yaw)} instead.
-    */
-   @Deprecated
-   default void setOrientation(double yaw)
-   {
-      getOrientation().setYaw(yaw);
-   }
-
-   /**
-    * Sets the orientation from the given orientation 2D.
-    *
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(Orientation2DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation from the yaw angle of the given quaternion.
-    *
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(Orientation3DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
    }
 
    /**

@@ -62,38 +62,6 @@ public class LineSegment3DTest
    }
 
    @Test
-   public void testSetFirstEndpoint() throws Exception
-   {
-      Random random = new Random(324324L);
-
-      Point3D expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-
-      LineSegment3D lineSegment3D = new LineSegment3D();
-      lineSegment3D.setFirstEndpoint(expectedFirstEndpoint);
-      EuclidCoreTestTools.assertEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
-
-      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-      lineSegment3D.setFirstEndpoint(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ());
-      EuclidCoreTestTools.assertEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
-   }
-
-   @Test
-   public void testSetSecondEndpoint() throws Exception
-   {
-      Random random = new Random(324324L);
-
-      Point3D expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-
-      LineSegment3D lineSegment3D = new LineSegment3D();
-      lineSegment3D.setSecondEndpoint(expectedSecondEndpoint);
-      EuclidCoreTestTools.assertEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
-
-      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-      lineSegment3D.setSecondEndpoint(expectedSecondEndpoint.getX(), expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
-      EuclidCoreTestTools.assertEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
-   }
-
-   @Test
    public void testSetters() throws Exception
    {
       Random random = new Random(324324L);
@@ -165,11 +133,11 @@ public class LineSegment3DTest
 
          Point3D firstEndpoint = new Point3D();
          firstEndpoint.setElement(i, Double.NaN);
-         lineSegment3D.setFirstEndpoint(firstEndpoint);
+         lineSegment3D.getFirstEndpoint().set(firstEndpoint);
 
          assertTrue(lineSegment3D.containsNaN());
-         assertTrue(lineSegment3D.firstEndpointContainsNaN());
-         assertFalse(lineSegment3D.secondEndpointContainsNaN());
+         assertTrue(lineSegment3D.getFirstEndpoint().containsNaN());
+         assertFalse(lineSegment3D.getSecondEndpoint().containsNaN());
       }
 
       for (int i = 0; i < 3; i++)
@@ -179,11 +147,11 @@ public class LineSegment3DTest
 
          Point3D secondEndpoint = new Point3D();
          secondEndpoint.setElement(i, Double.NaN);
-         lineSegment3D.setSecondEndpoint(secondEndpoint);
+         lineSegment3D.getSecondEndpoint().set(secondEndpoint);
 
          assertTrue(lineSegment3D.containsNaN());
-         assertFalse(lineSegment3D.firstEndpointContainsNaN());
-         assertTrue(lineSegment3D.secondEndpointContainsNaN());
+         assertFalse(lineSegment3D.getFirstEndpoint().containsNaN());
+         assertTrue(lineSegment3D.getSecondEndpoint().containsNaN());
       }
    }
 
@@ -605,22 +573,22 @@ public class LineSegment3DTest
 
             Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
             firstEndpoint.setElement(j, element + 0.999 * epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertTrue(line1.epsilonEquals(line2, epsilon));
 
             firstEndpoint.setElement(j, element - 0.999 * epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertTrue(line1.epsilonEquals(line2, epsilon));
 
             firstEndpoint.setElement(j, element + 1.001 * epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertFalse(line1.epsilonEquals(line2, epsilon));
 
             firstEndpoint.setElement(j, element - 1.001 * epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
@@ -633,22 +601,22 @@ public class LineSegment3DTest
 
             Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
             secondEndpoint.setElement(j, element + 0.999 * epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertTrue(line1.epsilonEquals(line2, epsilon));
 
             secondEndpoint.setElement(j, element - 0.999 * epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertTrue(line1.epsilonEquals(line2, epsilon));
 
             secondEndpoint.setElement(j, element + 1.001 * epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertFalse(line1.epsilonEquals(line2, epsilon));
 
             secondEndpoint.setElement(j, element - 1.001 * epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
@@ -684,12 +652,12 @@ public class LineSegment3DTest
 
             Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
             firstEndpoint.setElement(j, element + epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertFalse(line1.equals(line2));
 
             firstEndpoint.setElement(j, element - epsilon);
-            line2.setFirstEndpoint(firstEndpoint);
+            line2.getFirstEndpoint().set(firstEndpoint);
 
             assertFalse(line1.equals(line2));
          }
@@ -702,12 +670,12 @@ public class LineSegment3DTest
 
             Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
             secondEndpoint.setElement(j, element + epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertFalse(line1.equals(line2));
 
             secondEndpoint.setElement(j, element - epsilon);
-            line2.setSecondEndpoint(secondEndpoint);
+            line2.getSecondEndpoint().set(secondEndpoint);
 
             assertFalse(line1.equals(line2));
          }

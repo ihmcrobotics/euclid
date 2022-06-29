@@ -43,8 +43,8 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    public final T createRandom2DFramePose(Random random, ReferenceFrame referenceFrame)
    {
       Pose3D pose = new Pose3D();
-      pose.setOrientationYawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0, 0);
-      pose.setPosition(EuclidCoreRandomTools.nextPoint2D(random));
+      pose.getOrientation().setYawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0, 0);
+      pose.getPosition().set(EuclidCoreRandomTools.nextPoint2D(random));
       return createFramePose(referenceFrame, pose);
    }
 
