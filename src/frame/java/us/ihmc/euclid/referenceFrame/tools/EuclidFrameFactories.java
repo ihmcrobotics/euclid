@@ -74,6 +74,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -297,7 +298,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -350,7 +351,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -409,7 +410,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -468,7 +469,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -539,7 +540,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -622,7 +623,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -724,7 +725,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -789,7 +790,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -916,7 +917,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -997,7 +998,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1090,7 +1091,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1183,7 +1184,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1341,7 +1342,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1390,7 +1391,7 @@ public class EuclidFrameFactories
                                                                               double initialZ)
    {
       return newLinkedFixedFrameUnitVector3DBasics(referenceFrameHolder, new UnitVector3D(initialX, initialY, initialZ));
-   };
+   }
 
    /**
     * Creates a new frame unit vector which is linked to the given frameless unit vector and
@@ -1521,7 +1522,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1603,7 +1604,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameOrientation2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1690,7 +1691,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1860,7 +1861,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1931,7 +1932,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
 
@@ -2004,7 +2005,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
 
@@ -2014,7 +2015,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame point that can be used to observe access to the source point's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2029,7 +2030,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame point that can be used to observe access to the source point's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2044,7 +2045,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame vector that can be used to observe access to the source vector's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2059,7 +2060,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame vector that can be used to observe access to the source vector's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2074,7 +2075,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame unit vector that can be used to observe access to the source unit vector's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
     *                              is being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2089,7 +2090,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame unit vector that can be used to observe access to the source unit vector's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
     *                              is being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -2104,7 +2105,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame rotation matrix that can be used to observe access to the source rotation
     * matrix's coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
     *                              matrix is being accessed. The corresponding constants {@link Axis3D}
     *                              will be passed to indicate the row and column respectively of the
@@ -2122,7 +2123,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame quaternion that can be used to observe access to the source quaternion's
     * coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
     *                              is being accessed. The index of the component being accessed will be
     *                              passed.
@@ -2136,7 +2137,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame point that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame point. Not modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis2D} will be
@@ -2157,7 +2158,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a linked frame point that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2179,7 +2180,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame point that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame point. Not modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis3D} will be
@@ -2200,7 +2201,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a linked frame point that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2222,7 +2223,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame vector that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame vector. Not modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
@@ -2244,7 +2245,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame vector that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2266,7 +2267,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame vector that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame vector. Not modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
@@ -2288,7 +2289,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame vector that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2310,7 +2311,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame unit vector that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame unit vector. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
@@ -2333,7 +2334,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame unit vector that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
     *                              has been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2355,7 +2356,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame unit vector that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame unit vector. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
@@ -2378,7 +2379,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame unit vector that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
     *                              has been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2400,7 +2401,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame rotation matrix that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame rotation matrix. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the rotation
@@ -2423,7 +2424,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame rotation matrix that can be used to observe read and write operations on
     * the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
@@ -2443,7 +2444,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame quaternion that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame quaternion. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever the quaternion has been
@@ -2463,7 +2464,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame quaternion that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the quaternion has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
@@ -2482,7 +2483,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame bounding box that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame bounding box. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
@@ -2505,7 +2506,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame bounding box that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis2D} and
     *                              {@link Bound} will be passed to indicate the component that was
@@ -2527,7 +2528,7 @@ public class EuclidFrameFactories
 
    /**
     * Creates a new frame bounding box that can be used to observe read and write operations.
-    * 
+    *
     * @param referenceFrameHolder  the reference frame supplier for the new frame bounding box. Not
     *                              modified.
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
@@ -2550,7 +2551,7 @@ public class EuclidFrameFactories
    /**
     * Creates a linked frame bounding box that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis3D} and
     *                              {@link Bound} will be passed to indicate the component that was

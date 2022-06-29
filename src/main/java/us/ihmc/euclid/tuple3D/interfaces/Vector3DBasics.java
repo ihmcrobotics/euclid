@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -34,39 +33,6 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  */
 public interface Vector3DBasics extends Tuple3DBasics, Vector3DReadOnly, Transformable
 {
-   /**
-    * Tolerance used in {@link #clipToMaxLength(double)}.
-    */
-   public static final double EPS_MAX_LENGTH = 1.0e-7;
-
-   /**
-    * Normalizes this vector such that its magnitude is equal to 1 after calling this method and its
-    * direction remains unchanged.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if this vector contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    */
-   default void normalize()
-   {
-      if (containsNaN())
-         return;
-      scale(1.0 / length());
-   }
-
-   /**
-    * Sets this vector to {@code other} and then calls {@link #normalize()}.
-    *
-    * @param other the other vector to copy the values from. Not modified.
-    */
-   default void setAndNormalize(Tuple3DReadOnly other)
-   {
-      set(other);
-      normalize();
-   }
-
    /**
     * Sets this vector to the cross product of {@code this} and {@code other}.
     * <p>
@@ -110,22 +76,12 @@ public interface Vector3DBasics extends Tuple3DBasics, Vector3DReadOnly, Transfo
     *
     * @param maxLength the maximum allowed length for this vector.
     * @return whether the length of this vector has been changed or not.
+    * @deprecated Use {@link Tuple3DBasics#clipToMaxNorm(double)}
     */
+   @Deprecated
    default boolean clipToMaxLength(double maxLength)
    {
-      if (maxLength < Vector3DBasics.EPS_MAX_LENGTH)
-      {
-         setToZero();
-         return true;
-      }
-
-      double lengthSquared = lengthSquared();
-
-      if (lengthSquared < maxLength * maxLength)
-         return false;
-
-      scale(maxLength / EuclidCoreTools.squareRoot(lengthSquared));
-      return true;
+      return clipToMaxNorm(maxLength);
    }
 
    /**

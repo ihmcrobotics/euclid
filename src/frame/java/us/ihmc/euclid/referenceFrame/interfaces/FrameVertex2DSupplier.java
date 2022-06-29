@@ -5,6 +5,8 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
  * Implement this interface to create a custom supplier of 2D frame vertices or use the static
@@ -12,7 +14,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameHolder
+public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeometry
 {
    /**
     * A supplier with no vertices.
@@ -30,6 +32,27 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
       {
          return 0;
       }
+
+      @Override
+      public int hashCode()
+      {
+         return 1;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof FrameVertex2DSupplier)
+            return equals((FrameVertex2DSupplier) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    };
 
    /** {@inheritDoc} */
@@ -45,45 +68,22 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
       return isEmpty() ? null : getVertex(0).getReferenceFrame();
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param other the other supplier to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean equals(FrameVertex2DSupplier other)
+   /** {@inheritDoc} */
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      if (other == null)
-         return false;
-      if (getNumberOfVertices() != other.getNumberOfVertices())
-         return false;
-      for (int i = 0; i < getNumberOfVertices(); i++)
-      {
-         if (!getVertex(i).equals(other.getVertex(i)))
-            return false;
-      }
-      return true;
-   }
+      StringBuilder sb = new StringBuilder("Frame vertex 2D Supplier: [");
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean epsilonEquals(FrameVertex2DSupplier other, double epsilon)
-   {
-      if (getNumberOfVertices() != other.getNumberOfVertices())
-         return false;
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
-            return false;
+         if (i > 0)
+            sb.append(", ");
+         sb.append(getVertex(i).toString(format));
       }
-      return true;
+
+      sb.append(']');
+
+      return sb.toString();
    }
 
    /**
@@ -196,9 +196,29 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
          }
 
          @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVertex2DSupplier)
+               return equals((FrameVertex2DSupplier) object);
+            else
+               return false;
+         }
+
+         @Override
          public String toString()
          {
-            return "Vertex 2D Supplier: " + vertices.subList(startIndex, startIndex + numberOfVertices).toString();
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

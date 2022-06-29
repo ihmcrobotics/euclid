@@ -268,38 +268,6 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
 
    /**
     * Redefines this line with a new point, a new direction vector, and a new reference frame.
-    * <p>
-    * After calling this method this line is in the XY-plane.
-    * </p>
-    *
-    * @param pointOnLine   new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FrameVector2DReadOnly)} instead.
-    */
-   @Deprecated
-   default void setIncludingFrame(FramePoint2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
-   {
-      setIncludingFrame(pointOnLine.getReferenceFrame(), pointOnLine, lineDirection);
-   }
-
-   /**
-    * Redefines this line with a new point, a new direction vector, and a new reference frame.
-    * <p>
-    * After calling this method this line is in the XY-plane.
-    * </p>
-    *
-    * @param pointOnLine   new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FrameVector2DReadOnly)} instead.
-    */
-   @Deprecated
-   default void setIncludingFrame(Point2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
-   {
-      setIncludingFrame(lineDirection.getReferenceFrame(), pointOnLine, lineDirection);
-   }
-
-   /**
-    * Redefines this line with a new point, a new direction vector, and a new reference frame.
     *
     * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
@@ -310,32 +278,6 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       setIncludingFrame(pointOnLine.getReferenceFrame(), pointOnLine, lineDirection);
-   }
-
-   /**
-    * Redefines this line with a new point, a new direction vector, and a new reference frame.
-    *
-    * @param pointOnLine   new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FrameVector3DReadOnly)} instead.
-    */
-   @Deprecated
-   default void setIncludingFrame(FramePoint3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
-   {
-      setIncludingFrame(pointOnLine.getReferenceFrame(), pointOnLine, lineDirection);
-   }
-
-   /**
-    * Redefines this line with a new point, a new direction vector, and a new reference frame.
-    *
-    * @param pointOnLine   new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FrameVector3DReadOnly)} instead.
-    */
-   @Deprecated
-   default void setIncludingFrame(Point3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
-   {
-      setIncludingFrame(lineDirection.getReferenceFrame(), pointOnLine, lineDirection);
    }
 
    /**
@@ -357,38 +299,6 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
 
    /**
     * Redefines this line such that it goes through the two given points in the given reference frame.
-    * <p>
-    * After calling this method this line is in the XY-plane.
-    * </p>
-    *
-    * @param firstPointOnLine  first point on this line. Not modified.
-    * @param secondPointOnLine second point on this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FramePoint2DReadOnly)}
-    */
-   @Deprecated
-   default void setIncludingFrame(FramePoint2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
-   {
-      setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstPointOnLine, secondPointOnLine);
-   }
-
-   /**
-    * Redefines this line such that it goes through the two given points in the given reference frame.
-    * <p>
-    * After calling this method this line is in the XY-plane.
-    * </p>
-    *
-    * @param firstPointOnLine  first point on this line. Not modified.
-    * @param secondPointOnLine second point on this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FramePoint2DReadOnly)}
-    */
-   @Deprecated
-   default void setIncludingFrame(Point2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
-   {
-      setIncludingFrame(secondPointOnLine.getReferenceFrame(), firstPointOnLine, secondPointOnLine);
-   }
-
-   /**
-    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -399,31 +309,5 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
       setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstPointOnLine, secondPointOnLine);
-   }
-
-   /**
-    * Redefines this line such that it goes through the two given points in the given reference frame.
-    *
-    * @param firstPointOnLine  first point on this line. Not modified.
-    * @param secondPointOnLine second point on this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FramePoint3DReadOnly)}
-    */
-   @Deprecated
-   default void setIncludingFrame(FramePoint3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
-   {
-      setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstPointOnLine, secondPointOnLine);
-   }
-
-   /**
-    * Redefines this line such that it goes through the two given points in the given reference frame.
-    *
-    * @param firstPointOnLine  first point on this line. Not modified.
-    * @param secondPointOnLine second point on this line. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FramePoint3DReadOnly)}
-    */
-   @Deprecated
-   default void setIncludingFrame(Point3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
-   {
-      setIncludingFrame(secondPointOnLine.getReferenceFrame(), firstPointOnLine, secondPointOnLine);
    }
 }

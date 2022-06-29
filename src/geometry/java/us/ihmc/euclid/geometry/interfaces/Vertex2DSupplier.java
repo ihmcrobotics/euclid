@@ -2,9 +2,11 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 /**
@@ -13,7 +15,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Vertex2DSupplier
+public interface Vertex2DSupplier extends EuclidGeometry
 {
    /**
     * A supplier with no vertices.
@@ -30,6 +32,27 @@ public interface Vertex2DSupplier
       public int getNumberOfVertices()
       {
          return 0;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return 1;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vertex2DSupplier)
+            return equals((Vertex2DSupplier) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -58,18 +81,17 @@ public interface Vertex2DSupplier
       return getNumberOfVertices() == 0;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    *
-    * @param other the other supplier to compare against this.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean equals(Vertex2DSupplier other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null)
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Vertex2DSupplier))
+         return false;
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
       for (int i = 0; i < getNumberOfVertices(); i++)
@@ -80,23 +102,78 @@ public interface Vertex2DSupplier
       return true;
    }
 
-   /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other supplier to compare against this.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two suppliers are equal.
-    */
-   default boolean epsilonEquals(Vertex2DSupplier other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex2DSupplier))
+         return false;
+
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
+
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
+
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
             return false;
       }
+
       return true;
+   }
+
+   /**
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * <p>
+    * The difference with {@link #epsilonEquals(EuclidGeometry, double)} is this method relies on
+    * {@link Point2DReadOnly#geometricallyEquals(EuclidGeometry, double)}.
+    * </p>
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vertex2DSupplier))
+         return false;
+
+      Vertex2DSupplier other = (Vertex2DSupplier) geometry;
+
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).geometricallyEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default String toString(String format)
+   {
+      StringBuilder sb = new StringBuilder("Vertex 2D Supplier: [");
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (i > 0)
+            sb.append(", ");
+         sb.append(getVertex(i).toString(format));
+      }
+
+      sb.append(']');
+
+      return sb.toString();
    }
 
    /**
@@ -209,9 +286,29 @@ public interface Vertex2DSupplier
          }
 
          @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Vertex2DSupplier)
+               return equals((Vertex2DSupplier) object);
+            else
+               return false;
+         }
+
+         @Override
          public String toString()
          {
-            return "Vertex 2D Supplier: " + vertices.subList(startIndex, startIndex + numberOfVertices).toString();
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -262,31 +359,20 @@ public interface Vertex2DSupplier
          throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
                + (startIndex + numberOfVertices));
 
+      Point2DReadOnly[] point2Ds = new Point2DReadOnly[numberOfVertices];
+
+      for (int index = 0; index < numberOfVertices; index++)
+      {
+         double[] vertex = vertices[startIndex + index];
+         point2Ds[index] = EuclidCoreFactories.newLinkedPoint2DReadOnly(() -> vertex[0], () -> vertex[1]);
+      }
+
       return new Vertex2DSupplier()
       {
          @Override
          public Point2DReadOnly getVertex(int index)
          {
-            return new Point2DReadOnly()
-            {
-               @Override
-               public double getX()
-               {
-                  return vertices[startIndex + index][0];
-               }
-
-               @Override
-               public double getY()
-               {
-                  return vertices[startIndex + index][1];
-               }
-
-               @Override
-               public String toString()
-               {
-                  return EuclidCoreIOTools.getTuple2DString(this);
-               }
-            };
+            return point2Ds[index];
          }
 
          @Override
@@ -296,11 +382,29 @@ public interface Vertex2DSupplier
          }
 
          @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Vertex2DSupplier)
+               return equals((Vertex2DSupplier) object);
+            else
+               return false;
+         }
+
+         @Override
          public String toString()
          {
-            StringJoiner joiner = new StringJoiner("[", ", ", "]");
-            Arrays.stream(vertices).forEach(v -> joiner.add(EuclidCoreIOTools.getStringOf("(", ")", ", ", v[0], v[1])));
-            return "Vertex 2D Supplier: " + joiner;
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

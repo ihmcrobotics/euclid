@@ -5,8 +5,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Implementation of a half-edge 3D that belongs to a convex polytope 3D expressed in a given
@@ -105,6 +105,6 @@ public class FrameHalfEdge3D extends AbstractHalfEdge3D<FrameVertex3D, FrameHalf
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFrameHalfEdge3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

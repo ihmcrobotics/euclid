@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -13,6 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * Tools for performing operations on rotation matrices.
@@ -21,6 +23,9 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class RotationMatrixTools
 {
+
+   static final double EPS = 1.0e-12;
+
    private RotationMatrixTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
@@ -991,25 +996,189 @@ public class RotationMatrixTools
    }
 
    /**
-    * Computes and returns the distance from the rotation matrix {@code m1} to {@code m2}.
+    * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D
+    * orientation systems.
     *
-    * @param m1 the first rotation matrix. Not modified.
-    * @param m2 the second rotation matrix. Not modified.
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param orientation3D  the orientation3D to be used for comparison. Not modified.
+    * @return The angle between roationMatrix and orientation3D, contained in [0, <i>pi</i>].
+    */
+   public static double distance(RotationMatrixReadOnly rotationMatrix, Orientation3DReadOnly orientation3D)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(rotationMatrix, (QuaternionReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(rotationMatrix, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(rotationMatrix, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(rotationMatrix, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
+      }
+   }
+
+   /**
+    * Computes and returns the distance between rotation matrix and Quaternion.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param quaternion     the quaternion to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two orientations. It is contained in [0,
+    *         <i>pi</i>].
+    */
+   public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
+   {
+      return QuaternionTools.distance(quaternion, rotationMatrix);
+   }
+
+   /**
+    * Computes and returns the distance between rotation matrix and axis angle.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param axisAngle      the axisAngle to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
-   public static double distance(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2)
+   public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly axisAngle)
    {
-      double m00 = m1.getM00() * m2.getM00() + m1.getM01() * m2.getM01() + m1.getM02() * m2.getM02();
-      double m01 = m1.getM00() * m2.getM10() + m1.getM01() * m2.getM11() + m1.getM02() * m2.getM12();
-      double m02 = m1.getM00() * m2.getM20() + m1.getM01() * m2.getM21() + m1.getM02() * m2.getM22();
-      double m10 = m1.getM10() * m2.getM00() + m1.getM11() * m2.getM01() + m1.getM12() * m2.getM02();
-      double m11 = m1.getM10() * m2.getM10() + m1.getM11() * m2.getM11() + m1.getM12() * m2.getM12();
-      double m12 = m1.getM10() * m2.getM20() + m1.getM11() * m2.getM21() + m1.getM12() * m2.getM22();
-      double m20 = m1.getM20() * m2.getM00() + m1.getM21() * m2.getM01() + m1.getM22() * m2.getM02();
-      double m21 = m1.getM20() * m2.getM10() + m1.getM21() * m2.getM11() + m1.getM22() * m2.getM12();
-      double m22 = m1.getM20() * m2.getM20() + m1.getM21() * m2.getM21() + m1.getM22() * m2.getM22();
+      return AxisAngleTools.distance(axisAngle, rotationMatrix);
+   }
 
+   /**
+    * Computes and returns the distance between rotation matrix and yaw pitch roll.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param yawPitchRoll   the yawPitchRoll to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
+   public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly yawPitchRoll)
+   {
+      if (rotationMatrix.containsNaN() || yawPitchRoll.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double m00, m01, m02, m10, m11, m12, m20, m21, m22;
+
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
+
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
+
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
+
+      // Introduction to Robotics, 2.64
+      m00 = cosc * cosb;
+      m01 = cosc * sinb * sina - sinc * cosa;
+      m02 = cosc * sinb * cosa + sinc * sina;
+      m10 = sinc * cosb;
+      m11 = sinc * sinb * sina + cosc * cosa;
+      m12 = sinc * sinb * cosa - cosc * sina;
+      m20 = -sinb;
+      m21 = cosb * sina;
+      m22 = cosb * cosa;
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Computes and returns the distance from the rotation matrix {@code m1} to {@code m2}.
+    *
+    * @param a the first rotation matrix. Not modified.
+    * @param b the second rotation matrix. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
+   public static double distance(RotationMatrixReadOnly a, RotationMatrixReadOnly b)
+   {
+      double b00 = b.getM00();
+      double b01 = b.getM01();
+      double b02 = b.getM02();
+      double b10 = b.getM10();
+      double b11 = b.getM11();
+      double b12 = b.getM12();
+      double b20 = b.getM20();
+      double b21 = b.getM21();
+      double b22 = b.getM22();
+      return distance(a, b00, b01, b02, b10, b11, b12, b20, b21, b22);
+   }
+
+   static double distance(RotationMatrixReadOnly a, double b00, double b01, double b02, double b10, double b11, double b12, double b20, double b21, double b22)
+   {
+      double m00 = a.getM00() * b00 + a.getM01() * b01 + a.getM02() * b02;
+      double m01 = a.getM00() * b10 + a.getM01() * b11 + a.getM02() * b12;
+      double m02 = a.getM00() * b20 + a.getM01() * b21 + a.getM02() * b22;
+      double m10 = a.getM10() * b00 + a.getM11() * b01 + a.getM12() * b02;
+      double m11 = a.getM10() * b10 + a.getM11() * b11 + a.getM12() * b12;
+      double m12 = a.getM10() * b20 + a.getM11() * b21 + a.getM12() * b22;
+      double m20 = a.getM20() * b00 + a.getM21() * b01 + a.getM22() * b02;
+      double m21 = a.getM20() * b10 + a.getM21() * b11 + a.getM22() * b12;
+      double m22 = a.getM20() * b20 + a.getM21() * b21 + a.getM22() * b22;
+
+      return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   // TODO Test me against Quaternion.angle or AxisAngle.angle - - - - - D O N E
+
+   /**
+    * Computes and returns the angular distance of given rotation matrix from origin.
+    *
+    * @param m the rotation matrix to be used for comparison. Not modified
+    * @return the angle representing the distance from origin (zero orientation). It is contained in
+    *         [0, <i>pi</i>].
+    */
+   public static double angle(RotationMatrixReadOnly m)
+   {
+      double m00 = m.getM00();
+      double m01 = m.getM01();
+      double m02 = m.getM02();
+      double m10 = m.getM10();
+      double m11 = m.getM11();
+      double m12 = m.getM12();
+      double m20 = m.getM20();
+      double m21 = m.getM21();
+      double m22 = m.getM22();
+      return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Computes and returns the angular distance of given rotation matrix from origin.
+    *
+    * @param m00 element at (0,0)
+    * @param m01 element at (0,1)
+    * @param m02 element at (0,2)
+    * @param m10 element at (1,0)
+    * @param m11 element at (1,1)
+    * @param m12 element at (1,2)
+    * @param m20 element at (2,0)
+    * @param m21 element at (2,1)
+    * @param m22 element at (2,2)
+    * @return the angle representing the distance from origin (zero orientation). It is contained in
+    *         [0, <i>pi</i>].
+    */
+   public static double angle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
       double angle, x, y, z; // variables for result
 
       x = m21 - m12;

@@ -152,10 +152,10 @@ public class CyclingConversionTest
                   EuclidCoreTestTools.assertMatrix3DEquals(originalMatrix, (Matrix3DReadOnly) nextRotationType.rotationHolder, epsilon);
                   break;
                case AXISANGLE:
-                  EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(originalAxisAngle, (AxisAngleReadOnly) nextRotationType.rotationHolder, epsilon);
+                  EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(originalAxisAngle, (AxisAngleReadOnly) nextRotationType.rotationHolder, epsilon);
                   break;
                case QUATERNION:
-                  EuclidCoreTestTools.assertQuaternionGeometricallyEquals(originalQuaternion, (QuaternionReadOnly) nextRotationType.rotationHolder, epsilon);
+                  EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(originalQuaternion, (QuaternionReadOnly) nextRotationType.rotationHolder, epsilon);
                   break;
                case VECTOR:
                   EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(originalRotationVector,
@@ -163,7 +163,7 @@ public class CyclingConversionTest
                                                                               epsilon);
                   break;
                case YAW_PITCH_ROLL:
-                  EuclidCoreTestTools.assertYawPitchRollEquals(originalYawPitchRoll, (YawPitchRollReadOnly) nextRotationType.rotationHolder, epsilon);
+                  EuclidCoreTestTools.assertEquals(originalYawPitchRoll, (YawPitchRollReadOnly) nextRotationType.rotationHolder, epsilon);
                default:
                   break;
             }

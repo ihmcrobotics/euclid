@@ -1,13 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
@@ -17,7 +15,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  *
  * @author Sylvain Bertrand
  */
-public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
+public class FrameOrientation2D implements FrameOrientation2DBasics
 {
    /** The reference frame is which this orientation is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -111,13 +109,6 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameOrientation2D other)
-   {
-      FrameOrientation2DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -175,44 +166,6 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    }
 
    /**
-    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
-    * {@code other}.
-    * <p>
-    * Note that this method performs number comparison and not an angle comparison, such that:
-    * -<i>pi</i> &ne; <i>pi</i>.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two orientations are equal, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public boolean epsilonEquals(FrameOrientation2D other, double epsilon)
-   {
-      return FrameOrientation2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
-    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the orientation to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameOrientation2D other, double epsilon)
-   {
-      return FrameOrientation2DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this frame orientation 2D as follows:<br>
     * (0.123 )-worldFrame
     *
@@ -221,7 +174,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameOrientation2DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

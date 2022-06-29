@@ -4,7 +4,6 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Axis3D} can be used to provide a simple and readable way to refer the three main axes of a
@@ -127,7 +126,7 @@ public enum Axis3D implements UnitVector3DReadOnly
    }
 
    @Override
-   public double dot(Vector3DReadOnly other)
+   public double dot(Tuple3DReadOnly other)
    {
       return extract(other);
    }
@@ -207,7 +206,7 @@ public enum Axis3D implements UnitVector3DReadOnly
 
    /**
     * Sets the value of {@code tupleToUpdate} for the component along this axis.
-    * 
+    *
     * @param tupleToUpdate the tuple to update. Modified.
     * @param value         the new value for the tuple's component.
     */
@@ -215,7 +214,7 @@ public enum Axis3D implements UnitVector3DReadOnly
 
    /**
     * Gets the value of {@code tupleToUpdate} for the component along this axis.
-    * 
+    *
     * @param tuple the tuple to get the component's value of. Not modified.
     * @return the compoent's value.
     */
@@ -250,55 +249,4 @@ public enum Axis3D implements UnitVector3DReadOnly
     * @return the previous axis.
     */
    public abstract Axis3D previous();
-
-   /**
-    * Gets the value of the tuple for the given axis.
-    *
-    * @param tuple the tuple to get value from. Not modified.
-    * @param axis  the {@link Axis3D} to get value for. Not modified.
-    * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@code tuple.getElement(axis)} instead.
-    */
-   @Deprecated
-   public static double get(Tuple3DReadOnly tuple, Axis3D axis)
-   {
-      return axis.extract(tuple);
-   }
-
-   /**
-    * Sets the value of the given tuple for the given axis to the given value.
-    *
-    * @param tupleToModify the tuple to set value of. Modified.
-    * @param axis          the {@link Axis3D} to set value for. Not modified.
-    * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
-    */
-   public static void set(Tuple3DBasics tupleToModify, Axis3D axis, double value)
-   {
-      axis.insert(tupleToModify, value);
-   }
-
-   /**
-    * Obtains the next axis, in a clockwise fashion.
-    *
-    * @return next clockwise axis
-    * @deprecated Use {@link #previous()} instead.
-    */
-   @Deprecated
-   public Axis3D getNextClockwiseAxis()
-   {
-      return previous();
-   }
-
-   /**
-    * Obtains the next axis, in a counterclockwise fashion.
-    *
-    * @return next counterclockwise axis
-    * @deprecated Use {@link #next()} instead.
-    */
-   @Deprecated
-   public Axis3D getNextCounterClockwiseAxis()
-   {
-      return next();
-   }
 }

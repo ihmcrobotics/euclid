@@ -26,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @see FrameGilbertJohnsonKeerthiCollisionDetector
  * @see FrameExpandingPolytopeAlgorithm
  */
-public interface SupportingFrameVertexHolder extends SupportingVertexHolder, ReferenceFrameHolder
+public interface SupportingFrameVertexHolder extends SupportingVertexHolder, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override

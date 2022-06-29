@@ -16,12 +16,13 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.RigidBodyTransformBasicsTest;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
-public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
+public abstract class Pose3DBasicsTest<T extends Pose3DBasics> extends RigidBodyTransformBasicsTest<T>
 {
    private static final double EPSILON = 1e-7;
 
@@ -36,6 +37,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
       return copy;
    }
 
+   @Override
    @Test
    public void testSetToNaN()
    {
@@ -56,6 +58,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
       }
    }
 
+   @Override
    @Test
    public void testSetToZero()
    {
@@ -93,7 +96,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
          toSet.setX(x);
          toSet.setY(y);
          toSet.setZ(z);
-         toSet.setOrientation(quaternion);
+         toSet.getOrientation().set(quaternion);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
@@ -106,8 +109,8 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
 
          AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
 
-         toSet.setPosition(x, y, z);
-         toSet.setOrientation(aa);
+         toSet.getPosition().set(x, y, z);
+         toSet.getOrientation().set(aa);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
@@ -144,8 +147,8 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
          toSet = createRandomPose3D(random);
          RotationMatrix rot = EuclidCoreRandomTools.nextRotationMatrix(random);
 
-         toSet.setPosition(tuple);
-         toSet.setOrientation(rot);
+         toSet.getPosition().set(tuple);
+         toSet.getOrientation().set(rot);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
@@ -158,8 +161,8 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
 
          YawPitchRoll ypr = EuclidCoreRandomTools.nextYawPitchRoll(random);
          T toCopy = createEmptyPose3D();
-         toCopy.setPosition(x, y, z);
-         toCopy.setOrientationYawPitchRoll(ypr.getYaw(), ypr.getPitch(), ypr.getRoll());
+         toCopy.getPosition().set(x, y, z);
+         toCopy.getOrientation().set(ypr);
 
          assertEquals(ypr.getYaw(), toCopy.getYaw(), EPSILON);
          assertEquals(ypr.getPitch(), toCopy.getPitch(), EPSILON);
@@ -173,31 +176,6 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
          assertEquals(ypr.getYaw(), toSet.getYaw(), EPSILON);
          assertEquals(ypr.getPitch(), toSet.getPitch(), EPSILON);
          assertEquals(ypr.getRoll(), toSet.getRoll(), EPSILON);
-      }
-   }
-
-   @Test
-   public void testPointDistance()
-   {
-      Random random = new Random(41133L);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         T firstPose = createRandomPose3D(random);
-         T secondPose = copy(firstPose);
-
-         Vector3D translation = EuclidCoreRandomTools.nextVector3D(random);
-         double length = translation.length();
-
-         secondPose.appendTranslation(translation);
-
-         assertEquals(length, firstPose.getPositionDistance(secondPose), EPSILON);
-
-         Point3D point = new Point3D();
-         point.set(firstPose.getPosition());
-         point.add(translation);
-
-         assertEquals(length, firstPose.getPositionDistance(point), EPSILON);
       }
    }
 

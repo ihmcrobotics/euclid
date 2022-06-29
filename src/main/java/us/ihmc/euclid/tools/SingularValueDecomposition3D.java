@@ -74,15 +74,15 @@ public class SingularValueDecomposition3D
 
    /**
     * Specifies whether the singular values should be sorted in descending order, i.e.:
-    * 
+    *
     * <pre>
     * W.getX() &geq; W.getY() &geq; |W.getZ()|
     * </pre>
-    * 
+    *
     * Note that regardless of the state of this flag, the two first singular values are always positive
     * and the sign of the third singular value is the same as the determinant of the matrix being
     * decomposed.
-    * 
+    *
     * @param sortDescendingOrder {@code true} for sorting the singular values in descending,
     *                            {@code false} for skipping sorting. Default value {@code true}.
     */
@@ -839,7 +839,7 @@ public class SingularValueDecomposition3D
 
    /**
     * Returns whether this calculator is sorting the singular values in descending order.
-    * 
+    *
     * @return whether this calculator is sorting the singular values in descending order.
     */
    public boolean getSortDescendingOrder()

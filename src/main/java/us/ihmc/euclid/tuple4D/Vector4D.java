@@ -1,6 +1,5 @@
 package us.ihmc.euclid.tuple4D;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector4D implements Vector4DBasics, GeometryObject<Vector4D>
+public class Vector4D implements Vector4DBasics
 {
    /** The x-component. */
    private double x;
@@ -98,17 +97,6 @@ public class Vector4D implements Vector4DBasics, GeometryObject<Vector4D>
       set(point3D);
    }
 
-   /**
-    * Sets this vector to {@code other}.
-    *
-    * @param other the other vector to copy the values from. Not modified.
-    */
-   @Override
-   public void set(Vector4D other)
-   {
-      Vector4DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public void setX(double x)
@@ -182,42 +170,6 @@ public class Vector4D implements Vector4DBasics, GeometryObject<Vector4D>
    }
 
    /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Vector4D other, double epsilon)
-   {
-      return Vector4DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 4D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 4D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Vector4D other, double epsilon)
-   {
-      return Vector4DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this 4D vector as follows: (x, y, z, s).
     *
     * @return the {@code String} representing this 4D vector.
@@ -225,7 +177,7 @@ public class Vector4D implements Vector4DBasics, GeometryObject<Vector4D>
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple4DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

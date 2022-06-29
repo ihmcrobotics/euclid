@@ -67,62 +67,6 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
    }
 
    /**
-    * Changes the first endpoint of this line segment.
-    *
-    * @param firstEndpointX x-coordinate of the new first endpoint.
-    * @param firstEndpointY y-coordinate of the new first endpoint.
-    * @param firstEndpointZ z-coordinate of the new first endpoint.
-    * @deprecated Use
-    *             {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ)}
-    *             instead.
-    */
-   @Deprecated
-   default void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ)
-   {
-      getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
-   }
-
-   /**
-    * Changes the second endpoint of this line segment.
-    *
-    * @param secondEndpointX x-coordinate of the new second endpoint.
-    * @param secondEndpointY y-coordinate of the new second endpoint.
-    * @param secondEndpointZ z-coordinate of the new second endpoint.
-    * @deprecated Use
-    *             {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ)}
-    *             instead.
-    */
-   @Deprecated
-   default void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
-   {
-      getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
-   }
-
-   /**
-    * Changes the first endpoint of this line segment.
-    *
-    * @param firstEndpoint new endpoint of this line segment. Not modified.
-    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
-    */
-   @Deprecated
-   default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
-   {
-      getFirstEndpoint().set(firstEndpoint);
-   }
-
-   /**
-    * Changes the second endpoint of this line segment.
-    *
-    * @param secondEndpoint new second endpoint of this line segment. Not modified.
-    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
-    */
-   @Deprecated
-   default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
-   {
-      getSecondEndpoint().set(secondEndpoint);
-   }
-
-   /**
     * Sets this line segment to be same as the given line segment.
     *
     * @param other the other line segment to copy. Not modified.

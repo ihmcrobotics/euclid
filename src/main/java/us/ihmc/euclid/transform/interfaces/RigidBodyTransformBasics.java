@@ -1,6 +1,5 @@
 package us.ihmc.euclid.transform.interfaces;
 
-import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -95,7 +94,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Sets all the components of the rotation matrix to {@link Double#NaN}.
-    * 
+    *
     * @see {@link RotationMatrix#setToNaN()}.
     */
    default void setRotationToNaN()
@@ -154,7 +153,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Sets this rigid-body transform to the given {@code affineTransform} stripped of any scaling.
-    * 
+    *
     * @param affineTransform the affine transform to copy. Not modified.
     */
    default void set(AffineTransformReadOnly affineTransform)
@@ -196,201 +195,6 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    {
       getRotation().set(orientation);
       getTranslation().set(translation);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given axis-angle.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    * @deprecated Use {@code this.getRotation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setRotation(Orientation3DReadOnly orientation)
-   {
-      getRotation().set(orientation);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given rotation vector.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVector the rotation vector used to set the rotation part of this transform. Not
-    *                       modified.
-    * @deprecated Use {@code this.getRotation().setRotationVector(rotationVector)} instead.
-    */
-   @Deprecated
-   default void setRotation(Vector3DReadOnly rotationVector)
-   {
-      getRotation().setRotationVector(rotationVector);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
-    */
-   @Deprecated
-   default void setRotation(RotationMatrixReadOnly rotationMatrix)
-   {
-      getRotation().set(rotationMatrix);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * z-axis of an angle {@code yaw}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \
-    * R = | sin(yaw)  cos(yaw) 0 |
-    *     \    0         0     1 /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    * @deprecated Use {@code this.getRotation().setToYawOrientation(yaw)} instead.
-    */
-   @Deprecated
-   default void setRotationYaw(double yaw)
-   {
-      getRotation().setToYawOrientation(yaw);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * y-axis of an angle {@code pitch}.
-    *
-    * <pre>
-    *     /  cos(pitch) 0 sin(pitch) \
-    * R = |      0      1     0      |
-    *     \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    * @deprecated Use {@code this.getRotation().setRotationPitch(pitch)} instead.
-    */
-   @Deprecated
-   default void setRotationPitch(double pitch)
-   {
-      getRotation().setToPitchOrientation(pitch);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * x-axis of an angle {@code roll}.
-    *
-    * <pre>
-    *     / 1     0          0     \
-    * R = | 0 cos(roll) -sin(roll) |
-    *     \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    * @deprecated Use {@code this.getRotation().setRotationRoll(roll)} instead.
-    */
-   @Deprecated
-   default void setRotationRoll(double roll)
-   {
-      getRotation().setToRollOrientation(roll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yaw   the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll  the angle to rotate about the x-axis.
-    * @deprecated Use {@code this.getRotation().setRotationYawPitchRoll(yaw, pitch, roll)} instead.
-    */
-   @Deprecated
-   default void setRotationYawPitchRoll(double yaw, double pitch, double roll)
-   {
-      getRotation().setYawPitchRoll(yaw, pitch, roll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code eulerAngles}.
-    *
-    * <pre>
-    *     / cos(eulerAngles.z) -sin(eulerAngles.z) 0 \   /  cos(eulerAngles.y) 0 sin(eulerAngles.y) \   / 1         0                   0          \
-    * R = | sin(eulerAngles.z)  cos(eulerAngles.z) 0 | * |          0          1         0          | * | 0 cos(eulerAngles.x) -sin(eulerAngles.x) |
-    *     \         0                   0          1 /   \ -sin(eulerAngles.y) 0 cos(eulerAngles.y) /   \ 0 sin(eulerAngles.x)  cos(eulerAngles.x) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * This is equivalent to
-    * {@code this.setRotationYawPitchRoll(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX())}.
-    * </p>
-    *
-    * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
-    * @deprecated Use {@code this.getRotation().setEuler(eulerAngles)} instead.
-    */
-   @Deprecated
-   default void setRotationEuler(Vector3DReadOnly eulerAngles)
-   {
-      getRotation().setEuler(eulerAngles);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code rotX}, {@code rotY}, and {@code rotZ}.
-    *
-    * <pre>
-    *     / cos(rotZ) -sin(rotZ) 0 \   /  cos(rotY) 0 sin(rotY) \   / 1     0          0     \
-    * R = | sin(rotZ)  cos(rotZ) 0 | * |      0     1     0     | * | 0 cos(rotX) -sin(rotX) |
-    *     \     0          0     1 /   \ -sin(rotY) 0 cos(rotY) /   \ 0 sin(rotX)  cos(rotX) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * This is equivalent to {@code this.setRotationYawPitchRoll(rotZ, rotY, rotX)}.
-    * </p>
-    *
-    * @param rotX the angle to rotate about the x-axis.
-    * @param rotY the angle to rotate about the y-axis.
-    * @param rotZ the angle to rotate about the z-axis.
-    * @deprecated Use {@code this.getRotation().setEuler(rotX, rotY, rotZ)} instead.
-    */
-   @Deprecated
-   default void setRotationEuler(double rotX, double rotY, double rotZ)
-   {
-      getRotation().setEuler(rotX, rotY, rotZ);
    }
 
    /**
@@ -554,83 +358,6 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    {
       getRotation().setEuler(rotX, rotY, rotZ);
       setTranslationToZero();
-   }
-
-   /**
-    * Sets the x-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the x-component of the translation part.
-    * @deprecated Use {@code this.getTranslation().setX(x)} instead.
-    */
-   @Deprecated
-   default void setTranslationX(double x)
-   {
-      getTranslation().setX(x);
-   }
-
-   /**
-    * Sets the y-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param y the y-component of the translation part.
-    * @deprecated Use {@code this.getTranslation().setY(y)} instead.
-    */
-   @Deprecated
-   default void setTranslationY(double y)
-   {
-      getTranslation().setY(y);
-   }
-
-   /**
-    * Sets the z-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param z the z-component of the translation part.
-    * @deprecated Use {@code this.getTranslation().setZ(z)} instead.
-    */
-   @Deprecated
-   default void setTranslationZ(double z)
-   {
-      getTranslation().setZ(z);
-   }
-
-   /**
-    * Sets the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the x-component of the translation part.
-    * @param y the y-component of the translation part.
-    * @param z the z-component of the translation part.
-    * @deprecated Use {@code this.getTranslation().set(x, y, z)} instead.
-    */
-   @Deprecated
-   default void setTranslation(double x, double y, double z)
-   {
-      getTranslation().set(x, y, z);
-   }
-
-   /**
-    * Sets the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param translation tuple used to set the translation part of this transform. Not modified.
-    * @deprecated Use {@code this.getTranslation().set(translation)} instead.
-    */
-   @Deprecated
-   default void setTranslation(Tuple3DReadOnly translation)
-   {
-      getTranslation().set(translation);
    }
 
    /**
@@ -814,7 +541,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Appends the orientation to the rotation part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void appendOrientation(Orientation3DReadOnly orientation)
@@ -1043,7 +770,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Prepends the orientation to the rotation part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void prependOrientation(Orientation3DReadOnly orientation)

@@ -62,13 +62,13 @@ public class Vector4D32Test extends Vector4DBasicsTest<Vector4D32>
       { // Test Vector4D32(QuaternionReadOnly quaternion)
          Quaternion32 quaternion = EuclidCoreRandomTools.nextQuaternion32(random);
          Vector4D32 vector = new Vector4D32(quaternion);
-         EuclidCoreTestTools.assertTuple4DEquals(quaternion, vector, EPS);
+         EuclidCoreTestTools.assertEquals(quaternion, vector, EPS);
       }
 
       { // Test Vector4D32(Tuple4DReadOnly other)
          Tuple4DReadOnly quaternion = EuclidCoreRandomTools.nextQuaternion32(random);
          Vector4D32 vector = new Vector4D32(quaternion);
-         EuclidCoreTestTools.assertTuple4DEquals(quaternion, vector, EPS);
+         EuclidCoreTestTools.assertEquals(quaternion, vector, EPS);
       }
 
       { // Test Vector4D(Vector3DReadOnly vector3D)

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -32,7 +33,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Transform
+public interface Transform extends EuclidGeometry
 {
    /**
     * Transforms the given {@code pointToTransform} by this transform.

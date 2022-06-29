@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -724,15 +727,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   /**
-    * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other   the other face to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Face3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Face3DReadOnly))
+         return false;
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -744,15 +749,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
-    *
-    * @param other   the other face to compare against this. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Face3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Face3DReadOnly))
+         return false;
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -786,18 +793,19 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   /**
-    * Tests on a per component basis, if this face 3D is exactly equal to {@code other}.
-    *
-    * @param other the other face 3D to compare against this. Not modified.
-    * @return {@code true} if the two faces are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Face3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      if (other == null)
+      if (geometry == null)
          return false;
+      if (!(geometry instanceof Face3DReadOnly))
+         return false;
+
+      Face3DReadOnly other = (Face3DReadOnly) geometry;
+
       if (getNumberOfEdges() != other.getNumberOfEdges())
          return false;
 
@@ -807,5 +815,26 @@ public interface Face3DReadOnly extends SupportingVertexHolder
             return false;
       }
       return true;
+   }
+
+   /**
+    * Gets the representative {@code String} of this face 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getFace3DString(format, this);
    }
 }

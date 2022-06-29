@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * components are expected to be expressed in the global coordinate system of the box, i.e.
  * accounting for the box's pose.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
@@ -21,7 +21,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (0.5 * box3D.getSizeX(), 0.0, 0.0)} in
     * the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local maximum x coordinate of the box.
     */
    Face3DReadOnly getXMaxFace();
@@ -29,7 +29,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (0.0, 0.5 * box3D.getSizeY(), 0.0)} in
     * the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local maximum y coordinate of the box.
     */
    Face3DReadOnly getYMaxFace();
@@ -37,7 +37,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (0.0, 0.0, 0.5 * box3D.getSizeZ())} in
     * the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local maximum y coordinate of the box.
     */
    Face3DReadOnly getZMaxFace();
@@ -45,7 +45,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to one of the three following faces: {@link #getXMaxFace()}, {@link #getYMaxFace()},
     * and {@link #getZMaxFace()}.
-    * 
+    *
     * @param axis used to select the adequate face to be returned.
     * @return one the three box's face representing one of its local maximum coordinates.
     */
@@ -67,7 +67,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (-0.5 * box3D.getSizeX(), 0.0, 0.0)}
     * in the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local minimum x coordinate of the box.
     */
    Face3DReadOnly getXMinFace();
@@ -75,7 +75,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (0.0, -0.5 * box3D.getSizeY(), 0.0)}
     * in the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local minimum y coordinate of the box.
     */
    Face3DReadOnly getYMinFace();
@@ -83,7 +83,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which centroid is at {@code (0.0, 0.0, -0.5 * box3D.getSizeZ())}
     * in the box's local coordinate system.
-    * 
+    *
     * @return the face representing the local maximum y coordinate of the box.
     */
    Face3DReadOnly getZMinFace();
@@ -91,7 +91,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to one of the three following faces: {@link #getXMinFace()}, {@link #getYMinFace()},
     * and {@link #getZMinFace()}.
-    * 
+    *
     * @param axis used to select the adequate face to be returned.
     * @return one the three box's face representing one of its local minimum coordinates.
     */
@@ -112,7 +112,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
 
    /**
     * Gets the box this polytope view is backed with.
-    * 
+    *
     * @return the box this polytope view is for.
     */
    Box3DReadOnly getOwner();

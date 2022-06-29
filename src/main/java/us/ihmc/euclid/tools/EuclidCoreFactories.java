@@ -172,7 +172,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -218,7 +218,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -271,7 +271,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -324,7 +324,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -442,7 +442,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -518,14 +518,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new quaternion that is a read-only view of the given {@code original} conjugated.
-    * 
+    *
     * @param originalQuaternion the original quaternion to create the linked conjugated quaternion for.
     *                           Not modified.
     * @return the conjugated read-only view of {@code original}.
@@ -576,7 +576,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -663,8 +663,9 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
+
       };
    }
 
@@ -673,13 +674,13 @@ public class EuclidCoreFactories
     * {@code originalTuple}.
     * <p>
     * The tilde form is the matrix implementation of cross product:
-    * 
+    *
     * <pre>
     *               /  0 -z  y \
     * tildeMatrix = |  z  0 -x |
     *               \ -y  x  0 /
     * </pre>
-    * 
+    *
     * where <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> are the components of {@code originalTuple}.
     * </p>
     *
@@ -762,7 +763,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -770,13 +771,13 @@ public class EuclidCoreFactories
    /**
     * Creates a new matrix 3D that is a read-only view of the diagonal form of the given
     * {@code originalTuple}:
-    * 
+    *
     * <pre>
     *                  / x  0  0 \
     * diagonalMatrix = | 0  y  0 |
     *                  \ 0  0  z /
     * </pre>
-    * 
+    *
     * where <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> are the components of {@code originalTuple}.
     *
     * @param originalTuple the original tuple to create linked diagonal matrix for. Not modified.
@@ -858,14 +859,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a linked point that can be used to observe access to the source point's coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -880,7 +881,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked point that can be used to observe access to the source point's coordinates.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate being accessed.
@@ -895,7 +896,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe access to the source vector's components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component being accessed.
@@ -910,7 +911,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe access to the source vector's components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component being accessed.
@@ -946,7 +947,7 @@ public class EuclidCoreFactories
    /**
     * Creates a linked unit vector that can be used to observe access to the source unit vector's
     * components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component being accessed.
@@ -1006,7 +1007,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1014,7 +1015,7 @@ public class EuclidCoreFactories
    /**
     * Creates a linked unit vector that can be used to observe access to the source unit vector's
     * components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component being accessed.
@@ -1086,7 +1087,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1094,7 +1095,7 @@ public class EuclidCoreFactories
    /**
     * Creates a linked rotation matrix that can be used to observe access to the source rotation
     * matrix's components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
     *                              matrix is being accessed. The corresponding constants {@link Axis3D}
     *                              will be passed to indicate the row and column respectively of the
@@ -1207,7 +1208,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
@@ -1215,7 +1216,7 @@ public class EuclidCoreFactories
    /**
     * Creates a linked quaternion that can be used to observe access to the source rotation matrix's
     * components.
-    * 
+    *
     * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
     *                              is being accessed. The index of the component being accessed will be
     *                              passed.
@@ -1286,14 +1287,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new point that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1311,7 +1312,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked point that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1409,14 +1410,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new point that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1434,7 +1435,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked point that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1550,14 +1551,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component that was changed alongside its new
@@ -1575,7 +1576,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1673,14 +1674,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component that was changed alongside its new
@@ -1698,7 +1699,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -1813,14 +1814,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component that was changed alongside its new
@@ -1838,7 +1839,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2011,14 +2012,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component that was changed alongside its new
@@ -2036,7 +2037,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
     *                              been modified. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
@@ -2240,14 +2241,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new rotation matrix that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
@@ -2264,7 +2265,7 @@ public class EuclidCoreFactories
    /**
     * Creates a linked rotation matrix that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
@@ -2440,14 +2441,14 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrix3DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }
 
    /**
     * Creates a new quaternion that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the quaternion has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
@@ -2462,7 +2463,7 @@ public class EuclidCoreFactories
 
    /**
     * Creates a linked quaternion that can be used to observe read and write operations on the source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever the quaternion has been
     *                              modified. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a component of the rotation
@@ -2556,7 +2557,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple4DString(this);
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
    }

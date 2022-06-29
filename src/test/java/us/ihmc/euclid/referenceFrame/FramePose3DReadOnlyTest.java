@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -12,8 +14,12 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
 public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
 {
@@ -37,8 +43,8 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    public final T createRandom2DFramePose(Random random, ReferenceFrame referenceFrame)
    {
       Pose3D pose = new Pose3D();
-      pose.setOrientationYawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0, 0);
-      pose.setPosition(EuclidCoreRandomTools.nextPoint2D(random));
+      pose.getOrientation().setYawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0, 0);
+      pose.getPosition().set(EuclidCoreRandomTools.nextPoint2D(random));
       return createFramePose(referenceFrame, pose);
    }
 
@@ -53,7 +59,16 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      for (Method method : Transform.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformReadOnly.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      for (Method method : RigidBodyTransformBasics.class.getDeclaredMethods())
+         signaturesToIgnore.add(new MethodSignature(method.getName(), method.getParameterTypes()));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
-      tester.assertOverloadingWithFrameObjects(FramePose3DReadOnly.class, Pose3DReadOnly.class, true, 1);
+      tester.assertOverloadingWithFrameObjects(FramePose3DReadOnly.class, Pose3DReadOnly.class, true, 1, methodFilter);
    }
 }

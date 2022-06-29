@@ -14,11 +14,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * A linear transform matrix behaves mostly like a regular 3D matrix. In addition to the base
  * features from {@link Matrix3DReadOnly}, the linear transform can be decomposed, using a singular
  * value decomposition, into:
- * 
+ *
  * <pre>
  * A = U W V
  * </pre>
- * 
+ *
  * where:
  * <ul>
  * <li><tt>A</tt> is this 3D linear transform.
@@ -30,7 +30,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * rotation transform, i.e. ignoring the scale matrix {@code W}, and use this view to perform
  * operations with other rotations.
  * </p>
- * 
+ *
  * @see SingularValueDecomposition3D
  * @author Sylvain Bertrand
  */
@@ -43,7 +43,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * returned quaternion is linked to this transform, i.e. it is automatically updated when this
     * transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of this linear transform as a pure orientation.
     */
    QuaternionReadOnly getAsQuaternion();
@@ -52,11 +52,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Returns the read-only view of the pre-scale rotation part of this linear transform.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -67,7 +67,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * The returned quaternion is linked to this transform, i.e. it is automatically updated when this
     * transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of the pre-scale rotation part of this linear transform.
     */
    QuaternionReadOnly getPreScaleQuaternion();
@@ -76,11 +76,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Returns the read-only view of the scale part of this linear transform.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -91,7 +91,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * The returned vector is linked to this transform, i.e. it is automatically updated when this
     * transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of the scale part of this linear transform.
     */
    Vector3DReadOnly getScaleVector();
@@ -100,11 +100,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Returns the read-only view of the post-scale rotation part of this linear transform.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -115,14 +115,14 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * The returned quaternion is linked to this transform, i.e. it is automatically updated when this
     * transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of the post-scale rotation part of this linear transform.
     */
    QuaternionReadOnly getPostScaleQuaternion();
 
    /**
     * Gets this linear transform stripped of its scale part into a pure orientation.
-    * 
+    *
     * @param orientationToPack the object to store the orientation. Modified.
     */
    default void getOrientation(Orientation3DBasics orientationToPack)
@@ -138,7 +138,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
     * same axis-angle.
     * </p>
-    * 
+    *
     * @param rotationVector the vector to store the rotation. Modified.
     */
    default void getRotationVector(Vector3DBasics rotationVector)
@@ -153,7 +153,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     */
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
@@ -165,11 +165,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Gets the x-component of this linear transform's scale.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -178,7 +178,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * <li><tt>U</tt> is the 3D post-scale rotation.
     * </ul>
     * </p>
-    * 
+    *
     * @return the x-component of this linear transform's scale.
     */
    default double getScaleX()
@@ -190,11 +190,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Gets the y-component of this linear transform's scale.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -203,7 +203,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * <li><tt>U</tt> is the 3D post-scale rotation.
     * </ul>
     * </p>
-    * 
+    *
     * @return the y-component of this linear transform's scale.
     */
    default double getScaleY()
@@ -215,11 +215,11 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * Gets the z-component of this linear transform's scale.
     * <p>
     * The linear transform is decomposed, using a singular value decomposition, into:
-    * 
+    *
     * <pre>
     * A = U W V
     * </pre>
-    * 
+    *
     * where:
     * <ul>
     * <li><tt>A</tt> is this 3D linear transform.
@@ -228,7 +228,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
     * <li><tt>U</tt> is the 3D post-scale rotation.
     * </ul>
     * </p>
-    * 
+    *
     * @return the z-component of this linear transform's scale.
     */
    default double getScaleZ()

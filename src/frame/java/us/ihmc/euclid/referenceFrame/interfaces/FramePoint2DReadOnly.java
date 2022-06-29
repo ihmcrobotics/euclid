@@ -97,21 +97,4 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
       checkReferenceFrameMatch(framePoint3DReadOnly);
       return Point2DReadOnly.super.distanceXYSquared(framePoint3DReadOnly);
    }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
-    * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
-    *
-    * @param other   the frame point to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two frame points represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default boolean geometricallyEquals(FramePoint2DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Point2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
 }

@@ -135,22 +135,22 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T expected = createEmptyTuple();
 
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
-         rigidBodyTransform.setRotationYaw(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         rigidBodyTransform.setTranslation(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         rigidBodyTransform.getRotation().setToYawOrientation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
+         rigidBodyTransform.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          rigidBodyTransform.transform(expected);
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
@@ -197,24 +197,24 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T expected = createEmptyTuple();
 
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
-         rigidBodyTransform.setRotationYaw(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         rigidBodyTransform.setTranslation(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         rigidBodyTransform.getRotation().setToYawOrientation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
+         rigidBodyTransform.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          actual.set(original);
          actual.applyTransform(rigidBodyTransform);
          actual.applyInverseTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, false);
          actual.applyInverseTransform(rigidBodyTransform, false);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          actual.set(original);
          actual.applyTransform(rigidBodyTransform, true);
          actual.applyInverseTransform(rigidBodyTransform, true);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
 
          rigidBodyTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 

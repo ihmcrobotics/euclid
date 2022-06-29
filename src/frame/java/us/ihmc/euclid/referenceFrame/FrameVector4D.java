@@ -1,10 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
@@ -26,7 +24,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
  * requiring {@code FrameVector4D}.
  * </p>
  */
-public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameVector4D>
+public class FrameVector4D implements FrameVector4DBasics
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -100,19 +98,6 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    public FrameVector4D(FrameTuple4DReadOnly other)
    {
       setIncludingFrame(other);
-   }
-
-   /**
-    * Sets this frame vector to {@code other}.
-    *
-    * @param other the other frame vector to set this to. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public void set(FrameVector4D other)
-   {
-      FrameVector4DBasics.super.set(other);
    }
 
    /**
@@ -244,48 +229,6 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two vectors have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameVector4D other, double epsilon)
-   {
-      return FrameVector4DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 4D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 4D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two vectors can be spaced and still considered
-    *                equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameVector4D other, double epsilon)
-   {
-      return FrameVector4DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this frame vector 4D as follows: (x, y, z,
     * s)-worldFrame.
     *
@@ -294,7 +237,7 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple4DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

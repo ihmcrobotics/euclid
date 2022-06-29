@@ -1,5 +1,7 @@
 package us.ihmc.euclid.orientation.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Orientation2DReadOnly
+public interface Orientation2DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the current yaw angle of this orientation 2D.
@@ -196,54 +198,73 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
-    * {@code other}.
+    * {@inheritDoc}
     * <p>
     * Note that this method performs number comparison and not an angle comparison, such that:
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Orientation2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Orientation2DReadOnly))
+         return false;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
       return EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
-    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the orientation to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   default boolean geometricallyEquals(Orientation2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Orientation2DReadOnly))
+         return false;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
       return Math.abs(difference(other)) <= epsilon;
    }
 
    /**
-    * Tests if this orientation 2D is exactly equal to {@code other}.
+    * {@inheritDoc}
     * <p>
     * Note that this method performs number comparison and not an angle comparison, such that:
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
-    *
-    * @param other the other orientation 2D to compare against this. Not modified.
-    * @return {@code true} if the two orientations are exactly equal, {@code false} otherwise.
     */
-   default boolean equals(Orientation2DReadOnly other)
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getYaw() == other.getYaw();
+      if (!(geometry instanceof Orientation2DReadOnly))
+         return false;
+      Orientation2DReadOnly other = (Orientation2DReadOnly) geometry;
+      return EuclidCoreTools.equals(getYaw(), other.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of this orientation 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getOrientation2DString(format, this);
    }
 }

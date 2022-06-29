@@ -205,7 +205,7 @@ public abstract class Matrix3DBasicsTest<T extends Matrix3DBasics> extends Commo
 
          tildeMatrix.transform(vector2, actual);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALL_EPS);
       }
    }
 
@@ -610,6 +610,7 @@ public abstract class Matrix3DBasicsTest<T extends Matrix3DBasics> extends Commo
       }
    }
 
+   @Override
    @Test
    public void testTranspose() throws Exception
    {

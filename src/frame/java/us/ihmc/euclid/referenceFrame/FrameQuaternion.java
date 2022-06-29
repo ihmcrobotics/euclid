@@ -2,14 +2,12 @@ package us.ihmc.euclid.referenceFrame;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -33,7 +31,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * requiring {@code FrameQuaternion}.
  * </p>
  */
-public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<FrameQuaternion>
+public class FrameQuaternion implements FrameQuaternionBasics
 {
    /** The reference frame is which this quaternion is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -202,19 +200,6 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    }
 
    /**
-    * Sets this frame quaternion to {@code other}.
-    *
-    * @param other the other quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public void set(FrameQuaternion other)
-   {
-      FrameQuaternionBasics.super.set(other);
-   }
-
-   /**
     * Sets the reference frame of this quaternion without updating or modifying its x, y, z, and s
     *
     * @param referenceFrame the new reference frame for this frame vector.
@@ -306,52 +291,6 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    }
 
    /**
-    * Tests on a per component basis if this quaternion is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two quaternions have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two quaternions are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameQuaternion other, double epsilon)
-   {
-      return FrameQuaternionBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *                be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameQuaternion other, double epsilon)
-   {
-      return FrameQuaternionBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
     * s)-worldFrame.
     *
@@ -360,7 +299,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple4DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

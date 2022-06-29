@@ -48,7 +48,7 @@ public class EuclidCoreRandomToolsTest
 
          orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, randomVector, true);
          assertEquals(0.0, randomVector.dot(orthogonal), EPSILON);
-         assertEquals(1.0, orthogonal.length(), EPSILON);
+         assertEquals(1.0, orthogonal.norm(), EPSILON);
       }
 
       // Now check with the axes X, Y, and Z to highlight edge-cases.
@@ -65,11 +65,11 @@ public class EuclidCoreRandomToolsTest
 
          orthogonal1 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, true);
          assertEquals(0.0, vector.dot(orthogonal1), EPSILON);
-         assertEquals(1.0, orthogonal1.length(), EPSILON);
+         assertEquals(1.0, orthogonal1.norm(), EPSILON);
 
          orthogonal2 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, true);
          assertEquals(0.0, vector.dot(orthogonal2), EPSILON);
-         assertEquals(1.0, orthogonal2.length(), EPSILON);
+         assertEquals(1.0, orthogonal2.norm(), EPSILON);
          assertFalse(orthogonal1.epsilonEquals(orthogonal2, EPSILON));
       }
    }

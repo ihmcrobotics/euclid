@@ -1,11 +1,10 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -23,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
+public class Capsule3D implements Capsule3DBasics
 {
    /** Position of this capsule's center. */
    private final Point3D position = new Point3D();
@@ -88,17 +87,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    public Capsule3D(Capsule3DReadOnly other)
    {
       set(other);
-   }
-
-   /**
-    * Copies the {@code other} capsule data into {@code this}.
-    *
-    * @param other the other capsule to copy. Not modified.
-    */
-   @Override
-   public void set(Capsule3D other)
-   {
-      Capsule3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -176,33 +164,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    }
 
    /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other capsule to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Capsule3D other, double epsilon)
-   {
-      return Capsule3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two capsules are geometrically
-    * similar.
-    *
-    * @param other   the capsule to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the capsules represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Capsule3D other, double epsilon)
-   {
-      return Capsule3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Capsule3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -244,6 +205,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getCapsule3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

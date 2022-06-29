@@ -46,7 +46,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Vector2D expected = new Vector2D(newX, newY);
          expected.normalize();
 
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -55,7 +55,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          UnitVector2D actual = new UnitVector2D(randomVectorArray);
          Vector2D expected = new Vector2D(randomVectorArray);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -64,7 +64,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          UnitVector2D actual = new UnitVector2D(other);
          Vector2D expected = new Vector2D(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -83,7 +83,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setX(x);
          expected.setX(x);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -95,7 +95,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setY(y);
          expected.setY(y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -138,7 +138,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          expected.setElement(1, y);
 
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -151,7 +151,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(x, y);
          expected.set(x, y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -163,7 +163,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
          actual.set(other);
          expected.set(other);
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -176,7 +176,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(other);
          expected.set(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -189,7 +189,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(tuple3D);
          expected.set(tuple3D);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -202,7 +202,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(tupleArray);
          expected.set(tupleArray);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -215,7 +215,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(2, tupleArray);
          expected.set(2, tupleArray);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -228,7 +228,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(tupleArray);
          expected.set(tupleArray);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -241,7 +241,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(2, tupleArray);
          expected.set(2, tupleArray);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -256,7 +256,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(matrix);
          expected.set(matrix);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -271,7 +271,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(5, matrix);
          expected.set(5, matrix);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -286,7 +286,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.set(5, 2, matrix);
          expected.set(5, 2, matrix);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -305,12 +305,12 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
          actual.absolute();
          expected.absolute();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
 
          actual.setAndAbsolute(other);
          expected.setAndAbsolute(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -329,12 +329,12 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
          actual.negate();
          expected.negate();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
 
          actual.setAndNegate(other);
          expected.setAndNegate(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -536,12 +536,12 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.addX(x);
          expected.addX(x);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
 
          actual.addY(y);
          expected.addY(y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -555,7 +555,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.add(x, y);
          expected.add(x, y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -568,7 +568,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.add(tupleToAdd);
          expected.add(tupleToAdd);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -582,7 +582,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.add(tupleToAdd1, tupleToAdd2);
          expected.add(tupleToAdd1, tupleToAdd2);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -603,12 +603,12 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.subX(x);
          expected.subX(x);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
 
          actual.subY(y);
          expected.subY(y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -622,7 +622,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.sub(x, y);
          expected.sub(x, y);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -635,7 +635,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.sub(tupleToSub);
          expected.sub(tupleToSub);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -649,7 +649,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.sub(tupleToSub1, tupleToSub2);
          expected.sub(tupleToSub1, tupleToSub2);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -669,7 +669,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.clipToMax(max);
          expected.clipToMax(max);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -683,7 +683,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setAndClipToMax(max, other);
          expected.setAndClipToMax(max, other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -696,7 +696,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.clipToMin(min);
          expected.clipToMin(min);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -710,7 +710,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setAndClipToMin(min, other);
          expected.setAndClipToMin(min, other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -724,7 +724,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.clipToMinMax(min, max);
          expected.clipToMinMax(min, max);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -739,7 +739,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setAndClipToMinMax(min, max, other);
          expected.setAndClipToMinMax(min, max, other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -758,7 +758,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scale(scale);
          expected.scale(scale);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -771,7 +771,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scale(scaleX, scaleY);
          expected.scale(scaleX, scaleY);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -784,7 +784,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.setAndScale(scale, other);
          expected.setAndScale(scale, other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -797,7 +797,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleAdd(scale, other); // the scale is applied to unit vector which cannot be scaled.
          expected.add(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -811,7 +811,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleAdd(scale, other1, other2);
          expected.scaleAdd(scale, other1, other2);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -824,7 +824,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleAdd(scale, other, actual);
          expected.scaleAdd(scale, other, expected);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -837,7 +837,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleSub(scale, other); // the scale is applied to unit vector which cannot be scaled.
          expected.sub(other);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -851,7 +851,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleSub(scale, other1, other2);
          expected.scaleSub(scale, other1, other2);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -864,7 +864,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.scaleSub(scale, other, actual);
          expected.scaleSub(scale, other, expected);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -885,7 +885,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
    @Test
    @Override
-   public void testLengthSquared()
+   public void testNormSquared()
    {
       Random random = new Random(312310L);
 
@@ -894,7 +894,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random, -100.0, 100.0);
          UnitVector2D actual = new UnitVector2D(expected);
 
-         assertEquals(1.0, actual.lengthSquared());
+         assertEquals(1.0, actual.normSquared());
       }
    }
 
@@ -915,7 +915,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.interpolate(other, alpha);
          expected.interpolate(other, alpha);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -930,7 +930,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          actual.interpolate(other1, other2, alpha);
          expected.interpolate(other1, other2, alpha);
          expected.normalize();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, DOUBLE_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, DOUBLE_EPSILON);
       }
    }
 
@@ -957,20 +957,20 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
    @Override
    @Test
-   public void testLength()
+   public void testNorm()
    {
       Random random = new Random(234234);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
          UnitVector2D vector = new UnitVector2D(EuclidCoreRandomTools.nextVector2D(random, -100.0, 100.0));
-         assertTrue(vector.length() == 1.0);
+         assertTrue(vector.norm() == 1.0);
       }
    }
 
    @Override
    @Test
-   public void testClipToMaxLength() throws Exception
+   public void testClipToMaxNorm() throws Exception
    {
       Random random = new Random(234234);
 

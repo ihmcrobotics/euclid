@@ -15,7 +15,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
  * <p>
  * This polytope reference frame is linked to the ramp reference frame.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameRampPolytope3DView extends RampPolytope3DView, FrameConvexPolytope3DReadOnly

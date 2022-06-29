@@ -73,43 +73,6 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLineX the new x-coordinate of the point on this line.
-    * @param pointOnLineY the new y-coordinate of the point on this line.
-    * @deprecated Use {@code this.getPoint().set(pointOnLineX, pointOnLineY)} instead.
-    */
-   @Deprecated
-   default void setPoint(double pointOnLineX, double pointOnLineY)
-   {
-      getPoint().set(pointOnLineX, pointOnLineY);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized values provided.
-    *
-    * @param lineDirectionX the new x-component of the direction of this line.
-    * @param lineDirectionY the new y-component of the direction of this line.
-    * @deprecated Use {@code this.getDirection().set(lineDirectionX, lineDirectionY)} instead.
-    */
-   @Deprecated
-   default void setDirection(double lineDirectionX, double lineDirectionY)
-   {
-      getDirection().set(lineDirectionX, lineDirectionY);
-   }
-
-   /**
-    * Flips this line's direction.
-    *
-    * @deprecated Use {@code this.getDirection().negate()} instead.
-    */
-   @Deprecated
-   default void negateDirection()
-   {
-      getDirection().negate();
-   }
-
-   /**
     * Applies a counter-clockwise rotation to the direction of this line about the z-axis by
     * {@code angleInRadians}.
     * <p>
@@ -121,54 +84,6 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    default void rotate(double angleInRadians)
    {
       RotationMatrixTools.applyYawRotation(angleInRadians, getDirection(), getDirection());
-   }
-
-   /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLine new point on this line. Not modified.
-    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
-    */
-   @Deprecated
-   default void setPoint(Point2DReadOnly pointOnLine)
-   {
-      getPoint().set(pointOnLine);
-   }
-
-   /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLine new point on this line. Not modified.
-    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
-    */
-   @Deprecated
-   default void setPoint(Point3DReadOnly pointOnLine)
-   {
-      getPoint().set(pointOnLine);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
-    *
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
-    */
-   @Deprecated
-   default void setDirection(Vector2DReadOnly lineDirection)
-   {
-      getDirection().set(lineDirection);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
-    *
-    * @param lineDirection new direction of this line. Not modified.
-    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
-    */
-   @Deprecated
-   default void setDirection(Vector3DReadOnly lineDirection)
-   {
-      getDirection().set(lineDirection);
    }
 
    /**

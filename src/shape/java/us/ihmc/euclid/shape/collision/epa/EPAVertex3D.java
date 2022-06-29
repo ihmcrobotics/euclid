@@ -6,7 +6,7 @@ import java.util.List;
 
 import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -238,6 +238,6 @@ public class EPAVertex3D implements Vertex3DReadOnly
    @Override
    public String toString()
    {
-      return "EPA " + EuclidShapeIOTools.getVertex3DString(this);
+      return "EPA " + toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

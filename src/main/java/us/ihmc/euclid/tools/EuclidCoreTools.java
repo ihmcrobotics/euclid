@@ -70,16 +70,13 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple2DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -118,17 +115,13 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -161,16 +154,13 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple2DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -209,17 +199,13 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -255,7 +241,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(0.0, 0.0, 0.0, 1.0);
+         return -1106247679;
       }
 
       @Override
@@ -270,7 +256,7 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getTuple4DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
    };
 
@@ -343,13 +329,13 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getMatrix3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
 
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         return 1;
       }
    };
 
@@ -425,13 +411,13 @@ public class EuclidCoreTools
       @Override
       public String toString()
       {
-         return EuclidCoreIOTools.getMatrix3DString(this);
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
       }
 
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         return 976224257;
       }
    };
 
@@ -904,6 +890,22 @@ public class EuclidCoreTools
    }
 
    /**
+    * Test if the two values are equal with the special case of considering
+    * {@code Double.NaN == Double.NaN}.
+    *
+    * @param expectedValue the first value to compare.
+    * @param actualValue   the second value to compare.
+    * @return {@code true} if the two values are considered to be equal, {@code false otherwise}.
+    */
+   public static boolean equals(double expectedValue, double actualValue)
+   {
+      if (expectedValue == actualValue)
+         return true;
+      else
+         return Double.isNaN(expectedValue) && Double.isNaN(actualValue);
+   }
+
+   /**
     * Tests if the two values are equal to an {@code epsilon}:<br>
     * |{@code expectedValue} - {@code actualValue}| &leq; {@code epsilon}
     * <p>
@@ -1144,6 +1146,25 @@ public class EuclidCoreTools
    public static double acos(double a)
    {
       return StrictMath.acos(a);
+   }
+
+   /**
+    * Variation of {@link Math#acos(double)} function that relies on the following identity:
+    *
+    * <pre>
+    * acos(cosX) = 2 atan2(&Sqrt;(1 - cosX<sup>2</sup>), 1 + cosX)
+    * </pre>
+    *
+    * @param cosX the value whose arc cosine is to be returned. The value is clamped to be within [-1,
+    *             1].
+    * @return the arc cosine of the argument.
+    */
+   public static double fastAcos(double cosX)
+   {
+      if (cosX == -1.0)
+         return Math.PI;
+      else
+         return 2.0 * atan2(squareRoot(1.0 - cosX * cosX), 1.0 + cosX);
    }
 
    /**

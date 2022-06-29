@@ -5,6 +5,9 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -13,7 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * Read-only interface for a 2D axis-aligned bounding box defined from a set of minimum and maximum
  * coordinates.
  */
-public interface BoundingBox2DReadOnly
+public interface BoundingBox2DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the minimum coordinate of this bounding box.
@@ -594,48 +597,62 @@ public interface BoundingBox2DReadOnly
       return intersectionBetweenRay2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(BoundingBox2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof BoundingBox2DReadOnly))
+         return false;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
       return getMinPoint().epsilonEquals(other.getMinPoint(), epsilon) && getMaxPoint().epsilonEquals(other.getMaxPoint(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   default boolean geometricallyEquals(BoundingBox2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof BoundingBox2DReadOnly))
+         return false;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
-    *
-    * @param other the other bounding box 2D to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(BoundingBox2DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+      if (!(geometry instanceof BoundingBox2DReadOnly))
+         return false;
+      BoundingBox2DReadOnly other = (BoundingBox2DReadOnly) geometry;
+      return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
+   }
+
+   /**
+    * Gets a representative {@code String} of this bounding box 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getBoundingBox2DString(format, this);
    }
 }

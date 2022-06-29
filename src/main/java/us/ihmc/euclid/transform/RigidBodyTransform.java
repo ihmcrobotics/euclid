@@ -3,9 +3,7 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -53,8 +51,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform
-      implements RigidBodyTransformBasics, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>, Settable<RigidBodyTransform>
+public class RigidBodyTransform implements RigidBodyTransformBasics
 {
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
@@ -198,18 +195,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Computes the determinant of the rotation part of this transform.
-    *
-    * @return the determinant's value.
-    * @deprecated Use {@code this.getRotation().determinant()} instead.
-    */
-   @Deprecated
-   public double determinantRotationPart()
-   {
-      return getRotation().determinant();
-   }
-
-   /**
     * Sets this rigid-body transform from the given 12 coefficients.
     *
     * @param m00 the 1st row 1st column component of the rotation part of this transform.
@@ -280,17 +265,6 @@ public class RigidBodyTransform
    {
       getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       getTranslation().set(m03, m13, m23);
-   }
-
-   /**
-    * Sets this rigid-body transform to {@code other}.
-    *
-    * @param other the other rigid-body transform to copy the values from. Not modified.
-    */
-   @Override
-   public void set(RigidBodyTransform other)
-   {
-      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -545,86 +519,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Sets the rotation part of this transform from the given 9 coefficients.
-    *
-    * @param m00 the 1st row 1st column component of the rotation part of this transform.
-    * @param m01 the 1st row 2nd column component of the rotation part of this transform.
-    * @param m02 the 1st row 3rd column component of the rotation part of this transform.
-    * @param m10 the 2nd row 1st column component of the rotation part of this transform.
-    * @param m11 the 2nd row 2nd column component of the rotation part of this transform.
-    * @param m12 the 2nd row 3rd column component of the rotation part of this transform.
-    * @param m20 the 3rd row 1st column component of the rotation part of this transform.
-    * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
-    * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
-    * @throws NotARotationMatrixException if the resulting matrix does not represent a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
-    *             instead.
-    */
-   @Deprecated
-   public void setRotation(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
-   /**
-    * Sets the rotation part of this transform from the given 9 coefficients.
-    * <p>
-    * Prefer using the method
-    * {@link #setRotation(double, double, double, double, double, double, double, double, double)} as
-    * it asserts that the coefficients 0represent a rotation matrix.
-    * </p>
-    *
-    * @param m00 the 1st row 1st column component of the rotation part of this transform.
-    * @param m01 the 1st row 2nd column component of the rotation part of this transform.
-    * @param m02 the 1st row 3rd column component of the rotation part of this transform.
-    * @param m10 the 2nd row 1st column component of the rotation part of this transform.
-    * @param m11 the 2nd row 2nd column component of the rotation part of this transform.
-    * @param m12 the 2nd row 3rd column component of the rotation part of this transform.
-    * @param m20 the 3rd row 1st column component of the rotation part of this transform.
-    * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
-    * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
-    * @deprecated Use {@code this.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
-    *             instead.
-    */
-   @Deprecated
-   public void setRotationUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
-    */
-   @Deprecated
-   public void setRotation(DMatrix rotationMatrix)
-   {
-      getRotation().set(rotationMatrix);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
-    */
-   @Deprecated
-   public void setRotation(Matrix3DReadOnly rotationMatrix)
-   {
-      getRotation().set(rotationMatrix);
-   }
-
-   /**
     * Sets the rotation part of this transform to the given matrix and sets the translation part to
     * zero.
     *
@@ -829,45 +723,6 @@ public class RigidBodyTransform
    public RotationMatrixBasics getRotation()
    {
       return rotationMatrix;
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *                             Modified.
-    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
-    */
-   @Deprecated
-   public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(getRotation());
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *                             Modified.
-    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
-    */
-   @Deprecated
-   public void getRotation(DMatrix rotationMatrixToPack)
-   {
-      getRotation().get(rotationMatrixToPack);
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform in 1D row-major array.
-    *
-    * @param rotationMatrixArrayToPack the array in which the rotation part of this transform is
-    *                                  stored. Modified.
-    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
-    */
-   @Deprecated
-   public void getRotation(double[] rotationMatrixArrayToPack)
-   {
-      getRotation().get(rotationMatrixArrayToPack);
    }
 
    @Override
@@ -1096,20 +951,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param epsilon tolerance to use when comparing each component.
-    * @param other   the other rigid-body transform to compare against this. Not modified.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(RigidBodyTransform other, double epsilon)
-   {
-      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(RigidBodyTransform)}, it returns {@code false} otherwise or if the {@code object}
     * is {@code null}.
@@ -1126,43 +967,37 @@ public class RigidBodyTransform
          return false;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are exactly equal.
-    * <p>
-    * The method returns {@code false} if the given transform is {@code null}.
-    * </p>
-    *
-    * @param other the other transform to compare against this. Not modified.
-    * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
-    */
-   public boolean equals(RigidBodyTransform other)
+   /** {@inheritDoc} */
+   @Override
+   public boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
+      if (!(geometry instanceof RigidBodyTransform))
+         return false;
+      RigidBodyTransform other = (RigidBodyTransform) geometry;
+      return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
 
-   /**
-    * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
-    * translation vectors are equal.
-    *
-    * @param other   the other rigid body transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
-   public boolean geometricallyEquals(RigidBodyTransform other, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      return other.getRotation().geometricallyEquals(getRotation(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
+         return false;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
+      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
    /**
     * Provides a {@code String} representation of this transform as follows:
-    * 
+    *
     * <pre>
     *  0.596  0.630  0.930 | -0.435
     * -0.264  0.763  0.575 | -0.464
@@ -1175,7 +1010,27 @@ public class RigidBodyTransform
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getRigidBodyTransformString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Gets a representative {@code String} of this transform given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
+    * </p>
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
    }
 
    @Override

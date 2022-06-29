@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -42,16 +41,16 @@ public class BoundingBox3DTest
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(min, max);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(new BoundingBox3D(min, max));
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -62,16 +61,16 @@ public class BoundingBox3DTest
       min.get(minArray);
       max.get(maxArray);
       boundingBox = new BoundingBox3D(minArray, maxArray);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Asserts exception is thrown when attempting to create a bad bounding box
       try
@@ -178,8 +177,8 @@ public class BoundingBox3DTest
       halfSize.sub(max, min);
       halfSize.scale(0.5);
       BoundingBox3D boundingBox = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -189,7 +188,7 @@ public class BoundingBox3DTest
          expected.combine(boundingBoxOne, boundingBoxTwo);
          BoundingBox3D actual = BoundingBox3D.union(boundingBoxOne, boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -202,15 +201,15 @@ public class BoundingBox3DTest
 
       min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(min);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(new double[] {min.getX(), min.getY(), min.getZ()});
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(min.getX(), min.getY(), min.getZ());
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       // Check exceptions
       boundingBox.setToZero();
@@ -312,15 +311,15 @@ public class BoundingBox3DTest
 
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(max);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(new double[] {max.getX(), max.getY(), max.getZ()});
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(max.getX(), max.getY(), max.getZ());
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Check exceptions
       boundingBox.setToZero();
@@ -425,8 +424,8 @@ public class BoundingBox3DTest
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
@@ -436,15 +435,15 @@ public class BoundingBox3DTest
       min.get(minArray);
       max.get(maxArray);
       boundingBox.set(minArray, maxArray);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min, max);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
@@ -456,15 +455,15 @@ public class BoundingBox3DTest
       halfSize.sub(max, min);
       halfSize.scale(0.5);
       boundingBox.set(center, halfSize);
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(new BoundingBox3D(min, max));
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Asserts exception is thrown when attempting to create a bad bounding box
       try
@@ -689,7 +688,7 @@ public class BoundingBox3DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(boundingBoxTwo, combined, EPSILON);
+         EuclidCoreTestTools.assertEquals(boundingBoxTwo, combined, EPSILON);
 
          boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          boundingBoxTwo.setToNaN();
@@ -697,7 +696,7 @@ public class BoundingBox3DTest
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
 
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(boundingBoxOne, combined, EPSILON);
+         EuclidCoreTestTools.assertEquals(boundingBoxOne, combined, EPSILON);
       }
    }
 
@@ -749,14 +748,14 @@ public class BoundingBox3DTest
          boundingBox3D.set(center, halfSize);
          Point3D actualCenter = new Point3D();
          boundingBox3D.getCenterPoint(actualCenter);
-         EuclidCoreTestTools.assertTuple3DEquals(center, actualCenter, EPSILON);
+         EuclidCoreTestTools.assertEquals(center, actualCenter, EPSILON);
          Vector3D centerToMin = new Vector3D();
          centerToMin.sub(boundingBox3D.getMinPoint(), center);
          Vector3D centerToMax = new Vector3D();
          centerToMax.sub(boundingBox3D.getMaxPoint(), center);
 
          centerToMax.negate();
-         EuclidCoreTestTools.assertTuple3DEquals(centerToMax, centerToMin, EPSILON);
+         EuclidCoreTestTools.assertEquals(centerToMax, centerToMin, EPSILON);
       }
    }
 
@@ -774,7 +773,7 @@ public class BoundingBox3DTest
 
          expectedPoint.interpolate(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), alpha);
          boundingBox3D.getPointGivenParameters(alpha, alpha, alpha, actualPoint);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, actualPoint, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPoint, actualPoint, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -809,7 +808,7 @@ public class BoundingBox3DTest
          Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = new BoundingBox3D();
          boundingBox3D.set(center, halfSize);
-         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.normSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 
@@ -1645,7 +1644,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1655,7 +1654,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
 
          actualFirstIntersection.setToZero();
@@ -1671,7 +1670,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1681,7 +1680,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }
@@ -1720,7 +1719,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1730,7 +1729,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
 
          actualFirstIntersection.setToZero();
@@ -1746,7 +1745,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1756,7 +1755,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }
@@ -1792,7 +1791,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
          }
 
          if (expectedN <= 1)
@@ -1802,7 +1801,7 @@ public class BoundingBox3DTest
          }
          else
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
          }
       }
    }

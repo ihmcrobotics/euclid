@@ -364,7 +364,7 @@ public class EuclidFrameShapeTools
          double axisY = axis.getY();
          double axisZ = axis.getZ();
 
-         double invNormSquared = 1.0 / axis.lengthSquared();
+         double invNormSquared = 1.0 / axis.normSquared();
          double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
          double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
          double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));
@@ -395,7 +395,7 @@ public class EuclidFrameShapeTools
          double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
          double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
 
-         double invNormSquared = 1.0 / axis.lengthSquared();
+         double invNormSquared = 1.0 / axis.normSquared();
          double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
          double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
          double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));

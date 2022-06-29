@@ -1,12 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DBasics;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -27,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObject<FrameUnitVector3D>
+public class FrameUnitVector3D implements FrameUnitVector3DBasics
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -163,13 +161,6 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameUnitVector3D other)
-   {
-      FrameUnitVector3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void set(UnitVector3DReadOnly other)
    {
       vector.set(other);
@@ -252,48 +243,6 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
    }
 
    /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two vectors have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameUnitVector3D other, double epsilon)
-   {
-      return FrameUnitVector3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 3D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two vectors can be spaced and still considered
-    *                equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameUnitVector3D other, double epsilon)
-   {
-      return FrameUnitVector3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this frame vector 3D as follows: (x, y,
     * z)-worldFrame.
     *
@@ -302,7 +251,7 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

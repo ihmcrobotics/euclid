@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * An affine transform represents a transform that can rotate, scale, shear, and/or translate
  * geometries.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface AffineTransformBasics extends AffineTransformReadOnly, Clearable
@@ -27,7 +27,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Gets the write and read reference of the linear part of this transform, such as rotation and
     * scaling.
-    * 
+    *
     * @return the write and read reference of the linear part of this transform.
     */
    @Override
@@ -111,7 +111,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Inverts this transform.
-    * 
+    *
     * @throws SingularMatrixException if this transform is not invertible.
     */
    default void invert()
@@ -406,7 +406,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * <p>
     * This method does not affect the translation part of this transform.
     * </p>
-    * 
+    *
     * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
     */
    default void setLinearTransform(Matrix3DReadOnly linearTransform)
@@ -419,7 +419,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * <p>
     * This method does not affect the translation part of this transform.
     * </p>
-    * 
+    *
     * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
     */
    default void setLinearTransform(DMatrix linearTransform)
@@ -432,7 +432,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * <p>
     * This method does not affect the translation part of this transform.
     * </p>
-    * 
+    *
     * @param rotationMatrix the rotation matrix used to set the linear part of this transform. Not
     *                       modified.
     */
@@ -446,7 +446,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * <p>
     * This method does not affect the translation part of this transform.
     * </p>
-    * 
+    *
     * @param orientation the orientation used to set the linear part of this transform. Not modified.
     */
    default void setLinearTransform(Orientation3DReadOnly orientation)
@@ -598,7 +598,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Appends the orientation to the linear part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void appendOrientation(Orientation3DReadOnly orientation)
@@ -659,14 +659,14 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Appends the given scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *               / scale   0     0   0 \
     * this = this * |   0   scale   0   0 |
     *               |   0     0   scale 0 |
     *               \   0     0     0   1 /
     * </pre>
-    * 
+    *
     * @param scale the scale to append.
     */
    default void appendScale(double scale)
@@ -676,14 +676,14 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Appends a scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *               / scale.getX()      0            0       0 \
     * this = this * |      0       scale.getY()      0       0 |
     *               |      0            0       scale.getZ() 0 |
     *               \      0            0            0       1 /
     * </pre>
-    * 
+    *
     * @param scale the scale to append. Not modified
     */
    default void appendScale(Tuple3DReadOnly scale)
@@ -693,7 +693,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Appends a scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *               / x 0 0 0 \
     * this = this * | 0 y 0 0 |
@@ -844,7 +844,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Prepends the orientation to the linear part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void prependOrientation(Orientation3DReadOnly orientation)
@@ -921,14 +921,14 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Prepends the given scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *        / scale   0     0   0 \
     * this = |   0   scale   0   0 | * this
     *        |   0     0   scale 0 |
     *        \   0     0     0   1 /
     * </pre>
-    * 
+    *
     * @param scale the scale to append.
     */
    default void prependScale(double scale)
@@ -938,14 +938,14 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Prepends a scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *        / scale.getX()      0            0       0 \
     * this = |      0       scale.getY()      0       0 | * this
     *        |      0            0       scale.getZ() 0 |
     *        \      0            0            0       1 /
     * </pre>
-    * 
+    *
     * @param scale the scale to append. Not modified
     */
    default void prependScale(Tuple3DReadOnly scale)
@@ -955,7 +955,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Prepends a scale to the linear part of this transform.
-    * 
+    *
     * <pre>
     *        / x 0 0 0 \
     * this = | 0 y 0 0 | * this

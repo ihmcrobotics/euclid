@@ -1,5 +1,6 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -8,10 +9,10 @@ import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.AxisAngleTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
@@ -149,21 +150,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double axisNorm()
    {
-      return getAxis().length();
-   }
-
-   /**
-    * Tests if the axis of this axis-angle is of unit-length.
-    *
-    * @param epsilon tolerance to use in this test.
-    * @return {@code true} if the axis is unitary, {@code false} otherwise.
-    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
-    * @since 0.13.0
-    */
-   @Deprecated
-   default boolean isAxisUnitary(double epsilon)
-   {
-      return Math.abs(1.0 - axisNorm()) < epsilon;
+      return getAxis().norm();
    }
 
    /**
@@ -182,16 +169,29 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       return Math.abs(getAngle()) < epsilon || Math.abs(getX()) < epsilon && Math.abs(getY()) < epsilon;
    }
 
-   /**
-    * Computes and returns the distance from this axis-angle to {@code other}.
-    *
-    * @param other the other axis-angle to measure the distance. Not modified.
-    * @return the angle representing the distance between the two axis-angles. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   default double distance(AxisAngleReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
-      return AxisAngleTools.distance(this, other);
+      return AxisAngleTools.distance(this, other, limitToPi);
+   }
+
+   /**
+    * Computes and returns the angular distance from origin.
+    *
+    * @return the the angular distance from origin.
+    */
+   @Override
+   default double angle()
+   {
+      return getAngle();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default double angle(boolean limitToPi)
+   {
+      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(angle()));
    }
 
    /** {@inheritDoc} */
@@ -421,44 +421,47 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       AxisAngleTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
 
-   /**
-    * Tests on a per component basis, if this axis-angle is exactly equal to {@code other}. A failing
-    * test does not necessarily mean that the two axis-angles represent two different orientations.
-    *
-    * @param other the other axis-angle to compare against this. Not modified.
-    * @return {@code true} if the two axis-angles are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(AxisAngleReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getAngle() == other.getAngle();
+      if (!(geometry instanceof AxisAngleReadOnly))
+         return false;
+      AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
+      if (!EuclidCoreTools.equals(getX(), other.getX()))
+         return false;
+      if (!EuclidCoreTools.equals(getY(), other.getY()))
+         return false;
+      if (!EuclidCoreTools.equals(getZ(), other.getZ()))
+         return false;
+      if (!EuclidCoreTools.equals(getAngle(), other.getAngle()))
+         return false;
+
+      return true;
    }
 
-   /**
-    * Tests on a per component basis, if this axis-angle is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
-    * different orientations.
-    *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(AxisAngleReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof AxisAngleReadOnly))
+         return false;
+
+      AxisAngleReadOnly other = (AxisAngleReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon))
          return false;
-
       if (!EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))
          return false;
-
       if (!EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon))
          return false;
-
       if (!EuclidCoreTools.epsilonEquals(getAngle(), other.getAngle(), epsilon))
          return false;
 
@@ -466,22 +469,19 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * Gets a representative {@code String} of this axis-angle given a specific format to use.
     * <p>
-    * Two axis-angle are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
+    * <pre>
+    * ( 0.674,  0.455,  0.582,  0.593 )
+    * </pre>
+    * </p>
     */
-   default boolean geometricallyEquals(AxisAngleReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+      return EuclidCoreIOTools.getAxisAngleString(format, this);
    }
 }

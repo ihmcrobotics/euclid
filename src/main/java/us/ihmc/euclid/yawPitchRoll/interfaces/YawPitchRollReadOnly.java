@@ -1,12 +1,14 @@
 package us.ihmc.euclid.yawPitchRoll.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -151,16 +153,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       return YawPitchRollTools.isOrientation2D(getYaw(), getPitch(), getRoll(), epsilon);
    }
 
-   /**
-    * Computes and returns the distance from this yaw-pitch-roll to {@code other}.
-    *
-    * @param other the other yaw-pitch-roll to measure the distance. Not modified.
-    * @return the angle representing the distance between the two orientations. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   default double distance(YawPitchRollReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
-      return YawPitchRollTools.distance(this, other);
+      return YawPitchRollTools.distance(this, other, limitToPi);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default double angle(boolean limitToPi)
+   {
+      return YawPitchRollTools.angle(this, limitToPi);
    }
 
    /** {@inheritDoc} */
@@ -363,43 +367,43 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       YawPitchRollTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
 
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two yaw-pitch-rolls represent two different
-    * orientations.
-    *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
-    * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(YawPitchRollReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();
+      if (!(geometry instanceof YawPitchRollReadOnly))
+         return false;
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
+      if (!EuclidCoreTools.equals(getYaw(), other.getYaw()))
+         return false;
+      if (!EuclidCoreTools.equals(getPitch(), other.getPitch()))
+         return false;
+      if (!EuclidCoreTools.equals(getRoll(), other.getRoll()))
+         return false;
+
+      return true;
    }
 
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean epsilonEquals(YawPitchRollReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof YawPitchRollReadOnly))
+         return false;
+
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) geometry;
       if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
          return false;
-
       if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
          return false;
-
       if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;
 
@@ -407,23 +411,19 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * Gets a representative {@code String} of this yaw-pitch-roll given a specific format to use.
     * <p>
-    * Two yaw-pitch-roll are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
-    *         otherwise.
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    * </p>
     */
-   default boolean geometricallyEquals(YawPitchRollReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+      return EuclidCoreIOTools.getYawPitchRollString(format, this);
    }
 }

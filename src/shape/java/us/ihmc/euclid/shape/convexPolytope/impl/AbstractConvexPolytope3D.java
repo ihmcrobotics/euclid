@@ -25,7 +25,7 @@ import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -704,6 +704,6 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getConvexPolytope3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

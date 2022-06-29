@@ -16,21 +16,52 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple4D.Vector4D;
 
 public class EuclidCoreToolsTest
 {
    @Test
    public void testConstants()
    {
-      assertEquals(new Point2D(), EuclidCoreTools.origin2D);
-      assertEquals(new Point3D(), EuclidCoreTools.origin3D);
-      assertEquals(new Vector2D(), EuclidCoreTools.zeroVector2D);
-      assertEquals(new Vector3D(), EuclidCoreTools.zeroVector3D);
-      Matrix3D expected = new Matrix3D();
-      expected.setToZero();
-      assertEquals(expected, EuclidCoreTools.zeroMatrix3D);
-      expected.setIdentity();
-      assertEquals(expected, EuclidCoreTools.identityMatrix3D);
+
+      Point2D expectedOrigin2D = new Point2D();
+      assertEquals(expectedOrigin2D, EuclidCoreTools.origin2D);
+      assertEquals(expectedOrigin2D.hashCode(), EuclidCoreTools.origin2D.hashCode());
+      assertEquals(expectedOrigin2D.toString(), EuclidCoreTools.origin2D.toString());
+
+      Point3D expectedOrigin3D = new Point3D();
+      assertEquals(expectedOrigin3D, EuclidCoreTools.origin3D);
+      assertEquals(expectedOrigin3D.hashCode(), EuclidCoreTools.origin3D.hashCode());
+      assertEquals(expectedOrigin3D.toString(), EuclidCoreTools.origin3D.toString());
+
+      Vector2D expectedZeroVector2D = new Vector2D();
+      assertEquals(expectedZeroVector2D, EuclidCoreTools.zeroVector2D);
+      assertEquals(expectedZeroVector2D.hashCode(), EuclidCoreTools.zeroVector2D.hashCode());
+      assertEquals(expectedZeroVector2D.toString(), EuclidCoreTools.zeroVector2D.toString());
+
+      Vector3D expectedZeroVector3D = new Vector3D();
+      assertEquals(expectedZeroVector3D, EuclidCoreTools.zeroVector3D);
+      assertEquals(expectedZeroVector3D.hashCode(), EuclidCoreTools.zeroVector3D.hashCode());
+      assertEquals(expectedZeroVector3D.toString(), EuclidCoreTools.zeroVector3D.toString());
+
+      Vector4D expectedQuaternion = new Vector4D();
+      expectedQuaternion.setElement(3, 1);
+      assertEquals(expectedQuaternion, EuclidCoreTools.neutralQuaternion);
+      assertEquals(expectedQuaternion.hashCode(), EuclidCoreTools.neutralQuaternion.hashCode());
+      assertEquals(expectedQuaternion.toString(), EuclidCoreTools.neutralQuaternion.toString());
+
+      Matrix3D expectedZeroMatrix3D = new Matrix3D();
+      expectedZeroMatrix3D.setToZero();
+      assertEquals(expectedZeroMatrix3D, EuclidCoreTools.zeroMatrix3D);
+      assertEquals(expectedZeroMatrix3D.toString(), EuclidCoreTools.zeroMatrix3D.toString());
+      assertEquals(expectedZeroMatrix3D.hashCode(), EuclidCoreTools.zeroMatrix3D.hashCode());
+
+      Matrix3D expectedIdentity3D = new Matrix3D();
+      expectedIdentity3D.setIdentity();
+      assertEquals(expectedIdentity3D, EuclidCoreTools.identityMatrix3D);
+      assertEquals(expectedIdentity3D.toString(), EuclidCoreTools.identityMatrix3D.toString());
+      assertEquals(expectedIdentity3D.hashCode(), EuclidCoreTools.identityMatrix3D.hashCode());
+
    }
 
    @Test
@@ -556,5 +587,54 @@ public class EuclidCoreToolsTest
          double min = EuclidCoreRandomTools.nextDouble(random, -100.0, 100.0);
          EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, min, min - EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
       }
+   }
+
+   @Test
+   public void testFastAcos()
+   {
+      double epsilon = 1.0e-14;
+      double maxError = 0.0;
+      double maxErrorX = 0.0;
+      double error;
+      double expected;
+      double actual;
+
+      for (double x = -1.0; x < 1.0; x += 1.0e-6)
+      {
+         expected = Math.acos(x);
+         actual = EuclidCoreTools.fastAcos(x);
+         assertEquals(expected, actual, epsilon, "x=" + x);
+
+         error = Math.abs(actual - expected);
+         if (error > maxError)
+         {
+            maxError = error;
+            maxErrorX = x;
+         }
+      }
+
+      double x = -1.0;
+      expected = Math.acos(x);
+      actual = EuclidCoreTools.fastAcos(x);
+      assertEquals(expected, actual, epsilon, "x=" + x);
+      error = Math.abs(actual - expected);
+      if (error > maxError)
+      {
+         maxError = error;
+         maxErrorX = x;
+      }
+
+      x = 1.0;
+      expected = Math.acos(x);
+      actual = EuclidCoreTools.fastAcos(x);
+      assertEquals(expected, actual, epsilon, "x=" + x);
+      error = Math.abs(actual - expected);
+      if (error > maxError)
+      {
+         maxError = error;
+         maxErrorX = x;
+      }
+
+      System.out.println("EuclidCoreToolsTest.testFastAcos: max error=" + maxError + " at x=" + maxErrorX);
    }
 }

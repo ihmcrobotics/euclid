@@ -54,7 +54,7 @@ public abstract class FrameConvexPolygon2DBasicsTest<F extends FrameConvexPolygo
    {
       FrameTypeCopier frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame, (ConvexPolygon2DReadOnly) polygon);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessConvexPolygon2D;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode")
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("toString")
             && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,

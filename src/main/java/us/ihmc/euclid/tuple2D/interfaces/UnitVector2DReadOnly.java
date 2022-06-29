@@ -1,7 +1,5 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
-import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
-
 /**
  * Read-only interface for 2 dimensional unit-length vector.
  * <p>
@@ -18,9 +16,6 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  */
 public interface UnitVector2DReadOnly extends Vector2DReadOnly
 {
-   /** Tolerance used on this vector's components to identify if it can be normalized. */
-   public static final double ZERO_TEST_EPSILON = UnitVector3DReadOnly.ZERO_TEST_EPSILON;
-
    /**
     * {@inheritDoc}
     * <p>
@@ -78,7 +73,7 @@ public interface UnitVector2DReadOnly extends Vector2DReadOnly
     * @return 1.0
     */
    @Override
-   default double length()
+   default double norm()
    {
       return 1.0;
    }
@@ -87,7 +82,7 @@ public interface UnitVector2DReadOnly extends Vector2DReadOnly
     * @return 1.0
     */
    @Override
-   default double lengthSquared()
+   default double normSquared()
    {
       return 1.0;
    }

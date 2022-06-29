@@ -4,8 +4,7 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Represents an infinitely-long 2D line defined by a 2D point and a 2D unit-vector.
  */
-public class Line2D implements Line2DBasics, GeometryObject<Line2D>
+public class Line2D implements Line2DBasics
 {
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
@@ -88,17 +87,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Sets this line to be the same as the given line.
-    *
-    * @param other the other line to copy. Not modified.
-    */
-   @Override
-   public void set(Line2D other)
-   {
-      Line2DBasics.super.set(other);
-   }
-
-   /**
     * Gets the read-only reference to the direction of this line.
     *
     * @return the reference to the direction.
@@ -118,40 +106,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    public Point2DBasics getPoint()
    {
       return point;
-   }
-
-   /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Line2D other, double epsilon)
-   {
-      return Line2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Line2D other, double epsilon)
-   {
-      return Line2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -179,7 +133,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLine2DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

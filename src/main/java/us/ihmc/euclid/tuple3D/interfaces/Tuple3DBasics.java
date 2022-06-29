@@ -6,6 +6,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -98,6 +99,23 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    }
 
    /**
+    * Normalizes this tuple such that its norm is equal to 1 after calling this method and its
+    * direction remains unchanged.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if this tuple contains {@link Double#NaN}, this method is ineffective.
+    * </ul>
+    * </p>
+    */
+   default void normalize()
+   {
+      if (containsNaN())
+         return;
+      scale(1.0 / norm());
+   }
+
+   /**
     * Clips each component of this tuple to a maximum value {@code max}.
     *
     * @param max the maximum value for each component.
@@ -127,6 +145,37 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    default void clipToMinMax(double min, double max)
    {
       setAndClipToMinMax(min, max, this);
+   }
+
+   /**
+    * Limits the norm of this tuple to {@code maxNorm}.
+    * <p>
+    * If the norm of this tuple is less than {@code maxNorm}, this method does nothing. When it is
+    * greater than {@code maxNorm}, this tuple is scaled such that it length is equal to
+    * {@code maxNorm} and its direction is preserved.
+    * </p>
+    * <p>
+    * Edge case: if {@code maxNorm <} {@value TupleTools#EPS_MAX_NORM}, this tuple is set to zero.
+    * </p>
+    *
+    * @param maxNorm the maximum allowed norm for this tuple.
+    * @return whether the norm of this tuple has been changed or not.
+    */
+   default boolean clipToMaxNorm(double maxNorm)
+   {
+      if (maxNorm < TupleTools.EPS_MAX_NORM)
+      {
+         setToZero();
+         return true;
+      }
+
+      double normSquared = normSquared();
+
+      if (normSquared < maxNorm * maxNorm)
+         return false;
+
+      scale(maxNorm / EuclidCoreTools.squareRoot(normSquared));
+      return true;
    }
 
    /**
@@ -325,6 +374,17 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    default void setAndNegate(Tuple3DReadOnly other)
    {
       set(-other.getX(), -other.getY(), -other.getZ());
+   }
+
+   /**
+    * Sets this tuple to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other tuple to copy the values from. Not modified.
+    */
+   default void setAndNormalize(Tuple3DReadOnly other)
+   {
+      set(other);
+      normalize();
    }
 
    /**

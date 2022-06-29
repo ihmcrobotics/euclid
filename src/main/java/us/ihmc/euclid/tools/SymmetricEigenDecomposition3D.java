@@ -12,13 +12,13 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 /**
  * Calculator for computing the eigenvalues and eigenvectors of a symmetric 3D matrix <tt>A</tt>.
  * Eigenvalues and eigenvectors have the following property:
- * 
+ *
  * <pre>
  * A*v = &lambda;*v
  * </pre>
- * 
+ *
  * where A is a square matrix and v is an eigenvector associated with the eigenvalue &lambda;.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class SymmetricEigenDecomposition3D
@@ -66,11 +66,11 @@ public class SymmetricEigenDecomposition3D
 
    /**
     * Specifies whether the eigenvalues should be sorted in descending order, i.e.:
-    * 
+    *
     * <pre>
     * |&lambda;<sub>1</sub>| > |&lambda;<sub>2</sub>| > |&lambda;<sub>3</sub>|
     * </pre>
-    * 
+    *
     * @param sortDescendingOrder {@code true} for sorting the eigenvalues in descending, {@code false}
     *                            for skipping sorting. Default value {@code true}.
     */
@@ -124,7 +124,7 @@ public class SymmetricEigenDecomposition3D
     * Redirection to
     * {@link SingularValueDecomposition3D#computeV(Matrix3DBasics, QuaternionBasics, int, double)} to
     * decompose the matrix.
-    * 
+    *
     * @param A the matrix to decompose. Modified.
     * @return whether the algorithm succeeded or not.
     */
@@ -198,7 +198,7 @@ public class SymmetricEigenDecomposition3D
             }
          }
          else
-         { // 2 > 1 > 0 
+         { // 2 > 1 > 0
             lambda.set(lambda.getZ(), lambda.getY(), lambda.getX());
             Qquat.setUnsafe(sqrtTwoOverTwo * (qx + qz),
                             sqrtTwoOverTwo * (qy - qs),
@@ -242,7 +242,7 @@ public class SymmetricEigenDecomposition3D
 
    /**
     * Returns the i<sup>th</sup> eigenvector.
-    * 
+    *
     * @param index the index&in;[0;2] of the eigenvector to get.
     * @return the i<sup>th</sup> eigenvector.
     */
@@ -253,7 +253,7 @@ public class SymmetricEigenDecomposition3D
 
    /**
     * Returns the three eigenvectors in a matrix format where each column represents an eigenvector.
-    * 
+    *
     * @param eigenVectorsToPack the matrix used to store the eigenvectors. If {@code null}, a new
     *                           matrix is created and returned.
     * @return the eigenvectors in a matrix format.
@@ -268,7 +268,7 @@ public class SymmetricEigenDecomposition3D
     * <p>
     * Note that the eigenvalues are sorted in descending order.
     * </p>
-    * 
+    *
     * @param index the index&in;[0;2] of the eigenvalue to get.
     * @return the i<sup>th</sup> eigenvalue.
     */
@@ -282,7 +282,7 @@ public class SymmetricEigenDecomposition3D
     * <p>
     * Note that the eigenvalues are sorted in descending order.
     * </p>
-    * 
+    *
     * @return the eigenvalues in a vector format.
     */
    public Vector3D getEigenValues()
@@ -322,7 +322,7 @@ public class SymmetricEigenDecomposition3D
 
    /**
     * Returns whether this calculator is sorting the eigenvalues in descending order.
-    * 
+    *
     * @return whether this calculator is sorting the eigenvalues in descending order.
     */
    public boolean getSortDescendingOrder()
@@ -380,7 +380,7 @@ public class SymmetricEigenDecomposition3D
 
       /**
        * Returns the i<sup>th</sup> eigenvector.
-       * 
+       *
        * @param index the index&in;[0;2] of the eigenvector to get.
        * @return the i<sup>th</sup> eigenvector.
        */
@@ -391,7 +391,7 @@ public class SymmetricEigenDecomposition3D
 
       /**
        * Returns the three eigenvectors in a matrix format where each column represents an eigenvector.
-       * 
+       *
        * @param eigenVectorsToPack the matrix used to store the eigenvectors. If {@code null}, a new
        *                           matrix is created and returned.
        * @return the eigenvectors in a matrix format.
@@ -409,7 +409,7 @@ public class SymmetricEigenDecomposition3D
        * <p>
        * Note that the eigenvalues are sorted in descending order.
        * </p>
-       * 
+       *
        * @param index the index&in;[0;2] of the eigenvalue to get.
        * @return the i<sup>th</sup> eigenvalue.
        */
@@ -423,7 +423,7 @@ public class SymmetricEigenDecomposition3D
        * <p>
        * Note that the eigenvalues are sorted in descending order.
        * </p>
-       * 
+       *
        * @return the eigenvalues in a vector format.
        */
       public Vector3D getEigenValues()

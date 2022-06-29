@@ -299,35 +299,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Set this matrix to the inverse of the other matrix.
-    * <p>
-    * this = other<sup>-1</sup>
-    * </p>
-    *
-    * @param other the other matrix. Not modified.
-    * @throws SingularMatrixException if the matrix is not invertible.
-    */
-   default void setAndInvert(Matrix3DReadOnly other)
-   {
-      set(other);
-      invert();
-   }
-
-   /**
-    * Sets this matrix to equal the other matrix and then transposes this.
-    * <p>
-    * this = other<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    */
-   default void setAndTranspose(Matrix3DReadOnly other)
-   {
-      set(other);
-      transpose();
-   }
-
-   /**
     * Sets this matrix to {@code other} and then calls {@link #negate()}.
     *
     * @param other the other matrix used to update this matrix. Not modified.

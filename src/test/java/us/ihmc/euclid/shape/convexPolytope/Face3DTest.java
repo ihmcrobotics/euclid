@@ -57,13 +57,13 @@ public class Face3DTest
       face.addVertex(new Vertex3D(p0));
       assertEquals(p0, face.getVertices().get(0));
       assertEquals(1, face.getNumberOfEdges()); // The first edge is initialized to start and end at the first vertex added.
-      EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face.getNormal(), EPSILON);
+      EuclidCoreTestTools.assertEquals(Axis3D.Z, face.getNormal(), EPSILON);
 
       face.addVertex(new Vertex3D(p1));
       assertEquals(p0, face.getVertices().get(0));
       assertEquals(p1, face.getVertices().get(1));
       assertEquals(2, face.getNumberOfEdges());
-      EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face.getNormal(), EPSILON);
+      EuclidCoreTestTools.assertEquals(Axis3D.Z, face.getNormal(), EPSILON);
 
       // From here we're verifying that the face is re-ordering the vertices so they are clockwise ordered.
       face.addVertex(new Vertex3D(p2));
@@ -71,7 +71,7 @@ public class Face3DTest
       assertEquals(p0, face.getVertices().get(1));
       assertEquals(p2, face.getVertices().get(2));
       assertEquals(3, face.getNumberOfEdges());
-      EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face.getNormal(), EPSILON);
+      EuclidCoreTestTools.assertEquals(Axis3D.Z, face.getNormal(), EPSILON);
 
       face.addVertex(new Vertex3D(p3));
       assertEquals(p1, face.getVertices().get(0));
@@ -79,7 +79,7 @@ public class Face3DTest
       assertEquals(p3, face.getVertices().get(2));
       assertEquals(p2, face.getVertices().get(3));
       assertEquals(4, face.getNumberOfEdges());
-      EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face.getNormal(), EPSILON);
+      EuclidCoreTestTools.assertEquals(Axis3D.Z, face.getNormal(), EPSILON);
    }
 
    @Test
@@ -105,10 +105,10 @@ public class Face3DTest
       {
          face.addVertex(new Vertex3D(points.get(i)));
          assertEquals(i + 1, face.getNumberOfEdges()); // Ensuring that all vertices are added.
-         EuclidCoreTestTools.assertTuple3DEquals(points.get(i), face.getVertices().get(i), EPSILON);
+         EuclidCoreTestTools.assertEquals(points.get(i), face.getVertices().get(i), EPSILON);
       }
 
-      EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face.getNormal(), EPSILON); // Check that the normal has not changed.
+      EuclidCoreTestTools.assertEquals(Axis3D.Z, face.getNormal(), EPSILON); // Check that the normal has not changed.
 
       Random random = new Random(3453);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -128,7 +128,7 @@ public class Face3DTest
       // Because the initial is +Z, if the rotation is too large, the estimated normal will be flipped such that its z-component is positive.
       if (expectedNormal.getZ() < 0.0)
          expectedNormal.negate();
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedNormal, face.getNormal(), EPSILON);
    }
 
    @Test
@@ -164,7 +164,7 @@ public class Face3DTest
          Face3D face3D = new Face3D(Axis3D.Z);
          convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).forEach(v -> face3D.addVertex(v));
          assertEquals(numberOfVertices, face3D.getNumberOfEdges());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, face3D.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertEquals(Axis3D.Z, face3D.getNormal(), EPSILON);
 
          Point3D[] expectedLineOfSightVertices3D = Stream.of(lineOfSightVertices2D).map(Point3D::new).toArray(Point3D[]::new);
 
@@ -176,10 +176,10 @@ public class Face3DTest
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);
          HalfEdge3D expectedLineOfSightStartEdge3D = face3D.getEdge(expectedLineOfSightIndices[0]);
          HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPrevious();
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndEdge3D.getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndEdge3D.getDestination(), EPSILON);
 
          { // Testing Face3DReadOnly.canObserverSeeEdge(...) which is used for the line-of-sight calculation.
             { // Go through the edges that are in the line of sight of the observer and assert that they are visible.
@@ -211,15 +211,15 @@ public class Face3DTest
 
          String errorMessage = "Iteration: " + i;
          assertNotNull(face3D.lineOfSightStart(observer3D), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(errorMessage, expectedLineOfSightVertices3D[0], face3D.lineOfSightStart(observer3D).getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(errorMessage, expectedLineOfSightVertices3D[0], face3D.lineOfSightStart(observer3D).getOrigin(), EPSILON);
 
          assertNotNull(face3D.lineOfSightEnd(observer3D), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(errorMessage, expectedLineOfSightVertices3D[1], face3D.lineOfSightEnd(observer3D).getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(errorMessage, expectedLineOfSightVertices3D[1], face3D.lineOfSightEnd(observer3D).getDestination(), EPSILON);
 
          List<HalfEdge3D> lineOfSight3D = face3D.lineOfSight(observer3D);
          assertFalse(lineOfSight3D.isEmpty(), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], lineOfSight3D.get(0).getOrigin(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], lineOfSight3D.get(lineOfSight3D.size() - 1).getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], lineOfSight3D.get(0).getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], lineOfSight3D.get(lineOfSight3D.size() - 1).getDestination(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -254,7 +254,7 @@ public class Face3DTest
          Face3D face3D = new Face3D(faceNormal); // Feeding the expected normal to prevent any flip between expected and actual normal.
          convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).peek(transform::transform).forEach(v -> face3D.addVertex(v));
          assertEquals(numberOfVertices, face3D.getNumberOfEdges());
-         EuclidCoreTestTools.assertTuple3DEquals(faceNormal, face3D.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertEquals(faceNormal, face3D.getNormal(), EPSILON);
 
          Point3D[] expectedLineOfSightVertices3D = Stream.of(lineOfSightVertices2D).map(Point3D::new).peek(transform::transform).toArray(Point3D[]::new);
 
@@ -267,10 +267,10 @@ public class Face3DTest
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);
          HalfEdge3D expectedLineOfSightStartEdge3D = face3D.getEdge(expectedLineOfSightIndices[0]);
          HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPrevious();
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndEdge3D.getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndEdge3D.getDestination(), EPSILON);
 
          { // Testing Face3DReadOnly.canObserverSeeEdge(...) which is used for the line-of-sight calculation.
             { // Go through the edges that are in the line of sight of the observer and assert that they are visible.
@@ -302,15 +302,15 @@ public class Face3DTest
 
          String errorMessage = "Iteration: " + i;
          assertNotNull(face3D.lineOfSightStart(observer3D), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(errorMessage, expectedLineOfSightVertices3D[0], face3D.lineOfSightStart(observer3D).getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(errorMessage, expectedLineOfSightVertices3D[0], face3D.lineOfSightStart(observer3D).getOrigin(), EPSILON);
 
          assertNotNull(face3D.lineOfSightEnd(observer3D), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(errorMessage, expectedLineOfSightVertices3D[1], face3D.lineOfSightEnd(observer3D).getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(errorMessage, expectedLineOfSightVertices3D[1], face3D.lineOfSightEnd(observer3D).getDestination(), EPSILON);
 
          List<HalfEdge3D> lineOfSight3D = face3D.lineOfSight(observer3D);
          assertFalse(lineOfSight3D.isEmpty(), errorMessage);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], lineOfSight3D.get(0).getOrigin(), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], lineOfSight3D.get(lineOfSight3D.size() - 1).getDestination(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[0], lineOfSight3D.get(0).getOrigin(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedLineOfSightVertices3D[1], lineOfSight3D.get(lineOfSight3D.size() - 1).getDestination(), EPSILON);
       }
    }
 
@@ -373,7 +373,7 @@ public class Face3DTest
          // Assert that the normal remains consistent with the edge ordering
          Vector3D originalNormal = new Vector3D(face.getNormal());
          face.updateNormal();
-         EuclidCoreTestTools.assertTuple3DEquals(originalNormal, face.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertEquals(originalNormal, face.getNormal(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -796,7 +796,7 @@ public class Face3DTest
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointAbove, face3D.getCentroid(), face3D.getNormal());
          Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointAbove);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -809,7 +809,7 @@ public class Face3DTest
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointBelow, face3D.getCentroid(), face3D.getNormal());
          Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointBelow);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -830,7 +830,7 @@ public class Face3DTest
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnLine3D(pointOutside, edge.getOrigin(), edge.getDirection(true));
          Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointOutside);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -857,7 +857,7 @@ public class Face3DTest
 
          Point3DReadOnly expectedProjection = closestVertex;
          Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointOutside);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EPSILON);
       }
    }
 
@@ -915,7 +915,7 @@ public class Face3DTest
 
       public void flipDirection()
       {
-         line.negateDirection();
+         line.getDirection().negate();
       }
 
       @Override

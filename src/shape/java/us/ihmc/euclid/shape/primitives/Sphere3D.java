@@ -1,9 +1,8 @@
 package us.ihmc.euclid.shape.primitives;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -11,7 +10,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
+public class Sphere3D implements Sphere3DBasics
 {
    /** The position of the center of this sphere. */
    private final Point3D position = new Point3D();
@@ -104,49 +103,10 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
       this.radius = radius;
    }
 
-   /**
-    * Copies the {@code other} sphere data into {@code this}.
-    *
-    * @param other the other sphere to copy. Not modified.
-    */
-   @Override
-   public void set(Sphere3D other)
-   {
-      Sphere3DBasics.super.set(other);
-   }
-
    @Override
    public Sphere3D copy()
    {
       return new Sphere3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other sphere to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Sphere3D other, double epsilon)
-   {
-      return Sphere3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
-    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
-    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
-    *
-    * @param other   the sphere to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two spheres represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Sphere3D other, double epsilon)
-   {
-      return Sphere3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -189,6 +149,6 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getSphere3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

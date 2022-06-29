@@ -40,8 +40,6 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOnly
 {
-   /** Threshold used to trigger a more expensive comparison between two quaternions. */
-   public static final double GEOMETRICALLY_EQUALS_THRESHOLD = 0.005;
    /** Default tolerance used to verify that this quaternion is a unit-quaternion. */
    public static final double EPS_UNITARY = 1.0e-7;
 
@@ -62,7 +60,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Override
    default boolean isZeroOrientation(double epsilon)
    {
-      return QuaternionTools.isNeutralQuaternion(this, epsilon);
+      return QuaternionTools.isNeutralQuaternion(this, epsilon, true);
    }
 
    /**
@@ -124,49 +122,30 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
       return EuclidCoreTools.fastSquareRoot(normSquared());
    }
 
-   /**
-    * Computes and returns the distance from this quaternion to {@code other}.
-    *
-    * @param other the other quaternion to measure the distance. Not modified.
-    * @return the angle representing the distance between the two quaternions. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   default double distance(QuaternionReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
-      double dot = dot(other);
-      if (dot > 1.0)
-         dot = 1.0;
-      else if (dot < -1.0)
-         dot = -1.0;
-      return 2.0 * EuclidCoreTools.acos(dot);
+      return QuaternionTools.distance(this, other, limitToPi);
    }
 
-   /**
-    * Computes and returns the distance from this quaternion to {@code other}.
-    * <p>
-    * This method is equivalent to {@link #distance(QuaternionReadOnly)} but is more accurate when
-    * computing the distance between two quaternions that are very close. Note that it is also more
-    * expensive.
-    * </p>
-    *
-    * @param other the other quaternion to measure the distance. Not modified.
-    * @return the angle representing the distance between the two quaternions. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   default double distancePrecise(QuaternionReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default double angle(boolean limitToPi)
    {
-      return QuaternionTools.distancePrecise(this, other);
+      return QuaternionTools.angle(this, limitToPi);
    }
 
    /**
     * Calculates and returns the angle of the rotation this quaternion represents.
     *
+    * @deprecated Use {@link #angle()} instead.
     * @return the angle &in; [-2<i>pi</i>;2<i>pi</i>].
     */
+   @Deprecated
    default double getAngle()
    {
-      double sinHalfTheta = EuclidCoreTools.norm(getX(), getY(), getZ());
-      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, getS());
+      return angle();
    }
 
    /** {@inheritDoc} */
@@ -293,38 +272,5 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *                be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(QuaternionReadOnly other, double epsilon)
-   {
-      if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
-
-      double angle;
-      if (epsilon > GEOMETRICALLY_EQUALS_THRESHOLD)
-         angle = distance(other);
-      else
-         angle = distancePrecise(other);
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(angle)) <= epsilon;
    }
 }

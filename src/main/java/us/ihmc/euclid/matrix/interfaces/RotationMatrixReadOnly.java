@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -95,15 +96,42 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    }
 
    /**
-    * Computes and returns the distance between this rotation matrix and the {@code other}.
+    * {@inheritDoc}
     *
     * @param other the other rotation matrix to compute the distance. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
-   default double distance(RotationMatrixReadOnly other)
+   @Override
+   default double distance(Orientation3DReadOnly other)
    {
       return RotationMatrixTools.distance(this, other);
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @param other     the other rotation matrix to compute the distance. Not modified.
+    * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
+   @Override
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
+   {
+      return distance(other);
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
+    * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
+    */
+   @Override
+   default double angle(boolean limitToPi)
+   {
+      return RotationMatrixTools.angle(this);
    }
 
    /** {@inheritDoc} */
@@ -419,21 +447,18 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
+    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
     * </p>
     *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
+    * @param geometry the object to compare against this.
+    * @param epsilon  the maximum angle for the two orientations to be considered equal.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(RotationMatrixReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      return distance(other) <= epsilon;
+      return Orientation3DReadOnly.super.geometricallyEquals(geometry, epsilon);
    }
 }

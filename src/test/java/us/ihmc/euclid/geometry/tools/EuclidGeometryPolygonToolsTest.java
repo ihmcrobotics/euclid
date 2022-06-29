@@ -421,7 +421,7 @@ public class EuclidGeometryPolygonToolsTest
          else
          {
             assertEquals(1, hullSize, "Failed at iteration: " + i);
-            EuclidCoreTestTools.assertTuple2DEquals(original, listToProcess.get(0), SMALLEST_EPSILON);
+            EuclidCoreTestTools.assertEquals(original, listToProcess.get(0), SMALLEST_EPSILON);
          }
       }
 
@@ -599,7 +599,7 @@ public class EuclidGeometryPolygonToolsTest
             vertexWeight /= 2.0 * actualArea;
             recomputedCentroid.add(vertexWeight * vertex.getX(), vertexWeight * vertex.getY());
          }
-         EuclidCoreTestTools.assertTuple2DEquals(recomputedCentroid, centroid, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(recomputedCentroid, centroid, SMALLEST_EPSILON);
 
          try
          {
@@ -634,7 +634,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D centroid = nextPoint2D(random);
          double area = computeConvexPolygon2DArea(Collections.singletonList(vertex), 1, true, centroid);
          assertTrue(area == 0.0);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex, centroid, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex, centroid, SMALLEST_EPSILON);
       }
 
       { // Test with a polygon that has only 2 vertex
@@ -647,7 +647,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D actualCentroid = nextPoint2D(random);
          double area = computeConvexPolygon2DArea(points, 2, true, actualCentroid);
          assertTrue(area == 0.0);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedCentroid, actualCentroid, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedCentroid, actualCentroid, SMALLEST_EPSILON);
       }
 
       { // Test with a tiny polygon
@@ -666,7 +666,7 @@ public class EuclidGeometryPolygonToolsTest
 
          Point2D centroid = nextPoint2D(random);
          computeConvexPolygon2DArea(points, 3, true, centroid);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex0, centroid, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex0, centroid, SMALLEST_EPSILON);
       }
    }
 
@@ -691,7 +691,7 @@ public class EuclidGeometryPolygonToolsTest
             Vector2D edgeNormal = new Vector2D();
             boolean success = edgeNormal(edgeIndex, convexPolygon2D, hullSize, clockwiseOrdered, edgeNormal);
             assertTrue(success);
-            assertEquals(1.0, edgeNormal.length(), SMALLEST_EPSILON);
+            assertEquals(1.0, edgeNormal.norm(), SMALLEST_EPSILON);
 
             Vector2D edgeDirection = new Vector2D();
             edgeDirection.sub(edgeEnd, edgeStart);
@@ -1328,13 +1328,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (expectedFirstIntersection.distance(actualFirstIntersection) < expectedFirstIntersection.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualSecondIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
          }
       }
 
@@ -1370,13 +1370,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
          }
       }
 
@@ -1488,8 +1488,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                  actualFirstIntersection,
                                                                                  actualSecondIntersection);
          assertEquals(1, numberOfIntersections, "Iteration: " + i);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1521,9 +1521,9 @@ public class EuclidGeometryPolygonToolsTest
                                                                           actualSecondIntersection);
          assertEquals(2, nIntersections, "Iteration: " + i);
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          else
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
       }
 
       { // Test exceptions
@@ -1613,7 +1613,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                              firstIntersection,
                                                                              secondIntersection);
          assertEquals(1, numberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex, firstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex, firstIntersection, SMALLEST_EPSILON);
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersection);
       }
    }
@@ -1654,7 +1654,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-2.0, 0.0);
          lineSegmentEnd.set(2.0, 0.0);
@@ -1669,8 +1669,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-0.5, 0.0);
          lineSegmentEnd.set(0.5, 0.0);
@@ -1709,8 +1709,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.0, 0.5);
          lineSegmentEnd.set(-0.5, 1.0);
@@ -1725,8 +1725,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.5, 1.0);
          lineSegmentEnd.set(1.5, 1.0);
@@ -1741,8 +1741,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-2.5, 1.0);
          lineSegmentEnd.set(-1.5, 1.0);
@@ -1770,8 +1770,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, 0.0);
          lineSegmentEnd.set(1.0, 0.5);
@@ -1786,8 +1786,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-0.5, 1.0);
          lineSegmentEnd.set(-1.0, 0.5);
@@ -1802,8 +1802,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.5, 0.5);
          lineSegmentEnd.set(1.5, 0.5);
@@ -1818,8 +1818,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(0.0, -1.5);
          lineSegmentEnd.set(1.5, -1.5);
@@ -1858,8 +1858,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, 1.0);
          lineSegmentEnd.set(1.0, 0.5);
@@ -1874,8 +1874,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(0.5, 1.0);
          lineSegmentEnd.set(1.0, 1.0);
@@ -1890,8 +1890,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, 0.5);
          lineSegmentEnd.set(1.0, 1.0);
@@ -1906,8 +1906,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.5, 1.0);
          lineSegmentEnd.set(-0.5, 1.0);
@@ -1922,8 +1922,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.5, 1.0);
          lineSegmentEnd.set(-1.0, 1.0);
@@ -1937,7 +1937,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.0, 1.0);
          lineSegmentEnd.set(-1.5, 1.0);
@@ -1951,7 +1951,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, 1.0);
          lineSegmentEnd.set(1.5, 1.0);
@@ -1965,7 +1965,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.5, 1.0);
          lineSegmentEnd.set(1.0, 1.0);
@@ -1979,7 +1979,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.5, 1.5);
          lineSegmentEnd.set(1.0, 1.0);
@@ -1993,7 +1993,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(0.5, 1.5);
          lineSegmentEnd.set(1.0, 1.0);
@@ -2007,7 +2007,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(-1.0, -1.0);
          lineSegmentEnd.set(0.8, 1.0);
@@ -2022,8 +2022,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, 1.0);
          lineSegmentEnd.set(-1.0, -1.0);
@@ -2038,8 +2038,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, -0.5);
          lineSegmentEnd.set(1.0, 0.0);
@@ -2054,8 +2054,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
 
          lineSegmentStart.set(1.0, -1.5);
          lineSegmentEnd.set(1.0, 0.5);
@@ -2070,8 +2070,8 @@ public class EuclidGeometryPolygonToolsTest
                                                                                           actualFirstIntersection,
                                                                                           actualSecondIntersection);
          assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2126,13 +2126,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (expectedFirstIntersection.distance(actualFirstIntersection) < expectedFirstIntersection.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualSecondIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
          }
 
          // Make the line-segment endpoints such that we have 0 intersection
@@ -2164,9 +2164,9 @@ public class EuclidGeometryPolygonToolsTest
          assertEquals(1, numberOfIntersections);
 
          if (actualFirstIntersection.distance(expectedFirstIntersection) < actualFirstIntersection.distance(expectedSecondIntersection))
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
          else
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
 
          lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, nextDouble(random, 0.0, 1.0));
          lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaOutsideEnd);
@@ -2181,9 +2181,9 @@ public class EuclidGeometryPolygonToolsTest
          assertEquals(1, numberOfIntersections);
 
          if (actualFirstIntersection.distance(expectedFirstIntersection) < actualFirstIntersection.distance(expectedSecondIntersection))
-            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
          else
-            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2228,13 +2228,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
          }
 
          // Make the line-segment not overlap the edge (two sides to test)
@@ -2275,13 +2275,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(lineSegmentEnd, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(lineSegmentEnd, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
          }
 
          // Test second side
@@ -2299,13 +2299,13 @@ public class EuclidGeometryPolygonToolsTest
 
          if (nextVertex.distance(actualFirstIntersection) < nextVertex.distance(actualSecondIntersection))
          {
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(lineSegmentStart, actualSecondIntersection, SMALL_EPSILON);
          }
          else
          {
-            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualFirstIntersection, SMALL_EPSILON);
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(lineSegmentStart, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
          }
       }
 
@@ -2340,7 +2340,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                  actualFirstIntersection,
                                                                                  actualSecondIntersection);
          assertEquals(1, nIntersections, "Iteration: " + i);
-         EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+         EuclidCoreTestTools.assertEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
       }
    }
 
@@ -2393,18 +2393,18 @@ public class EuclidGeometryPolygonToolsTest
          {
             if (firstIntersectionWithLine.distance(expectedIntersections.get(0)) < firstIntersectionWithLine.distance(expectedIntersections.get(1)))
             {
-               EuclidCoreTestTools.assertTuple2DEquals(firstIntersectionWithRay, expectedIntersections.get(0), EPSILON);
-               EuclidCoreTestTools.assertTuple2DEquals(secondIntersectionWithRay, expectedIntersections.get(1), EPSILON);
+               EuclidCoreTestTools.assertEquals(firstIntersectionWithRay, expectedIntersections.get(0), EPSILON);
+               EuclidCoreTestTools.assertEquals(secondIntersectionWithRay, expectedIntersections.get(1), EPSILON);
             }
             else
             {
-               EuclidCoreTestTools.assertTuple2DEquals(firstIntersectionWithRay, expectedIntersections.get(1), EPSILON);
-               EuclidCoreTestTools.assertTuple2DEquals(secondIntersectionWithRay, expectedIntersections.get(0), EPSILON);
+               EuclidCoreTestTools.assertEquals(firstIntersectionWithRay, expectedIntersections.get(1), EPSILON);
+               EuclidCoreTestTools.assertEquals(secondIntersectionWithRay, expectedIntersections.get(0), EPSILON);
             }
          }
 
          if (expectedNumberOfIntersections == 1)
-            EuclidCoreTestTools.assertTuple2DEquals(expectedIntersections.get(0), firstIntersectionWithRay, EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedIntersections.get(0), firstIntersectionWithRay, EPSILON);
       }
    }
 
@@ -2437,7 +2437,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D actualProjection = new Point2D();
          boolean success = orthogonalProjectionOnConvexPolygon2D(pointToProject, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
          assertTrue(success);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2464,7 +2464,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D acualProjection = new Point2D();
          boolean success = orthogonalProjectionOnConvexPolygon2D(pointToProject, convexPolygon2D, hullSize, clockwiseOrdered, acualProjection);
          assertTrue(success);
-         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, vertex, acualProjection, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, vertex, acualProjection, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2536,7 +2536,7 @@ public class EuclidGeometryPolygonToolsTest
                                                                                            convexPolygon2D.get(1),
                                                                                            expectedProjection);
          assertTrue(expectedSuccess == actualSuccess);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedProjection, actualProjection, SMALLEST_EPSILON);
       }
 
       { // Test exceptions
@@ -2800,79 +2800,79 @@ public class EuclidGeometryPolygonToolsTest
          rayDirection.set(0.0, 1.0);
          expected.set(2.0, 0.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, 1.0);
          rayDirection.set(0.5, 0.5);
          expected.set(4.0 / 5.0, 3.0 / 5.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, 1.0);
          rayDirection.set(-0.5, 0.1);
          expected.set(0.0, 1.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.0, 0.1);
          expected.set(-0.5, 0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.3);
          expected.set(-0.5, 0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(-0.3, -0.3);
          expected.set(-0.5, 0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.31);
          expected.set(-0.5, 0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.29);
          expected.set(0.0, 1.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.75, -0.75);
          rayDirection.set(1.0, 1.0);
          expected.set(1.5, -0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.75, -0.75);
          rayDirection.set(-0.3, -0.3);
          expected.set(1.5, -0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, -1.2);
          rayDirection.set(-2.0, 1.0);
          expected.set(1.0, -1.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, -1.2);
          rayDirection.set(2.0, -1.0);
          expected.set(1.0, -1.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.1, -0.7);
          rayDirection.set(-2.0, 1.0);
          expected.set(0.0, -0.5);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
       }
 
       { // Test examples with a single point polygon
@@ -2888,12 +2888,12 @@ public class EuclidGeometryPolygonToolsTest
          rayOrigin.set(5.0, -3.0);
          rayDirection.set(0.0, 1.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(0.0, 0.0);
          rayDirection.set(1.0, 0.0);
          assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, SMALLEST_EPSILON);
       }
 
       { // Test with an empty polygon
@@ -2967,7 +2967,7 @@ public class EuclidGeometryPolygonToolsTest
             if (distanceExpected > distanceActual)
                System.err.println("Test is bad");
          }
-         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -3071,7 +3071,7 @@ public class EuclidGeometryPolygonToolsTest
             if (distanceExpected > distanceActual)
                System.err.println("Test is bad");
          }
-         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
       }
    }
 

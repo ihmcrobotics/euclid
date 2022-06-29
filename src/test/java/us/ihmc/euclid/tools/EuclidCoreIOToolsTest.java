@@ -32,7 +32,7 @@ public class EuclidCoreIOToolsTest
       RigidBodyTransform t = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
       expected = "-0.146  0.372  0.917 |  0.969\n" //
-            + " 0.050  0.928 -0.369 |  0.028\n" // 
+            + " 0.050  0.928 -0.369 |  0.028\n" //
             + "-0.988 -0.008 -0.154 | -0.619\n" //
             + " 0.000  0.000  0.000 |  1.000";
       assertEquals(expected, EuclidCoreIOTools.getRigidBodyTransformString(t));
@@ -60,7 +60,7 @@ public class EuclidCoreIOToolsTest
       AffineTransform t = EuclidCoreRandomTools.nextAffineTransform(random);
 
       expected = " 1.639 -5.595  9.691 | -0.618\n" //
-            + " 0.275 -6.188  7.012 | -0.556\n" // 
+            + " 0.275 -6.188  7.012 | -0.556\n" //
             + "-0.728  6.787 -4.461 |  0.498\n" //
             + " 0.000  0.000  0.000 |  1.000";
       assertEquals(expected, EuclidCoreIOTools.getAffineTransformString(t));
@@ -445,13 +445,13 @@ public class EuclidCoreIOToolsTest
          assertEquals(expected, EuclidCoreIOTools.getArrayString(null, null, separator, array));
          assertEquals(expected, EuclidCoreIOTools.getArrayString(separator, array, Object::toString));
          assertEquals(expected, EuclidCoreIOTools.getArrayString(null, null, separator, array, Object::toString));
-         
+
          String prefix = "!prefix!";
          String suffix = "?suffix?";
          expected = "!prefix![blop=4, choux=-0.0727027174796302]-p-[blop=-4, choux=0.4845303753357886]-p-null?suffix?";
          assertEquals(expected, EuclidCoreIOTools.getArrayString(prefix, suffix, separator, array));
          assertEquals(expected, EuclidCoreIOTools.getArrayString(prefix, suffix, separator, array, Object::toString));
-         
+
          expected = "blop=4-p-blop=-4-p-null";
          assertEquals(expected, EuclidCoreIOTools.getArrayString(separator, array, e -> "blop=" + e.blop));
          assertEquals(expected, EuclidCoreIOTools.getArrayString(null, null, separator, array, e -> "blop=" + e.blop));
@@ -472,13 +472,13 @@ public class EuclidCoreIOToolsTest
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(separator, list, Object::toString));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list, Object::toString));
-         
+
          String prefix = "!prefix!";
          String suffix = "?suffix?";
          expected = "!prefix![blop=4, choux=-0.0727027174796302]-p-[blop=-4, choux=0.4845303753357886]-p-[blop=44, choux=0.2874116776971093]?suffix?";
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, list));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, list, Object::toString));
-         
+
          expected = "blop=4-p-blop=-4-p-blop=44";
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(separator, list, e -> "blop=" + e.blop));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list, e -> "blop=" + e.blop));
@@ -491,13 +491,13 @@ public class EuclidCoreIOToolsTest
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(separator, list, Object::toString));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list, Object::toString));
-         
+
          String prefix = "!prefix!";
          String suffix = "?suffix?";
          expected = "!prefix![blop=4, choux=-0.0727027174796302]-p-[blop=-4, choux=0.4845303753357886]-p-null?suffix?";
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, list));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, list, Object::toString));
-         
+
          expected = "blop=4-p-blop=-4-p-null";
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(separator, list, e -> "blop=" + e.blop));
          assertEquals(expected, EuclidCoreIOTools.getCollectionString(null, null, separator, list, e -> "blop=" + e.blop));

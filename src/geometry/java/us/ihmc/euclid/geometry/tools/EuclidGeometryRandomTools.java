@@ -31,7 +31,6 @@ import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -288,44 +287,6 @@ public class EuclidGeometryRandomTools
       Point3D center = nextPoint3D(random, centerMinMax);
       Vector3D halfSize = nextVector3D(random, 0.0, sizeMax / 2.0);
       return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
-   }
-
-   /**
-    * Generates a random orientation 2D.
-    * <p>
-    * <ul>
-    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return the random orientation 2D.
-    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random)} instead
-    */
-   @Deprecated
-   public static Orientation2D nextOrientation2D(Random random)
-   {
-      return EuclidCoreRandomTools.nextOrientation2D(random);
-   }
-
-   /**
-    * Generates a random orientation 2D.
-    * <p>
-    * <ul>
-    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @param minMax the maximum absolute value orientation 2D's angle.
-    * @return the random orientation 2D.
-    * @throws RuntimeException if {@code pointMinMax < 0}.
-    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random,double)} instead
-    */
-   @Deprecated
-   public static Orientation2D nextOrientation2D(Random random, double minMax)
-   {
-      return EuclidCoreRandomTools.nextOrientation2D(random, minMax);
    }
 
    /**

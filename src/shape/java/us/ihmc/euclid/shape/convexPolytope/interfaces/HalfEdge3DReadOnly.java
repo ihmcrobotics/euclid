@@ -2,6 +2,9 @@ package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -100,24 +103,43 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getOrigin(), getDestination());
    }
 
-   /**
-    * Tests on a per component basis, if this half-edge 3D is exactly equal to {@code other}.
-    *
-    * @param other the other half-edge 3D to compare against this. Not modified.
-    * @return {@code true} if the two half-edges are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(HalfEdge3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
-         return false;
-      else if (getOrigin() == null != (other.getOrigin() == null))
-         return false;
-      else if (getDestination() == null != (other.getDestination() == null))
-         return false;
-      else
-         return LineSegment3DReadOnly.super.equals(other);
+
+      if (geometry instanceof HalfEdge3DReadOnly)
+      {
+         HalfEdge3DReadOnly other = (HalfEdge3DReadOnly) geometry;
+         if (getOrigin() == null != (other.getOrigin() == null))
+            return false;
+         if (getDestination() == null != (other.getDestination() == null))
+            return false;
+      }
+
+      return LineSegment3DReadOnly.super.equals(geometry);
+   }
+
+   /**
+    * Gets the representative {@code String} of this half-edge 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getHalfEdge3DString(format, this);
    }
 }

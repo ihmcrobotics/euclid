@@ -2,6 +2,8 @@ package us.ihmc.euclid.tuple4D.interfaces;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -33,7 +35,7 @@ import us.ihmc.euclid.tools.TupleTools;
  *
  * @author Sylvain Bertrand
  */
-public interface Tuple4DReadOnly
+public interface Tuple4DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the x-component of this tuple.
@@ -292,13 +294,49 @@ public interface Tuple4DReadOnly
    }
 
    /**
+    * Calculates the norm of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup> +
+    * ({@code this.s} - {@code other.s})<sup>2</sup>]
+    * </p>
+    *
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNorm(Tuple4DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceNormSquared(other));
+   }
+
+   /**
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>
+    * +({@code this.s} - {@code other.s})<sup>2</sup>
+    * </p>
+    *
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNormSquared(Tuple4DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      double dz = getZ() - other.getZ();
+      double ds = getS() - other.getS();
+      return EuclidCoreTools.normSquared(dx, dy, dz, ds);
+   }
+
+   /**
     * Calculates and returns the value of the dot product of this tuple with {@code other}.
     * <p>
     * For instance, the dot product of two tuples p and q is defined as: <br>
     * p . q = &sum;<sub>i=1:4</sub>(p<sub>i</sub> * q<sub>i</sub>)
     * </p>
     *
-    * @param other the other vector used for the dot product. Not modified.
+    * @param other the other tuple used for the dot product. Not modified.
     * @return the value of the dot product.
     */
    default double dot(Tuple4DReadOnly other)
@@ -306,32 +344,57 @@ public interface Tuple4DReadOnly
       return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ() + getS() * other.getS();
    }
 
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Tuple4DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Tuple4DReadOnly))
+         return false;
+      Tuple4DReadOnly other = (Tuple4DReadOnly) geometry;
+      if (!EuclidCoreTools.equals(getX(), other.getX()))
+         return false;
+      if (!EuclidCoreTools.equals(getY(), other.getY()))
+         return false;
+      if (!EuclidCoreTools.equals(getZ(), other.getZ()))
+         return false;
+      if (!EuclidCoreTools.equals(getS(), other.getS()))
+         return false;
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Tuple4DReadOnly))
+         return false;
+
+      Tuple4DReadOnly other = (Tuple4DReadOnly) geometry;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
 
    /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
+    * Gets a representative {@code String} of this tuple 4D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
+    * <pre>
+    * (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
     */
-   default boolean equals(Tuple4DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
+      return EuclidCoreIOTools.getTuple4DString(format, this);
    }
 }

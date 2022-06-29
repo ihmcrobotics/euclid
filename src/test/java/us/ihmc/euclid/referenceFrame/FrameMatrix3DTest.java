@@ -39,7 +39,7 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
    {
       FrameTypeCopier frameTypeBuilder = (frame, matrix) -> createFrameMatrix3D(frame, (Matrix3DReadOnly) matrix);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().equals("toString");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
                                                                   framelessTypeBuilder,

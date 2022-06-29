@@ -768,7 +768,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -782,7 +782,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -796,7 +796,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          transform.transform(expected);
          actual.set(original);
          actual.applyTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, 10.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 10.0 * getEpsilon());
       }
    }
 
@@ -816,7 +816,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -830,7 +830,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -844,7 +844,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          actual.set(original);
          actual.applyTransform(transform);
          actual.applyInverseTransform(transform);
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, 10.0 * getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, 10.0 * getEpsilon());
       }
    }
 

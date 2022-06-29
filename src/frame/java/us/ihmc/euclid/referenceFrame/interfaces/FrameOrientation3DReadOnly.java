@@ -36,8 +36,39 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, ReferenceFrameHolder
+public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, EuclidFrameGeometry
 {
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other the other orientation to be compared to. Not modified.
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *                                         not match.
+    */
+   default double distance(FrameOrientation3DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Orientation3DReadOnly.super.distance(other);
+   }
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other     the other orientation to be compared to. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *                                         not match.
+    */
+   default double distance(FrameOrientation3DReadOnly other, boolean limitToPi)
+   {
+      checkReferenceFrameMatch(other);
+      return distance((Orientation3DReadOnly) other, limitToPi);
+   }
+
    /**
     * Converts, if necessary, and packs this orientation in a quaternion.
     *

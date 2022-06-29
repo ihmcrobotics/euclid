@@ -2,6 +2,7 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -30,7 +31,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface Orientation3DReadOnly
+public interface Orientation3DReadOnly extends EuclidGeometry
 {
    /**
     * Default tolerance to use when testing if this orientation represents an orientation in the
@@ -226,6 +227,46 @@ public interface Orientation3DReadOnly
     * @return the roll angle around the x-axis.
     */
    double getRoll();
+
+   /**
+    * Calculates and returns the angular distance from origin.
+    *
+    * @return the angle from origin in range: [0, 2<i>pi</i>].
+    */
+   default double angle()
+   {
+      return angle(false);
+   }
+
+   /**
+    * Calculates and returns the angular distance from origin.
+    *
+    * @param limitToPi Limits the result to [0, <i>pi</i>].
+    * @return the angle from origin in range: [0, 2<i>pi</i>].
+    */
+   double angle(boolean limitToPi);
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other the other orientation to be compared to. Not modified.
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    */
+   default double distance(Orientation3DReadOnly other)
+   {
+      return distance(other, false);
+   }
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other     the other orientation to be compared to. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    */
+   double distance(Orientation3DReadOnly other, boolean limitToPi);
 
    /**
     * Transforms the given tuple by this orientation.
@@ -745,6 +786,28 @@ public interface Orientation3DReadOnly
       if (orientationTransformed != orientationOriginal)
          orientationTransformed.set(orientationOriginal);
       orientationTransformed.prependInvertOther(this);
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
+    * </p>
+    */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Orientation3DReadOnly))
+         return false;
+      if (epsilon >= Math.PI)
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
+      Orientation3DReadOnly other = (Orientation3DReadOnly) geometry;
+      return distance(other, true) <= epsilon;
    }
 
    /**

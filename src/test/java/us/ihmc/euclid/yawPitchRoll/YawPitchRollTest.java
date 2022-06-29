@@ -67,7 +67,7 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
          YawPitchRoll actual = new YawPitchRoll(rotationVector);
          YawPitchRoll expected = new YawPitchRoll();
          YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, expected);
-         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -87,7 +87,7 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
          assertFalse(ypr1.epsilonEquals(ypr2, getEpsilon()));
          ypr2.set(ypr1);
          assertTrue(ypr1.epsilonEquals(ypr2, getEpsilon()));
-         EuclidCoreTestTools.assertYawPitchRollEquals(ypr1, ypr2, getEpsilon());
+         EuclidCoreTestTools.assertEquals(ypr1, ypr2, getEpsilon());
       }
    }
 

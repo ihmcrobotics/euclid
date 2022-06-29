@@ -53,12 +53,12 @@ public abstract class Orientation3DBasicsTest
 
          neutral.transform(vectorOriginal, vectorTransformed);
 
-         EuclidCoreTestTools.assertTuple3DEquals(vectorOriginal, vectorTransformed, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorOriginal, vectorTransformed, getEpsilon());
 
          neutral.set(orientation);
          neutral.prepend(inverse);
          neutral.transform(vectorOriginal, vectorTransformed);
-         EuclidCoreTestTools.assertTuple3DEquals(vectorOriginal, vectorTransformed, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorOriginal, vectorTransformed, getEpsilon());
       }
    }
 
@@ -89,7 +89,7 @@ public abstract class Orientation3DBasicsTest
 
          rotationMatrix.transform(vectorOriginal, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -136,7 +136,7 @@ public abstract class Orientation3DBasicsTest
 
          axisAngle.transform(vectorOriginal, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -178,7 +178,7 @@ public abstract class Orientation3DBasicsTest
 
          quaternion.transform(vectorOriginal, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -219,7 +219,7 @@ public abstract class Orientation3DBasicsTest
 
          new Quaternion(rotationVector).transform(vectorOriginal, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -273,7 +273,7 @@ public abstract class Orientation3DBasicsTest
          RotationMatrixTools.applyPitchRotation(pitch, expected, expected);
          RotationMatrixTools.applyYawRotation(yaw, expected, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -316,7 +316,7 @@ public abstract class Orientation3DBasicsTest
          RotationMatrixTools.applyPitchRotation(rotY, expected, expected);
          RotationMatrixTools.applyYawRotation(rotZ, expected, expected);
          orientation.transform(vectorOriginal, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -369,12 +369,12 @@ public abstract class Orientation3DBasicsTest
 
          neutral.transform(vectorOriginal, vectorTransformed);
 
-         EuclidCoreTestTools.assertTuple3DEquals(vectorOriginal, vectorTransformed, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorOriginal, vectorTransformed, getEpsilon());
 
          neutral.set(orientation);
          neutral.prepend(inverse);
          neutral.transform(vectorOriginal, vectorTransformed);
-         EuclidCoreTestTools.assertTuple3DEquals(vectorOriginal, vectorTransformed, getEpsilon());
+         EuclidCoreTestTools.assertEquals(vectorOriginal, vectorTransformed, getEpsilon());
       }
    }
 
@@ -396,7 +396,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -412,7 +412,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -428,7 +428,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -450,7 +450,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -466,7 +466,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -482,7 +482,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -504,7 +504,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -520,7 +520,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -536,7 +536,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -558,7 +558,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -574,7 +574,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -590,7 +590,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -612,7 +612,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -628,7 +628,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -644,7 +644,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -666,7 +666,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -682,7 +682,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -698,7 +698,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -720,7 +720,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -736,7 +736,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -752,7 +752,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 
@@ -774,7 +774,7 @@ public abstract class Orientation3DBasicsTest
 
          Quaternion actual = new Quaternion();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -790,7 +790,7 @@ public abstract class Orientation3DBasicsTest
 
          AxisAngle actual = new AxisAngle();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -806,7 +806,7 @@ public abstract class Orientation3DBasicsTest
 
          RotationMatrix actual = new RotationMatrix();
          actual.set(actualOrientation);
-         EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(expected, actual, getEpsilon());
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 

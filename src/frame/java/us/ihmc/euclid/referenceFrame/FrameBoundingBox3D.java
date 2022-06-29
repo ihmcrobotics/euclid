@@ -2,16 +2,13 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -19,8 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box that is expressed in a reference frame.
  */
-public class FrameBoundingBox3D
-      implements FrameBoundingBox3DBasics, EpsilonComparable<FrameBoundingBox3D>, Settable<FrameBoundingBox3D>, GeometricallyComparable<FrameBoundingBox3D>
+public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
 
 {
    /** The reference frame is which this bounding box is currently expressed. */
@@ -105,13 +101,6 @@ public class FrameBoundingBox3D
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameBoundingBox3D other)
-   {
-      FrameBoundingBox3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -136,42 +125,6 @@ public class FrameBoundingBox3D
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
-   }
-
-   /**
-    * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
-    * equal to {@code other} with the tolerance {@code epsilon}.
-    * <p>
-    * If the two bounding boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameBoundingBox3D other, double epsilon)
-   {
-      return FrameBoundingBox3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameBoundingBox3D other, double epsilon)
-   {
-      return FrameBoundingBox3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -216,6 +169,6 @@ public class FrameBoundingBox3D
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

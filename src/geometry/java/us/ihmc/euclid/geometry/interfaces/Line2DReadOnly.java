@@ -2,7 +2,10 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -17,7 +20,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * direction.
  * </p>
  */
-public interface Line2DReadOnly
+public interface Line2DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the point through which this line is going.
@@ -829,18 +832,24 @@ public interface Line2DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
+    * {@inheritDoc}
+    * <p>
+    * This method will return {@code false} if the two lines are physically the same but either the
+    * point or vector of each line is different. For instance, if {@code this.point == other.point} and
+    * {@code this.direction == - other.direction}, the two lines are physically the same but this
+    * method returns {@code false}.
+    * </p>
     */
-   default boolean epsilonEquals(Line2DReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Line2DReadOnly))
+         return false;
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
       if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
          return false;
       if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
@@ -850,34 +859,53 @@ public interface Line2DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
+    * {@inheritDoc}
     * <p>
     * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
     * opposite direction.
     * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Line2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Line2DReadOnly))
+         return false;
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
       return isCollinear(other, epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Line2DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+      if (!(geometry instanceof Line2DReadOnly))
+         return false;
+      Line2DReadOnly other = (Line2DReadOnly) geometry;
+      return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+   }
+
+   /**
+    * Gets a representative {@code String} of this line 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLine2DString(format, this);
    }
 }

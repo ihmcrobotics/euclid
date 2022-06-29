@@ -3,9 +3,6 @@ package us.ihmc.euclid.axisAngle;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -23,7 +20,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, EpsilonComparable<AxisAngle32>, GeometricallyComparable<AxisAngle32>
+public class AxisAngle32 implements AxisAngleBasics
 {
    /** The axis part of this axis-angle. */
    private final UnitVector3D32 axis = new UnitVector3D32(Axis3D.X);
@@ -117,17 +114,6 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    }
 
    /**
-    * Sets this axis-angle to the same value as the given axis-angle {@code other}.
-    *
-    * @param other the other axis-angle. Not modified.
-    */
-   @Override
-   public void set(AxisAngle32 other)
-   {
-      AxisAngleBasics.super.set(other);
-   }
-
-   /**
     * Sets this axis-angle to represent a new rotation of axis ({@code x}, {@code y}, {@code z}) and
     * angle of {@code angle}.
     *
@@ -202,45 +188,9 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    public boolean equals(Object object)
    {
       if (object instanceof AxisAngleReadOnly)
-         return equals((AxisAngleReadOnly) object);
+         return AxisAngleBasics.super.equals((AxisAngleReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis, if this axis-angle is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
-    * different orientations.
-    *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(AxisAngle32 other, double epsilon)
-   {
-      return AxisAngleBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two axis-angle are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(AxisAngle32 other, double epsilon)
-   {
-      return AxisAngleBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -251,7 +201,7 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getAxisAngleString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

@@ -6,9 +6,12 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -84,7 +87,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
    /**
     * Checks that the size component corresponding to the given axis is positive.
-    * 
+    *
     * @param axis to identify the component to check.
     * @throws IllegalArgumentException if the size component is strictly negative.
     */
@@ -349,7 +352,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the {@code ConvexPolytope3DReadOnly} view backed this box.
-    * 
+    *
     * @return the polytope view of this box.
     */
    BoxPolytope3DView asConvexPolytope();
@@ -426,30 +429,31 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    Box3DBasics copy();
 
-   /**
-    * Tests separately and on a per component basis if the pose and the size of this box and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    *
-    * @param other   the other box which pose and size is to be compared against this box pose and
-    *                size. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Box3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
-      return getSize().epsilonEquals(other.getSize(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon)
-            && getPosition().epsilonEquals(other.getPosition(), epsilon);
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Box3DReadOnly))
+         return false;
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
+      return getSize().epsilonEquals(other.getSize(), epsilon) && getPose().epsilonEquals(other.getPose(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param other   the box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Box3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Box3DReadOnly))
+         return false;
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
@@ -463,20 +467,18 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return result;
    }
 
-   /**
-    * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.
-    *
-    * @param other the other box 3D to compare against this. Not modified.
-    * @return {@code true} if the two boxes are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Box3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+      if (!(geometry instanceof Box3DReadOnly))
+         return false;
+      Box3DReadOnly other = (Box3DReadOnly) geometry;
+      return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
    }
 
    /**
@@ -501,5 +503,22 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    default void transformToWorld(Transformable transformable)
    {
       transformable.applyTransform(getPose());
+   }
+
+   /**
+    * Gets the representative {@code String} of this box 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getBox3DString(format, this);
    }
 }

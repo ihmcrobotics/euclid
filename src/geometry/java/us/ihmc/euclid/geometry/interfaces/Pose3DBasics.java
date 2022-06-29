@@ -2,14 +2,13 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -20,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * A pose 3D represents a position and orientation in 3 dimensions.
  * </p>
  */
-public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
+public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, RigidBodyTransformBasics
 {
    /**
     * Sets the x-coordinate of the position.
@@ -69,57 +68,33 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    QuaternionBasics getOrientation();
 
    /**
-    * Sets the position coordinates.
-    *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
-    * @param z the z-coordinate of the position.
-    * @deprecated Use {@code this.getPosition().set(x, y, z)} instead.
-    */
-   @Deprecated
-   default void setPosition(double x, double y, double z)
-   {
-      getPosition().set(x, y, z);
-   }
-
-   /**
-    * Sets the position to the given tuple.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @deprecated Use {@code this.getPosition().set(position)} instead.
-    */
-   @Deprecated
-   default void setPosition(Tuple3DReadOnly position)
-   {
-      setPosition(position.getX(), position.getY(), position.getZ());
-   }
-
-   /**
-    * Sets the x and y coordinates from the given tuple 2D, the z coordinate remains unchanged.
+    * Gets the reference of the position part of this pose 3D.
     * <p>
-    * The z component remains unchanged.
+    * Same as {@link #getPosition()}, it is needed only to comply to the
+    * {@code RigidBodyTransformBasics} interface.
     * </p>
     *
-    * @param position2D the tuple with the new x and y coordinates. Not modified.
-    * @deprecated Use {@code this.getPosition().set(position2D)} instead.
+    * @return the position part of this pose 3D.
     */
-   @Deprecated
-   default void setPosition(Tuple2DReadOnly position2D)
+   @Override
+   default Point3DBasics getTranslation()
    {
-      getPosition().set(position2D);
+      return getPosition();
    }
 
    /**
-    * Sets the position from the given tuple 2D and z coordinate.
+    * Gets the reference to the orientation part of this pose 3D.
+    * <p>
+    * Same as {@link #getOrientation()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
     *
-    * @param position2D the tuple with the new x and y coordinates. Not modified.
-    * @param z          the new z value for this pose's position z-coordinate.
-    * @deprecated Use {@code this.getPosition().set(position2D, z)} instead.
+    * @return the orientation part of this pose 3D.
     */
-   @Deprecated
-   default void setPosition(Tuple2DReadOnly position2D, double z)
+   @Override
+   default QuaternionBasics getRotation()
    {
-      getPosition().set(position2D, z);
+      return getOrientation();
    }
 
    /**
@@ -165,70 +140,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the orientation part of this pose 3D with the 4 components of a quaternion.
-    * <p>
-    * The quaternion is normalized internally.
-    * </p>
-    *
-    * @param qx the x-component of the quaternion's vector part.
-    * @param qy the y-component of the quaternion's vector part.
-    * @param qz the z-component of the quaternion's vector part.
-    * @param qs the scalar component of the quaternion.
-    * @deprecated Use {@code this.getOrientation().set(qx, qy, qz, qs)} instead.
-    */
-   @Deprecated
-   default void setOrientation(double qx, double qy, double qz, double qs)
-   {
-      getOrientation().set(qx, qy, qz, qs);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given orientation 2D.
-    *
-    * @param orientation the orientation 2D used to set this pose's orientation. Not modified.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(Orientation2DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given orientation.
-    *
-    * @param orientation the orientation used to set this pose's orientation. Not modified.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(Orientation3DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given yaw, pitch, and roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yaw   the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll  the angle to rotate about the x-axis.
-    * @deprecated Use {@code this.getOrientation().setYawPitchRoll(yaw, pitch, roll)} instead.
-    */
-   @Deprecated
-   default void setOrientationYawPitchRoll(double yaw, double pitch, double roll)
-   {
-      getOrientation().setYawPitchRoll(yaw, pitch, roll);
-   }
-
-   /**
     * Sets this pose 3D to match the given rigid-body transform.
     *
     * @param rigidBodyTransform the transform use to set this pose 3D. Not modified.
     */
+   @Override
    default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getPosition().set(rigidBodyTransform.getTranslation());
@@ -270,42 +186,6 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    {
       getOrientation().setToZero();
       getPosition().setToZero();
-   }
-
-   /**
-    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a proper
-    * orientation.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    *
-    * @deprecated Use {@code this.getOrientation().normalize()} instead.
-    */
-   @Deprecated
-   default void normalizeQuaternion()
-   {
-      getOrientation().normalize();
-   }
-
-   /**
-    * Normalizes the quaternion part of this pose and then limits the angle of the rotation it
-    * represents to be &in; [-<i>pi</i>;<i>pi</i>].
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    *
-    * @deprecated Use {@code this.getOrientation().normalizeAndLimitToPi()} instead.
-    */
-   @Deprecated
-   default void normalizeQuaternionAndLimitToPi()
-   {
-      getOrientation().normalizeAndLimitToPi();
    }
 
    /**
@@ -359,6 +239,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
     */
+   @Override
    default void prependTranslation(double x, double y, double z)
    {
       getPosition().add(x, y, z);
@@ -374,6 +255,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
+   @Override
    default void prependTranslation(Tuple3DReadOnly translation)
    {
       prependTranslation(translation.getX(), translation.getY(), translation.getZ());
@@ -397,6 +279,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param yaw the angle to rotate about the z-axis.
     */
+   @Override
    default void prependYawRotation(double yaw)
    {
       RotationMatrixTools.applyYawRotation(yaw, getPosition(), getPosition());
@@ -409,6 +292,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param pitch the angle to rotate about the y-axis.
     */
+   @Override
    default void prependPitchRotation(double pitch)
    {
       RotationMatrixTools.applyPitchRotation(pitch, getPosition(), getPosition());
@@ -421,6 +305,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param roll the angle to rotate about the x-axis.
     */
+   @Override
    default void prependRollRotation(double roll)
    {
       RotationMatrixTools.applyRollRotation(roll, getPosition(), getPosition());
@@ -451,6 +336,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
     */
+   @Override
    default void appendTranslation(double x, double y, double z)
    {
       double thisX = getX();
@@ -471,6 +357,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
+   @Override
    default void appendTranslation(Tuple3DReadOnly translation)
    {
       appendTranslation(translation.getX(), translation.getY(), translation.getZ());
@@ -505,6 +392,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param yaw the angle to rotate about the z-axis.
     */
+   @Override
    default void appendYawRotation(double yaw)
    {
       getOrientation().appendYawRotation(yaw);
@@ -525,6 +413,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param pitch the angle to rotate about the y-axis.
     */
+   @Override
    default void appendPitchRotation(double pitch)
    {
       getOrientation().appendPitchRotation(pitch);
@@ -545,6 +434,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param roll the angle to rotate about the x-axis.
     */
+   @Override
    default void appendRollRotation(double roll)
    {
       getOrientation().appendRollRotation(roll);

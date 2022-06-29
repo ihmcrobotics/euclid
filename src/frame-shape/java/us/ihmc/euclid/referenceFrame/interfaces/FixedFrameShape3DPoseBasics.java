@@ -426,7 +426,7 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
 
    /**
     * Appends the orientation to this pose.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.
@@ -462,7 +462,7 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
 
    /**
     * Prepends the orientation to this pose.
-    * 
+    *
     * @param orientation the orientation to prepend. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.

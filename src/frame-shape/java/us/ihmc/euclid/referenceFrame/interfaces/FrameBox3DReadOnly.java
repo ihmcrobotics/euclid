@@ -5,8 +5,10 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -433,58 +435,19 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    FixedFrameBox3DBasics copy();
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of this box and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
+    * Gets the representative {@code String} of this frame box 3D given a specific format to use.
     * <p>
-    * If the two boxes have different frames, this method returns {@code false}.
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the other box which pose and size is to be compared against this box pose and
-    *                size. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise and are expressed in the same
-    *         reference frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameBox3DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return Box3DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    *
-    * @param other   the box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   default boolean geometricallyEquals(FrameBox3DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Box3DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this box 3D is exactly equal to {@code other}.
-    * <p>
-    * If the two boxes have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other box 3D to compare against this. Not modified.
-    * @return {@code true} if the two boxes are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameBox3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+      return EuclidFrameShapeIOTools.getFrameBox3DString(format, this);
    }
 }

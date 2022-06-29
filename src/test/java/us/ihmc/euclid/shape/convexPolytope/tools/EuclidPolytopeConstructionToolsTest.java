@@ -111,7 +111,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          0.25172865278680445);
       Vector3D actualNormal = new Vector3D(-0.7049187675308248, 0.40222475571059535, 0.5842129552452384);
       assertTrue(EuclidPolytopeConstructionTools.updateFace3DNormal(covariance, actualNormal));
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
    }
 
    @Test
@@ -172,7 +172,7 @@ public class EuclidPolytopeConstructionToolsTest
                                                                                         actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -202,7 +202,7 @@ public class EuclidPolytopeConstructionToolsTest
                                                                                         actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
       }
    }
 

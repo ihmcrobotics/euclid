@@ -5,7 +5,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.primitives.Box3D;
@@ -17,6 +16,7 @@ import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public class EuclidFrameShapeToolsTest
@@ -39,10 +39,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          EuclidShapeTools.boundingBoxBox3D(boxInWorld.getPosition(), boxInWorld.getOrientation(), boxInWorld.getSize(), expected);
          EuclidFrameShapeTools.boundingBoxBox3D(worldFrame, boxInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          boxInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -57,10 +57,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          EuclidShapeTools.boundingBoxBox3D(boxInWorld.getPosition(), boxInWorld.getOrientation(), boxInWorld.getSize(), expected);
          EuclidFrameShapeTools.boundingBoxBox3D(shapeFrame, boxInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          boxInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -80,10 +80,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          EuclidShapeTools.boundingBoxBox3D(boxInBBXFrame.getPosition(), boxInBBXFrame.getOrientation(), boxInBBXFrame.getSize(), expected);
          EuclidFrameShapeTools.boundingBoxBox3D(shapeFrame, boxInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          boxInBBXFrame.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
 
@@ -100,10 +100,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          capsuleInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCapsule3D(worldFrame, capsuleInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          capsuleInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -117,10 +117,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          capsuleInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCapsule3D(shapeFrame, capsuleInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          capsuleInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -139,10 +139,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          capsuleInBBX.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCapsule3D(shapeFrame, capsuleInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          capsuleInBBX.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -159,10 +159,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          cylinderInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCylinder3D(worldFrame, cylinderInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          cylinderInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -176,10 +176,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          cylinderInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCylinder3D(shapeFrame, cylinderInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          cylinderInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -198,10 +198,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          cylinderInBBX.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxCylinder3D(shapeFrame, cylinderInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
 
          cylinderInBBX.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -219,10 +219,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInWorld.getPosition(), ellipsoidInWorld.getOrientation(), ellipsoidInWorld.getRadii(), expected);
          EuclidFrameShapeTools.boundingBoxEllipsoid3D(worldFrame, ellipsoidInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          ellipsoidInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -237,10 +237,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInWorld.getPosition(), ellipsoidInWorld.getOrientation(), ellipsoidInWorld.getRadii(), expected);
          EuclidFrameShapeTools.boundingBoxEllipsoid3D(shapeFrame, ellipsoidInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          ellipsoidInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -263,10 +263,10 @@ public class EuclidFrameShapeToolsTest
                                                  ellipsoidInBBXFrame.getRadii(),
                                                  expected);
          EuclidFrameShapeTools.boundingBoxEllipsoid3D(shapeFrame, ellipsoidInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          ellipsoidInBBXFrame.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
 
@@ -284,10 +284,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          rampInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxRamp3D(worldFrame, rampInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          rampInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -302,10 +302,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          rampInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxRamp3D(shapeFrame, rampInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          rampInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -325,10 +325,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          rampInBBXFrame.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxRamp3D(shapeFrame, rampInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          rampInBBXFrame.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
 
@@ -345,10 +345,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          sphereInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxSphere3D(worldFrame, sphereInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          sphereInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -362,10 +362,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          sphereInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxSphere3D(shapeFrame, sphereInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          sphereInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -384,10 +384,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          sphereInBBXFrame.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxSphere3D(shapeFrame, sphereInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          sphereInBBXFrame.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
 
@@ -405,10 +405,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          convexPolytopeInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxConvexPolytope3D(worldFrame, convexPolytopeInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          convexPolytopeInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -423,10 +423,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          convexPolytopeInWorld.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxConvexPolytope3D(shapeFrame, convexPolytopeInFrame, worldFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          convexPolytopeInWorld.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -446,10 +446,10 @@ public class EuclidFrameShapeToolsTest
          BoundingBox3D actual = new BoundingBox3D();
          convexPolytopeInBBXFrame.getBoundingBox(expected);
          EuclidFrameShapeTools.boundingBoxConvexPolytope3D(shapeFrame, convexPolytopeInFrame, boundingBoxFrame, actual);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
 
          convexPolytopeInBBXFrame.getBoundingBox(expected);
-         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+         EuclidCoreTestTools.assertEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
 

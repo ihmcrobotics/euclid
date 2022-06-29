@@ -1,13 +1,12 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -22,7 +21,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3D>
+public class Ellipsoid3D implements Ellipsoid3DBasics
 {
    /** Pose of this ellipsoid. */
    private final Shape3DPose pose = new Shape3DPose();
@@ -182,49 +181,11 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
       supplier = newSupplier;
    }
 
-   /**
-    * Copies the {@code other} ellipsoid data into {@code this}.
-    *
-    * @param other the other ellipsoid to copy. Not modified.
-    */
-   @Override
-   public void set(Ellipsoid3D other)
-   {
-      Ellipsoid3DBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public Ellipsoid3D copy()
    {
       return new Ellipsoid3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other ellipsoid to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Ellipsoid3D other, double epsilon)
-   {
-      return Ellipsoid3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
-    * similar.
-    *
-    * @param other   the ellipsoid to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
-   {
-      return Ellipsoid3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -267,6 +228,6 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getEllipsoid3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

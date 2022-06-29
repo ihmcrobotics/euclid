@@ -2525,7 +2525,7 @@ public class EuclidGeometryPolygonTools
     * returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
     *                         convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.

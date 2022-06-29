@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -37,7 +38,7 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     */
    default double distance(Point3DReadOnly other)
    {
-      return EuclidCoreTools.squareRoot(distanceSquared(other));
+      return differenceNorm(other);
    }
 
    /**
@@ -53,10 +54,7 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     */
    default double distanceSquared(Point3DReadOnly other)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return EuclidCoreTools.normSquared(dx, dy, dz);
+      return differenceNormSquared(other);
    }
 
    /**
@@ -163,23 +161,17 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
 
-   /**
-    * Tests if {@code this} and {@code other} represent the same point 3D to an {@code epsilon}.
-    * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other point 3D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
-    * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Point3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Point3DReadOnly))
+         return false;
+      Point3DReadOnly other = (Point3DReadOnly) geometry;
       return distance(other) <= epsilon;
    }
 }

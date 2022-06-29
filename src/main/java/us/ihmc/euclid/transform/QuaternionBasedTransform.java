@@ -2,9 +2,7 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -42,8 +40,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class QuaternionBasedTransform implements RigidBodyTransformBasics, EpsilonComparable<QuaternionBasedTransform>,
-      GeometricallyComparable<QuaternionBasedTransform>, Settable<QuaternionBasedTransform>
+public class QuaternionBasedTransform implements RigidBodyTransformBasics
 {
    /** The rotation part of this transform. */
    private final Quaternion quaternion = new Quaternion();
@@ -209,17 +206,6 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
    {
       quaternion.setUnsafe(qx, qy, qz, qs);
       translationVector.set(x, y, z);
-   }
-
-   /**
-    * Sets this quaternion-based transform to the given {@code other}.
-    *
-    * @param other the other quaternion-based transform. Not modified.
-    */
-   @Override
-   public void set(QuaternionBasedTransform other)
-   {
-      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -406,15 +392,17 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
       return translationVector;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param other the other quaternion-based transform to compare against this. Not modified.
-    */
+   /** {@inheritDoc} */
    @Override
-   public boolean epsilonEquals(QuaternionBasedTransform other, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof QuaternionBasedTransform))
+         return false;
+      QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
       return quaternion.epsilonEquals(other.quaternion, epsilon) && translationVector.epsilonEquals(other.translationVector, epsilon);
    }
 
@@ -435,38 +423,18 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
          return false;
    }
 
-   /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are exactly equal.
-    * <p>
-    * The method returns {@code false} if the given transform is {@code null}.
-    * </p>
-    *
-    * @param other the other transform to compare against this. Not modified.
-    * @return {@code true} if the two transforms are exactly equal, {@code false} otherwise.
-    */
-   public boolean equals(QuaternionBasedTransform other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);
-   }
-
-   /**
-    * Two quaternion based transforms are considered geometrically equal if both the rotation-scale
-    * matrices and translation vectors are equal.
-    *
-    * @param other   the other quaternion based transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two quaternion based transforms are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
-   public boolean geometricallyEquals(QuaternionBasedTransform other, double epsilon)
+   public boolean equals(EuclidGeometry geometry)
    {
-      return other.quaternion.geometricallyEquals(quaternion, epsilon) && other.translationVector.geometricallyEquals(translationVector, epsilon);
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof QuaternionBasedTransform))
+         return false;
+      QuaternionBasedTransform other = (QuaternionBasedTransform) geometry;
+      return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);
    }
 
    /**
@@ -479,7 +447,25 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getQuaternionBasedTransformString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Gets a representative {@code String} of this transform given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Quaternion:  ( 0.174,  0.732, -0.222,  0.620 )
+    * Translation: (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidCoreIOTools.getQuaternionBasedTransformString(format, this);
    }
 
    @Override

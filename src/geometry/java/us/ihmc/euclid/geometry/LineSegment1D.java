@@ -3,9 +3,8 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -18,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents a finite-length 1D line segment defined by its two 1D endpoints.
  */
-public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EpsilonComparable<LineSegment1D>, GeometricallyComparable<LineSegment1D>
+public class LineSegment1D implements Clearable, EuclidGeometry
 {
    /** The first endpoint defining this line segment. */
    private double firstEndpoint = Double.NaN;
@@ -370,7 +369,11 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
       secondEndpoint = 0.0;
    }
 
-   @Override
+   /**
+    * Sets this line segment to the other segment.
+    *
+    * @param other the other line segment 1D to set this to. Not modified.
+    */
    public void set(LineSegment1D other)
    {
       set(other.firstEndpoint, other.secondEndpoint);
@@ -570,17 +573,17 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
       return new LineSegment2D(firstEndpoint, secondEndpoint);
    }
 
-   /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
-   public boolean epsilonEquals(LineSegment1D other, double epsilon)
+   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) geometry;
       if (!EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon))
          return false;
       if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
@@ -589,21 +592,22 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param other   the line segment to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
    @Override
-   public boolean geometricallyEquals(LineSegment1D other, double epsilon)
+   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) geometry;
       if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
             && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return true;
@@ -611,23 +615,6 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
             && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon))
          return true;
       return false;
-   }
-
-   /**
-    * Tests on a per component basis, if this line segment 1D is exactly equal to {@code other}.
-    *
-    * @param other the other line segment 1D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(LineSegment1D other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return firstEndpoint == other.firstEndpoint && secondEndpoint == other.secondEndpoint;
    }
 
    /**
@@ -646,6 +633,24 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
          return false;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   public boolean equals(EuclidGeometry geometry)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment1D))
+         return false;
+      LineSegment1D other = (LineSegment1D) geometry;
+      if (!EuclidCoreTools.equals(firstEndpoint, other.firstEndpoint))
+         return false;
+      if (!EuclidCoreTools.equals(secondEndpoint, other.secondEndpoint))
+         return false;
+      return true;
+   }
+
    @Override
    public int hashCode()
    {
@@ -661,7 +666,24 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment1DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Gets a representative {@code String} of this line segment 1D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   public String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment1DString(format, this);
    }
 
    /**

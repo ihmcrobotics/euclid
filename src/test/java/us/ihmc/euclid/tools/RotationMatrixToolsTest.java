@@ -20,6 +20,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class RotationMatrixToolsTest
 {
@@ -43,11 +44,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyYawRotation(yaw, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyYawRotation(yaw, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -63,11 +64,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyYawRotation(yaw, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyYawRotation(yaw, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 
@@ -89,11 +90,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyPitchRotation(pitch, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyPitchRotation(pitch, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 
@@ -115,11 +116,11 @@ public class RotationMatrixToolsTest
 
          rotationMatrix.transform(tupleOriginal, expectedTuple);
          RotationMatrixTools.applyRollRotation(roll, tupleOriginal, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
 
          actualTuple.set(tupleOriginal);
          RotationMatrixTools.applyRollRotation(roll, actualTuple, actualTuple);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
+         EuclidCoreTestTools.assertEquals(expectedTuple, actualTuple, EPS);
       }
    }
 
@@ -207,7 +208,7 @@ public class RotationMatrixToolsTest
       Random random = new Random(45345L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Testing against quaternion distance
+      {
          RotationMatrix m1 = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix m2 = EuclidCoreRandomTools.nextRotationMatrix(random);
 
@@ -254,6 +255,67 @@ public class RotationMatrixToolsTest
          double expectedDistance = Math.abs(axisAngle.getAngle());
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
          assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Cross Platform distance method testing: (RotationMatrix, Quaternion)
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         RotationMatrix converted = new RotationMatrix(quaternion);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, quaternion);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Cross Platform distance method testing: (RotationMatrix , Axis Angle)
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         RotationMatrix converted = new RotationMatrix(axisAngle);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, axisAngle);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Cross Platform Distance Method Testing: (RotationMatrix , Yaw Pitch Roll)
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         RotationMatrix converted = new RotationMatrix(yawPitchRoll);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, yawPitchRoll);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Type check test in distance method
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         double withQuaternionResult = RotationMatrixTools.distance(rotationMatrix, new Quaternion(orientation));
+         double withRotationMatrixResult = RotationMatrixTools.distance(rotationMatrix, new RotationMatrix(orientation));
+
+         double notCastedResult = RotationMatrixTools.distance(rotationMatrix, orientation);
+
+         if (Math.abs(notCastedResult) <= Math.PI)
+            assertEquals(notCastedResult, withRotationMatrixResult, EPS);
+         else
+            assertEquals(notCastedResult, withQuaternionResult, EPS);
+      }
+   }
+
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(242334);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
+
+         double expected = quaternion.angle();
+         double actual = RotationMatrixTools.angle(rotationMatrix);
+
+         assertEquals(expected, actual, EPS);
       }
    }
 

@@ -50,62 +50,6 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    FixedFrameUnitVector2DBasics getDirection();
 
    /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *                                         in the same reference frame.
-    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
-    */
-   @Deprecated
-   default void setPoint(FramePoint2DReadOnly pointOnLine)
-   {
-      getPoint().set(pointOnLine);
-   }
-
-   /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *                                         in the same reference frame.
-    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
-    */
-   @Deprecated
-   default void setPoint(FramePoint3DReadOnly pointOnLine)
-   {
-      getPoint().set(pointOnLine);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
-    *
-    * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *                                         expressed in the same reference frame.
-    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
-    */
-   @Deprecated
-   default void setDirection(FrameVector2DReadOnly lineDirection)
-   {
-      getDirection().set(lineDirection);
-   }
-
-   /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
-    *
-    * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *                                         expressed in the same reference frame.
-    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
-    */
-   @Deprecated
-   default void setDirection(FrameVector3DReadOnly lineDirection)
-   {
-      getDirection().set(lineDirection);
-   }
-
-   /**
     * Redefines this line with a new point and a new direction vector.
     *
     * @param referenceFrame the reference frame in which the given coordinates are expressed.

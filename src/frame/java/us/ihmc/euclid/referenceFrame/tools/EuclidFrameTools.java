@@ -918,7 +918,7 @@ public class EuclidFrameTools
     * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -947,7 +947,7 @@ public class EuclidFrameTools
     * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -974,7 +974,7 @@ public class EuclidFrameTools
     * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -1003,7 +1003,7 @@ public class EuclidFrameTools
     * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -7239,7 +7239,7 @@ public class EuclidFrameTools
     * method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param p1                     the first point that belongs to the sphere. Not modified.
     * @param p2                     the second point that belongs to the sphere. Not modified.
     * @param p3                     the third point that belongs to the sphere. Not modified.
@@ -7275,7 +7275,7 @@ public class EuclidFrameTools
     * method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param p1                     the first point that belongs to the sphere. Not modified.
     * @param p2                     the second point that belongs to the sphere. Not modified.
     * @param p3                     the third point that belongs to the sphere. Not modified.

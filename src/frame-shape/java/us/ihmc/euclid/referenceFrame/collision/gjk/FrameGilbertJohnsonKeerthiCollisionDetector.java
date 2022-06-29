@@ -469,7 +469,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * This is destined for debugging purposes to obtain further information about reason how the last
     * evaluation terminated.
     * </p>
-    * 
+    *
     * @return the termination type for the last evaluation.
     */
    public TerminationType getLastTerminationType()

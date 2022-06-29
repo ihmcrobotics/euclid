@@ -108,42 +108,6 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Sets the size along the x-axis for this ramp.
-    *
-    * @param sizeX the size of this ramp along the x-axis.
-    * @throws IllegalArgumentException if {@code length} is negative.
-    * @deprecated Use {@code this.getSize().setX(sizeX)} instead.
-    */
-   default void setSizeX(double sizeX)
-   {
-      getSize().setX(sizeX);
-   }
-
-   /**
-    * Sets the size along the y-axis for this ramp.
-    *
-    * @param sizeY the size of this ramp along the y-axis.
-    * @throws IllegalArgumentException if {@code width} is negative.
-    * @deprecated Use {@code this.getSize().setY(sizeY)} instead.
-    */
-   default void setSizeY(double sizeY)
-   {
-      getSize().setY(sizeY);
-   }
-
-   /**
-    * Sets the size along the z-axis for this ramp.
-    *
-    * @param sizeZ the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if {@code height} is negative.
-    * @deprecated Use {@code this.getSize().setZ(sizeZ)} instead.
-    */
-   default void setSizeZ(double sizeZ)
-   {
-      getSize().setZ(sizeZ);
-   }
-
-   /**
     * Sets this ramp properties.
     *
     * @param position    the position of this ramp. Not modified.
@@ -240,22 +204,6 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    {
       getPose().set(pose);
       getSize().set(size[0], size[1], size[2]);
-   }
-
-   /**
-    * Sets the size of this ramp.
-    *
-    * @param sizeX the size of this ramp along the x-axis.
-    * @param sizeY the size of this ramp along the y-axis.
-    * @param sizeZ the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
-    *                                  negative.
-    * @deprecated Use {@code this.getSize().set(sizeX, sizeY, sizeZ)} instead.
-    */
-   @Deprecated
-   default void setSize(double sizeX, double sizeY, double sizeZ)
-   {
-      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /** {@inheritDoc} */

@@ -3,6 +3,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Read-only interface for a 2D pose expressed in a given reference frame.
@@ -18,7 +20,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  * using methods requiring {@code FramePose2DReadOnly}.
  * </p>
  */
-public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolder
+public interface FramePose2DReadOnly extends Pose2DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -83,59 +85,19 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Tests if this pose is equal to the given {@code other} to an {@code epsilon}.
+    * Gets a representative {@code String} of this pose 2D given a specific format to use.
     * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the other pose to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing..
-    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FramePose2DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 ), worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
     */
-   default boolean geometricallyEquals(FramePose2DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return Pose2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if this pose is exactly equal to {@code other}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other pose to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   default boolean equals(FramePose2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Pose2DReadOnly.super.equals(other);
+      return EuclidFrameIOTools.getFramePose2DString(format, this);
    }
 }

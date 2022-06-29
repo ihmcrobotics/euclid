@@ -5,15 +5,6 @@
 
 ## Minutiae
 
-### Tested Platforms
-We test all of our software on OS X 10.11 El Capitan, Windows 7/8/10, and Ubuntu 16.04, 18.04 LTS Desktop and Server.
-
-### Branches
-This repository uses the git-flow branching model. You can find more about git-flow [here](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow).
-
-### Test and documentation coverage
-We have put our best effort into documenting and testing the entire library. Test coverage is above 90%. 
-
 ### Licensing
 This library is under the license Apache 2.0. Consult the license file for more information.
 

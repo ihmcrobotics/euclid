@@ -3,18 +3,16 @@ package us.ihmc.euclid.referenceFrame;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -39,7 +37,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryObject<FrameRotationMatrix>
+public class FrameRotationMatrix implements FrameRotationMatrixBasics
 {
    /** The reference frame is which this rotation matrix is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -245,13 +243,6 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
 
    /** {@inheritDoc} */
    @Override
-   public void set(FrameRotationMatrix other)
-   {
-      FrameRotationMatrixBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void set(RotationMatrixReadOnly other)
    {
       rotationMatrix.set(other);
@@ -416,48 +407,6 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
    }
 
    /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameRotationMatrix other, double epsilon)
-   {
-      return FrameRotationMatrixBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameRotationMatrix other, double epsilon)
-   {
-      return FrameRotationMatrixBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this matrix as follows:
     *
     * <pre>
@@ -472,7 +421,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameMatrix3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

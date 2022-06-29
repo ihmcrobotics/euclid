@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -52,6 +54,9 @@ public class EuclidGeometryTools
    /**
     * Computes the angle in radians from the first 2D vector to the second 2D vector. The computed
     * angle is in the range [-<i>pi</i>; <i>pi</i>].
+    * <p>
+    * Redirection to {@link TupleTools#angle(double, double, double, double)}.
+    * </p>
     *
     * @param firstVectorX  x-component of the first vector. Not modified.
     * @param firstVectorY  y-component of the first vector. Not modified.
@@ -61,18 +66,7 @@ public class EuclidGeometryTools
     */
    public static double angleFromFirstToSecondVector2D(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY)
    {
-      // The sign of the angle comes from the cross product
-      double crossProduct = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      // the magnitude of the angle comes from the dot product
-      double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
-
-      double angle = EuclidCoreTools.atan2(crossProduct, dotProduct);
-      // This is a hack to get the polygon tests to pass.
-      // Probably some edge case not well handled somewhere (Sylvain)
-      if (crossProduct == 0.0)
-         angle = -angle;
-
-      return angle;
+      return TupleTools.angle(firstVectorX, firstVectorY, secondVectorX, secondVectorY);
    }
 
    /**
@@ -84,7 +78,7 @@ public class EuclidGeometryTools
     */
    public static double angleFromXForwardToVector2D(Vector2DReadOnly vector)
    {
-      return angleFromXForwardToVector2D(vector.getX(), vector.getY());
+      return Axis2D.X.angle(vector);
    }
 
    /**
@@ -103,6 +97,9 @@ public class EuclidGeometryTools
    /**
     * Computes the angle in radians from the first 3D vector to the second 3D vector. The computed
     * angle is in the range [0; <i>pi</i>].
+    * <p>
+    * Redirection to {@link TupleTools#angle(double, double, double, double, double, double)}.
+    * </p>
     *
     * @param firstVectorX  x-component of first the vector.
     * @param firstVectorY  y-component of first the vector.
@@ -119,30 +116,7 @@ public class EuclidGeometryTools
                                                        double secondVectorY,
                                                        double secondVectorZ)
    {
-      return angleFromFirstToSecondVector3D(firstVectorX, firstVectorY, firstVectorZ, false, secondVectorX, secondVectorY, secondVectorZ, false);
-   }
-
-   private static double angleFromFirstToSecondVector3D(double firstVectorX,
-                                                        double firstVectorY,
-                                                        double firstVectorZ,
-                                                        boolean isFirstVectorUnitary,
-                                                        double secondVectorX,
-                                                        double secondVectorY,
-                                                        double secondVectorZ,
-                                                        boolean isSecondVectorUnitary)
-   {
-      double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
-      double secondVectorLength = isSecondVectorUnitary ? 1.0 : EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
-
-      double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
-      dotProduct /= firstVectorLength * secondVectorLength;
-
-      if (dotProduct > 1.0)
-         dotProduct = 1.0;
-      else if (dotProduct < -1.0)
-         dotProduct = -1.0;
-
-      return EuclidCoreTools.acos(dotProduct);
+      return TupleTools.angle(firstVectorX, firstVectorY, firstVectorZ, secondVectorX, secondVectorY, secondVectorZ);
    }
 
    /**
@@ -1671,7 +1645,7 @@ public class EuclidGeometryTools
     * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -1712,7 +1686,7 @@ public class EuclidGeometryTools
     * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -6440,12 +6414,12 @@ public class EuclidGeometryTools
       pointOnIntersectionToPack.setToNaN();
       intersectionDirectionToPack.setToNaN();
 
-      double normalMagnitude1 = planeNormal1.length();
+      double normalMagnitude1 = planeNormal1.norm();
 
       if (normalMagnitude1 < ONE_TRILLIONTH)
          return false;
 
-      double normalMagnitude2 = planeNormal2.length();
+      double normalMagnitude2 = planeNormal2.norm();
 
       if (normalMagnitude2 < ONE_TRILLIONTH)
          return false;
@@ -6455,7 +6429,7 @@ public class EuclidGeometryTools
          return false;
 
       intersectionDirectionToPack.cross(planeNormal1, planeNormal2);
-      double det = intersectionDirectionToPack.lengthSquared();
+      double det = intersectionDirectionToPack.normSquared();
 
       // d1 = planeNormal1 . pointOnPlane1
       double d1 = planeNormal1.getX() * pointOnPlane1.getX() + planeNormal1.getY() * pointOnPlane1.getY() + planeNormal1.getZ() * pointOnPlane1.getZ();
@@ -7481,7 +7455,7 @@ public class EuclidGeometryTools
 
       normalToPack.set(v1_y * v2_z - v1_z * v2_y, v2_x * v1_z - v2_z * v1_x, v1_x * v2_y - v1_y * v2_x);
 
-      double normalLength = normalToPack.length();
+      double normalLength = normalToPack.norm();
       if (normalLength < ONE_TRILLIONTH)
          return false;
 
@@ -8178,7 +8152,7 @@ public class EuclidGeometryTools
                                                        Vector3DReadOnly planeNormal,
                                                        Point3DBasics projectionToPack)
    {
-      double normalMagnitude = planeNormal.length();
+      double normalMagnitude = planeNormal.norm();
       if (normalMagnitude < ONE_TRILLIONTH)
          return false;
 
@@ -9601,7 +9575,7 @@ public class EuclidGeometryTools
 
       double numerator = lengthNeighbourSideA * lengthNeighbourSideA + lengthNeighbourSideB * lengthNeighbourSideB - lengthOppositeSideC * lengthOppositeSideC;
       double denominator = 2.0 * lengthNeighbourSideA * lengthNeighbourSideB;
-      return EuclidCoreTools.acos(numerator / denominator);
+      return EuclidCoreTools.fastAcos(numerator / denominator);
    }
 
    /**

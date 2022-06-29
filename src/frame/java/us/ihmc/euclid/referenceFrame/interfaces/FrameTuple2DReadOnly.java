@@ -1,6 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -17,45 +20,76 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * using methods requiring {@code FrameTuple2DReadOnly}.
  * </p>
  */
-public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHolder
+public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, EuclidFrameGeometry
 {
    /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
+    * Calculates the norm of the difference between {@code this} and {@code other}.
     * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup>]
     * </p>
     *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
     */
-   default boolean epsilonEquals(FrameTuple2DReadOnly other, double epsilon)
+   default double differenceNorm(FrameTuple2DReadOnly other)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-
-      return Tuple2DReadOnly.super.epsilonEquals(other, epsilon);
+      checkReferenceFrameMatch(other);
+      return Tuple2DReadOnly.super.differenceNorm(other);
    }
 
    /**
-    * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
     * <p>
-    * If the two tuples have different frames, this method returns {@code false}.
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup>
     * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
     */
-   default boolean equals(FrameTuple2DReadOnly other)
+   default double differenceNormSquared(FrameTuple2DReadOnly other)
    {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
+      checkReferenceFrameMatch(other);
+      return Tuple2DReadOnly.super.differenceNormSquared(other);
+   }
 
-      return Tuple2DReadOnly.super.equals(other);
+   /**
+    * Calculates and returns the value of the dot product of this tuple with {@code other}.
+    * <p>
+    * For instance, the dot product of two tuples p and q is defined as: <br>
+    * p . q = &sum;<sub>i=1:2</sub>(p<sub>i</sub> * q<sub>i</sub>)
+    * </p>
+    *
+    * @param other the other tuple used for the dot product. Not modified.
+    * @return the value of the dot product.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   default double dot(FrameTuple2DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Tuple2DReadOnly.super.dot(other);
+   }
+
+   /**
+    * Gets a representative {@code String} of this tuple 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * (-0.675, -0.102 ) - worldFrame
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameTuple2DString(format, this);
    }
 }

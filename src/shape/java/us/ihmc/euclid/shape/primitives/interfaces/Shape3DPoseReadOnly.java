@@ -1,6 +1,9 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -74,49 +77,48 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     */
    Vector3DReadOnly getZAxis();
 
-   /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Shape3DPoseReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Shape3DPoseReadOnly))
+         return false;
+      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
       return getShapePosition().epsilonEquals(other.getShapePosition(), epsilon) && getShapeOrientation().epsilonEquals(other.getShapeOrientation(), epsilon);
    }
 
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the shape pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Shape3DPoseReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      return getShapePosition().geometricallyEquals(other.getShapePosition(), epsilon)
-            && getShapeOrientation().geometricallyEquals(other.getShapeOrientation(), epsilon);
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Shape3DPoseReadOnly))
+         return false;
+      Shape3DPoseReadOnly other = (Shape3DPoseReadOnly) geometry;
+      return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
    }
 
    /**
-    * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
+    * Gets the representative {@code String} of this shape 3D pose given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other the other shape pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
+    * </pre>
+    * </p>
     */
-   default boolean equals(Shape3DPoseReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
+      return EuclidShapeIOTools.getShape3DPoseString(format, this);
    }
 }

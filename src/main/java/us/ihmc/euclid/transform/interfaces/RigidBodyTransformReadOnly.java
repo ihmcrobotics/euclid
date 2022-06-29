@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -309,80 +310,6 @@ public interface RigidBodyTransformReadOnly extends Transform
    }
 
    /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *                             Modified.
-    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
-    */
-   @Deprecated
-   default void getRotation(RotationMatrixBasics rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(getRotation());
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform as a quaternion.
-    *
-    * @param orientationToPack the orientation that is set to the rotation part of this transform.
-    *                          Modified.
-    * @deprecated Use {@code orientationToPack.set(this.getRotation())} instead.
-    */
-   @Deprecated
-   default void getRotation(Orientation3DBasics orientationToPack)
-   {
-      orientationToPack.set(getRotation());
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform as a rotation vector.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVectorToPack the rotation vector that is set to the rotation part of this
-    *                             transform. Modified.
-    * @deprecated Use {@code this.getRotation().getRotationVector(rotationVectorToPack)} instead.
-    */
-   @Deprecated
-   default void getRotation(Vector3DBasics rotationVectorToPack)
-   {
-      getRotation().getRotationVector(rotationVectorToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the Euler
-    * angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
-    * @deprecated Use {@code this.getRotation().getEuler(rotationVectorToPack)} instead.
-    */
-   @Deprecated
-   default void getRotationEuler(Vector3DBasics eulerAnglesToPack)
-   {
-      getRotation().getEuler(eulerAnglesToPack);
-   }
-
-   /**
-    * Packs the translation part of this rigid-body transform.
-    *
-    * @param translationToPack the tuple in which the translation part of this transform is stored.
-    *                          Modified.
-    * @deprecated Use {@code translationToPack.set(this.getTranslation())} instead.
-    */
-   @Deprecated
-   default void getTranslation(Tuple3DBasics translationToPack)
-   {
-      translationToPack.set(getTranslation());
-   }
-
-   /**
     * Gets the x-component of the translation part of this transform.
     *
     * @return the x-component of the translation part.
@@ -452,5 +379,19 @@ public interface RigidBodyTransformReadOnly extends Transform
    {
       rotationMatrixToPack.set(getRotation());
       translationToPack.set(getTranslation());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
+   {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
+         return false;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
+      return getRotation().geometricallyEquals(other.getRotation(), epsilon) && getTranslation().geometricallyEquals(other.getTranslation(), epsilon);
    }
 }

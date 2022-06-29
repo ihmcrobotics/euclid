@@ -118,7 +118,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       /**
        * Returns a more detailed description of the termination type.
-       * 
+       *
        * @return the description for this termination type.
        */
       public String getDescription()
@@ -526,7 +526,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * This is destined for debugging purposes to obtain further information about reason how the last
     * evaluation terminated.
     * </p>
-    * 
+    *
     * @return the termination type for the last evaluation.
     */
    public TerminationType getLastTerminationType()

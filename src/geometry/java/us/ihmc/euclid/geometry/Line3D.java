@@ -6,8 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
@@ -19,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents an infinitely long 3D line defined by a 3D point and a 3D unitary vector.
  */
-public class Line3D implements Line3DBasics, GeometryObject<Line3D>
+public class Line3D implements Line3DBasics
 {
    /** Coordinates of a point located on this line. */
    private final Point3D point = new Point3D();
@@ -127,51 +126,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    }
 
    /**
-    * Sets this line to be the same as the given line.
-    *
-    * @param other the other line to copy. Not modified.
-    */
-   @Override
-   public void set(Line3D other)
-   {
-      Line3DBasics.super.set(other);
-   }
-
-   /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Line3D other, double epsilon)
-   {
-      return Line3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
-    * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Line3D other, double epsilon)
-   {
-      return Line3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -196,7 +150,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLine3DString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

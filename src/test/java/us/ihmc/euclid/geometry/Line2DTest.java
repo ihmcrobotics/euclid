@@ -155,7 +155,7 @@ public class Line2DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
+         EuclidCoreTestTools.assertEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
       }
       catch (RuntimeException e)
       {
@@ -313,24 +313,6 @@ public class Line2DTest
    }
 
    @Test
-   public void testNegateDirection()
-   {
-      double delta = 1.0e-5;
-
-      Random random = new Random(2036L);
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Point2D firstPointOnLine = randomPoint(random);
-         Point2D secondPointOnLine = randomPoint(random);
-         Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVectorCopy = new Vector2D(line2d.getDirection());
-         line2d.negateDirection();
-         assertEquals(-normalizedVectorCopy.getX(), line2d.getDirection().getX(), delta);
-         assertEquals(-normalizedVectorCopy.getY(), line2d.getDirection().getY(), delta);
-      }
-   }
-
-   @Test
    public void testSetPointPoint()
    {
       double delta = 1.0e-5;
@@ -392,19 +374,6 @@ public class Line2DTest
       assertEquals(secondLine2d.getDirection().getX(), line2d.getDirection().getX(), delta);
       assertEquals(secondLine2d.getDirection().getY(), line2d.getDirection().getY(), delta);
       assertFalse(secondLine2d.getDirection() == line2d.getDirection());
-   }
-
-   @Test
-   public void testSetPoint2d()
-   {
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Point2D secondPointOnLine = new Point2D(1.0, 1.0);
-      Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D newPoint = new Point2D(11.0, 9.0);
-      line2d.setPoint(newPoint);
-
-      assertEquals(newPoint, line2d.getPoint());
-      assertFalse(newPoint == line2d.getPoint());
    }
 
    @Test
@@ -533,7 +502,7 @@ public class Line2DTest
       assertEquals(line2d.getDirection().getY(), interiorBisector.getDirection().getY(), delta);
 
       Line2D parallelLine2d = new Line2D(line2d);
-      parallelLine2d.setPoint(new Point2D(5.5, 18));
+      parallelLine2d.getPoint().set(new Point2D(5.5, 18));
       assertNull(line2d.interiorBisector(parallelLine2d));
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -556,7 +525,7 @@ public class Line2DTest
          Vector2D interiorNormalizedVector = new Vector2D(line2d.getDirection());
          Vector2D vector = new Vector2D(secondLine2d.getDirection());
          interiorNormalizedVector.add(vector);
-         double length = interiorNormalizedVector.length();
+         double length = interiorNormalizedVector.norm();
          assertEquals(interiorNormalizedVector.getX() / length, interiorBisector.getDirection().getX(), delta);
          assertEquals(interiorNormalizedVector.getY() / length, interiorBisector.getDirection().getY(), delta);
       }
@@ -688,7 +657,7 @@ public class Line2DTest
          Point2DBasics intersection = lineThroughEndPoint.intersectionWith(lineSegment2d);
          assertEquals(firstPoint.getX(), intersection.getX(), delta);
          assertEquals(firstPoint.getY(), intersection.getY(), delta);
-         lineThroughEndPoint.setPoint(secondPoint);
+         lineThroughEndPoint.getPoint().set(secondPoint);
          intersection = lineThroughEndPoint.intersectionWith(lineSegment2d);
 
          // TODO intersection is null, which is unexpected.
@@ -725,11 +694,11 @@ public class Line2DTest
          Point2D pointOnLine2 = new Point2D(expectedIntersection);
 
          Point2DBasics actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
 
          pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
 
       // Test when parallel but not collinear
@@ -766,11 +735,11 @@ public class Line2DTest
          Point2D pointOnLine2 = new Point2D(expectedIntersection);
 
          Point2DBasics actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
 
          pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
-         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
    }
 
@@ -1121,11 +1090,11 @@ public class Line2DTest
       Point2DBasics[] intersections = line2d.intersectionWith(triangle);
       assertEquals(1, intersections.length);
 
-      line2d.setPoint(new Point2D(-0.5, 0));
+      line2d.getPoint().set(new Point2D(-0.5, 0));
       intersections = line2d.intersectionWith(triangle);
       assertEquals(2, intersections.length);
 
-      line2d.setPoint(new Point2D(0.5, 0));
+      line2d.getPoint().set(new Point2D(0.5, 0));
       intersections = line2d.intersectionWith(triangle);
       assertNull(intersections);
 
@@ -1172,7 +1141,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, 0.0);
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Point2D firstPointOnLine = randomPoint(random);
       Point2D secondPointOnLine = randomPoint(random);
@@ -1202,7 +1171,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, randomDouble(random, 2.0 * Math.PI));
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
       Point2D point = new Point2D(line.getPoint());
@@ -1235,7 +1204,7 @@ public class Line2DTest
          Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
 
          transform.setRotationEulerAndZeroTranslation(eulerAngles);
-         transform.setTranslation(translation);
+         transform.getTranslation().set(translation);
 
          Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
@@ -1258,7 +1227,7 @@ public class Line2DTest
          Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
 
          transform.setRotationEulerAndZeroTranslation(eulerAngles);
-         transform.setTranslation(translation);
+         transform.getTranslation().set(translation);
 
          Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
@@ -1281,7 +1250,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, randomDouble(random, 2.0 * Math.PI));
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
       Point2D point = new Point2D(line.getPoint());
@@ -1355,7 +1324,7 @@ public class Line2DTest
       Line2D line10 = new Line2D(new Point2D(10.0, 0.0), new Point2D(20.0, 1.0));
       Line2D line11 = new Line2D(new Point2D(-10.0, 1.0), new Point2D(10.0, 1.0));
 
-      assertEquals(null, line1.intersectionWith(line11));
+      assertNull(line1.intersectionWith(line11));
 
       assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5));
       assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6));
@@ -1416,14 +1385,14 @@ public class Line2DTest
          secondLine = new Line2D(firstLine);
 
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale(0.99 * epsilon / orthogonal.length());
+         orthogonal.scale(0.99 * epsilon / orthogonal.norm());
 
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
          secondLine.set(firstLine);
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale(1.01 * epsilon / orthogonal.length());
+         orthogonal.scale(1.01 * epsilon / orthogonal.norm());
 
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
@@ -1436,13 +1405,13 @@ public class Line2DTest
 
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 0.99, direction, direction);
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 1.01, direction, direction);
-         secondLine.setDirection(direction);
+         secondLine.getDirection().set(direction);
 
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }

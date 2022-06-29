@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
-import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.TupleTools;
 
 /**
  * Read-only interface for a 2 dimensional vector.
@@ -37,10 +38,12 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * </p>
     *
     * @return the magnitude of this vector.
+    * @deprecated Use {@link Tuple2DReadOnly#norm()}.
     */
+   @Deprecated
    default double length()
    {
-      return EuclidCoreTools.squareRoot(lengthSquared());
+      return norm();
    }
 
    /**
@@ -55,25 +58,12 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * </p>
     *
     * @return the square of the magnitude of this vector.
+    * @deprecated Use {@link Tuple2DReadOnly#normSquared()}.
     */
+   @Deprecated
    default double lengthSquared()
    {
       return dot(this);
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:2</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    */
-   default double dot(Vector2DReadOnly other)
-   {
-      return getX() * other.getX() + getY() * other.getY();
    }
 
    /**
@@ -87,17 +77,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     */
    default double angle(Vector2DReadOnly other)
    {
-      double firstVectorX = getX();
-      double firstVectorY = getY();
-      double secondVectorX = other.getX();
-      double secondVectorY = other.getY();
-
-      // The sign of the angle comes from the cross product
-      double crossProduct = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      // the magnitude of the angle comes from the dot product
-      double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
-
-      return EuclidCoreTools.atan2(crossProduct, dotProduct);
+      return TupleTools.angle(this, other);
    }
 
    /**
@@ -123,26 +103,17 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       return tuple1.getX() * tuple2.getY() - tuple1.getY() * tuple2.getX();
    }
 
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 2D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Vector2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      return EuclidCoreTools.norm(dx, dy) <= epsilon;
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Vector2DReadOnly))
+         return false;
+      Vector2DReadOnly other = (Vector2DReadOnly) geometry;
+      return differenceNorm(other) <= epsilon;
    }
 }

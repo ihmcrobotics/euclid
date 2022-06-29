@@ -4,7 +4,6 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -98,7 +97,7 @@ public enum Axis2D implements UnitVector2DReadOnly
    }
 
    @Override
-   public double dot(Vector2DReadOnly other)
+   public double dot(Tuple2DReadOnly other)
    {
       return extract(other);
    }
@@ -209,84 +208,4 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @return the corresponding 3D axis.
     */
    public abstract Axis3D asAxis3D();
-
-   /**
-    * Gets the value of the tuple for the given axis.
-    *
-    * @param tuple the tuple to get value from. Not modified.
-    * @param axis  the {@link Axis2D} to get value for. Not modified.
-    * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@code tuple.getElement(axis)} instead.
-    */
-   @Deprecated
-   public static double get(Tuple2DReadOnly tuple, Axis2D axis)
-   {
-      return axis.extract(tuple);
-   }
-
-   /**
-    * Sets the value of the given tuple for the given axis to the given value.
-    *
-    * @param tupleToModify the tuple to set value of. Modified.
-    * @param axis          the {@link Axis2D} to set value for. Not modified.
-    * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
-    */
-   @Deprecated
-   public static void set(Tuple2DBasics tupleToModify, Axis2D axis, double value)
-   {
-      axis.insert(tupleToModify, value);
-   }
-
-   /**
-    * Gets the value of the tuple for the given axis.
-    *
-    * @param tuple the tuple to get value from. Not modified.
-    * @param axis  the {@link Axis2D} to get value for. Not modified.
-    * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@code tuple.getElement(axis)} instead.
-    */
-   @Deprecated
-   public static double get(Tuple3DReadOnly tuple, Axis2D axis)
-   {
-      return axis.extract(tuple);
-   }
-
-   /**
-    * Sets the value of the given tuple for the given axis to the given value.
-    *
-    * @param tupleToModify the tuple to set value of. Modified.
-    * @param axis          the {@link Axis2D} to set value for. Not modified.
-    * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
-    */
-   @Deprecated
-   public static void set(Tuple3DBasics tupleToModify, Axis2D axis, double value)
-   {
-      axis.insert(tupleToModify, value);
-   }
-
-   /**
-    * Obtains the next axis, in a clockwise fashion.
-    *
-    * @return next clockwise axis
-    * @deprecated Use {@link #other()} instead.
-    */
-   @Deprecated
-   public Axis2D getNextClockwiseAxis()
-   {
-      return other();
-   }
-
-   /**
-    * Obtains the next axis, in a counterclockwise fashion.
-    *
-    * @return next counterclockwise axis
-    * @deprecated Use {@link #other()} instead.
-    */
-   @Deprecated
-   public Axis2D getNextCounterClockwiseAxis()
-   {
-      return other();
-   }
 }

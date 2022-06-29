@@ -124,7 +124,7 @@ public class ReflectionBasedBuilder
             }
             catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
             {
-               throw new RuntimeException(e);
+               throw new ReflectionBasedBuilderException(e);
             }
          });
       }
@@ -142,7 +142,7 @@ public class ReflectionBasedBuilder
             }
             catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
             {
-               throw new RuntimeException(e);
+               throw new ReflectionBasedBuilderException(e);
             }
          });
       }
@@ -175,7 +175,7 @@ public class ReflectionBasedBuilder
       object = nextFramelessType(random, type);
       if (object != null)
          return object;
-      throw new IllegalStateException("Unknown class: " + type.getSimpleName()
+      throw new ReflectionBasedBuilderException("Unknown class: " + type.getSimpleName()
             + "\nThis class can be handled simply by registering a class that declares random generator as method with the following signature:\n\t"
             + type.getSimpleName() + " generatorNameDoesNotMatter(Random)\nor:\n\t" + type.getSimpleName()
             + " generatorNameDoesNotMatter(Random, ReferenceFrame) if the type is a frame type.\nNote that the return type can be any sub-class of "
@@ -270,7 +270,24 @@ public class ReflectionBasedBuilder
                   frame = ((ReferenceFrameHolder) parametersToClone[i]).getReferenceFrame();
 
                clone[i] = next(new Random(), frame, parameterType);
-               Method setter = parameterType.getMethod("set", parameterType);
+
+               Method setter = null;
+
+               for (Method method : parameterType.getMethods())
+               {
+                  if (!method.getName().equals("set"))
+                     continue;
+                  if (method.getParameterTypes().length != 1)
+                     continue;
+                  if (method.getParameterTypes()[0].isAssignableFrom(parameterType))
+                  {
+                     setter = method;
+                     break;
+                  }
+               }
+
+               if (setter == null)
+                  setter = parameterType.getMethod("set", parameterType);
                setter.invoke(clone[i], parametersToClone[i]);
             }
             catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e)
@@ -334,5 +351,29 @@ public class ReflectionBasedBuilder
       for (int i = 0; i < next.length; i++)
          next[i] = (char) random.nextInt();
       return next;
+   }
+
+   public static class ReflectionBasedBuilderException extends RuntimeException
+   {
+      private static final long serialVersionUID = 2307564351876519850L;
+
+      public ReflectionBasedBuilderException()
+      {
+      }
+
+      public ReflectionBasedBuilderException(String message, Throwable cause)
+      {
+         super(message, cause);
+      }
+
+      public ReflectionBasedBuilderException(String message)
+      {
+         super(message);
+      }
+
+      public ReflectionBasedBuilderException(Throwable cause)
+      {
+         super(cause);
+      }
    }
 }

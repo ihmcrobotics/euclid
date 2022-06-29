@@ -10,6 +10,8 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -33,7 +35,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * using methods requiring {@code FrameLine2DReadOnly}.
  * </p>
  */
-public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolder
+public interface FrameLine2DReadOnly extends Line2DReadOnly, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override
@@ -1772,68 +1774,19 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
-    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
-    * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
-    * are physically the same but this method returns {@code false}.
+    * Gets a representative {@code String} of this line 2D given a specific format to use.
     * <p>
-    * If the two lines have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FrameLine2DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
-         return false;
-      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
-         return false;
-
-      return true;
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 ), worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameLine2DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return Line2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    * <p>
-    * If the two lines have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in the
-    *         same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameLine2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+      return EuclidFrameIOTools.getFrameLine2DString(format, this);
    }
 }

@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -30,21 +29,6 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  */
 public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, FrameOrientation3DReadOnly, FrameMatrix3DReadOnly
 {
-   /**
-    * Computes and returns the distance between this rotation matrix and the {@code other}.
-    *
-    * @param other the other rotation matrix to compute the distance. Not modified.
-    * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default double distance(FrameRotationMatrixReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return RotationMatrixReadOnly.super.distance(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    default void addTransform(FixedFrameTuple3DBasics tupleToTransform)
@@ -425,29 +409,5 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
    {
       checkReferenceFrameMatch(tupleOriginal);
       RotationMatrixReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default boolean geometricallyEquals(FrameRotationMatrixReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return RotationMatrixReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

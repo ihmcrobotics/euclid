@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -13,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
  * </p>
  */
-public interface LineSegment3DReadOnly
+public interface LineSegment3DReadOnly extends EuclidGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -102,32 +105,6 @@ public interface LineSegment3DReadOnly
    default double getSecondEndpointZ()
    {
       return getSecondEndpoint().getZ();
-   }
-
-   /**
-    * Test if the first endpoint of this line segment contains {@link Double#NaN}.
-    *
-    * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
-    *         otherwise.
-    * @deprecated Use {@code this.getFirstEndpoint().containsNaN()} instead.
-    */
-   @Deprecated
-   default boolean firstEndpointContainsNaN()
-   {
-      return getFirstEndpoint().containsNaN();
-   }
-
-   /**
-    * Test if the second endpoint of this line segment contains {@link Double#NaN}.
-    *
-    * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
-    *         otherwise.
-    * @deprecated Use {@code this.getSecondEndpoint().containsNaN()} instead.
-    */
-   @Deprecated
-   default boolean secondEndpointContainsNaN()
-   {
-      return getSecondEndpoint().containsNaN();
    }
 
    /**
@@ -533,51 +510,51 @@ public interface LineSegment3DReadOnly
       return EuclidGeometryTools.dotProduct(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint());
    }
 
-   /**
-    * Tests on a per component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(LineSegment3DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment3DReadOnly))
+         return false;
+      LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;
       return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
    }
 
-   /**
-    * Tests on a per component basis, if this line segment 3D is exactly equal to {@code other}.
-    *
-    * @param other the other line segment 3D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(LineSegment3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean equals(EuclidGeometry geometry)
    {
-      if (other == this)
+      if (geometry == this)
          return true;
-      else if (other == null)
+      if (geometry == null)
          return false;
-      else
-         return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
+      if (!(geometry instanceof LineSegment3DReadOnly))
+         return false;
+      LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;
+      return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
-    * similar.
+    * {@inheritDoc}
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
-    *
-    * @param other   the line segment to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *         otherwise.
     */
-   default boolean geometricallyEquals(LineSegment3DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof LineSegment3DReadOnly))
+         return false;
+      LineSegment3DReadOnly other = (LineSegment3DReadOnly) geometry;
       if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
             && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
          return true;
@@ -585,5 +562,22 @@ public interface LineSegment3DReadOnly
             && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
          return true;
       return false;
+   }
+
+   /**
+    * Gets a representative {@code String} of this line segment 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line segment 3D: 1st endpoint = ( 0.174,  0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getLineSegment3DString(format, this);
    }
 }

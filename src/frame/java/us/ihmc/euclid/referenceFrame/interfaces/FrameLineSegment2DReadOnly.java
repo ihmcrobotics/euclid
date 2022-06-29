@@ -8,6 +8,8 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -29,7 +31,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * and always prefer using methods requiring {@code FrameLineSegment2DReadOnly}.
  * </p>
  */
-public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, ReferenceFrameHolder
+public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, EuclidFrameGeometry
 {
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
@@ -1383,60 +1385,19 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
-    * with the tolerance {@code epsilon}.
+    * Gets a representative {@code String} of this line segment 2D given a specific format to use.
     * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FrameLineSegment2DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return LineSegment2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
-    * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
-    * opposite direction.
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 ), worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other   the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameLineSegment2DReadOnly other, double epsilon)
+   @Override
+   default String toString(String format)
    {
-      checkReferenceFrameMatch(other);
-      return LineSegment2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
-    * <p>
-    * If the two line segments have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other the other line segment 2D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
-    */
-   default boolean equals(FrameLineSegment2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      else
-         return LineSegment2DReadOnly.super.equals(other);
+      return EuclidFrameIOTools.getFrameLineSegment2DString(format, this);
    }
 }

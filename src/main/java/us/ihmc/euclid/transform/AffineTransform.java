@@ -2,9 +2,6 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -43,11 +40,10 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * object is transformed with the {@link LinearTransform3D}. It is NOT translated.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
-public class AffineTransform
-      implements AffineTransformBasics, EpsilonComparable<AffineTransform>, GeometricallyComparable<AffineTransform>, Settable<AffineTransform>
+public class AffineTransform implements AffineTransformBasics
 {
    /** The rotation plus scaling part of this transform. */
    private final LinearTransform3D linearTransform = new LinearTransform3D();
@@ -138,24 +134,13 @@ public class AffineTransform
    }
 
    /**
-    * Sets this affine transform to the {@code other}.
-    *
-    * @param other the other affine transform to copy the values from. Not modified.
-    */
-   @Override
-   public void set(AffineTransform other)
-   {
-      set((AffineTransformReadOnly) other);
-   }
-
-   /**
     * Returns the read-only view of the linear part of this transform as a pure orientation.
     * <p>
     * The orientation represents the same transformation as {@link #getLinearTransform()} with the
     * scales set to 1. The returned quaternion is linked to this transform, i.e. it is automatically
     * updated when this transform is modified.
     * </p>
-    * 
+    *
     * @return the read-only view of the linear part of this transform as a pure orientation.
     */
    public QuaternionReadOnly getRotationView()
@@ -405,34 +390,6 @@ public class AffineTransform
    }
 
    /**
-    * Two affine transforms are considered geometrically equal if both the linear transform and
-    * translation vector are geometrically equal.
-    *
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(AffineTransform other, double epsilon)
-   {
-      return AffineTransformBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis if this transform and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param epsilon tolerance to use when comparing each component.
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(AffineTransform other, double epsilon)
-   {
-      return AffineTransformBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(AffineTransformReadOnly)}, it returns {@code false} otherwise or if the
     * {@code object} is {@code null}.
@@ -451,7 +408,7 @@ public class AffineTransform
 
    /**
     * Provides a {@code String} representation of this transform as follows:
-    * 
+    *
     * <pre>
     *  0.596  0.630  0.930 | -0.435
     * -0.264  0.763  0.575 | -0.464
@@ -464,7 +421,7 @@ public class AffineTransform
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getAffineTransformString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    @Override

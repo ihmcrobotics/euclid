@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -37,7 +38,7 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     */
    default double distance(Point2DReadOnly other)
    {
-      return EuclidCoreTools.squareRoot(distanceSquared(other));
+      return differenceNorm(other);
    }
 
    /**
@@ -53,9 +54,7 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     */
    default double distanceSquared(Point2DReadOnly other)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      return dx * dx + dy * dy;
+      return differenceNormSquared(other);
    }
 
    /**
@@ -121,26 +120,20 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     */
    default double distanceFromOriginSquared()
    {
-      return getX() * getX() + getY() * getY();
+      return EuclidCoreTools.normSquared(getX(), getY());
    }
 
-   /**
-    * Tests if {@code this} and {@code other} represent the same point 2D to an {@code epsilon}.
-    * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other point 2D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
-    * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Point2DReadOnly other, double epsilon)
+   /** {@inheritDoc} */
+   @Override
+   default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Point2DReadOnly))
+         return false;
+      Point2DReadOnly other = (Point2DReadOnly) geometry;
       return distance(other) <= epsilon;
    }
 }

@@ -34,6 +34,20 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    @Override
    FixedFrameQuaternionBasics getOrientation();
 
+   /** {@inheritDoc} */
+   @Override
+   default FixedFramePoint3DBasics getTranslation()
+   {
+      return getPosition();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default FixedFrameQuaternionBasics getRotation()
+   {
+      return getOrientation();
+   }
+
    /**
     * Sets this pose 3D to represent the pose of the given {@code referenceFrame} expressed in
     * {@code this.getReferenceFrame()}.
@@ -44,80 +58,6 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    {
       setToZero();
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
-   }
-
-   /**
-    * Sets the position from the given frame tuple 2D.
-    * <p>
-    * The z component remains unchanged.
-    * </p>
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *                                         the same reference frame.
-    * @deprecated Use {@code this.getPosition().set(position)} instead.
-    */
-   @Deprecated
-   default void setPosition(FrameTuple2DReadOnly position)
-   {
-      getPosition().set(position);
-   }
-
-   /**
-    * Sets the position from the given frame tuple 2D and the given {@code z} coordinate.
-    *
-    * @param position the tuple with the x and y position coordinates. Not modified.
-    * @param z        the new z-coordinate.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *                                         the same reference frame.
-    * @deprecated Use {@code this.getPosition().set(position, z)} instead.
-    */
-   @Deprecated
-   default void setPosition(FrameTuple2DReadOnly position, double z)
-   {
-      getPosition().set(position, z);
-   }
-
-   /**
-    * Sets the position from the given frame tuple 3D.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *                                         the same reference frame.
-    * @deprecated Use {@code this.getPosition().set(position)} instead.
-    */
-   @Deprecated
-   default void setPosition(FrameTuple3DReadOnly position)
-   {
-      getPosition().set(position);
-   }
-
-   /**
-    * Sets the orientation from the given frame orientation 2D.
-    *
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
-    *                                         in the same reference frame.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(FrameOrientation2DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation from the given frame orientation.
-    *
-    * @param orientation the orientation to set the orientation part of this frame pose. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
-    *                                         in the same reference frame.
-    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
-    */
-   @Deprecated
-   default void setOrientation(FrameOrientation3DReadOnly orientation)
-   {
-      getOrientation().set(orientation);
    }
 
    /**

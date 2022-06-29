@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, ReferenceFrameHolder
+public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, EuclidFrameGeometry
 {
    /**
     * Computes and returns the difference between {@code this} and {@code other}:<br>
@@ -536,63 +538,19 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
-    * {@code other}.
+    * Gets a representative {@code String} of this orientation 2D given a specific format to use.
     * <p>
-    * Note that this method performs number comparison and not an angle comparison, such that:
-    * -<i>pi</i> &ne; <i>pi</i>.
-    * </p>
-    * <p>
-    * If the two orientations have different frames, this method returns {@code false}.
-    * </p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two orientations are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(FrameOrientation2DReadOnly other, double epsilon)
-   {
-      if (getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation2DReadOnly.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
-    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the orientation to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   default boolean geometricallyEquals(FrameOrientation2DReadOnly other, double epsilon)
-   {
-      checkReferenceFrameMatch(other);
-      return Orientation2DReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if this orientation 2D is exactly equal to {@code other}.
-    * <p>
-    * Note that this method performs number comparison and not an angle comparison, such that:
-    * -<i>pi</i> &ne; <i>pi</i>.
+    * <pre>
+    * (0.174) - worldFrame
+    * </pre>
     * </p>
-    *
-    * @param other the other orientation 2D to compare against this. Not modified.
-    * @return {@code true} if the two orientations are exactly equal component-wise and are expressed
-    *         in the same reference frame, {@code false} otherwise.
     */
-   default boolean equals(FrameOrientation2DReadOnly other)
+   @Override
+   default String toString(String format)
    {
-      if (other == this)
-         return true;
-      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
-         return false;
-      return Orientation2DReadOnly.super.equals(other);
+      return EuclidFrameIOTools.getFrameOrientation2DString(format, this);
    }
 }
