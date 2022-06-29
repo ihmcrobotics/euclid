@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -37,34 +36,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
 {
    /**
-    * Normalizes this vector such that its magnitude is equal to 1 after calling this method and its
-    * direction remains unchanged.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if this vector contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    */
-   default void normalize()
-   {
-      if (containsNaN())
-         return;
-      scale(1.0 / length());
-   }
-
-   /**
-    * Sets this vector to {@code other} and then calls {@link #normalize()}.
-    *
-    * @param other the other vector to copy the values from. Not modified.
-    */
-   default void setAndNormalize(Vector2DReadOnly other)
-   {
-      set(other);
-      normalize();
-   }
-
-   /**
     * Limits the magnitude of this vector to {@code maxLength}.
     * <p>
     * If the length of this vector is less than {@code maxLength}, this method does nothing. When it is
@@ -78,22 +49,12 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     *
     * @param maxLength the maximum allowed length for this vector.
     * @return whether the length of this vector has been changed or not.
+    * @deprecated Use {@link Tuple2DBasics#clipToMaxNorm(double)}
     */
+   @Deprecated
    default boolean clipToMaxLength(double maxLength)
    {
-      if (maxLength < Vector3DBasics.EPS_MAX_LENGTH)
-      {
-         setToZero();
-         return true;
-      }
-
-      double lengthSquared = lengthSquared();
-
-      if (lengthSquared < maxLength * maxLength)
-         return false;
-
-      scale(maxLength / EuclidCoreTools.squareRoot(lengthSquared));
-      return true;
+      return clipToMaxNorm(maxLength);
    }
 
    /**

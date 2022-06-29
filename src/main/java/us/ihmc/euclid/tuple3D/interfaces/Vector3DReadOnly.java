@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
 /**
@@ -38,10 +37,12 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     * </p>
     *
     * @return the magnitude of this vector.
+    * @deprecated Use {@link Tuple3DReadOnly#norm()}.
     */
+   @Deprecated
    default double length()
    {
-      return EuclidCoreTools.squareRoot(lengthSquared());
+      return norm();
    }
 
    /**
@@ -56,54 +57,12 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     * </p>
     *
     * @return the square of the magnitude of this vector.
+    * @deprecated Use {@link Tuple3DReadOnly#normSquared()}.
     */
+   @Deprecated
    default double lengthSquared()
    {
-      return EuclidCoreTools.normSquared(getX(), getY(), getZ());
-   }
-
-   /**
-    * <p>
-    * Calculates the norm squared of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
-    */
-   default double differenceLengthSquared(Vector3DReadOnly other)
-   {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return dx * dx + dy * dy + dz * dz;
-   }
-
-   /**
-    * <p>
-    * Calculates the norm of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
-    */
-   default double differenceLength(Vector3DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:3</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    */
-   default double dot(Vector3DReadOnly other)
-   {
-      return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ();
+      return normSquared();
    }
 
    /**
@@ -131,6 +90,6 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       if (!(geometry instanceof Vector3DReadOnly))
          return false;
       Vector3DReadOnly other = (Vector3DReadOnly) geometry;
-      return differenceLength((Vector3DReadOnly) other) <= epsilon;
+      return differenceNorm((Vector3DReadOnly) other) <= epsilon;
    }
 }

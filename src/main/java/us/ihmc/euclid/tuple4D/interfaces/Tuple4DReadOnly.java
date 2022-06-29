@@ -294,13 +294,49 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    }
 
    /**
+    * Calculates the norm of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup> +
+    * ({@code this.s} - {@code other.s})<sup>2</sup>]
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNorm(Tuple4DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceNormSquared(other));
+   }
+
+   /**
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>
+    * +({@code this.s} - {@code other.s})<sup>2</sup>
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNormSquared(Tuple4DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      double dz = getZ() - other.getZ();
+      double ds = getZ() - other.getS();
+      return EuclidCoreTools.normSquared(dx, dy, dz, ds);
+   }
+
+   /**
     * Calculates and returns the value of the dot product of this tuple with {@code other}.
     * <p>
     * For instance, the dot product of two tuples p and q is defined as: <br>
     * p . q = &sum;<sub>i=1:4</sub>(p<sub>i</sub> * q<sub>i</sub>)
     * </p>
     *
-    * @param other the other vector used for the dot product. Not modified.
+    * @param other the other tuple used for the dot product. Not modified.
     * @return the value of the dot product.
     */
    default double dot(Tuple4DReadOnly other)
@@ -361,5 +397,4 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    {
       return EuclidCoreIOTools.getTuple4DString(format, this);
    }
-
 }

@@ -248,6 +248,84 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       tupleMatrixToPack.unsafe_set(startRow, column, getZ());
    }
 
+   /**
+    * Calculates and returns the norm of this tuple.
+    * <p>
+    * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>)
+    * </p>
+    *
+    * @return the norm's value of this tuple.
+    */
+   default double norm()
+   {
+      return EuclidCoreTools.squareRoot(normSquared());
+   }
+
+   /**
+    * Calculates and returns the square of the norm of this tuple.
+    * <p>
+    * norm<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>
+    * </p>
+    * <p>
+    * This method is usually preferred over {@link #norm()} when calculation speed matters and
+    * knowledge of the actual norm does not, i.e. when comparing several tuples by theirs norm.
+    * </p>
+    *
+    * @return the norm's value of this tuple.
+    */
+   default double normSquared()
+   {
+      return dot(this);
+   }
+
+   /**
+    * Calculates the norm of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>]
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNorm(Tuple3DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(differenceNormSquared(other));
+   }
+
+   /**
+    * Calculates the norm squared of the difference between {@code this} and {@code other}.
+    * <p>
+    * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
+    * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>
+    * </p>
+    * 
+    * @param other the other tuple to compare to. Not modified.
+    * @return the norm squared of the difference.
+    */
+   default double differenceNormSquared(Tuple3DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      double dz = getZ() - other.getZ();
+      return EuclidCoreTools.normSquared(dx, dy, dz);
+   }
+
+   /**
+    * Calculates and returns the value of the dot product of this tuple with {@code other}.
+    * <p>
+    * For instance, the dot product of two tuples p and q is defined as: <br>
+    * p . q = &sum;<sub>i=1:3</sub>(p<sub>i</sub> * q<sub>i</sub>)
+    * </p>
+    *
+    * @param other the other tuple used for the dot product. Not modified.
+    * @return the value of the dot product.
+    */
+   default double dot(Tuple3DReadOnly other)
+   {
+      return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ();
+   }
+
    /** {@inheritDoc} */
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)

@@ -38,7 +38,7 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     */
    default double distance(Point3DReadOnly other)
    {
-      return EuclidCoreTools.squareRoot(distanceSquared(other));
+      return differenceNorm(other);
    }
 
    /**
@@ -54,10 +54,7 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
     */
    default double distanceSquared(Point3DReadOnly other)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return EuclidCoreTools.normSquared(dx, dy, dz);
+      return differenceNormSquared(other);
    }
 
    /**

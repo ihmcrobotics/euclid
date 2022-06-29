@@ -454,7 +454,7 @@ public class EuclidCoreTestTools
       {
          Vector2D difference = new Vector2D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 
@@ -584,7 +584,7 @@ public class EuclidCoreTestTools
       {
          Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 

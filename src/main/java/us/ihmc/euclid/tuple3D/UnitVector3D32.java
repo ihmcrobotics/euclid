@@ -27,6 +27,9 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  */
 public class UnitVector3D32 implements UnitVector3DBasics
 {
+   /** Tolerance used on this vector's components to identify if it can be normalized. */
+   public static final double ZERO_TEST_EPSILON = 1.0e-16;
+
    /** The dirty flag for this unit vector indicating whether it needs to be normalized or not. */
    private boolean dirty = true;
    /** The x-component. */

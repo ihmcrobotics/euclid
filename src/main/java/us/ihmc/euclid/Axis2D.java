@@ -4,7 +4,6 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -98,7 +97,7 @@ public enum Axis2D implements UnitVector2DReadOnly
    }
 
    @Override
-   public double dot(Vector2DReadOnly other)
+   public double dot(Tuple2DReadOnly other)
    {
       return extract(other);
    }

@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple4D.interfaces;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 
 /**
  * Read-only interface for a 4 dimensional vector representing a generic quaternion.
@@ -26,36 +25,6 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
  */
 public interface Vector4DReadOnly extends Tuple4DReadOnly
 {
-   /**
-    * <p>
-    * Calculates the norm squared of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
-    */
-   default double differenceLengthSquared(Vector4DReadOnly other)
-   {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      double ds = getS() - other.getS();
-      return dx * dx + dy * dy + dz * dz + ds * ds;
-   }
-
-   /**
-    * <p>
-    * Calculates the norm of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
-    */
-   default double differenceLength(Vector4DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
-   }
-
    /** {@inheritDoc} */
    @Override
    default boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
@@ -67,6 +36,6 @@ public interface Vector4DReadOnly extends Tuple4DReadOnly
       if (!(geometry instanceof Vector4DReadOnly))
          return false;
       Vector4DReadOnly other = (Vector4DReadOnly) geometry;
-      return differenceLength(other) <= epsilon;
+      return differenceNorm(other) <= epsilon;
    }
 }

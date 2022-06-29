@@ -16,9 +16,6 @@ package us.ihmc.euclid.tuple3D.interfaces;
  */
 public interface UnitVector3DReadOnly extends Vector3DReadOnly
 {
-   /** Tolerance used on this vector's components to identify if it can be normalized. */
-   public static final double ZERO_TEST_EPSILON = 1.0e-16;
-
    /**
     * {@inheritDoc}
     * <p>
@@ -97,7 +94,7 @@ public interface UnitVector3DReadOnly extends Vector3DReadOnly
     * @return 1.0
     */
    @Override
-   default double length()
+   default double norm()
    {
       return 1.0;
    }
@@ -106,7 +103,7 @@ public interface UnitVector3DReadOnly extends Vector3DReadOnly
     * @return 1.0
     */
    @Override
-   default double lengthSquared()
+   default double normSquared()
    {
       return 1.0;
    }

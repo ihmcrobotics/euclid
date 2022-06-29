@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
 /**
@@ -39,10 +38,12 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * </p>
     *
     * @return the magnitude of this vector.
+    * @deprecated Use {@link Tuple2DReadOnly#norm()}.
     */
+   @Deprecated
    default double length()
    {
-      return EuclidCoreTools.squareRoot(lengthSquared());
+      return norm();
    }
 
    /**
@@ -57,53 +58,12 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * </p>
     *
     * @return the square of the magnitude of this vector.
+    * @deprecated Use {@link Tuple2DReadOnly#normSquared()}.
     */
+   @Deprecated
    default double lengthSquared()
    {
       return dot(this);
-   }
-
-   /**
-    * <p>
-    * Calculates the norm squared of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
-    */
-   default double differenceLengthSquared(Vector2DReadOnly other)
-   {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      return dx * dx + dy * dy;
-   }
-
-   /**
-    * <p>
-    * Calculates the norm of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
-    */
-   default double differenceLength(Vector2DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:2</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    */
-   default double dot(Vector2DReadOnly other)
-   {
-      return getX() * other.getX() + getY() * other.getY();
    }
 
    /**
@@ -154,6 +114,6 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       if (!(geometry instanceof Vector2DReadOnly))
          return false;
       Vector2DReadOnly other = (Vector2DReadOnly) geometry;
-      return differenceLength(other) <= epsilon;
+      return differenceNorm(other) <= epsilon;
    }
 }

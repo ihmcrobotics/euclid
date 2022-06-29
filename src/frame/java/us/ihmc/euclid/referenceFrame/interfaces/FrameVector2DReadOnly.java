@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
@@ -21,44 +20,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  */
 public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DReadOnly
 {
-
-   /**
-    * @param other other frame vector2D to compare to.
-    * @return ||<i>V<SUB>this</SUB> - V<SUB>other</SUB></i> ||<SUP>2</SUP>
-    */
-   default double differenceLengthSquared(FrameVector2DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return Vector2DReadOnly.super.differenceLengthSquared(other);
-   }
-
-   /**
-    * @param other other frame vector2D to compare to.
-    * @return ||<i>V<SUB>this</SUB> - V<SUB>other</SUB></i> ||
-    */
-   default double differenceLength(FrameVector2DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this frame vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:2</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other frame vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   default double dot(FrameVector2DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return Vector2DReadOnly.super.dot(other);
-   }
-
    /**
     * Calculates and returns the angle in radians from this frame vector to {@code other}.
     * <p>

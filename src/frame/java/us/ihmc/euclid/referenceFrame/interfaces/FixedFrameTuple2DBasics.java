@@ -191,6 +191,31 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
+    * Sets this tuple to {@code tuple2DReadOnly} and then calls {@link #normalize()}.
+    *
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndNormalize(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndNormalize(tuple2DReadOnly);
+   }
+
+   /**
+    * Sets this frame tuple to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other frame tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   default void setAndNormalize(FrameTuple2DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      setAndNormalize(other);
+   }
+
+   /**
     * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #scale(double)}.
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is

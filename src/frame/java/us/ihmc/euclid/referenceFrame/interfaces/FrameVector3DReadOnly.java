@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -20,50 +19,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface FrameVector3DReadOnly extends Vector3DReadOnly, FrameTuple3DReadOnly
 {
-
-   /**
-    * <p>
-    * Calculates the norm squared of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|<SUP>2</SUP>
-    */
-   default double differenceLengthSquared(FrameVector3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return Vector3DReadOnly.super.differenceLengthSquared(other);
-   }
-
-   /**
-    * <p>
-    * Calculates the norm of the two vectors (this and other)
-    * </p>
-    * 
-    * @param other the other vector to compare to.
-    * @return |V<SUB>this</SUB> - V<SUB>other</SUB>|
-    */
-   default double differenceLength(FrameVector3DReadOnly other)
-   {
-      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
-   }
-
-   /**
-    * Calculates and returns the value of the dot product of this frame vector with {@code other}.
-    * <p>
-    * For instance, the dot product of two vectors p and q is defined as: <br>
-    * p . q = &sum;<sub>i=1:3</sub>(p<sub>i</sub> * q<sub>i</sub>)
-    * </p>
-    *
-    * @param other the other frame vector used for the dot product. Not modified.
-    * @return the value of the dot product.
-    */
-   default double dot(FrameVector3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return Vector3DReadOnly.super.dot(other);
-   }
-
    /**
     * Calculates and returns the angle in radians from this frame vector to {@code other}.
     * <p>

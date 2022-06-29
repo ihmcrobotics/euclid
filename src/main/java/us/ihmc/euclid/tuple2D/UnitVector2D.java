@@ -7,6 +7,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -25,6 +26,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public class UnitVector2D implements UnitVector2DBasics
 {
+   /** Tolerance used on this vector's components to identify if it can be normalized. */
+   public static final double ZERO_TEST_EPSILON = UnitVector3D.ZERO_TEST_EPSILON;
+
    /** The dirty flag for this unit vector indicating whether it needs to be normalized or not. */
    private boolean dirty = true;
    /** The x-component. */
