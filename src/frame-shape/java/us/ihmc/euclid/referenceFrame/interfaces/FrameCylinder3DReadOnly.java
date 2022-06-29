@@ -8,6 +8,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -355,16 +356,12 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
    /**
     * Gets a representative {@code String} of this frame cylinder 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Cylinder 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906] - worldFrame
     * </pre>
     * </p>
-    *
-    * @param format     the format to use for each number.
-    * @param cylinder3D the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

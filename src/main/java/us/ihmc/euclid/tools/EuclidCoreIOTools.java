@@ -1231,26 +1231,61 @@ public class EuclidCoreIOTools
       return sb.toString();
    }
 
+   /**
+    * Format the {@code value} using the given {@code format}.
+    * 
+    * @param format the format to use. Can be {@code null}.
+    * @param value  the value to get the {@code String} of.
+    * @return the formatted {@code String} representing the given {@code value}.
+    */
    public static String toString(String format, double value)
    {
       return format != null ? String.format(format, value) : Double.toString(value);
    }
 
+   /**
+    * Format the {@code value} using the given {@code format}.
+    * 
+    * @param format the format to use. Can be {@code null}.
+    * @param value  the value to get the {@code String} of.
+    * @return the formatted {@code String} representing the given {@code value}.
+    */
    public static String toString(String format, float value)
    {
       return format != null ? String.format(format, value) : Float.toString(value);
    }
 
+   /**
+    * Format the {@code value} using the given {@code format}.
+    * 
+    * @param format the format to use. Can be {@code null}.
+    * @param value  the value to get the {@code String} of.
+    * @return the formatted {@code String} representing the given {@code value}.
+    */
    public static String toString(String format, boolean value)
    {
       return format != null ? String.format(format, value) : Boolean.toString(value);
    }
 
+   /**
+    * Format the {@code value} using the given {@code format}.
+    * 
+    * @param format the format to use. Can be {@code null}.
+    * @param value  the value to get the {@code String} of.
+    * @return the formatted {@code String} representing the given {@code value}.
+    */
    public static String toString(String format, int value)
    {
       return format != null ? String.format(format, value) : Integer.toString(value);
    }
 
+   /**
+    * Format the {@code value} using the given {@code format}.
+    * 
+    * @param format the format to use. Can be {@code null}.
+    * @param value  the value to get the {@code String} of.
+    * @return the formatted {@code String} representing the given {@code value}.
+    */
    public static String toString(String format, long value)
    {
       return format != null ? String.format(format, value) : Long.toString(value);

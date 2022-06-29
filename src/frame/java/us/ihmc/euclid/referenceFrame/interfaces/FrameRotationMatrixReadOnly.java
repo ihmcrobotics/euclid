@@ -411,10 +411,4 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
       checkReferenceFrameMatch(tupleOriginal);
       RotationMatrixReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
    }
-
-   @Override
-   default String toString(String format)
-   {
-      return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
-   }
 }

@@ -11,6 +11,7 @@ import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -815,9 +816,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Gets the representative {@code String} of {@code face3D} given a specific format to use.
+    * Gets the representative {@code String} of this face 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
@@ -827,9 +828,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

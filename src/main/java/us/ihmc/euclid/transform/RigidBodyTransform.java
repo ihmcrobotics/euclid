@@ -1014,10 +1014,10 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
    }
 
    /**
-    * Gets a representative {@code String} of {@code rigidBodyTransform} given a specific format to
-    * use.
+    * Gets a representative {@code String} of this transform given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     *  0.596  0.630  0.930 | -0.435
@@ -1026,9 +1026,6 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
     *  0.000  0.000  0.000 |  1.000
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the {@code String} representing this transform.
     */
    @Override
    public String toString(String format)

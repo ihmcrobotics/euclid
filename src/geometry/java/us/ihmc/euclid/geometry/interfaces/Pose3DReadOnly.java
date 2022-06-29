@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -267,10 +268,15 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
    }
 
    /**
-    * Provides a {@code String} representation of this pose 3D as follows:<br>
-    * Pose 3D: position = (x, y, z), orientation = (qx, qy, qz, qs)
+    * Gets a representative {@code String} of this pose 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @return the {@code String} representing this pose 3D.
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
     */
    @Override
    default String toString(String format)

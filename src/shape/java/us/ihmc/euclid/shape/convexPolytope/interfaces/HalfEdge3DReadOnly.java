@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -122,9 +123,10 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
    }
 
    /**
-    * Gets the representative {@code String} of {@code halfEdge3D} given a specific format to use.
+    * Gets the representative {@code String} of this half-edge 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
@@ -134,9 +136,6 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

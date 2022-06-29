@@ -445,24 +445,6 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    }
 
    /**
-    * Provides a {@code String} representation of this matrix as follows:
-    *
-    * <pre>
-    * /-0.576, -0.784,  0.949 \
-    * | 0.649, -0.542, -0.941 |
-    * \-0.486, -0.502, -0.619 /
-    * </pre>
-    *
-    * @param format the format to be used.
-    * @return the {@code String} representing this matrix.
-    */
-   @Override
-   default String toString(String format)
-   {
-      return Matrix3DReadOnly.super.toString(format);
-   }
-
-   /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply

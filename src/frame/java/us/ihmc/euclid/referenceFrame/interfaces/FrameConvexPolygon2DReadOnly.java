@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -1889,6 +1890,20 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
       return translateCopy((Tuple2DReadOnly) translation);
    }
 
+   /**
+    * Gets a representative {@code String} of this convex polygon 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
+    * worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

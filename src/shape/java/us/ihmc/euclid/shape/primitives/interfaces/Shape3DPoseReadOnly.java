@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -107,16 +108,12 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Gets the representative {@code String} of this shape 3D pose given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
     * </pre>
     * </p>
-    *
-    * @param format      the format to use for each number.
-    * @param shape3DPose the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

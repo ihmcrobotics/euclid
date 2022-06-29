@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -178,14 +179,14 @@ public interface Pose2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Gets a representative {@code String} of {@code pose2D} as follows:
+    * Gets a representative {@code String} of this pose 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
     * </pre>
-    *
-    * @param format the format to be used.
-    * @return the representative {@code String}.
+    * </p>
     */
    @Override
    default String toString(String format)

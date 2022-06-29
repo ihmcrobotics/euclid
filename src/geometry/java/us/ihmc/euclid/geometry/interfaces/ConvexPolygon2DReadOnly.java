@@ -10,6 +10,7 @@ import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -1682,9 +1683,10 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    }
 
    /**
-    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to use.
+    * Gets a representative {@code String} of this convex polygon 2D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Convex Polygon 2D: vertices = [
@@ -1692,9 +1694,6 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
     * (-0.052, -0.173 ) ]
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

@@ -250,17 +250,15 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Gets a representative {@code String} of {@code tuple} given a specific format to use.
+    * Gets a representative {@code String} of this tuple 2D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * (-0.675, -0.102 )
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -20,6 +21,16 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, EuclidFrameGeometry
 {
+   /**
+    * Gets a representative {@code String} of this tuple 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (-0.558, -0.380,  0.130 ) - worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

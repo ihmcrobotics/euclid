@@ -1305,6 +1305,16 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Eucli
       return BoundingBox3DReadOnly.super.intersectionWithRay3D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
+   /**
+    * Gets a representative {@code String} of this bounding box 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 ), worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

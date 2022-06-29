@@ -252,10 +252,14 @@ public interface Orientation2DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Calculates and returns a hash code value from the value of the angle of this orientation 2D.
+    * Gets a representative {@code String} of this orientation 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
-    * @param format the format to be used.
-    * @return the hash code value for this orientation 2D.
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
     */
    @Override
    default String toString(String format)

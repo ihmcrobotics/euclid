@@ -9,6 +9,7 @@ import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -1384,17 +1385,15 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Eucli
    }
 
    /**
-    * Gets a representative {@code String} of {@code lineSegment2D} given a specific format to use.
+    * Gets a representative {@code String} of this line segment 2D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 ), worldFrame
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

@@ -409,11 +409,15 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Provides a {@code String} representation of this yaw-pitch-roll as follows: yaw-pitch-roll: (yaw,
-    * pitch, roll).
+    * Gets a representative {@code String} of this yaw-pitch-roll given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param format the format to be used
-    * @return the {@code String} representing this yaw-pitch-roll.
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    * </p>
     */
    @Override
    default String toString(String format)

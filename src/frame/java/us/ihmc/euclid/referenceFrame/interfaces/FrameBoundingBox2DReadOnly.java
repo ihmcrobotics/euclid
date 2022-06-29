@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -1209,6 +1210,17 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Eucli
       return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
+   /**
+    * Gets a representative {@code String} of this bounding box 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 ), worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

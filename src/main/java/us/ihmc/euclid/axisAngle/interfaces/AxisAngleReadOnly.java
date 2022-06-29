@@ -493,15 +493,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * ( 0.674,  0.455,  0.582,  0.593 )
     * </pre>
     * </p>
-    *
-    * @param format    the format to use for each number.
-    * @param axisAngle the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)
    {
       return EuclidCoreIOTools.getAxisAngleString(format, this);
    }
-
 }

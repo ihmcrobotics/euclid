@@ -15,6 +15,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -199,7 +200,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     * Gets the representative {@code String} of this frame convex polytope 3D given a specific format
     * to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
@@ -229,9 +230,6 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     * worldFrame
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

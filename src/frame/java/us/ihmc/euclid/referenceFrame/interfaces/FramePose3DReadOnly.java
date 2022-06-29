@@ -213,6 +213,16 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, EuclidFrameGeometry
       return getOrientationDistance(other.getOrientation());
    }
 
+   /**
+    * Gets a representative {@code String} of this pose 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 ), worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

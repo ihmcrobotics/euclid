@@ -69,9 +69,6 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
     * <pre>
     * Point shape 3D: (-0.362, -0.617,  0.066 ) - worldFrame
     * </pre>
-    *
-    * @param format the format to be used.
-    * @return the {@code String} representing this point shape 3D.
     */
    @Override
    default String toString(String format)

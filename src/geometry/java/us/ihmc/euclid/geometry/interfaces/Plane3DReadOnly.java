@@ -1,8 +1,10 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
@@ -528,5 +530,22 @@ public interface Plane3DReadOnly extends EuclidGeometry
          return false;
       Plane3D other = (Plane3D) geometry;
       return isCoincident(other, epsilon, epsilon);
+   }
+
+   /**
+    * Gets a representative {@code String} of this plane 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getPlane3DString(format, this);
    }
 }

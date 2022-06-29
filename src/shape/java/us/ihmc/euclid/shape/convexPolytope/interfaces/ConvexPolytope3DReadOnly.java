@@ -12,6 +12,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -587,10 +588,10 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets the representative {@code String} of {@code convexPolytope3D} given a specific format to
-    * use.
+    * Gets the representative {@code String} of this convex polytope 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
@@ -619,9 +620,6 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     *    (-0.283, -0.207, -0.595 )
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

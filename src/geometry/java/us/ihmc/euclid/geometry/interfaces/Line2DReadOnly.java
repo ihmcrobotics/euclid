@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -891,6 +892,17 @@ public interface Line2DReadOnly extends EuclidGeometry
       return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
    }
 
+   /**
+    * Gets a representative {@code String} of this line 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

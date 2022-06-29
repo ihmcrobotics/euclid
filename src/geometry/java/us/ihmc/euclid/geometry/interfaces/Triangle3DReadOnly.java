@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -224,17 +225,15 @@ public interface Triangle3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Gets a representative {@code String} of a triangle as follows:
+    * Gets a representative {@code String} of this triangle 3D as follows:
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

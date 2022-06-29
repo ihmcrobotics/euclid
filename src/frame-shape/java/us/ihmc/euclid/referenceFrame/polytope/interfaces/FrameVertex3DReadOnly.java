@@ -7,6 +7,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Read-only interface for a vertex 3D that belongs to a convex polytope 3D expressed in given
@@ -82,7 +83,7 @@ public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DRea
    /**
     * Gets the representative {@code String} of this frame vertex 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
@@ -92,10 +93,6 @@ public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DRea
     *         worldFrame
     * </pre>
     * </p>
-    *
-    * @param format   the format to use for each number.
-    * @param vertex3D the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

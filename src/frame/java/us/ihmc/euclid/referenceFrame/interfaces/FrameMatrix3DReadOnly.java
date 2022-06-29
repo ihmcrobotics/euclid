@@ -7,6 +7,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -1013,9 +1014,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, EuclidFrameGeom
    }
 
    /**
-    * Gets a representative {@code String} of {@code matrix} given a specific format to use.
+    * Gets a representative {@code String} of this matrix 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * /-0.576, -0.784,  0.949 \
@@ -1024,9 +1026,6 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, EuclidFrameGeom
     * worldFrame
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

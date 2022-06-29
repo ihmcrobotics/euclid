@@ -78,9 +78,6 @@ public interface FrameHalfEdge3DReadOnly extends HalfEdge3DReadOnly, FrameLineSe
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     *    worldFrame
     * </pre>
-    *
-    * @param format the format to be used.
-    * @return the {@code String} representing this half-edge 3D.
     */
    @Override
    default String toString(String format)

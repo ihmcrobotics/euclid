@@ -346,10 +346,15 @@ public interface Tuple4DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Provides a {@code String} representation of this tuple4D as follows: (x, y, z, s).
+    * Gets a representative {@code String} of this tuple 4D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param format the format to use for each number.
-    * @return the {@code String} representing this tuple4D.
+    * <pre>
+    * (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
     */
    @Override
    default String toString(String format)

@@ -668,11 +668,15 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    }
 
    /**
-    * Provides a {@code String} representation of this line segment 1D as follows:<br>
-    * Line segment 1D: 1st endpoint = (x), 2nd endpoint = (x)
+    * Gets a representative {@code String} of this line segment 1D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param format the format to be used.
-    * @return the {@code String} representing this line segment 1D.
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
     */
    @Override
    public String toString(String format)

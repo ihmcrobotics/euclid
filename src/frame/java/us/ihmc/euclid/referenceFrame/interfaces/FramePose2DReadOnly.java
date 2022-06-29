@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Read-only interface for a 2D pose expressed in a given reference frame.
@@ -83,6 +84,16 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, EuclidFrameGeometry
       return getOrientationDistance(other.getOrientation());
    }
 
+   /**
+    * Gets a representative {@code String} of this pose 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 ), worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

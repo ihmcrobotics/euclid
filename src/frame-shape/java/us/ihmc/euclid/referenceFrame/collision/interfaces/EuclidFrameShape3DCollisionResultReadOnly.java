@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
  * Read-only interface adding {@code ReferenceFrame} support to
@@ -166,7 +167,7 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Gets the representative {@code String} of this collision result given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
     * When shapes are colliding:
     *
     * <pre>
@@ -183,10 +184,6 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
     * Shape B: Capsule3D - shapeFrameB, location: ( 0.540,  0.110,  0.319 ) - locationFrameB, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
     * </pre>
     * </p>
-    *
-    * @param format                       the format to use for each number.
-    * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

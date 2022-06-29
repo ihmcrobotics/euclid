@@ -415,6 +415,20 @@ public interface AffineTransformReadOnly extends Transform
       return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());
    }
 
+   /**
+    * Gets a representative {@code String} of this transform given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

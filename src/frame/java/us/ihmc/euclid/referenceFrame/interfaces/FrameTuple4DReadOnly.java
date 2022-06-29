@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
@@ -39,6 +40,16 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, EuclidFrameGeomet
       return Tuple4DReadOnly.super.dot(other);
    }
 
+   /**
+    * Gets a representative {@code String} of this tuple 4D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (-0.052, -0.173, -0.371,  0.087 ) - worldFrame
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

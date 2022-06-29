@@ -451,12 +451,16 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
    }
 
    /**
-    * Provides a {@code String} representation of this transform as follows: <br>
-    * Quaternion: (qx, qy, qz, qs) <br>
-    * Translation: ( x, y, z)
+    * Gets a representative {@code String} of this transform given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
-    * @param format the format to be used.
-    * @return the {@code String} representing this transform.
+    * <pre>
+    * Quaternion:  ( 0.174,  0.732, -0.222,  0.620 )
+    * Translation: (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
     */
    @Override
    public String toString(String format)

@@ -1458,9 +1458,6 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, EuclidFra
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)] - worldFrame
     * </pre>
-    *
-    * @param shape3DPose the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

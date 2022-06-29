@@ -282,6 +282,17 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       return true;
    }
 
+   /**
+    * Gets a representative {@code String} of this tuple 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

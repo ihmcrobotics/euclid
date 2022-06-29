@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -21,9 +22,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, EuclidFrameGeometry
 {
    /**
-    * Provides a {@code String} representation of this tuple2D. as follows: (x, y)-referenceFrame.
+    * Gets a representative {@code String} of this tuple 2D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
-    * @return a string representation of this tuple2D.
+    * <pre>
+    * (-0.675, -0.102 ) - worldFrame
+    * </pre>
+    * </p>
     */
    @Override
    default String toString(String format)

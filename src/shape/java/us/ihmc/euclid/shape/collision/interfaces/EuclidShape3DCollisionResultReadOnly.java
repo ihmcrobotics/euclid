@@ -4,6 +4,7 @@ import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -286,10 +287,10 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    }
 
    /**
-    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
+    * Gets the representative {@code String} of this collision result given a specific
     * format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
     * When shapes are colliding:
     *
     * <pre>
@@ -306,9 +307,6 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

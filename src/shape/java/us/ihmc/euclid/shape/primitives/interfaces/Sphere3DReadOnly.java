@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -261,18 +262,15 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets a representative {@code String} of {@code sphere3D} given a specific format to use.
+    * Gets a representative {@code String} of this sphere sphere 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
     * </pre>
     * </p>
-    *
-    * @param format   the format to use for each number.
-    * @param sphere3D the object to get the {@code String} of. Not modified.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

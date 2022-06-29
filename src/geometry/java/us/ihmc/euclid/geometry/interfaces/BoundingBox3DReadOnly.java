@@ -7,6 +7,7 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -912,6 +913,17 @@ public interface BoundingBox3DReadOnly extends EuclidGeometry
       return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
    }
 
+   /**
+    * Gets a representative {@code String} of this bounding box 3D given a specific format to use.
+    * <p>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    */
    @Override
    default String toString(String format)
    {

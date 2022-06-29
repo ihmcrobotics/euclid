@@ -1128,9 +1128,9 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    }
 
    /**
-    * Gets a representative {@code String} of {@code matrix} given a specific format to use.
+    * Gets a representative {@code String} of this matrix 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * /-0.576, -0.784,  0.949 \
@@ -1138,9 +1138,6 @@ public interface Matrix3DReadOnly extends EuclidGeometry
     * \-0.486, -0.502, -0.619 /
     * </pre>
     * </p>
-    *
-    * @param format the format to use for each number.
-    * @return the representative {@code String}.
     */
    @Override
    default String toString(String format)

@@ -53,7 +53,7 @@ public interface EuclidGeometry
     * Provides a {@code String} representation of this geometry.
     *
     * @param format the format to use for each number.
-    * @return the {@code String} representing this tuple4D.
+    * @return the {@code String} representing this geometry.
     * @see EuclidCoreIOTools#DEFAULT_FORMAT
     */
    String toString(String format);
