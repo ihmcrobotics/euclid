@@ -190,6 +190,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
     *
     * @param other the other rotation matrix to copy. Not modified.
     */
+   @Override
    void set(RotationMatrixReadOnly other);
 
    /**
@@ -203,6 +204,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
     * @param matrix the matrix to copy the values from. Not modified.
     * @throws NotARotationMatrixException if {@code matrix} is not a rotation matrix.
     */
+   @Override
    default void setAndInvert(Matrix3DReadOnly matrix)
    {
       setAndTranspose(matrix);

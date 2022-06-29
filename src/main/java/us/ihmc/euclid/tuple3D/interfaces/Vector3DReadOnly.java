@@ -90,6 +90,6 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       if (!(geometry instanceof Vector3DReadOnly))
          return false;
       Vector3DReadOnly other = (Vector3DReadOnly) geometry;
-      return differenceNorm((Vector3DReadOnly) other) <= epsilon;
+      return differenceNorm(other) <= epsilon;
    }
 }

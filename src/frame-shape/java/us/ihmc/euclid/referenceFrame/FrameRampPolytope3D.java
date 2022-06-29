@@ -38,7 +38,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This implementation registers listener to its owner such that it is always accurately
  * representing its owner even being modified after creation of the polytope view.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 class FrameRampPolytope3D implements FrameRampPolytope3DView

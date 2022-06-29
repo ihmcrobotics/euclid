@@ -57,7 +57,7 @@ public class EuclidCoreRandomTools
 
    /**
     * Picks at random an element in the given {@code array}.
-    * 
+    *
     * @param <T>    the element type.
     * @param random the random generator to use.
     * @param array  the array to pick the next element from.
@@ -70,7 +70,7 @@ public class EuclidCoreRandomTools
 
    /**
     * Picks at random one of the constants in {@link Axis2D}.
-    * 
+    *
     * @param random the random generator to use.
     * @return the next axis picked at random.
     */
@@ -81,7 +81,7 @@ public class EuclidCoreRandomTools
 
    /**
     * Picks at random one of the constants in {@link Axis3D}.
-    * 
+    *
     * @param random the random generator to use.
     * @return the next axis picked at random.
     */
@@ -277,7 +277,7 @@ public class EuclidCoreRandomTools
     * <p>
     * The type can be either: general matrix 3D, rotation matrix, or linear transform 3D.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random common 3D matrix.
     */
@@ -370,7 +370,7 @@ public class EuclidCoreRandomTools
     * <li>{@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
     * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
     * </ul>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random symmetric matrix.
     */
@@ -385,7 +385,7 @@ public class EuclidCoreRandomTools
     * <li>{@code matrix}<sub>ij</sub> &in; [-{@code minMaxValue}; {@code minMaxValue}].
     * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
     * </ul>
-    * 
+    *
     * @param random      the random generator to use.
     * @param minMaxValue the maximum absolute value for each element.
     * @return the random symmetric matrix.
@@ -402,7 +402,7 @@ public class EuclidCoreRandomTools
     * <li>{@code matrix}<sub>ij</sub> &in; [{@code minValue}; {@code maxValue}].
     * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
     * </ul>
-    * 
+    *
     * @param random   the random generator to use.
     * @param minValue the minimum value for each element.
     * @param maxValue the maximum value for each element.
@@ -528,7 +528,7 @@ public class EuclidCoreRandomTools
     * <p>
     * This is a redirection to {@link #nextMatrix3D(Random)}.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random linear transform 3D.
     * @see #nextMatrix3D(Random)
@@ -543,7 +543,7 @@ public class EuclidCoreRandomTools
     * <p>
     * This is a redirection to {@link #nextMatrix3D(Random, double)}.
     * </p>
-    * 
+    *
     * @param random      the random generator to use.
     * @param minMaxValue the maximum absolute value for each element.
     * @return the random linear transform 3D.
@@ -560,7 +560,7 @@ public class EuclidCoreRandomTools
     * <p>
     * This is a redirection to {@link #nextMatrix3D(Random, double, double)}.
     * </p>
-    * 
+    *
     * @param random   the random generator to use.
     * @param minValue the minimum value for each element.
     * @param maxValue the maximum value for each element.
@@ -579,7 +579,7 @@ public class EuclidCoreRandomTools
     * The matrix is constructed such that the absolute value of each of its eigen values is in [0.25;
     * 10.0].
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random linear transform 3D.
     */
@@ -594,7 +594,7 @@ public class EuclidCoreRandomTools
     * The matrix is constructed such that the absolute value of each of its eigen values is in
     * [{@code minAbsScale}; {@code maxAbsScale}].
     * </p>
-    * 
+    *
     * @param random      the random generator to use.
     * @param minAbsScale the minimum absolute value for each eigen value.
     * @param maxAbsScale the maximum absolute value for each eigen value.
@@ -795,7 +795,7 @@ public class EuclidCoreRandomTools
     * {@code minMaxValue = 10.0}.
     * <li>The translation part is generated with {@link #nextVector3D(Random)}.
     * </ul>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random affine transform.
     */
@@ -811,7 +811,7 @@ public class EuclidCoreRandomTools
     * {@link #nextNonSingularLinearTransform3D(Random)}.
     * <li>The translation part is generated with {@link #nextVector3D(Random)}.
     * </ul>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random affine transform.
     */
@@ -1419,7 +1419,7 @@ public class EuclidCoreRandomTools
     * <p>
     * Each coefficient of the matrix is generated randomly to be in [-1, 1].
     * </p>
-    * 
+    *
     * @param random          the random generator to use.
     * @param numberOfRows    the number of rows for the matrix to generate.
     * @param numberOfColumns the number of columns for the matrix to generate.
@@ -1432,7 +1432,7 @@ public class EuclidCoreRandomTools
 
    /**
     * Generates a random matrix.
-    * 
+    *
     * @param random          the random generator to use.
     * @param numberOfRows    the number of rows for the matrix to generate.
     * @param numberOfColumns the number of columns for the matrix to generate.
@@ -1447,7 +1447,7 @@ public class EuclidCoreRandomTools
 
    /**
     * Generates a random matrix.
-    * 
+    *
     * @param random          the random generator to use.
     * @param numberOfRows    the number of rows for the matrix to generate.
     * @param numberOfColumns the number of columns for the matrix to generate.

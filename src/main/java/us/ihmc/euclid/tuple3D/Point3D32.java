@@ -209,7 +209,7 @@ public class Point3D32 implements Point3DBasics
       else
          return false;
    }
-   
+
    /**
     * Provides a {@code String} representation of this point 3D as follows: (x, y, z).
     *

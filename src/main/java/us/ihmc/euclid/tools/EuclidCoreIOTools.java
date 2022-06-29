@@ -1233,7 +1233,7 @@ public class EuclidCoreIOTools
 
    /**
     * Format the {@code value} using the given {@code format}.
-    * 
+    *
     * @param format the format to use. Can be {@code null}.
     * @param value  the value to get the {@code String} of.
     * @return the formatted {@code String} representing the given {@code value}.
@@ -1245,7 +1245,7 @@ public class EuclidCoreIOTools
 
    /**
     * Format the {@code value} using the given {@code format}.
-    * 
+    *
     * @param format the format to use. Can be {@code null}.
     * @param value  the value to get the {@code String} of.
     * @return the formatted {@code String} representing the given {@code value}.
@@ -1257,7 +1257,7 @@ public class EuclidCoreIOTools
 
    /**
     * Format the {@code value} using the given {@code format}.
-    * 
+    *
     * @param format the format to use. Can be {@code null}.
     * @param value  the value to get the {@code String} of.
     * @return the formatted {@code String} representing the given {@code value}.
@@ -1269,7 +1269,7 @@ public class EuclidCoreIOTools
 
    /**
     * Format the {@code value} using the given {@code format}.
-    * 
+    *
     * @param format the format to use. Can be {@code null}.
     * @param value  the value to get the {@code String} of.
     * @return the formatted {@code String} representing the given {@code value}.
@@ -1281,7 +1281,7 @@ public class EuclidCoreIOTools
 
    /**
     * Format the {@code value} using the given {@code format}.
-    * 
+    *
     * @param format the format to use. Can be {@code null}.
     * @param value  the value to get the {@code String} of.
     * @return the formatted {@code String} representing the given {@code value}.

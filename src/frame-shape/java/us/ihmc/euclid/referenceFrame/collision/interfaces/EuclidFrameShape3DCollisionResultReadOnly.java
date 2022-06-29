@@ -167,7 +167,8 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    /**
     * Gets the representative {@code String} of this collision result given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:<br>
     * When shapes are colliding:
     *
     * <pre>

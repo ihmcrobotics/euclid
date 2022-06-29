@@ -17,11 +17,11 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * A linear transform matrix behaves mostly like a regular 3D matrix. In addition to the base
  * features from {@link Matrix3DBasics}, the linear transform can be decomposed, using a singular
  * value decomposition, into:
- * 
+ *
  * <pre>
  * A = U W V
  * </pre>
- * 
+ *
  * where:
  * <ul>
  * <li><tt>A</tt> is this 3D linear transform.
@@ -33,7 +33,7 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * rotation transform, i.e. ignoring the scale matrix {@code W}, and use this view to perform
  * operations with other rotations.
  * </p>
- * 
+ *
  * @see SingularValueDecomposition3D
  * @author Sylvain Bertrand
  */
@@ -53,7 +53,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
     * same axis-angle.
     * </p>
-    * 
+    *
     * @param rotationVector the rotation vector to set this linear transform. Not modified.
     */
    default void setRotationVector(Vector3DReadOnly rotationVector)
@@ -106,7 +106,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Resets any scale currently held by this transform and appends a new scale.
-    * 
+    *
     * @param scale the tuple holding the scale factors along each axis. Not modified.
     */
    default void setScale(Tuple3DReadOnly scale)
@@ -116,7 +116,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Resets any scale currently held by this transform and appends a new scale.
-    * 
+    *
     * @param x the scale factor along the x-axis.
     * @param y the scale factor along the y-axis.
     * @param z the scale factor along the z-axis.
@@ -134,7 +134,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * linear transform. This operation is similar to
     * {@link Orientation3DBasics#append(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation to append to this linear transform. Not modified.
     */
    default void appendRotation(Orientation3DReadOnly orientation)
@@ -149,7 +149,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * multiplied to this linear transform. This operation is similar to
     * {@link Orientation3DBasics#appendInvertOther(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation which the inverse is to be appended to this linear transform.
     *                    Not modified.
     */
@@ -165,7 +165,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * linear transform once inverted. This operation is similar to
     * {@link Orientation3DBasics#appendInvertThis(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation to append to this linear transform. Not modified.
     * @throws SingularMatrixException if this linear transform is not invertible.
     */
@@ -183,7 +183,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * multiplied to this linear transform once inverted. This operation is similar to
     * {@link Orientation3DBasics#appendInvertBoth(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation which the inverse is to be appended to this linear transform.
     *                    Not modified.
     * @throws SingularMatrixException if this linear transform is not invertible.
@@ -244,15 +244,15 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Appends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *               / scale   0     0   \
     * this = this * |   0   scale   0   |
     *               \   0     0   scale /
     * </pre>
-    * 
+    *
     * Note that this operation is identical to {@link #scale(double)}.
-    * 
+    *
     * @param scale the scale to append.
     */
    default void appendScale(double scale)
@@ -262,13 +262,13 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Appends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *               / scale.getX()      0            0       \
     * this = this * |      0       scale.getY()      0       |
     *               \      0            0       scale.getZ() /
     * </pre>
-    * 
+    *
     * @param scale the scale to append. Not modified
     */
    default void appendScale(Tuple3DReadOnly scale)
@@ -278,7 +278,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Appends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *               / x 0 0 \
     * this = this * | 0 y 0 |
@@ -301,7 +301,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * this linear transform. This operation is similar to
     * {@link Orientation3DBasics#prepend(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation to prepend to this linear transform. Not modified.
     */
    default void prependRotation(Orientation3DReadOnly orientation)
@@ -316,7 +316,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * pre-multiplied to this linear transform. This operation is similar to
     * {@link Orientation3DBasics#prependInvertOther(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation which the inverse is to be prepended to this linear transform.
     *                    Not modified.
     */
@@ -332,7 +332,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * this linear transform once inverted. This operation is similar to
     * {@link Orientation3DBasics#prependInvertThis(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation to prepend to this linear transform. Not modified.
     * @throws SingularMatrixException if this linear transform is not invertible.
     */
@@ -350,7 +350,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * pre-multiplied to this linear transform once inverted. This operation is similar to
     * {@link Orientation3DBasics#prependInvertBoth(Orientation3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param orientation the orientation which the inverse is to be prepended to this linear transform.
     *                    Not modified.
     * @throws SingularMatrixException if this linear transform is not invertible.
@@ -411,15 +411,15 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Prepends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *        / scale   0     0   \
     * this = |   0   scale   0   | * this
     *        \   0     0   scale /
     * </pre>
-    * 
+    *
     * Note that this operation is identical to {@link #scale(double)}.
-    * 
+    *
     * @param scale the scale to prepend.
     */
    default void prependScale(double scale)
@@ -429,13 +429,13 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Prepends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *        / scale.getX()      0            0       \
     * this = |      0       scale.getY()      0       | * this
     *        \      0            0       scale.getZ() /
     * </pre>
-    * 
+    *
     * @param scale the scale to prepend. Not modified
     */
    default void prependScale(Tuple3DReadOnly scale)
@@ -445,7 +445,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
 
    /**
     * Prepends a scale to this linear transform.
-    * 
+    *
     * <pre>
     *        / x 0 0 \
     * this = | 0 y 0 | * this

@@ -117,7 +117,7 @@ public class Orientation2D implements Orientation2DBasics
       else
          return false;
    }
-   
+
    /**
     * Provides a {@code String} representation of this orientation 2D as follows:<br>
     * (0.123 )

@@ -471,7 +471,7 @@ public class SingularValueDecomposition3DTest
             givensRotationToPack.set(1, 0, 0, 0, diag_b, -off_diag, 0, off_diag, diag_b);
             break;
          case Y:
-            // Kind off an oddity that the rotation needs to be inverted. 
+            // Kind off an oddity that the rotation needs to be inverted.
             // Best guess so far is that sh is computed from the s_02 element which is the location for the +sin(angle) element of a rotation along the y_axis, while the other 2 rotations uses the -sin(angle) element.
             givensQuaternionToPack.set(0, -sh, 0, ch);
             givensRotationToPack.set(diag_b, 0, -off_diag, 0, 1, 0, off_diag, 0, diag_b);

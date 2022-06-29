@@ -42,7 +42,7 @@ public enum Bound
     * <li>For {@link #MIN}, this returns {@code true} if {@code first < second}.
     * <li>For {@link #MAX}, this returns {@code true} if {@code first > second}.
     * </ul>
-    * 
+    *
     * @param first  the first value.
     * @param second the second value.
     * @return {@code true} if the first value is farther than the second according the bound.

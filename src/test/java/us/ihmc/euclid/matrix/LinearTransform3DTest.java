@@ -56,9 +56,9 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       { // Test LinearTransform3D()
          LinearTransform3D linearTransform3D = new LinearTransform3D();
          EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTools.identityMatrix3D, linearTransform3D, 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), (double) 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), 0);
          EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), linearTransform3D.getScaleVector(), 0);
          assertTrue(linearTransform3D.isIdentity());
          assertTrue(linearTransform3D.isRotationMatrix());
@@ -86,6 +86,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       }
    }
 
+   @Override
    @Test
    public void testSetIdentity() throws Exception
    {
@@ -98,9 +99,9 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D linearTransform3D = EuclidCoreRandomTools.nextLinearTransform3D(random, 10.0);
          linearTransform3D.setIdentity();
          EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTools.identityMatrix3D, linearTransform3D, 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), (double) 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), 0);
          EuclidCoreTestTools.assertEquals(new Vector3D(1, 1, 1), linearTransform3D.getScaleVector(), 0);
          assertTrue(linearTransform3D.isIdentity());
          assertTrue(linearTransform3D.isRotationMatrix());
@@ -117,15 +118,16 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D linearTransform3D = EuclidCoreRandomTools.nextLinearTransform3D(random, 10.0);
          linearTransform3D.setToZero();
          EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTools.zeroMatrix3D, linearTransform3D, 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), (double) 0);
-         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), (double) 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), 0);
+         EuclidCoreTestTools.assertEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), 0);
          EuclidCoreTestTools.assertEquals(new Vector3D(0, 0, 0), linearTransform3D.getScaleVector(), 0);
          assertFalse(linearTransform3D.isIdentity());
          assertFalse(linearTransform3D.isRotationMatrix());
       }
    }
 
+   @Override
    @Test
    public void testSetToNaN()
    {
@@ -238,7 +240,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          CommonMatrix3DBasics seed = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
          LinearTransform3D original = new LinearTransform3D(seed);
 
-         // If any other scale than 
+         // If any other scale than
          Vector3D expectedScale = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          if (random.nextBoolean())
             expectedScale.setZ(-expectedScale.getZ());

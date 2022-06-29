@@ -28,7 +28,7 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, EuclidFrameGeomet
     * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
     * ({@code this.y} - {@code other.y})<sup>2</sup>]
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
@@ -46,7 +46,7 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, EuclidFrameGeomet
     * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
     * ({@code this.y} - {@code other.y})<sup>2</sup>
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as

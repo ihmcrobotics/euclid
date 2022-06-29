@@ -610,6 +610,7 @@ public abstract class Matrix3DBasicsTest<T extends Matrix3DBasics> extends Commo
       }
    }
 
+   @Override
    @Test
    public void testTranspose() throws Exception
    {

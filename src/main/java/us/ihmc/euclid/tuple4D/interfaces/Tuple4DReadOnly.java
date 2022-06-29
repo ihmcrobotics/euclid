@@ -300,7 +300,7 @@ public interface Tuple4DReadOnly extends EuclidGeometry
     * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup> +
     * ({@code this.s} - {@code other.s})<sup>2</sup>]
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     */
@@ -316,7 +316,7 @@ public interface Tuple4DReadOnly extends EuclidGeometry
     * ({@code this.y} - {@code other.y})<sup>2</sup> + ({@code this.z} - {@code other.z})<sup>2</sup>
     * +({@code this.s} - {@code other.s})<sup>2</sup>
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     */

@@ -15,7 +15,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
  * <p>
  * This polytope reference frame is linked to the box reference frame.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameBoxPolytope3DView extends BoxPolytope3DView, FrameConvexPolytope3DReadOnly

@@ -2,7 +2,9 @@ package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**

@@ -206,7 +206,7 @@ public enum Axis3D implements UnitVector3DReadOnly
 
    /**
     * Sets the value of {@code tupleToUpdate} for the component along this axis.
-    * 
+    *
     * @param tupleToUpdate the tuple to update. Modified.
     * @param value         the new value for the tuple's component.
     */
@@ -214,7 +214,7 @@ public enum Axis3D implements UnitVector3DReadOnly
 
    /**
     * Gets the value of {@code tupleToUpdate} for the component along this axis.
-    * 
+    *
     * @param tuple the tuple to get the component's value of. Not modified.
     * @return the compoent's value.
     */

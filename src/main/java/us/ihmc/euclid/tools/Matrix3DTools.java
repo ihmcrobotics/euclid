@@ -237,7 +237,7 @@ public class Matrix3DTools
     * <p>
     * All the matrices can be the same object.
     * </p>
-    * 
+    *
     * @param m1           the left matrix in the multiplication. Not modified.
     * @param transpose1   whether to transpose {@code m1} before performing the multiplication.
     * @param invert1      whether to invert {@code m1} before performing the multiplication.
@@ -387,14 +387,14 @@ public class Matrix3DTools
 
    /**
     * Computes the outer product of {@code matrix} and stores the result in {@code matrixToPack}:
-    * 
+    *
     * <pre>
     * matrixToPack = matrix * matrix<sup>T</sup>
     * </pre>
     * <p>
     * Both matrices can be the same object.
     * </p>
-    * 
+    *
     * @param matrix       the input used to compute the outer product of. Not modified.
     * @param matrixToPack the output used to store the result. Modified.
     */
@@ -421,14 +421,14 @@ public class Matrix3DTools
 
    /**
     * Computes the inner product of {@code matrix} and stores the result in {@code matrixToPack}:
-    * 
+    *
     * <pre>
     * matrixToPack = matrix<sup>T</sup> * matrix
     * </pre>
     * <p>
     * Both matrices can be the same object.
     * </p>
-    * 
+    *
     * @param matrix       the input used to compute the inner product of. Not modified.
     * @param matrixToPack the output used to store the result. Modified.
     */
@@ -460,7 +460,7 @@ public class Matrix3DTools
     * <p>
     * All the parameters can be the same object.
     * </p>
-    * 
+    *
     * @param matrix            the matrix to append the orientation to. Not modified.
     * @param transposeMatrix   whether to transpose the matrix before performing the operation.
     * @param invertMatrix      whether to invert the matrix before performing the operation.
@@ -603,7 +603,7 @@ public class Matrix3DTools
     * <p>
     * All the parameters can be the same object.
     * </p>
-    * 
+    *
     * @param orientation       the orientation to append the matrix to. Not modified.
     * @param invertOrientation whether to invert the orientation before performing the operation.
     * @param matrix            the matrix to append to the orientation. Not modified.

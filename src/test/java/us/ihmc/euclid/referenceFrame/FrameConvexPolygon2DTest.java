@@ -216,7 +216,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<Fra
          FrameConvexPolygon2D expected = new FrameConvexPolygon2D(source);
          expected.changeFrame(destinationFrame);
 
-         assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
+         assertTrue(expected.epsilonEquals(actual, EPSILON));
       }
    }
 

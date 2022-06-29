@@ -38,7 +38,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
 
    /**
     * Sets this matrix by converting the given orientation.
-    * 
+    *
     * @param orientation3D the orientation to convert into a 3D matrix. Not modified.
     */
    default void set(Orientation3DReadOnly orientation3D)
@@ -51,7 +51,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
 
    /**
     * Sets this matrix to the given rotation matrix.
-    * 
+    *
     * @param rotationMatrix the rotation matrix to copy. Not modified.
     */
    default void set(RotationMatrixReadOnly rotationMatrix)

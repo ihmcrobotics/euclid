@@ -87,7 +87,8 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    /**
     * Gets a representative {@code String} of this frame capsule 3D given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906] - worldFrame

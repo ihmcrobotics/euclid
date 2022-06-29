@@ -208,7 +208,7 @@ public class RotationMatrixToolsTest
       Random random = new Random(45345L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { 
+      {
          RotationMatrix m1 = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix m2 = EuclidCoreRandomTools.nextRotationMatrix(random);
 
@@ -286,7 +286,7 @@ public class RotationMatrixToolsTest
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       {// Type check test in distance method
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -302,7 +302,7 @@ public class RotationMatrixToolsTest
             assertEquals(notCastedResult, withQuaternionResult, EPS);
       }
    }
-   
+
    @Test
    public void testAngle() throws Exception
    {
@@ -311,10 +311,10 @@ public class RotationMatrixToolsTest
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         
+
          double expected = quaternion.angle();
          double actual = RotationMatrixTools.angle(rotationMatrix);
-         
+
          assertEquals(expected, actual, EPS);
       }
    }

@@ -382,7 +382,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
     * <p>
     * This test avoids is thorough evaluation, in which case it returns {@code false}.
     * </p>
-    * 
+    *
     * @return {@code true} if this transform represents a pure rotation, {@code false} if this
     *         transform is not a pure rotation or if it is too expensive to conduct the test.
     */

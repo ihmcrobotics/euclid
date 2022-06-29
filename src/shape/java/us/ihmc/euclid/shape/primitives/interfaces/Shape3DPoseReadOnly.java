@@ -108,7 +108,8 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Gets the representative {@code String} of this shape 3D pose given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]

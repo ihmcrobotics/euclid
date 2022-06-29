@@ -13,14 +13,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * components are expected to be expressed in the global coordinate system of the ramp, i.e.
  * accounting for the ramp's pose.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
 {
    /**
     * Quick access to the face that represents the incline of the ramp.
-    * 
+    *
     * @return the face corresponding to the incline face.
     */
    Face3DReadOnly getRampFace();
@@ -28,7 +28,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the ramp's face which normal is {@code (1, 0, 0)} in the ramp's local coordinate
     * system.
-    * 
+    *
     * @return the face representing the local maximum x coordinate of the ramp.
     */
    Face3DReadOnly getXMaxFace();
@@ -36,7 +36,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the ramp's face which normal is {@code (0, 1, 0)} in the ramp's local coordinate
     * system.
-    * 
+    *
     * @return the face representing the local maximum y coordinate of the ramp.
     */
    Face3DReadOnly getYMaxFace();
@@ -44,7 +44,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the ramp's face which normal is {@code (0, -1, 0)} in the ramp's local coordinate
     * system.
-    * 
+    *
     * @return the face representing the local minimum y coordinate of the ramp.
     */
    Face3DReadOnly getYMinFace();
@@ -52,7 +52,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
    /**
     * Quick access to the box's face which normal is {@code (0, 0, -1)} in the ramp's local coordinate
     * system.
-    * 
+    *
     * @return the face representing the local minimum z coordinate of the ramp.
     */
    Face3DReadOnly getZMinFace();
@@ -63,7 +63,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
     * <p>
     * Note that the ramp face is returned when {@code axis == Axis3D#Z}.
     * </p>
-    * 
+    *
     * @param axis used to select the adequate face to be returned.
     * @return one the three ramp's face representing one of its local maximum coordinates.
     */
@@ -88,7 +88,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
     * <p>
     * Note that the ramp face is returned when {@code axis == Axis3D#X}.
     * </p>
-    * 
+    *
     * @param axis used to select the adequate face to be returned.
     * @return one the three ramp's face representing one of its local minimum coordinates.
     */
@@ -109,7 +109,7 @@ public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
 
    /**
     * Gets the ramp this polytope view is backed with.
-    * 
+    *
     * @return the ramp this polytope view is for.
     */
    Ramp3DReadOnly getOwner();

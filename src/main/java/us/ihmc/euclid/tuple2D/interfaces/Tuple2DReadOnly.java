@@ -252,7 +252,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
     * |{@code this} - {@code other}| = &radic;[({@code this.x} - {@code other.x})<sup>2</sup> +
     * ({@code this.y} - {@code other.y})<sup>2</sup>]
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     */
@@ -267,7 +267,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
     * |{@code this} - {@code other}|<sup>2</sup> = ({@code this.x} - {@code other.x})<sup>2</sup> +
     * ({@code this.y} - {@code other.y})<sup>2</sup>
     * </p>
-    * 
+    *
     * @param other the other tuple to compare to. Not modified.
     * @return the norm squared of the difference.
     */

@@ -214,7 +214,7 @@ public class EuclidGeometryFactories
 
    /**
     * Creates a new bounding box that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis2D} and
     *                              {@link Bound} will be passed to indicate the component that was
@@ -234,7 +234,7 @@ public class EuclidGeometryFactories
    /**
     * Creates a linked bounding box that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis2D} and
     *                              {@link Bound} will be passed to indicate the component that was
@@ -333,7 +333,7 @@ public class EuclidGeometryFactories
 
    /**
     * Creates a new bounding box that can be used to observe read and write operations.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis3D} and
     *                              {@link Bound} will be passed to indicate the component that was
@@ -353,7 +353,7 @@ public class EuclidGeometryFactories
    /**
     * Creates a linked bounding box that can be used to observe read and write operations on the
     * source.
-    * 
+    *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
     *                              has been modified. The corresponding constants {@link Axis3D} and
     *                              {@link Bound} will be passed to indicate the component that was
@@ -453,7 +453,7 @@ public class EuclidGeometryFactories
    /**
     * Functional interface for implementing listener that is to be notified whenever the bounding box
     * its attached is being modified.
-    * 
+    *
     * @author Sylvain Bertrand
     * @param <Axis> The 2D or 3D axis type that depends on the bounding box to listen to.
     */
@@ -462,7 +462,7 @@ public class EuclidGeometryFactories
    {
       /**
        * Notifies that the bounding box has changed.
-       * 
+       *
        * @param axis     the axis along which the bounding box was changed.
        * @param bound    the bound that was modified.
        * @param newValue the new value.

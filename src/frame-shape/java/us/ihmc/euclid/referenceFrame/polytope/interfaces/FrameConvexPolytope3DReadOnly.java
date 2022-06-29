@@ -200,7 +200,8 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     * Gets the representative {@code String} of this frame convex polytope 3D given a specific format
     * to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4

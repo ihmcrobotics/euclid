@@ -1645,7 +1645,7 @@ public class EuclidGeometryTools
     * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.
@@ -1686,7 +1686,7 @@ public class EuclidGeometryTools
     * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
     * article</a>.
     * </p>
-    * 
+    *
     * @param A                  the position of the first vertex of the triangle. Not modified.
     * @param B                  the position of the second vertex of the triangle. Not modified.
     * @param C                  the position of the third vertex of the triangle. Not modified.

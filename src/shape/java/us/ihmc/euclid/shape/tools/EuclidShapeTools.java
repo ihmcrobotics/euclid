@@ -2349,7 +2349,7 @@ public class EuclidShapeTools
     * The supporting vertex represents the location on a shape that is the farthest in a given
     * direction.
     * </p>
-    * 
+    *
     * @param supportDirection       the search direction. Not modified.
     * @param circle3DPosition       the location of the circle's center. Not modified.
     * @param circle3DAxis           the axis of revolution of the circle. Not modified.
@@ -2404,7 +2404,7 @@ public class EuclidShapeTools
    /**
     * Computes the supporting vertex for a torus while restricting the solution to lie on the inner
     * part of the torus only.
-    * 
+    *
     * @param supportDirection       the search direction. Not modified.
     * @param torus3DPosition        the coordinates of the torus' center. Not modified.
     * @param torus3DAxis            the axis of revolution of the torus. Not modified.
@@ -2498,7 +2498,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the volume of a box defined by its 3D size.
-    * 
+    *
     * @param sizeX the size of the box along the x-axis.
     * @param sizeY the size of the box along the y-axis.
     * @param sizeZ the size of the box along the z-axis.
@@ -2511,7 +2511,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the volume of a capsule defined by its radius and length.
-    * 
+    *
     * @param radius the capsule radius.
     * @param length the length of the capsule, i.e. the length of the cylindrical part of the capsule.
     * @return the volume of the capsule.
@@ -2547,7 +2547,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the volume of an ellipsoid defined by its three radii.
-    * 
+    *
     * @param radiusX the radius along the x-axis of the ellipsoid.
     * @param radiusY the radius along the y-axis of the ellipsoid.
     * @param radiusZ the radius along the z-axis of the ellipsoid.
@@ -2585,7 +2585,7 @@ public class EuclidShapeTools
    /**
     * Computes the volume of ramp defined by its 3D size, see {@link Ramp3DReadOnly} for the definition
     * of a ramp.
-    * 
+    *
     * @param sizeX the size of the ramp along the x-axis.
     * @param sizeY the size of the ramp along the y-axis.
     * @param sizeZ the size of the ramp along the z-axis.
@@ -2598,7 +2598,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the volume of a sphere defined by its radius.
-    * 
+    *
     * @param radius the radius of the sphere.
     * @return the volume of the sphere.
     */
@@ -2633,7 +2633,7 @@ public class EuclidShapeTools
    /**
     * Computes the volume of a torus defined by its radius (from torus axis to tube center) and the
     * radius of its tube.
-    * 
+    *
     * @param radius     the radius from the torus center to the tube center.
     * @param tubeRadius the radius of the tube.
     * @return the volume of the torus.

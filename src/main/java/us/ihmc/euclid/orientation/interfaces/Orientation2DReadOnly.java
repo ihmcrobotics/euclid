@@ -254,7 +254,8 @@ public interface Orientation2DReadOnly extends EuclidGeometry
    /**
     * Gets a representative {@code String} of this orientation 2D given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * (0.174)

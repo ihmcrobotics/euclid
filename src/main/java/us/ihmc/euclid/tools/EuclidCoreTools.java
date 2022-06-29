@@ -892,7 +892,7 @@ public class EuclidCoreTools
    /**
     * Test if the two values are equal with the special case of considering
     * {@code Double.NaN == Double.NaN}.
-    * 
+    *
     * @param expectedValue the first value to compare.
     * @param actualValue   the second value to compare.
     * @return {@code true} if the two values are considered to be equal, {@code false otherwise}.

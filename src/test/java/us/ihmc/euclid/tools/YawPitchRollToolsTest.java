@@ -234,21 +234,21 @@ public class YawPitchRollToolsTest
          double actual3 = YawPitchRollTools.distance(ypr1, ypr2, true);
 
          double expectedNoLimit = QuaternionTools.distance(q1, q2, false);
-         
+
          assertFalse(Math.abs(actual1 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual2 - expectedNoLimit) < EPSILON);
          assertFalse(Math.abs(actual3 - expectedNoLimit) < EPSILON);
          assertEquals(expected, actual1, EPSILON);
          assertEquals(expected, actual2, EPSILON);
          assertEquals(expected, actual3, EPSILON);
-         
+
          Orientation3DBasics orientation3D = EuclidCoreRandomTools.nextOrientation3D(random);
 
          double distanceLimit = YawPitchRollTools.distance(ypr1, orientation3D, true);
          double distanceLimitFromQuaternion = QuaternionTools.distance(q1, orientation3D, true);
          double distanceNoLimit = YawPitchRollTools.distance(ypr1, orientation3D, false);
          double distanceNoLimitFromQuaternion = QuaternionTools.distance(new Quaternion(ypr1), orientation3D, false);
-         
+
          assertEquals(distanceLimit, distanceLimitFromQuaternion, EPSILON);
          assertEquals(distanceNoLimit, distanceNoLimitFromQuaternion, EPSILON);
       }
@@ -264,7 +264,7 @@ public class YawPitchRollToolsTest
          YawPitchRoll yawPitchRoll = new YawPitchRoll(quaternion);
 
          double expected = quaternion.angle();
-         double actual = YawPitchRollTools.angle(yawPitchRoll,true);
+         double actual = YawPitchRollTools.angle(yawPitchRoll, true);
          assertEquals(expected, actual, EPSILON);
       }
    }

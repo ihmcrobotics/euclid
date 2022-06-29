@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape.collision.gjk;
 
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -58,17 +57,6 @@ public class GJKVertex3D implements Point3DReadOnly
    public Point3DReadOnly getVertexOnShapeB()
    {
       return vertexOnShapeB;
-   }
-
-   /**
-    * Calculates the dot product of {@code this} and the given {@code tuple3D}.
-    *
-    * @param tuple3D the second term in the dot product. Not modified.
-    * @return the dot product value.
-    */
-   public double dot(Tuple3DReadOnly tuple3D)
-   {
-      return TupleTools.dot(this, tuple3D);
    }
 
    /** {@inheritDoc} */

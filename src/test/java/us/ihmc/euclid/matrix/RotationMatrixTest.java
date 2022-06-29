@@ -752,7 +752,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          assertEquals(expectedDistance, actualDistance, EPS);
       }
    }
-   
+
    @Test
    public void testAngle() throws Exception
    {
@@ -765,8 +765,6 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix randomRotationMatrix = new RotationMatrix(randomAxisAngle);
          assertEquals(randomRotationMatrix.angle(), Math.abs(angle), EPS);
       }
-      
-      
    }
 
    @Test

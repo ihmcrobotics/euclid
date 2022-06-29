@@ -1197,9 +1197,7 @@ public class ConvexPolytope3DTest
 
          for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
          {
-            EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getCentroid(),
-                                                    actualPolytope.getFace(faceIndex).getCentroid(),
-                                                    EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(), EPSILON);
             EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
             EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
             assertEquals(expectedPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
@@ -1213,9 +1211,7 @@ public class ConvexPolytope3DTest
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
          {
-            EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getCentroid(),
-                                                    actualPolytope.getFace(faceIndex).getCentroid(),
-                                                    EPSILON);
+            EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(), EPSILON);
             EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
             EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
             assertEquals(originalPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);

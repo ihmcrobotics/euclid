@@ -94,7 +94,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Sets all the components of the rotation matrix to {@link Double#NaN}.
-    * 
+    *
     * @see {@link RotationMatrix#setToNaN()}.
     */
    default void setRotationToNaN()
@@ -153,7 +153,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Sets this rigid-body transform to the given {@code affineTransform} stripped of any scaling.
-    * 
+    *
     * @param affineTransform the affine transform to copy. Not modified.
     */
    default void set(AffineTransformReadOnly affineTransform)
@@ -541,7 +541,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Appends the orientation to the rotation part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void appendOrientation(Orientation3DReadOnly orientation)
@@ -770,7 +770,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Prepends the orientation to the rotation part of this transform.
-    * 
+    *
     * @param orientation the orientation to append. Not modified.
     */
    default void prependOrientation(Orientation3DReadOnly orientation)

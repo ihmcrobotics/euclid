@@ -337,7 +337,8 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    /**
     * Gets a representative {@code String} of this frame sphere 3D given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906] - worldFrame

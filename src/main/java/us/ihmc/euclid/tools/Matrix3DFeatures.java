@@ -609,7 +609,7 @@ public class Matrix3DFeatures
 
    /**
     * Finds and returns the value of the element that has the maximum value.
-    * 
+    *
     * @param m00 first matrix element in the first row.
     * @param m01 second matrix element in the first row.
     * @param m02 third matrix element in the first row.
@@ -631,7 +631,7 @@ public class Matrix3DFeatures
 
    /**
     * Finds and returns the value of the element that has the maximum absolute value.
-    * 
+    *
     * @param m00 first matrix element in the first row.
     * @param m01 second matrix element in the first row.
     * @param m02 third matrix element in the first row.
@@ -653,7 +653,7 @@ public class Matrix3DFeatures
 
    /**
     * Finds and returns the value of the element that has the minimum value.
-    * 
+    *
     * @param m00 first matrix element in the first row.
     * @param m01 second matrix element in the first row.
     * @param m02 third matrix element in the first row.
@@ -675,7 +675,7 @@ public class Matrix3DFeatures
 
    /**
     * Finds and returns the value of the element that has the minimum absolute value.
-    * 
+    *
     * @param m00 first matrix element in the first row.
     * @param m01 second matrix element in the first row.
     * @param m02 third matrix element in the first row.

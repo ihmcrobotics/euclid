@@ -2219,16 +2219,17 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          previousHashCode = newHashCode;
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testResetRotation() throws Exception
    {
       super.testResetRotation();
       Random random = new Random(42353L);
       RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      
+
       RigidBodyTransform transform = new RigidBodyTransform(original);
-      
+
       assertTrue(transform.hasRotation());
       transform.setRotationToZero();
       assertFalse(transform.hasRotation());
@@ -2246,7 +2247,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          }
       }
    }
-   
+
+   @Override
    @Test // moved from basic
    public void testResetTranslation() throws Exception
    {
@@ -2254,7 +2256,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       Random random = new Random(42353L);
       RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       RigidBodyTransform transform = new RigidBodyTransform(original);
-      
+
       assertTrue(transform.hasTranslation());
       transform.setTranslationToZero();
       assertFalse(transform.hasTranslation());
@@ -2272,6 +2274,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          }
       }
    }
+
+   @Override
    @Test
    public void testNormalizeRotationPart() throws Exception
    {
@@ -2368,7 +2372,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          }
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testSetToZero() throws Exception
    {
@@ -2404,7 +2409,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          }
       }
    }
-   
+
    @Test
    public void testToString() throws Exception
    {
@@ -2429,7 +2434,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertEquals(rbtA.toString(), rbtB.toString());
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testSetToNaN() throws Exception
    {
@@ -2480,6 +2486,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       EuclidCoreTestTools.assertIdentity(transform.getRotation(), EPS);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(transform.getTranslation());
    }
+
+   @Override
    @Test // moved to basic
    public void testContainsNaN() throws Exception
    {
@@ -2512,7 +2520,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
       transform.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN);
       assertTrue(transform.containsNaN());
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testAppendOrientation() throws Exception
    {
@@ -2536,7 +2545,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testAppendYawPitchRoll() throws Exception
    {
@@ -2659,12 +2669,13 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actual.hasRotation());
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testPrependTranslation() throws Exception
    {
       super.testPrependTranslation();
-      
+
       Random random = new Random(35454L);
 
       RigidBodyTransform expected = new RigidBodyTransform();
@@ -2750,12 +2761,13 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actual.hasTranslation());
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testPrependOrientation() throws Exception
    {
       super.testPrependOrientation();
-      
+
       Random random = new Random(3456);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2775,12 +2787,13 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testPrependYawPitchRoll() throws Exception
    {
       super.testPrependYawPitchRoll();
-      
+
       Random random = new Random(35454L);
 
       RigidBodyTransform expected = new RigidBodyTransform();
@@ -2902,7 +2915,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actual.hasRotation());
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testSetRotationAndZeroTranslation() throws Exception
    {
@@ -2976,7 +2990,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actualTransform.hasRotation());
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testMultiplyWithQuaternionBasedTransform() throws Exception
    {
@@ -3012,7 +3027,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testMultiplyWithAffineTransform() throws Exception
    {
@@ -3049,7 +3065,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test // moved to baisc
    public void testMultiplyInvertThis() throws Exception
    {
@@ -3186,7 +3203,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test // moved to basic
    public void testMultiplyInvertOther() throws Exception
    {
@@ -3337,7 +3355,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
    {
@@ -3372,7 +3391,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
    {
@@ -3408,7 +3428,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testMultiplyInvertThisWithAffineTransform() throws Exception
    {
@@ -3444,7 +3465,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testMultiplyInvertOtherWithAffineTransform() throws Exception
    {
@@ -3481,8 +3503,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiply() throws Exception
    {
@@ -3643,7 +3665,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyWithQuaternionBasedTransform() throws Exception
    {
@@ -3679,7 +3702,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyWithAffineTransform() throws Exception
    {
@@ -3716,7 +3740,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyInvertThis() throws Exception
    {
@@ -3858,7 +3883,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyInvertOther() throws Exception
    {
@@ -3998,11 +4024,13 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyInvertThisWithQuaternionBasedTransform() throws Exception
    {
       super.testPreMultiplyInvertThisWithQuaternionBasedTransform();
-      
+
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
@@ -4034,7 +4062,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
 
       }
    }
-   
+
+   @Override
    @Test //moved to basic
    public void testPreMultiplyInvertOtherWithQuaternionBasedTransform() throws Exception
    {
@@ -4066,7 +4095,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved from non-basic
    public void testPreMultiplyInvertThisWithAffineTransform() throws Exception
    {
@@ -4098,7 +4128,8 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
+   @Override
    @Test //moved from non-basic
    public void testPreMultiplyInvertOtherWithAffineTransform() throws Exception
    {
@@ -4125,13 +4156,13 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
       }
    }
-   
+
    @Override
    public double getEpsilon()
    {
       return EPS;
    }
-   
+
    @Override
    public RigidBodyTransform createRandomTransform(Random random)
    {

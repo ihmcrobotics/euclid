@@ -108,7 +108,7 @@ public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
    @Override
    public Pose3D copy(Pose3D original)
    {
-      return copy( (Pose3DReadOnly) original);
+      return copy((Pose3DReadOnly) original);
 
    }
 

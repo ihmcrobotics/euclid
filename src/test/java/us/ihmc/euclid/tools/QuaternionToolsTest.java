@@ -80,44 +80,44 @@ public class QuaternionToolsTest
          else
             assertEquals(notCastedResult, withQuaternionResult, EPSILON);
       }
-     // Test distance method with limit to Pi.
-     // This is used for verifying other type's distance method with limit to pi.
-     double min = Math.PI;
-     double max = 2 * Math.PI;
-     for (int i = 0; i < ITERATIONS; ++i)
-     {
-        double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
-        AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
-        AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
-        distance.setAngle(randomAngle);
-        AxisAngle aa2 = new AxisAngle();
-        AxisAngleTools.multiply(aa1, distance, aa2);
+      // Test distance method with limit to Pi.
+      // This is used for verifying other type's distance method with limit to pi.
+      double min = Math.PI;
+      double max = 2 * Math.PI;
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
 
-        Quaternion q1 = new Quaternion(aa1);
-        Quaternion q2 = new Quaternion(aa2);
-        double actual = QuaternionTools.distance(q1, q2, true);
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
+         double actual = QuaternionTools.distance(q1, q2, true);
 
-        distance.setAngle(actual);
-        AxisAngle aa3 = new AxisAngle();
-        AxisAngleTools.multiply(aa1, distance, aa3);
-        Quaternion q3 = new Quaternion(aa3);
+         distance.setAngle(actual);
+         AxisAngle aa3 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa3);
+         Quaternion q3 = new Quaternion(aa3);
 
-        distance.setAngle(-actual);
-        AxisAngle aa4 = new AxisAngle();
-        AxisAngleTools.multiply(aa1, distance, aa4);
-        Quaternion q4 = new Quaternion(aa4);
+         distance.setAngle(-actual);
+         AxisAngle aa4 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa4);
+         Quaternion q4 = new Quaternion(aa4);
 
-        assertFalse(q2.geometricallyEquals(q3, EPSILON));
-        EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(q2, q4, EPSILON);
+         assertFalse(q2.geometricallyEquals(q3, EPSILON));
+         EuclidCoreTestTools.assertOrientation3DGeometricallyEquals(q2, q4, EPSILON);
 
-        Orientation3DBasics orientation3D = EuclidCoreRandomTools.nextOrientation3D(random);
+         Orientation3DBasics orientation3D = EuclidCoreRandomTools.nextOrientation3D(random);
 
-        double distanceLimit = QuaternionTools.distance(q1, orientation3D, true);
-        double distanceNoLimit = QuaternionTools.distance(q1, orientation3D, false);
+         double distanceLimit = QuaternionTools.distance(q1, orientation3D, true);
+         double distanceNoLimit = QuaternionTools.distance(q1, orientation3D, false);
 
-        assertTrue(distanceLimit <= Math.PI);
-        assertEquals(Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distanceNoLimit)), distanceLimit, EPSILON);
-     }
+         assertTrue(distanceLimit <= Math.PI);
+         assertEquals(Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distanceNoLimit)), distanceLimit, EPSILON);
+      }
    }
 
    @Test

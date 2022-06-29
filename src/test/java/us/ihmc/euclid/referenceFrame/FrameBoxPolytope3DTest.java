@@ -28,7 +28,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
@@ -235,6 +234,6 @@ public class FrameBoxPolytope3DTest
 
    private static FrameBoxPolytope3DView copy(ReferenceFrame referenceFrame, BoxPolytope3DView boxPolytope3DView)
    {
-      return new FrameBox3D(referenceFrame, (Box3DReadOnly) boxPolytope3DView.copy()).asConvexPolytope();
+      return new FrameBox3D(referenceFrame, boxPolytope3DView.copy()).asConvexPolytope();
    }
 }

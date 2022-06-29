@@ -25,7 +25,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
 
    /**
     * Returns the volume for this shape.
-    * 
+    *
     * @return the volume in cubic meters.
     */
    double getVolume();

@@ -83,7 +83,8 @@ public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DRea
    /**
     * Gets the representative {@code String} of this frame vertex 3D given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3

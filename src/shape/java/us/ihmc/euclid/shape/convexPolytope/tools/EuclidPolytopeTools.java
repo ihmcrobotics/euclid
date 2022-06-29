@@ -675,7 +675,7 @@ public class EuclidPolytopeTools
     * returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param face3D  the face to be tested. Not modified.
     * @param epsilon the tolerance to use during the test. Its unit is meter and represents the maximum
     *                allowed deviation from a potential circumscribed circle.
@@ -703,7 +703,7 @@ public class EuclidPolytopeTools
     * returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolygon3D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
     *                         convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.

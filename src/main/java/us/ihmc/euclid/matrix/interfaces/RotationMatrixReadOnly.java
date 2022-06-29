@@ -124,7 +124,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
 
    /**
     * {@inheritDoc}
-    * 
+    *
     * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
     * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
     */
@@ -451,8 +451,8 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
     * </p>
     *
-    * @param geometry  the object to compare against this.
-    * @param epsilon the maximum angle for the two orientations to be considered equal.
+    * @param geometry the object to compare against this.
+    * @param epsilon  the maximum angle for the two orientations to be considered equal.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */

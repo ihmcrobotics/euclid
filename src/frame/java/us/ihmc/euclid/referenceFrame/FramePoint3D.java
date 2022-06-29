@@ -125,7 +125,6 @@ public class FramePoint3D implements FramePoint3DBasics
       setIncludingFrame(other);
    }
 
-
    /**
     * Sets the reference frame of this point without updating or modifying its x, y, and z components.
     *
@@ -231,7 +230,6 @@ public class FramePoint3D implements FramePoint3DBasics
       else
          return false;
    }
-
 
    /**
     * Provides a {@code String} representation of this frame point 3D as follows: (x, y, z)-worldFrame.

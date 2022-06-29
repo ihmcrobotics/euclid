@@ -20,7 +20,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameRampPolytope3DView;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -87,6 +86,6 @@ public class FrameRampPolytope3DTest
 
    private static FrameRampPolytope3DView copy(ReferenceFrame referenceFrame, RampPolytope3DView rampPolytope3DView)
    {
-      return new FrameRamp3D(referenceFrame, (Ramp3DReadOnly) rampPolytope3DView.copy()).asConvexPolytope();
+      return new FrameRamp3D(referenceFrame, rampPolytope3DView.copy()).asConvexPolytope();
    }
 }

@@ -8,7 +8,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 /**
  * {@code FixedReferenceFrame} represents a reference frame that is rigidly attached to its parent,
  * i.e. the transform to its parent is constant.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FixedReferenceFrame extends ReferenceFrame
@@ -18,7 +18,7 @@ public class FixedReferenceFrame extends ReferenceFrame
     * <p>
     * The new frame has the same orientation as its parent frame.
     * </p>
-    * 
+    *
     * @param frameName                   the name of the new frame.
     * @param parentFrame                 the parent frame of the new reference frame.
     * @param translationOffsetFromParent describes the position of the new reference frame's origin
@@ -35,7 +35,7 @@ public class FixedReferenceFrame extends ReferenceFrame
     * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
     * frame.
     * </p>
-    * 
+    *
     * @param frameName         the name of the new frame.
     * @param parentFrame       the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new

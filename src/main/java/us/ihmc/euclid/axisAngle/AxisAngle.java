@@ -161,6 +161,7 @@ public class AxisAngle implements AxisAngleBasics
     *
     * @return the {@code String} representing this axis-angle.
     */
+   @Override
    public String toString()
    {
       return toString(EuclidCoreIOTools.DEFAULT_FORMAT);

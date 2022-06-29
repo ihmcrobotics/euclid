@@ -111,7 +111,7 @@ public class EuclidGeometryToolsTest
 
          EuclidCoreTestTools.assertAngleEquals(expectedAngle, actualAngle, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D firstVector = EuclidCoreRandomTools.nextVector3D(random);
@@ -11187,10 +11187,12 @@ public class EuclidGeometryToolsTest
                       EPSILON);
          assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
-         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
-         lineSegmentStart,
-         lineSegmentEnd), EPSILON);
-         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd), EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint,
+                                          EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
+                                          EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint,
+                                          EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                                          EPSILON);
 
          List<Point2D> bisectorSegmentEndpoints = EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart,
                                                                                                      lineSegmentEnd,
@@ -11209,10 +11211,12 @@ public class EuclidGeometryToolsTest
                       EPSILON);
          assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
-         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
-         lineSegmentStart,
-         lineSegmentEnd), EPSILON);
-         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd), EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint,
+                                          EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
+                                          EPSILON);
+         EuclidCoreTestTools.assertEquals(lineSegmentMidpoint,
+                                          EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                                          EPSILON);
 
          // Test with small segment
          lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
@@ -11628,7 +11632,7 @@ public class EuclidGeometryToolsTest
          double isoscelesTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, legLength, baseLength);
          assertEquals(2.0 * rightTriangleArea, isoscelesTriangleArea, EPSILON);
 
-         // Comparing against pythagoras algorithm using the 
+         // Comparing against pythagoras algorithm using the
          double pythagorasHeight = EuclidGeometryTools.pythagorasGetCathetus(legLength, 0.5 * baseLength);
          assertEquals(height, pythagorasHeight, EPSILON);
       }

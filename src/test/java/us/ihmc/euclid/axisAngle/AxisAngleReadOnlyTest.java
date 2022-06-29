@@ -229,10 +229,10 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
          assertEquals(0.0, aa1.distance(aa1), getEpsilon());
       }
    }
-   
+
    @Test
    public void testAngle() throws Exception
-   {      
+   {
       Random random = new Random(564648L);
       T axisAngle;
       for (int i = 0; i < ITERATIONS; i++)
@@ -1008,7 +1008,4 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
          assertFalse(aabA.geometricallyEquals(aabB, epsilon));
       }
    }
-   
-
-   
 }
