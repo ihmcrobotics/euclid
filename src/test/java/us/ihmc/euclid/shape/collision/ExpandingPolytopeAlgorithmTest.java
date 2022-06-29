@@ -570,7 +570,7 @@ class ExpandingPolytopeAlgorithmTest
       assertTrue(result.areShapesColliding(), messagePrefix);
 
       augmentedCollisionVector.setAndNormalize(collisionVector);
-      augmentedCollisionVector.scale(Math.max(1.0e-4, 0.01 * collisionVector.length()) + collisionVector.length());
+      augmentedCollisionVector.scale(Math.max(1.0e-4, 0.01 * collisionVector.norm()) + collisionVector.norm());
       polytopeBTranslated = new ConvexPolytope3D(polytopeB);
       polytopeBTranslated.applyTransform(new RigidBodyTransform(new Quaternion(), augmentedCollisionVector));
       // We translate the polytopeB just enough to resolve the collision

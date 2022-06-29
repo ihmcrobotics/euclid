@@ -1243,7 +1243,7 @@ public abstract class ReferenceFrame
     * <p>
     * This predicate can be used to restrict the update to be done only by one thread for instance.
     * </p>
-    *
+    * 
     * @param treeUpdateCondition the filtering condition for the update of the transform to root.
     */
    public void setTreeUpdateCondition(Predicate<ReferenceFrame> treeUpdateCondition)
@@ -1306,7 +1306,7 @@ public abstract class ReferenceFrame
    private enum ChangeType
    {
       FRAME_ADDED, FRAME_REMOVED, FRAME_GCED
-   }
+   };
 
    private class FrameChange implements Change
    {

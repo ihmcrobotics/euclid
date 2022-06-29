@@ -245,10 +245,10 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
       for (int j = 0; j < 3; j++)
       {
          rotation.getRow(j, vector1);
-         assertEquals(1.0, vector1.length(), getEpsilon());
+         assertEquals(1.0, vector1.norm(), getEpsilon());
 
          rotation.getColumn(j, vector1);
-         assertEquals(1.0, vector1.length(), getEpsilon());
+         assertEquals(1.0, vector1.norm(), getEpsilon());
       }
 
       // Test that each pair of rows and each pair of columns are orthogonal

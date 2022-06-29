@@ -691,7 +691,7 @@ public class EuclidGeometryPolygonToolsTest
             Vector2D edgeNormal = new Vector2D();
             boolean success = edgeNormal(edgeIndex, convexPolygon2D, hullSize, clockwiseOrdered, edgeNormal);
             assertTrue(success);
-            assertEquals(1.0, edgeNormal.length(), SMALLEST_EPSILON);
+            assertEquals(1.0, edgeNormal.norm(), SMALLEST_EPSILON);
 
             Vector2D edgeDirection = new Vector2D();
             edgeDirection.sub(edgeEnd, edgeStart);

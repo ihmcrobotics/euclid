@@ -211,8 +211,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndNormalize(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      setAndNormalize(other);
+      setAndNormalize(other.getReferenceFrame(), other);
    }
 
    /**

@@ -6414,12 +6414,12 @@ public class EuclidGeometryTools
       pointOnIntersectionToPack.setToNaN();
       intersectionDirectionToPack.setToNaN();
 
-      double normalMagnitude1 = planeNormal1.length();
+      double normalMagnitude1 = planeNormal1.norm();
 
       if (normalMagnitude1 < ONE_TRILLIONTH)
          return false;
 
-      double normalMagnitude2 = planeNormal2.length();
+      double normalMagnitude2 = planeNormal2.norm();
 
       if (normalMagnitude2 < ONE_TRILLIONTH)
          return false;
@@ -6429,7 +6429,7 @@ public class EuclidGeometryTools
          return false;
 
       intersectionDirectionToPack.cross(planeNormal1, planeNormal2);
-      double det = intersectionDirectionToPack.lengthSquared();
+      double det = intersectionDirectionToPack.normSquared();
 
       // d1 = planeNormal1 . pointOnPlane1
       double d1 = planeNormal1.getX() * pointOnPlane1.getX() + planeNormal1.getY() * pointOnPlane1.getY() + planeNormal1.getZ() * pointOnPlane1.getZ();
@@ -7455,7 +7455,7 @@ public class EuclidGeometryTools
 
       normalToPack.set(v1_y * v2_z - v1_z * v2_y, v2_x * v1_z - v2_z * v1_x, v1_x * v2_y - v1_y * v2_x);
 
-      double normalLength = normalToPack.length();
+      double normalLength = normalToPack.norm();
       if (normalLength < ONE_TRILLIONTH)
          return false;
 
@@ -8152,7 +8152,7 @@ public class EuclidGeometryTools
                                                        Vector3DReadOnly planeNormal,
                                                        Point3DBasics projectionToPack)
    {
-      double normalMagnitude = planeNormal.length();
+      double normalMagnitude = planeNormal.norm();
       if (normalMagnitude < ONE_TRILLIONTH)
          return false;
 

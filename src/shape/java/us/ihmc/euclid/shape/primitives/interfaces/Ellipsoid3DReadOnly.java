@@ -369,8 +369,9 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       if (areThisRadiiXYEqual && areThisRadiiXZEqual)
       { // This ellipsoid is a sphere.
         // First - assert that the other ellipsoid is also a sphere.
-         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusY(), epsilon)
-               || !EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusZ(), epsilon))
+         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusY(), epsilon))
+            return false;
+         if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusZ(), epsilon))
             return false;
          // Second - assert that the radii are the same between the two ellipsoids.
          double thisRadiiSum = thisRadiusX + thisRadiusY + thisRadiusZ;

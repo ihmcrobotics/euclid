@@ -74,8 +74,6 @@ public class FramePointShape3D implements FramePointShape3DBasics
       setIncludingFrame(tuple3DReadOnly);
    }
 
-
-
    /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
@@ -138,7 +136,7 @@ public class FramePointShape3D implements FramePointShape3DBasics
    {
       return new FramePointShape3D(this);
    }
-   
+
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.

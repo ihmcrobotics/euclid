@@ -819,7 +819,7 @@ public class Ellipsoid3DTest
          Vector3D radii = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          radii.absolute();
          double average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
-         radii.scale(average / radii.length());
+         radii.scale(average / radii.norm());
 
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
@@ -829,7 +829,7 @@ public class Ellipsoid3DTest
          radii.setX(radii.getY());
          radii.absolute();
          average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
-         radii.scale(average / radii.length());
+         radii.scale(average / radii.norm());
 
          ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
@@ -1242,7 +1242,7 @@ public class Ellipsoid3DTest
             // Slightly translated the supporting vertex on plane orthogonal to the direction and asserting that the resulting point isn't inside.
             Vector3D orthogonalToSupportDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, supportDirection, true);
             Point3D pointSupposedlyOutside = new Point3D();
-            pointSupposedlyOutside.scaleAdd(1.0e-4 * ellipsoid.getRadii().length(), orthogonalToSupportDirection, supportingVertex);
+            pointSupposedlyOutside.scaleAdd(1.0e-4 * ellipsoid.getRadii().norm(), orthogonalToSupportDirection, supportingVertex);
             assertFalse(ellipsoid.isPointInside(pointSupposedlyOutside, EPSILON));
          }
 

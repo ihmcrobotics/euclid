@@ -389,7 +389,7 @@ public class LineSegment3DTest
          Vector3D expectedDirection = new Vector3D();
          expectedDirection.sub(secondEndpoint, firstEndpoint);
          EuclidCoreTestTools.assertEquals(expectedDirection, actualDirection, EPSILON);
-         assertEquals(lineSegment3D.length(), actualDirection.length(), EPSILON);
+         assertEquals(lineSegment3D.length(), actualDirection.norm(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -398,7 +398,7 @@ public class LineSegment3DTest
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(true, actualDirection);
 
-         assertEquals(1.0, actualDirection.length(), EPSILON);
+         assertEquals(1.0, actualDirection.norm(), EPSILON);
 
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(false, expectedDirection);
@@ -414,7 +414,7 @@ public class LineSegment3DTest
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(false, expectedDirection);
          EuclidCoreTestTools.assertEquals(expectedDirection, actualDirection, EPSILON);
-         assertEquals(lineSegment3D.length(), actualDirection.length(), EPSILON);
+         assertEquals(lineSegment3D.length(), actualDirection.norm(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -422,7 +422,7 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3DBasics actualDirection = lineSegment3D.getDirection(true);
 
-         assertEquals(1.0, actualDirection.length(), EPSILON);
+         assertEquals(1.0, actualDirection.norm(), EPSILON);
 
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(true, expectedDirection);

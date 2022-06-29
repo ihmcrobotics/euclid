@@ -591,7 +591,7 @@ public class QuaternionToolsTest
       tupleExpected.setY(-tupleExpected.getY());
       quaternion.setUnsafe(10.0, 10.0, 10.0, 10.0);
       QuaternionTools.transform(quaternion, tupleActual, tupleActual);
-      assertEquals(tupleExpected.length(), tupleActual.length(), EPSILON);
+      assertEquals(tupleExpected.norm(), tupleActual.norm(), EPSILON);
    }
 
    @Test
@@ -710,7 +710,7 @@ public class QuaternionToolsTest
       tupleExpected.setY(-tupleExpected.getY());
       quaternion.setUnsafe(10.0, 10.0, 10.0, 10.0);
       QuaternionTools.inverseTransform(quaternion, tupleActual, tupleActual);
-      assertEquals(tupleExpected.length(), tupleActual.length(), EPSILON);
+      assertEquals(tupleExpected.norm(), tupleActual.norm(), EPSILON);
 
       // Test that a quaternion with zeros does not do anything
       tupleExpected = EuclidCoreRandomTools.nextRotationVector(random);

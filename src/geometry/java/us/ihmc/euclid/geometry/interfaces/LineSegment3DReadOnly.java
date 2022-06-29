@@ -448,7 +448,9 @@ public interface LineSegment3DReadOnly extends EuclidGeometry
    {
       double alpha = percentageAlongLineSegment(x, y, z);
 
-      if ((alpha < epsilon) || (alpha > 1.0 - epsilon))
+      if (alpha < epsilon)
+         return false;
+      if (alpha > 1.0 - epsilon)
          return false;
 
       return true;

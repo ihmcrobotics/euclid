@@ -65,7 +65,7 @@ public class Shape3DPose implements Shape3DPoseBasics
    {
       set(pose);
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public RotationMatrixBasics getShapeOrientation()
@@ -147,7 +147,6 @@ public class Shape3DPose implements Shape3DPoseBasics
    {
       return changeListeners.remove(listener);
    }
-
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns

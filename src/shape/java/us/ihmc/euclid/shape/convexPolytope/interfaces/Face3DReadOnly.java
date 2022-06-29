@@ -799,7 +799,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Face3DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Face3DReadOnly))
          return false;
 
       Face3DReadOnly other = (Face3DReadOnly) geometry;
@@ -818,7 +820,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Gets the representative {@code String} of this face 3D given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:
     *
     * <pre>
     * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4

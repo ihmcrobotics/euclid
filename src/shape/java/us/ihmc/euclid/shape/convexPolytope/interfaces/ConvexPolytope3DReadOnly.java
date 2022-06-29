@@ -169,7 +169,10 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck)
    {
-      if (isEmpty() || !getBoundingBox().isInsideInclusive(pointToCheck))
+      if (isEmpty())
+         return false;
+
+      if (!getBoundingBox().isInsideInclusive(pointToCheck))
          return false;
 
       if (getNumberOfFaces() <= 2)
@@ -189,7 +192,10 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
-      if (isEmpty() || !getBoundingBox().isInsideEpsilon(pointToCheck, epsilon))
+      if (isEmpty())
+         return false;
+
+      if (!getBoundingBox().isInsideEpsilon(pointToCheck, epsilon))
          return false;
 
       if (getNumberOfFaces() <= 2)
@@ -517,7 +523,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
       ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
-      if ((other == null) || (getNumberOfFaces() != other.getNumberOfFaces()))
+      if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
 
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
@@ -540,7 +546,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       if (!(geometry instanceof ConvexPolytope3DReadOnly))
          return false;
       ConvexPolytope3DReadOnly other = (ConvexPolytope3DReadOnly) geometry;
-      if ((other == null) || (getNumberOfFaces() != other.getNumberOfFaces()))
+      if (getNumberOfFaces() != other.getNumberOfFaces())
          return false;
 
       ArrayDeque<Face3DReadOnly> thisFacesStack = new ArrayDeque<>(getFaces());

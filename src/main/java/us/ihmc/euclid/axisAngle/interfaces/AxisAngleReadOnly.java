@@ -151,7 +151,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double axisNorm()
    {
-      return getAxis().length();
+      return getAxis().norm();
    }
 
    /**

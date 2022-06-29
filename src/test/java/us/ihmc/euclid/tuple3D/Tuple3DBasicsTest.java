@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -11,9 +12,11 @@ import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
@@ -491,6 +494,49 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
          tuple2.setZ(min + random.nextDouble());
          tuple1.setAndClipToMinMax(min, max, tuple2);
          assertTrue(tuple1.equals(tuple2));
+      }
+   }
+
+   @Test
+   public void testClipToMaxNorm() throws Exception
+   {
+      Random random = new Random(234234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with maxNorm > EPS_MAX_LENGTH
+         double maxNorm = EuclidCoreRandomTools.nextDouble(random, TupleTools.EPS_MAX_NORM, 10.0);
+         double tupleNorm = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T expectedTuple = createTuple(1.0, 0.0, 0.0);
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         rotationMatrix.transform(expectedTuple, expectedTuple);
+         T actualTuple = createEmptyTuple();
+         actualTuple.setAndScale(tupleNorm, expectedTuple);
+
+         if (maxNorm > tupleNorm)
+         {
+            expectedTuple.scale(tupleNorm);
+            assertFalse(actualTuple.clipToMaxNorm(maxNorm));
+         }
+         else
+         {
+            expectedTuple.scale(maxNorm);
+            assertTrue(actualTuple.clipToMaxNorm(maxNorm));
+         }
+
+         EuclidCoreTestTools.assertEquals("Iteration: " + i + ", maxNorm: " + maxNorm, expectedTuple, actualTuple, 5.0 * getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with maxNorm < EPS_MAX_LENGTH
+         double maxNorm = EuclidCoreRandomTools.nextDouble(random, 0.0, TupleTools.EPS_MAX_NORM);
+         double tupleNorm = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         T actualTuple = createTuple(tupleNorm, 0.0, 0.0);
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         rotationMatrix.transform(actualTuple, actualTuple);
+
+         assertTrue(actualTuple.clipToMaxNorm(maxNorm));
+
+         EuclidCoreTestTools.assertTuple3DIsSetToZero("Iteration: " + i + ", maxNorm: " + maxNorm, actualTuple);
       }
    }
 

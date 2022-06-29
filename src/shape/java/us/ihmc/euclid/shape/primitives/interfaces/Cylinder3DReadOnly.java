@@ -320,7 +320,6 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!getAxis().equals(other.getAxis()))
          return false;
       return true;
-
    }
 
    /**

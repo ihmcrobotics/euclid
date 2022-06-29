@@ -690,10 +690,10 @@ public class Matrix3DToolsTest
          for (int j = 0; j < 3; j++)
          {
             matrixActual.getRow(j, vector1);
-            assertEquals(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.norm(), EPS);
 
             matrixActual.getColumn(j, vector1);
-            assertEquals(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.norm(), EPS);
          }
 
          // Test that each pair of rows and each pair of columns are orthogonal

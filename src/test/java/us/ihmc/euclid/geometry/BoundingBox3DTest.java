@@ -808,7 +808,7 @@ public class BoundingBox3DTest
          Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = new BoundingBox3D();
          boundingBox3D.set(center, halfSize);
-         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.normSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 

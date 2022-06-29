@@ -688,7 +688,7 @@ public class BoundingBox2DTest
          Vector2D halfSize = EuclidCoreRandomTools.nextVector2D(random, 0.0, 10.0);
          BoundingBox2D boundingBox2D = new BoundingBox2D();
          boundingBox2D.set(center, halfSize);
-         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.normSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 

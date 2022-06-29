@@ -281,8 +281,8 @@ public class SingularValueDecomposition3DTest
          sortedB.getColumn(0, cols[0]);
          sortedB.getColumn(1, cols[1]);
          sortedB.getColumn(2, cols[2]);
-         assertTrue(cols[0].length() > cols[1].length());
-         assertTrue(cols[1].length() > cols[2].length());
+         assertTrue(cols[0].norm() > cols[1].norm());
+         assertTrue(cols[1].norm() > cols[2].norm());
       }
    }
 

@@ -947,7 +947,7 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
 
    @Test
    @Override
-   public void testLengthSquared()
+   public void testNormSquared()
    {
       Random random = new Random(312310L);
 
@@ -956,7 +956,7 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, -100.0, 100.0);
          UnitVector3D actual = new UnitVector3D(expected);
 
-         assertEquals(1.0, actual.lengthSquared());
+         assertEquals(1.0, actual.normSquared());
       }
    }
 
@@ -1019,20 +1019,20 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
 
    @Override
    @Test
-   public void testLength()
+   public void testNorm()
    {
       Random random = new Random(234234);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
          UnitVector3D vector = new UnitVector3D(EuclidCoreRandomTools.nextVector3D(random, -100.0, 100.0));
-         assertTrue(vector.length() == 1.0);
+         assertTrue(vector.norm() == 1.0);
       }
    }
 
    @Override
    @Test
-   public void testClipToMaxLength() throws Exception
+   public void testClipToMaxNorm() throws Exception
    {
       Random random = new Random(234234);
 

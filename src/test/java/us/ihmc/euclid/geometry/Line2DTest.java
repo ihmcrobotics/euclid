@@ -556,7 +556,7 @@ public class Line2DTest
          Vector2D interiorNormalizedVector = new Vector2D(line2d.getDirection());
          Vector2D vector = new Vector2D(secondLine2d.getDirection());
          interiorNormalizedVector.add(vector);
-         double length = interiorNormalizedVector.length();
+         double length = interiorNormalizedVector.norm();
          assertEquals(interiorNormalizedVector.getX() / length, interiorBisector.getDirection().getX(), delta);
          assertEquals(interiorNormalizedVector.getY() / length, interiorBisector.getDirection().getY(), delta);
       }
@@ -1416,14 +1416,14 @@ public class Line2DTest
          secondLine = new Line2D(firstLine);
 
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale(0.99 * epsilon / orthogonal.length());
+         orthogonal.scale(0.99 * epsilon / orthogonal.norm());
 
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
          secondLine.set(firstLine);
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale(1.01 * epsilon / orthogonal.length());
+         orthogonal.scale(1.01 * epsilon / orthogonal.norm());
 
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));

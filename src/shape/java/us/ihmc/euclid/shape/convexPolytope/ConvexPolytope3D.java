@@ -101,17 +101,6 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
       initialize(faces);
    }
 
-   /**
-    * Sets this convex polytope to be identical to {@code other}.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    */
-   public void set(ConvexPolytope3D other)
-   {
-      this.set((ConvexPolytope3DReadOnly) other);
-   }
-
    @Override
    public Point3D getCentroid()
    {

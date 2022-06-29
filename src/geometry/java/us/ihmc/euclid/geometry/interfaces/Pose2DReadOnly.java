@@ -141,7 +141,9 @@ public interface Pose2DReadOnly extends EuclidGeometry
    {
       if (geometry == this)
          return true;
-      if ((geometry == null) || !(geometry instanceof Pose2DReadOnly))
+      if (geometry == null)
+         return false;
+      if (!(geometry instanceof Pose2DReadOnly))
          return false;
       Pose2DReadOnly other = (Pose2DReadOnly) geometry;
       return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
@@ -158,6 +160,10 @@ public interface Pose2DReadOnly extends EuclidGeometry
    @Override
    default boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
    {
+      if (geometry == this)
+         return true;
+      if (geometry == null)
+         return false;
       if (!(geometry instanceof Pose2DReadOnly))
          return false;
       Pose2DReadOnly other = (Pose2DReadOnly) geometry;

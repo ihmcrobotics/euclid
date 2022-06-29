@@ -885,7 +885,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
    @Test
    @Override
-   public void testLengthSquared()
+   public void testNormSquared()
    {
       Random random = new Random(312310L);
 
@@ -894,7 +894,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random, -100.0, 100.0);
          UnitVector2D actual = new UnitVector2D(expected);
 
-         assertEquals(1.0, actual.lengthSquared());
+         assertEquals(1.0, actual.normSquared());
       }
    }
 
@@ -957,20 +957,20 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
    @Override
    @Test
-   public void testLength()
+   public void testNorm()
    {
       Random random = new Random(234234);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
          UnitVector2D vector = new UnitVector2D(EuclidCoreRandomTools.nextVector2D(random, -100.0, 100.0));
-         assertTrue(vector.length() == 1.0);
+         assertTrue(vector.norm() == 1.0);
       }
    }
 
    @Override
    @Test
-   public void testClipToMaxLength() throws Exception
+   public void testClipToMaxNorm() throws Exception
    {
       Random random = new Random(234234);
 

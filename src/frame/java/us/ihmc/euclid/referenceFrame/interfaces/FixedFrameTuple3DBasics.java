@@ -276,6 +276,30 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
+    * Sets this tuple to {@code tuple3DReadOnly} and then calls {@link #normalize()}.
+    *
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndNormalize(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndNormalize(tuple3DReadOnly);
+   }
+
+   /**
+    * Sets this frame tuple to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other frame tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   default void setAndNormalize(FrameTuple3DReadOnly other)
+   {
+      setAndNormalize(other.getReferenceFrame(), other);
+   }
+
+   /**
     * Sets this frame tuple to {@code tuple3DReadOnly} and then calls {@link #scale(double)}.
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
@@ -301,31 +325,6 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    default void setAndScale(double scalar, FrameTuple3DReadOnly other)
    {
       setAndScale(scalar, other.getReferenceFrame(), other);
-   }
-
-   /**
-    * Sets this tuple to {@code tuple3DReadOnly} and then calls {@link #normalize()}.
-    *
-    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
-    */
-   default void setAndNormalize(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      setAndNormalize(tuple3DReadOnly);
-   }
-
-   /**
-    * Sets this frame tuple to {@code other} and then calls {@link #normalize()}.
-    *
-    * @param other the other frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   default void setAndNormalize(FrameTuple3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      setAndNormalize(other);
    }
 
    /**

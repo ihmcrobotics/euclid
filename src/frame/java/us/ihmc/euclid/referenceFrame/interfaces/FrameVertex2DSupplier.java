@@ -6,6 +6,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
  * Implement this interface to create a custom supplier of 2D frame vertices or use the static
@@ -30,6 +31,12 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeom
       public int getNumberOfVertices()
       {
          return 0;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return 1;
       }
 
       @Override
@@ -186,6 +193,17 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, EuclidFrameGeom
          public int getNumberOfVertices()
          {
             return numberOfVertices;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
          }
 
          @Override

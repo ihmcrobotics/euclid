@@ -994,7 +994,7 @@ public class ConvexPolytope3DTest
                for (Point3D vertex : Arrays.asList(a, b, c, d))
                { // We pull the vertices slightly towards the centroid to avoid edge-cases due to the construction epsilon.
                   toInside.sub(convexPolytope3D.getCentroid(), vertex);
-                  toInside.scale(convexPolytope3D.getConstructionEpsilon() / toInside.length());
+                  toInside.scale(convexPolytope3D.getConstructionEpsilon() / toInside.norm());
                   vertex.add(toInside);
                }
                point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, a, b, c, d));

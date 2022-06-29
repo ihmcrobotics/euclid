@@ -6,6 +6,7 @@ import java.util.List;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 /**
@@ -31,6 +32,12 @@ public interface Vertex2DSupplier extends EuclidGeometry
       public int getNumberOfVertices()
       {
          return 0;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return 1;
       }
 
       @Override
@@ -279,6 +286,17 @@ public interface Vertex2DSupplier extends EuclidGeometry
          }
 
          @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
          public boolean equals(Object object)
          {
             if (object instanceof Vertex2DSupplier)
@@ -361,6 +379,17 @@ public interface Vertex2DSupplier extends EuclidGeometry
          public int getNumberOfVertices()
          {
             return numberOfVertices;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = 1;
+            for (int i = 0; i < getNumberOfVertices(); i++)
+            {
+               bits = EuclidHashCodeTools.addToHashCode(bits, getVertex(i));
+            }
+            return EuclidHashCodeTools.toIntHashCode(bits);
          }
 
          @Override

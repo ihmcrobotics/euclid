@@ -114,7 +114,9 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
     */
    default boolean containsNaN()
    {
-      if (Double.isNaN(getSignedDistance()) || getPointOnA().containsNaN() || getNormalOnA().containsNaN())
+      if (Double.isNaN(getSignedDistance()))
+         return true;
+      if (getPointOnA().containsNaN() || getNormalOnA().containsNaN())
          return true;
       if (getPointOnB().containsNaN() || getNormalOnB().containsNaN())
          return true;
@@ -140,12 +142,16 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
          return false;
       if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
+
       if (getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
          return false;
+
       if (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
          return false;
+
       if (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
          return false;
+
       if (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
          return false;
       return true;
@@ -187,8 +193,11 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
       if (other == null)
          return false;
 
-      if ((areShapesColliding() != other.areShapesColliding()) || (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
-            : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon)))
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+
+      if (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
+            : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon))
          return false;
 
       boolean swap;
@@ -256,41 +265,37 @@ public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
    default boolean equals(EuclidGeometry geometry)
    {
       if (geometry == this)
-      {
          return true;
-      }
-      else if (geometry == null || !(geometry instanceof EuclidShape3DCollisionResultReadOnly))
-      {
+      if (geometry == null)
          return false;
-      }
-      else
-      {
-         EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
-         if (areShapesColliding() != other.areShapesColliding())
-            return false;
-         if (!EuclidCoreTools.equals(getSignedDistance(), other.getSignedDistance()))
-            return false;
-         if (getShapeA() != other.getShapeA())
-            return false;
-         if (getShapeB() != other.getShapeB())
-            return false;
-         if (!getPointOnA().equals(other.getPointOnA()))
-            return false;
-         if (!getNormalOnA().equals(other.getNormalOnA()))
-            return false;
-         if (!getPointOnB().equals(other.getPointOnB()))
-            return false;
-         if (!getNormalOnB().equals(other.getNormalOnB()))
-            return false;
-         return true;
-      }
+      if (!(geometry instanceof EuclidShape3DCollisionResultReadOnly))
+         return false;
+
+      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) geometry;
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+      if (!EuclidCoreTools.equals(getSignedDistance(), other.getSignedDistance()))
+         return false;
+      if (getShapeA() != other.getShapeA())
+         return false;
+      if (getShapeB() != other.getShapeB())
+         return false;
+      if (!getPointOnA().equals(other.getPointOnA()))
+         return false;
+      if (!getNormalOnA().equals(other.getNormalOnA()))
+         return false;
+      if (!getPointOnB().equals(other.getPointOnB()))
+         return false;
+      if (!getNormalOnB().equals(other.getNormalOnB()))
+         return false;
+      return true;
    }
 
    /**
-    * Gets the representative {@code String} of this collision result given a specific
-    * format to use.
+    * Gets the representative {@code String} of this collision result given a specific format to use.
     * <p>
-    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String}
+    * as follows:<br>
     * When shapes are colliding:
     *
     * <pre>

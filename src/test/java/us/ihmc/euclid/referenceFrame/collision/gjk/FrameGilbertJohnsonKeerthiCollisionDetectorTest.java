@@ -351,7 +351,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          Vector3D errorTangentialVector = new Vector3D();
          errorTangentialVector.sub(errorPointOnA, errorNormalVector);
          pointNormalError = Math.max(pointNormalError, normalError);
-         pointTangentialError = Math.max(pointTangentialError, errorTangentialVector.length());
+         pointTangentialError = Math.max(pointTangentialError, errorTangentialVector.norm());
       }
 
       private void add(ComparisonError other)

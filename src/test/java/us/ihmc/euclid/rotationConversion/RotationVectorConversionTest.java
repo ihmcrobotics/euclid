@@ -39,7 +39,7 @@ public class RotationVectorConversionTest
          double angle = axisAngle.getAngle();
          RotationVectorConversion.convertAxisAngleToRotationVectorImpl(ux, uy, uz, angle, rotationVector);
 
-         assertEquals(rotationVector.length(), Math.abs(angle), EPSILON);
+         assertEquals(rotationVector.norm(), Math.abs(angle), EPSILON);
          assertEquals(rotationVector.getX(), angle * ux, EPSILON);
          assertEquals(rotationVector.getY(), angle * uy, EPSILON);
          assertEquals(rotationVector.getZ(), angle * uz, EPSILON);
@@ -52,7 +52,7 @@ public class RotationVectorConversionTest
       double ux = expectedRotationVector.getX();
       double uy = expectedRotationVector.getY();
       double uz = expectedRotationVector.getZ();
-      double angle = expectedRotationVector.length();
+      double angle = expectedRotationVector.norm();
       RotationVectorConversion.convertAxisAngleToRotationVectorImpl(ux, uy, uz, angle, actualRotationVector);
       EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
 

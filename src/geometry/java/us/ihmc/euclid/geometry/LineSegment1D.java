@@ -250,7 +250,9 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    {
       double alpha = (point - firstEndpoint) / (secondEndpoint - firstEndpoint);
 
-      if ((alpha < epsilon) || (alpha > 1.0 - epsilon))
+      if (alpha < epsilon)
+         return false;
+      if (alpha > 1.0 - epsilon)
          return false;
 
       return true;
@@ -370,7 +372,7 @@ public class LineSegment1D implements Clearable, EuclidGeometry
    /**
     * Sets this line segment to the other segment.
     *
-    * @param other the other LineSegement1D to set this to.
+    * @param other the other line segment 1D to set this to. Not modified.
     */
    public void set(LineSegment1D other)
    {

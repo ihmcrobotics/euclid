@@ -100,8 +100,8 @@ public class EuclidFrameShapeTestTools
 
             String difference = "[";
             difference += "distance: " + Math.abs(expected.getSignedDistance() - actual.getSignedDistance());
-            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
-            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
+            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.norm();
+            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.norm();
             difference += "]";
             EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
          }
@@ -296,8 +296,8 @@ public class EuclidFrameShapeTestTools
 
             String difference = "[";
             difference += "distance: " + Math.abs(expected.getSignedDistance() - actual.getSignedDistance());
-            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
-            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
+            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.norm();
+            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.norm();
             difference += "]";
             EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
          }

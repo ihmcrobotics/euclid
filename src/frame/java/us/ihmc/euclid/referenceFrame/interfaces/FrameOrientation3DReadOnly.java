@@ -2214,5 +2214,4 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Eucli
       matrixTransformed.setReferenceFrame(getReferenceFrame());
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
-
 }

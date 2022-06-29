@@ -793,7 +793,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.norm(), EuclidGeometryTools.ONE_TRILLIONTH);
          assertEquals(0.0, actualAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
          assertEquals(0.0, actualAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
@@ -830,7 +830,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.norm(), EuclidGeometryTools.ONE_TRILLIONTH);
          // Can not be as accurate as we get closer to 0.0
          assertEquals(0.0, actualAxis.dot(firstVector), 1.0e-10);
          assertEquals(0.0, actualAxis.dot(secondVector), 1.0e-10);
@@ -873,7 +873,7 @@ public class EuclidGeometryToolsTest
          assertEquals(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
          assertEquals(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.norm(), EuclidGeometryTools.ONE_TRILLIONTH);
          // Can not be as accurate as we get closer to Math.PI
          assertEquals(0.0, actualAxis.dot(firstVector), 1.0e-10);
          assertEquals(0.0, actualAxis.dot(secondVector), 1.0e-10);
@@ -904,7 +904,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.norm(), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -933,7 +933,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.norm(), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -2703,7 +2703,7 @@ public class EuclidGeometryToolsTest
 
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
          Point3D point = new Point3D();
-         double scalar = expectedDistance / planeNormal.length();
+         double scalar = expectedDistance / planeNormal.norm();
          if (random.nextBoolean())
             scalar = -scalar;
          point.scaleAdd(scalar, planeNormal, secondPointOnPlane);
@@ -2732,7 +2732,7 @@ public class EuclidGeometryToolsTest
 
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, -10.0, 10.0);
          Point3D point = new Point3D();
-         point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
+         point.scaleAdd(expectedDistance / planeNormal.norm(), planeNormal, secondPointOnPlane);
 
          double actualDistance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
@@ -9391,7 +9391,7 @@ public class EuclidGeometryToolsTest
          Point2D secondPointOnLine2 = new Point2D();
          secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, firstPointOnLine2);
 
-         if (Math.abs(lineDirection1.dot(lineDirection2) / lineDirection1.length() / lineDirection2.length()) > 1.0 - 0.0005)
+         if (Math.abs(lineDirection1.dot(lineDirection2) / lineDirection1.norm() / lineDirection2.norm()) > 1.0 - 0.0005)
             epsilon = 1.0e-11; // Loss of precision for small angles between the two lines.
          else
             epsilon = 1.0e-12;
@@ -9858,7 +9858,7 @@ public class EuclidGeometryToolsTest
 
          String message = "Angle between vectors " + expectedIntersectionDirection.angle(actualIntersectionDirection);
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedIntersectionDirection, actualIntersectionDirection, 1.0e-7), message);
-         assertEquals(1.0, actualIntersectionDirection.length(), EPSILON);
+         assertEquals(1.0, actualIntersectionDirection.norm(), EPSILON);
 
          if (planeNormal1.dot(planeNormal2) < 0.0)
             planeNormal1.negate();
@@ -10814,7 +10814,7 @@ public class EuclidGeometryToolsTest
          Vector2D orthogonalToLine = EuclidGeometryTools.perpendicularVector2D(lineDirection);
          if (random.nextBoolean())
             orthogonalToLine.negate();
-         orthogonalToLine.scale(EuclidCoreRandomTools.nextDouble(random, 10.0) / orthogonalToLine.length());
+         orthogonalToLine.scale(EuclidCoreRandomTools.nextDouble(random, 10.0) / orthogonalToLine.norm());
 
          Point2D pointAlreadyOnLine = new Point2D();
 
@@ -11177,7 +11177,7 @@ public class EuclidGeometryToolsTest
          assertTrue(success);
 
          bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
-         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.norm(), EPSILON);
          assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
          assertEquals(bisectorSegmentHalfLength,
                       EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
@@ -11199,7 +11199,7 @@ public class EuclidGeometryToolsTest
          bisectorSegmentEnd = bisectorSegmentEndpoints.get(1);
 
          bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
-         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.norm(), EPSILON);
          assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
          assertEquals(bisectorSegmentHalfLength,
                       EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
@@ -11241,8 +11241,8 @@ public class EuclidGeometryToolsTest
       {
          vector = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
          Vector2D perpendicularVector = EuclidGeometryTools.perpendicularVector2D(vector);
-         assertEquals(vector.length(), perpendicularVector.length(), EPSILON);
-         assertEquals(vector.length() * vector.length(), vector.cross(perpendicularVector), EPSILON);
+         assertEquals(vector.norm(), perpendicularVector.norm(), EPSILON);
+         assertEquals(vector.norm() * vector.norm(), vector.cross(perpendicularVector), EPSILON);
          assertEquals(0.0, vector.dot(perpendicularVector), EPSILON);
          assertEquals(Math.PI / 2.0, vector.angle(perpendicularVector), EPSILON);
       }
@@ -11664,9 +11664,9 @@ public class EuclidGeometryToolsTest
          cb.sub(b, c);
 
          // The three edge lengths
-         double abLength = ab.length();
-         double acLength = ac.length();
-         double bcLength = bc.length();
+         double abLength = ab.norm();
+         double acLength = ac.norm();
+         double bcLength = bc.norm();
 
          // The three angles
          double abc = Math.abs(ba.angle(bc));
@@ -11704,9 +11704,9 @@ public class EuclidGeometryToolsTest
          cb.sub(b, c);
 
          // The three edge lengths
-         double abLength = ab.length();
-         double acLength = ac.length();
-         double bcLength = bc.length();
+         double abLength = ab.norm();
+         double acLength = ac.norm();
+         double bcLength = bc.norm();
 
          // The three angles
          double abc = Math.abs(ba.angle(bc));

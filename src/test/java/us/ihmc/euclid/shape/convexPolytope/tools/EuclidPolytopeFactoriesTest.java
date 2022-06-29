@@ -38,7 +38,7 @@ class EuclidPolytopeFactoriesTest
          assertEquals(30, icosahedron.getNumberOfEdges());
 
          icosahedron.getVertices().forEach(vertex -> assertEquals(radius, vertex.distanceFromOrigin(), EPSILON));
-         icosahedron.getHalfEdges().forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).length(), EPSILON));
+         icosahedron.getHalfEdges().forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).norm(), EPSILON));
          assertEquals(EuclidShapeTools.icosahedronVolume(EuclidShapeTools.icosahedronEdgeLength(radius)), icosahedron.getVolume(), EPSILON);
          EuclidCoreTestTools.assertEquals(new Point3D(), icosahedron.getCentroid(), EPSILON);
       }

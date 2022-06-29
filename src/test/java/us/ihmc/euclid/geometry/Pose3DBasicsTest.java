@@ -190,7 +190,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics> extends RigidBody
          T secondPose = copy(firstPose);
 
          Vector3D translation = EuclidCoreRandomTools.nextVector3D(random);
-         double length = translation.length();
+         double length = translation.norm();
 
          secondPose.appendTranslation(translation);
 
