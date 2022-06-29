@@ -34,8 +34,11 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
    QuaternionReadOnly getOrientation();
 
    /**
-    * Gets the read-only reference of the position part of this pose 3D. Same as getPosition but it is
-    * defined again to comply to RigidBodyTransformReadOnly.
+    * Gets the read-only reference of the position part of this pose 3D.
+    * <p>
+    * Same as {@link #getPosition()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
     *
     * @return the read-only position part of this pose 3D.
     */
@@ -46,8 +49,11 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly, EuclidGeomet
    }
 
    /**
-    * Gets the read-only reference to the orientation part of this pose 3D. Same as getOrientation but
-    * it is defined again to comply to RigidBodyTransformReadOnly.
+    * Gets the read-only reference to the orientation part of this pose 3D.
+    * <p>
+    * Same as {@link #getOrientation()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
     *
     * @return the read-only orientation part of this pose 3D.
     */

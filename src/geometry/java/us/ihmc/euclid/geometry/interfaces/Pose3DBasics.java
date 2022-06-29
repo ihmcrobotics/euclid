@@ -70,8 +70,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
    QuaternionBasics getOrientation();
 
    /**
-    * Gets the reference of the position part of this pose 3D. Same as getPosition but it is defined
-    * again to comply to RigidBodyTransformBasics
+    * Gets the reference of the position part of this pose 3D.
+    * <p>
+    * Same as {@link #getPosition()}, it is needed only to comply to the
+    * {@code RigidBodyTransformBasics} interface.
+    * </p>
     *
     * @return the position part of this pose 3D.
     */
@@ -82,8 +85,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
    }
 
    /**
-    * Gets the reference to the orientation part of this pose 3D. Same as getOrientation but it is
-    * defined again to comply to RigidBodyTransformBasics
+    * Gets the reference to the orientation part of this pose 3D.
+    * <p>
+    * Same as {@link #getOrientation()}, it is needed only to comply to the
+    * {@code RigidBodyTransformReadOnly} interface.
+    * </p>
     *
     * @return the orientation part of this pose 3D.
     */

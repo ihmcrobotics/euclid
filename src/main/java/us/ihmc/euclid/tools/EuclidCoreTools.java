@@ -71,7 +71,6 @@ public class EuclidCoreTools
       public int hashCode()
       {
          return 1;
-
       }
 
       @Override
