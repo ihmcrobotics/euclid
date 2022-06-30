@@ -3,6 +3,8 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents an infinitely wide and long 3D plane defined by a 3D point and a 3D unit-vector.
  */
-public class Plane3D implements Plane3DBasics
+public class Plane3D implements Plane3DBasics, Settable<Plane3D>
 {
    /** Coordinates of a point located on this plane. */
    private final Point3D point = new Point3D();
@@ -104,8 +106,19 @@ public class Plane3D implements Plane3DBasics
    }
 
    /**
+    * Sets this plane to be the same as the given plane.
+    *
+    * @param other the other plane to copy. Not modified.
+    */
+   @Override
+   public void set(Plane3D other)
+   {
+      Plane3DBasics.super.set(other);
+   }
+
+   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Plane3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -114,7 +127,7 @@ public class Plane3D implements Plane3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Plane3DReadOnly)
-         return Plane3DBasics.super.equals((Plane3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

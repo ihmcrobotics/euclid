@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DBasics;
@@ -34,7 +36,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameBox3D implements FrameBox3DBasics
+public class FrameBox3D implements FrameBox3DBasics, Settable<FrameBox3D>
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The reference frame in which this shape is expressed. */
@@ -386,6 +388,13 @@ public class FrameBox3D implements FrameBox3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameBox3D other)
+   {
+      FrameBox3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public FrameBox3D copy()
    {
       return new FrameBox3D(this);
@@ -453,7 +462,7 @@ public class FrameBox3D implements FrameBox3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameBox3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two faces have different frames, this method returns {@code false}.
     * </p>
@@ -466,7 +475,7 @@ public class FrameBox3D implements FrameBox3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameBox3DReadOnly)
-         return FrameBox3DBasics.super.equals((FrameBox3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

@@ -2,7 +2,10 @@ package us.ihmc.euclid.referenceFrame;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
@@ -31,7 +34,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * requiring {@code FrameQuaternion}.
  * </p>
  */
-public class FrameQuaternion implements FrameQuaternionBasics
+public class FrameQuaternion implements FrameQuaternionBasics, Settable<FrameQuaternion>
 {
    /** The reference frame is which this quaternion is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -200,6 +203,19 @@ public class FrameQuaternion implements FrameQuaternionBasics
    }
 
    /**
+    * Sets this frame quaternion to {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   @Override
+   public void set(FrameQuaternion other)
+   {
+      FrameQuaternionBasics.super.set(other);
+   }
+
+   /**
     * Sets the reference frame of this quaternion without updating or modifying its x, y, z, and s
     *
     * @param referenceFrame the new reference frame for this frame vector.
@@ -272,7 +288,7 @@ public class FrameQuaternion implements FrameQuaternionBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
@@ -285,7 +301,7 @@ public class FrameQuaternion implements FrameQuaternionBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple4DReadOnly)
-         return equals((FrameTuple4DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

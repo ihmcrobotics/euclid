@@ -1,11 +1,11 @@
 package us.ihmc.euclid.referenceFrame.collision;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
-import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
 /**
@@ -130,7 +130,7 @@ public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DColl
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(EuclidShape3DCollisionResultReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -139,7 +139,7 @@ public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DColl
    public boolean equals(Object object)
    {
       if (object instanceof EuclidFrameShape3DCollisionResultReadOnly)
-         return EuclidFrameShape3DCollisionResultBasics.super.equals((EuclidFrameShape3DCollisionResultReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

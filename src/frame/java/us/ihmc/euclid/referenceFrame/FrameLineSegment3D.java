@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
@@ -25,7 +27,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
  * using methods requiring {@code FrameLineSegment3D}.
  * </p>
  */
-public class FrameLineSegment3D implements FrameLineSegment3DBasics
+public class FrameLineSegment3D implements FrameLineSegment3DBasics, Settable<FrameLineSegment3D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -88,6 +90,13 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameLineSegment3D other)
+   {
+      FrameLineSegment3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -116,7 +125,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameLineSegment3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
@@ -129,7 +138,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameLineSegment3DReadOnly)
-         return equals((FrameLineSegment3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

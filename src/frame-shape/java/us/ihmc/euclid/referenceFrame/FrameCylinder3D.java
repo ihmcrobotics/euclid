@@ -1,7 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DBasics;
@@ -24,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCylinder3D implements FrameCylinder3DBasics
+public class FrameCylinder3D implements FrameCylinder3DBasics, Settable<FrameCylinder3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -138,6 +140,13 @@ public class FrameCylinder3D implements FrameCylinder3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameCylinder3D other)
+   {
+      FrameCylinder3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -227,7 +236,7 @@ public class FrameCylinder3D implements FrameCylinder3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameCylinder3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two cylinders have different frames, this method returns {@code false}.
     * </p>
@@ -240,7 +249,7 @@ public class FrameCylinder3D implements FrameCylinder3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameCylinder3DReadOnly)
-         return FrameCylinder3DBasics.super.equals((FrameCylinder3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

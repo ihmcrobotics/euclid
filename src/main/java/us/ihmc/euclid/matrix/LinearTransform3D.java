@@ -2,6 +2,8 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -45,7 +47,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * @see SingularValueDecomposition3D
  * @author Sylvain Bertrand
  */
-public class LinearTransform3D implements LinearTransform3DBasics
+public class LinearTransform3D implements LinearTransform3DBasics, Settable<LinearTransform3D>
 {
    /** The matrix coefficients. */
    private double m00, m01, m02, m10, m11, m12, m20, m21, m22;
@@ -536,6 +538,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
     *
     * @param other the other linear transform to copy the values from. Not modified.
     */
+   @Override
    public void set(LinearTransform3D other)
    {
       m00 = other.m00;
@@ -1104,7 +1107,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Matrix3DReadOnly)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
     * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
@@ -1114,7 +1117,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Matrix3DReadOnly)
-         return equals((Matrix3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

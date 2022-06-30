@@ -2,7 +2,9 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
@@ -30,7 +32,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * requiring {@code FramePose2D}.
  * </p>
  */
-public class FramePose2D implements FramePose2DBasics
+public class FramePose2D implements FramePose2DBasics, Settable<FramePose2D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -134,6 +136,13 @@ public class FramePose2D implements FramePose2DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FramePose2D other)
+   {
+      FramePose2DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -162,7 +171,7 @@ public class FramePose2D implements FramePose2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FramePose2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
@@ -174,7 +183,7 @@ public class FramePose2D implements FramePose2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FramePose2DReadOnly)
-         return equals((FramePose2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

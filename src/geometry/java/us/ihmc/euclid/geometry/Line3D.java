@@ -6,6 +6,8 @@ import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -18,7 +20,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents an infinitely long 3D line defined by a 3D point and a 3D unitary vector.
  */
-public class Line3D implements Line3DBasics
+public class Line3D implements Line3DBasics, Settable<Line3D>
 {
    /** Coordinates of a point located on this line. */
    private final Point3D point = new Point3D();
@@ -126,8 +128,19 @@ public class Line3D implements Line3DBasics
    }
 
    /**
+    * Sets this line to be the same as the given line.
+    *
+    * @param other the other line to copy. Not modified.
+    */
+   @Override
+   public void set(Line3D other)
+   {
+      Line3DBasics.super.set(other);
+   }
+
+   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -136,7 +149,7 @@ public class Line3D implements Line3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Line3DReadOnly)
-         return equals((Line3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

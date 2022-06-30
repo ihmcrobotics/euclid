@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Point2D implements Point2DBasics
+public class Point2D implements Point2DBasics, Settable<Point2D>
 {
    /** The x-coordinate. */
    private double x;
@@ -73,6 +75,17 @@ public class Point2D implements Point2DBasics
    }
 
    /**
+    * Sets this point to {@code other}.
+    *
+    * @param other the other point to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Point2D other)
+   {
+      Point2DBasics.super.set(other);
+   }
+
+   /**
     * Sets the x-coordinate of this point.
     *
     * @param x the x-coordinate.
@@ -118,7 +131,7 @@ public class Point2D implements Point2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -127,7 +140,7 @@ public class Point2D implements Point2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple2DReadOnly)
-         return equals((Tuple2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

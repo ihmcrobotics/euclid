@@ -1,5 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -24,7 +27,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
  * requiring {@code FrameVector4D}.
  * </p>
  */
-public class FrameVector4D implements FrameVector4DBasics
+public class FrameVector4D implements FrameVector4DBasics, Settable<FrameVector4D>
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -98,6 +101,19 @@ public class FrameVector4D implements FrameVector4DBasics
    public FrameVector4D(FrameTuple4DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /**
+    * Sets this frame vector to {@code other}.
+    *
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FrameVector4D other)
+   {
+      FrameVector4DBasics.super.set(other);
    }
 
    /**
@@ -210,7 +226,7 @@ public class FrameVector4D implements FrameVector4DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
@@ -223,7 +239,7 @@ public class FrameVector4D implements FrameVector4DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple4DReadOnly)
-         return equals((FrameTuple4DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

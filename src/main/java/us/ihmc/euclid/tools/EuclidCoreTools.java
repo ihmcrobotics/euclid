@@ -3,6 +3,7 @@ package us.ihmc.euclid.tools;
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.Matrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -921,6 +922,62 @@ public class EuclidCoreTools
    public static boolean epsilonEquals(double expectedValue, double actualValue, double epsilon)
    {
       return Math.abs(expectedValue - actualValue) <= epsilon;
+   }
+
+   /**
+    * Tests if the two arguments are equal on a per component basis.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidGeometry#equals equals} method of the first argument.
+    * </p>
+    *
+    * @param a the first geometry in the comparison. Not modified.
+    * @param b the second geometry in the comparison. Not modified.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidGeometry#equals(EuclidGeometry)
+    */
+   public static boolean equals(EuclidGeometry a, EuclidGeometry b)
+   {
+      return (a == b) || (a != null && a.equals(b));
+   }
+
+   /**
+    * Tests if the two arguments are approximately equal on a per component basis.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidGeometry#epsilonEquals epsilonEquals} method of the first argument.
+    * </p>
+    *
+    * @param a       the first geometry in the comparison. Not modified.
+    * @param b       the second geometry in the comparison. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidGeometry#epsilonEquals(EuclidGeometry, double)
+    */
+   public static boolean epsilonEquals(EuclidGeometry a, EuclidGeometry b, double epsilon)
+   {
+      return (a == b) || (a != null && a.epsilonEquals(b, epsilon));
+   }
+
+   /**
+    * Tests if the two arguments represent the same geometry to an {@code epsilon}.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidGeometry#geometricallyEquals geometricallyEquals} method of the first argument.
+    * </p>
+    *
+    * @param a       the first geometry in the comparison. Not modified.
+    * @param b       the second geometry in the comparison. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidGeometry#geometricallyEquals(EuclidGeometry, double)
+    */
+   public static boolean geometricallyEquals(EuclidGeometry a, EuclidGeometry b, double epsilon)
+   {
+      return (a == b) || (a != null && a.geometricallyEquals(b, epsilon));
    }
 
    /**

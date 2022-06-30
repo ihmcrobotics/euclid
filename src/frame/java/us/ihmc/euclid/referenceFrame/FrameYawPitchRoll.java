@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
@@ -36,7 +38,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public class FrameYawPitchRoll implements FrameYawPitchRollBasics
+public class FrameYawPitchRoll implements FrameYawPitchRollBasics, Settable<FrameYawPitchRoll>
 {
    /** The reference frame is which this yaw-pitch-roll is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -133,6 +135,12 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
    }
 
    @Override
+   public void set(FrameYawPitchRoll other)
+   {
+      FrameYawPitchRollBasics.super.set(other);
+   }
+
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -194,15 +202,15 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param object the other yaw-pitch-roll to compare against this. Not modified.
     * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise and are
     *         expressed in the same reference frame, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object other)
+   public boolean equals(Object object)
    {
-      if (other instanceof FrameYawPitchRollReadOnly)
-         return equals((FrameYawPitchRollReadOnly) other);
+      if (object instanceof FrameYawPitchRollReadOnly)
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

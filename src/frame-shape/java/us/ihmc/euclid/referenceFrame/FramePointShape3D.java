@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FramePointShape3D implements FramePointShape3DBasics
+public class FramePointShape3D implements FramePointShape3DBasics, Settable<FramePointShape3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -72,6 +74,13 @@ public class FramePointShape3D implements FramePointShape3DBasics
    public FramePointShape3D(FrameTuple3DReadOnly tuple3DReadOnly)
    {
       setIncludingFrame(tuple3DReadOnly);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FramePointShape3D other)
+   {
+      FramePointShape3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -139,7 +148,7 @@ public class FramePointShape3D implements FramePointShape3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two point shapes have different frames, this method returns {@code false}.
     * </p>
@@ -152,7 +161,7 @@ public class FramePointShape3D implements FramePointShape3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FramePointShape3DReadOnly)
-         return FramePointShape3DBasics.super.equals((FramePointShape3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

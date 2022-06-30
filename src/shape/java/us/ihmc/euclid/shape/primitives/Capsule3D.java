@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -22,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Capsule3D implements Capsule3DBasics
+public class Capsule3D implements Capsule3DBasics, Settable<Capsule3D>
 {
    /** Position of this capsule's center. */
    private final Point3D position = new Point3D();
@@ -87,6 +89,17 @@ public class Capsule3D implements Capsule3DBasics
    public Capsule3D(Capsule3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Copies the {@code other} capsule data into {@code this}.
+    *
+    * @param other the other capsule to copy. Not modified.
+    */
+   @Override
+   public void set(Capsule3D other)
+   {
+      Capsule3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -165,7 +178,7 @@ public class Capsule3D implements Capsule3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Capsule3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -174,7 +187,7 @@ public class Capsule3D implements Capsule3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Capsule3DReadOnly)
-         return Capsule3DBasics.super.equals((Capsule3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

@@ -1,7 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * A {@link FrameBoundingBox2D} can be used to define from a set of minimum and maximum coordinates
  * an axis-aligned bounding box in the XY-plane that is expressed in a given reference frame..
  */
-public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
+public class FrameBoundingBox2D implements FrameBoundingBox2DBasics, Settable<FrameBoundingBox2D>
 {
    /** The reference frame is which this bounding box is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -99,6 +101,13 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameBoundingBox2D other)
+   {
+      FrameBoundingBox2DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -127,7 +136,7 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameBoundingBox2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two bounding boxes have different frames, this method returns {@code false}.
     * </p>
@@ -139,7 +148,7 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameBoundingBox2DReadOnly)
-         return FrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

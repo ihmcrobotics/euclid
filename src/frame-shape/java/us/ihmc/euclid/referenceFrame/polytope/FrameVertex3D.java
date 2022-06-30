@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.polytope;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
@@ -72,7 +73,7 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameVertex3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two faces have different frames, this method returns {@code false}.
     * </p>
@@ -85,7 +86,7 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
    public boolean equals(Object object)
    {
       if (object instanceof FrameVertex3DReadOnly)
-         return FrameVertex3DReadOnly.super.equals((FrameVertex3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

@@ -4,7 +4,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
@@ -15,8 +14,8 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 public class TupleTools
 {
    /**
-    * Tolerance used in {@link Tuple2DBasics#clipToMaxNorm(double)},
-    * {@link Tuple3DBasics#clipToMaxNorm(double)}, {@link Tuple4DBasics#clipToMaxNorm(double)}.
+    * Tolerance used in {@link Tuple2DBasics#clipToMaxNorm(double)} and
+    * {@link Tuple3DBasics#clipToMaxNorm(double)}.
     */
    public static final double EPS_MAX_NORM = 1.0e-7;
 

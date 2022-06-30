@@ -2,6 +2,8 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -11,7 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.
  */
-public class LineSegment2D implements LineSegment2DBasics
+public class LineSegment2D implements LineSegment2DBasics, Settable<LineSegment2D>
 {
    /** The first endpoint defining this line segment. */
    private final Point2D firstEndpoint = new Point2D();
@@ -69,6 +71,17 @@ public class LineSegment2D implements LineSegment2DBasics
       set(firstEndpoint, secondEndpoint);
    }
 
+   /**
+    * Sets this line segment to be same as the given line segment.
+    *
+    * @param other the other line segment to copy. Not modified.
+    */
+   @Override
+   public void set(LineSegment2D other)
+   {
+      LineSegment2DBasics.super.set(other);
+   }
+
    /** {@inheritDoc} */
    @Override
    public Point2DBasics getFirstEndpoint()
@@ -85,7 +98,7 @@ public class LineSegment2D implements LineSegment2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(LineSegment2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -94,7 +107,7 @@ public class LineSegment2D implements LineSegment2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof LineSegment2DReadOnly)
-         return equals((LineSegment2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

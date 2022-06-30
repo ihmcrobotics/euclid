@@ -2,7 +2,9 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
@@ -16,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box that is expressed in a reference frame.
  */
-public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
+public class FrameBoundingBox3D implements FrameBoundingBox3DBasics, Settable<FrameBoundingBox3D>
 
 {
    /** The reference frame is which this bounding box is currently expressed. */
@@ -101,6 +103,13 @@ public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameBoundingBox3D other)
+   {
+      FrameBoundingBox3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -129,7 +138,7 @@ public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameBoundingBox3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two bounding boxes have different frames, this method returns {@code false}.
     * </p>
@@ -141,7 +150,7 @@ public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameBoundingBox3DReadOnly)
-         return FrameBoundingBox3DBasics.super.equals((FrameBoundingBox3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

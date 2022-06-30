@@ -30,6 +30,12 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics> extends RigidBody
 
    public abstract T createRandomPose3D(Random random);
 
+   @Override
+   public T createRandomTransform(Random random)
+   {
+      return createRandomPose3D(random);
+   }
+
    public T copy(Pose3DReadOnly source)
    {
       T copy = createEmptyPose3D();

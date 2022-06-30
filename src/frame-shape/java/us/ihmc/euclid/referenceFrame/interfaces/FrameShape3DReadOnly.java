@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVertexHolder
+public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVertexHolder, EuclidFrameGeometry
 {
    /**
     * {@inheritDoc}

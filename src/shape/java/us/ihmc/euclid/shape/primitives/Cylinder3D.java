@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -22,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Cylinder3D implements Cylinder3DBasics
+public class Cylinder3D implements Cylinder3DBasics, Settable<Cylinder3D>
 {
    /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
@@ -91,6 +93,17 @@ public class Cylinder3D implements Cylinder3DBasics
    public Cylinder3D(Cylinder3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Copies the {@code other} cylinder data into {@code this}.
+    *
+    * @param other the other cylinder to copy. Not modified.
+    */
+   @Override
+   public void set(Cylinder3D other)
+   {
+      Cylinder3DBasics.super.set(other);
    }
 
    /**
@@ -186,7 +199,7 @@ public class Cylinder3D implements Cylinder3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Cylinder3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -195,7 +208,7 @@ public class Cylinder3D implements Cylinder3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Cylinder3DReadOnly)
-         return Cylinder3DBasics.super.equals((Cylinder3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

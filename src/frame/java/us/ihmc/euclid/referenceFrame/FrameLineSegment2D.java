@@ -2,7 +2,9 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
@@ -28,7 +30,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * using methods requiring {@code FrameLineSegment2D}.
  * </p>
  */
-public class FrameLineSegment2D implements FrameLineSegment2DBasics
+public class FrameLineSegment2D implements FrameLineSegment2DBasics, Settable<FrameLineSegment2D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -106,6 +108,13 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameLineSegment2D other)
+   {
+      FrameLineSegment2DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -164,7 +173,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameLineSegment2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
@@ -177,7 +186,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameLineSegment2DReadOnly)
-         return equals((FrameLineSegment2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

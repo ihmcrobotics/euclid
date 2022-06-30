@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -25,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector3D32 implements UnitVector3DBasics
+public class UnitVector3D32 implements UnitVector3DBasics, Settable<UnitVector3D32>
 {
    /** Tolerance used on this vector's components to identify if it can be normalized. */
    public static final double ZERO_TEST_EPSILON = 1.0e-16;
@@ -145,6 +147,13 @@ public class UnitVector3D32 implements UnitVector3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(UnitVector3D32 other)
+   {
+      set((UnitVector3DReadOnly) other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void set(UnitVector3DReadOnly other)
    {
       x = (float) other.getRawX();
@@ -209,7 +218,7 @@ public class UnitVector3D32 implements UnitVector3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -218,7 +227,7 @@ public class UnitVector3D32 implements UnitVector3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple3DReadOnly)
-         return UnitVector3DBasics.super.equals((Tuple3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

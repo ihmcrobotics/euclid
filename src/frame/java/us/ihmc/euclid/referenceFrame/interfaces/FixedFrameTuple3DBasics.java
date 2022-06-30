@@ -278,6 +278,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    /**
     * Sets this tuple to {@code tuple3DReadOnly} and then calls {@link #normalize()}.
     *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
+    *                        expressed.
     * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */

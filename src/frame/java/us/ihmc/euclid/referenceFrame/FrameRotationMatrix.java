@@ -3,10 +3,12 @@ package us.ihmc.euclid.referenceFrame;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixBasics;
@@ -37,7 +39,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRotationMatrix implements FrameRotationMatrixBasics
+public class FrameRotationMatrix implements FrameRotationMatrixBasics, Settable<FrameRotationMatrix>
 {
    /** The reference frame is which this rotation matrix is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -243,6 +245,13 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameRotationMatrix other)
+   {
+      FrameRotationMatrixBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void set(RotationMatrixReadOnly other)
    {
       rotationMatrix.set(other);
@@ -388,8 +397,8 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise or if the
-    * {@code object} is {@code null}.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     * <p>
     * If the two matrices have different frames, this method returns {@code false}.
     * </p>
@@ -401,7 +410,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameMatrix3DReadOnly)
-         return FrameRotationMatrixBasics.super.equals((FrameMatrix3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

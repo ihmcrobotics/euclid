@@ -2,6 +2,8 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -13,7 +15,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * A {@link BoundingBox2D} can be used to define from a set of minimum and maximum coordinates an
  * axis-aligned bounding box in the XY-plane.
  */
-public class BoundingBox2D implements BoundingBox2DBasics
+public class BoundingBox2D implements BoundingBox2DBasics, Settable<BoundingBox2D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point2D minPoint = new Point2D();
@@ -119,6 +121,17 @@ public class BoundingBox2D implements BoundingBox2DBasics
       set(minX, minY, maxX, maxY);
    }
 
+   /**
+    * Redefines this bounding box to be the same as the given {@code other}.
+    *
+    * @param other the bounding box used to redefine this bounding box. Not modified.
+    */
+   @Override
+   public void set(BoundingBox2D other)
+   {
+      BoundingBox2DBasics.super.set(other);
+   }
+
    /** {@inheritDoc} */
    @Override
    public Point2D getMinPoint()
@@ -135,7 +148,7 @@ public class BoundingBox2D implements BoundingBox2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(BoundingBox2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -144,7 +157,7 @@ public class BoundingBox2D implements BoundingBox2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof BoundingBox2DReadOnly)
-         return BoundingBox2DBasics.super.equals((BoundingBox2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

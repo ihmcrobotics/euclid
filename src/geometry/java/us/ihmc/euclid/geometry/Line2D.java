@@ -4,6 +4,8 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -16,7 +18,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Represents an infinitely-long 2D line defined by a 2D point and a 2D unit-vector.
  */
-public class Line2D implements Line2DBasics
+public class Line2D implements Line2DBasics, Settable<Line2D>
 {
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
@@ -87,6 +89,17 @@ public class Line2D implements Line2DBasics
    }
 
    /**
+    * Sets this line to be the same as the given line.
+    *
+    * @param other the other line to copy. Not modified.
+    */
+   @Override
+   public void set(Line2D other)
+   {
+      Line2DBasics.super.set(other);
+   }
+
+   /**
     * Gets the read-only reference to the direction of this line.
     *
     * @return the reference to the direction.
@@ -110,7 +123,7 @@ public class Line2D implements Line2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -119,7 +132,7 @@ public class Line2D implements Line2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Line2DReadOnly)
-         return equals((Line2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
@@ -21,7 +23,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameShape3DPose implements FrameShape3DPoseBasics
+public class FrameShape3DPose implements FrameShape3DPoseBasics, Settable<FrameShape3DPose>
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -112,6 +114,13 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics
    public FrameShape3DPose(FrameShape3DPoseReadOnly pose)
    {
       setIncludingFrame(pose);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameShape3DPose other)
+   {
+      FrameShape3DPoseBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -212,7 +221,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameShape3DPoseReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
@@ -225,7 +234,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameShape3DPoseReadOnly)
-         return FrameShape3DPoseBasics.super.equals((FrameShape3DPoseReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

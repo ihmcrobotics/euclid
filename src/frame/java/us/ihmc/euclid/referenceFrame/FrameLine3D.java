@@ -6,7 +6,9 @@ import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
@@ -37,7 +39,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * requiring {@code FrameLine3D}.
  * </p>
  */
-public class FrameLine3D implements FrameLine3DBasics
+public class FrameLine3D implements FrameLine3DBasics, Settable<FrameLine3D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -260,6 +262,13 @@ public class FrameLine3D implements FrameLine3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameLine3D other)
+   {
+      FrameLine3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -288,7 +297,7 @@ public class FrameLine3D implements FrameLine3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameLine3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -297,7 +306,7 @@ public class FrameLine3D implements FrameLine3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameLine3DReadOnly)
-         return equals((FrameLine3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

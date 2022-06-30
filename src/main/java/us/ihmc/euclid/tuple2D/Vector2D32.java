@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -17,7 +19,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector2D32 implements Vector2DBasics
+public class Vector2D32 implements Vector2DBasics, Settable<Vector2D32>
 {
    /** The x-component. */
    private float x;
@@ -62,6 +64,17 @@ public class Vector2D32 implements Vector2DBasics
    public Vector2D32(Tuple2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this vector to {@code other}.
+    *
+    * @param other the other vector to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Vector2D32 other)
+   {
+      Vector2DBasics.super.set(other);
    }
 
    /**
@@ -152,7 +165,7 @@ public class Vector2D32 implements Vector2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -161,7 +174,7 @@ public class Vector2D32 implements Vector2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple2DReadOnly)
-         return equals((Tuple2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

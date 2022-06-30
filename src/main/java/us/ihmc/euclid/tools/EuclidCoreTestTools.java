@@ -1517,9 +1517,10 @@ public class EuclidCoreTestTools
     * actual.toString(format)
     * </pre>
     *
-    * @param messagePrefix    prefix to add to the error message.
-    * @param expectedAsString the result that was expected.
-    * @param actualAsString   the result that was obtained.
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the result that was expected.
+    * @param actual        the result that was obtained.
+    * @param format        the format to use for each number.
     */
    public static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
    {
@@ -1538,10 +1539,11 @@ public class EuclidCoreTestTools
     * </pre>
     *
     * @param messagePrefix      prefix to add to the error message.
-    * @param expectedAsString   the result that was expected.
-    * @param actualAsString     the result that was obtained.
+    * @param expected           the result that was expected.
+    * @param actual             the result that was obtained.
     * @param differenceAsString a short comprehensible summary of the difference between the expected
     *                           and obtained results.
+    * @param format             the format to use for each number.
     */
    public static void throwNotEqualAssertionError(String messagePrefix,
                                                   EuclidGeometry expected,

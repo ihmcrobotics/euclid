@@ -1,7 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DBasics;
@@ -24,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCapsule3D implements FrameCapsule3DBasics
+public class FrameCapsule3D implements FrameCapsule3DBasics, Settable<FrameCapsule3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -138,6 +140,13 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameCapsule3D other)
+   {
+      FrameCapsule3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -227,7 +236,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameCapsule3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two capsules have different frames, this method returns {@code false}.
     * </p>
@@ -240,7 +249,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameCapsule3DReadOnly)
-         return FrameCapsule3DBasics.super.equals((FrameCapsule3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

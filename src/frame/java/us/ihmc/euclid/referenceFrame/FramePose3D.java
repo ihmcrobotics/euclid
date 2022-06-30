@@ -2,8 +2,10 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
@@ -31,7 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePose3D}.
  * </p>
  */
-public class FramePose3D implements FramePose3DBasics
+public class FramePose3D implements FramePose3DBasics, Settable<FramePose3D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -127,6 +129,19 @@ public class FramePose3D implements FramePose3DBasics
       setIncludingFrame(other);
    }
 
+   /**
+    * Sets this frame pose 3D to the {@code other} frame pose 3D.
+    *
+    * @param other the other frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
+    */
+   @Override
+   public void set(FramePose3D other)
+   {
+      FramePose3DBasics.super.set(other);
+   }
+
    /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
@@ -157,7 +172,7 @@ public class FramePose3D implements FramePose3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FramePose3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
@@ -169,7 +184,7 @@ public class FramePose3D implements FramePose3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FramePose3DReadOnly)
-         return equals((FramePose3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

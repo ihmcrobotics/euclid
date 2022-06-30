@@ -8,6 +8,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
@@ -668,7 +669,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Face3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -677,7 +678,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    public boolean equals(Object object)
    {
       if (object instanceof Face3DReadOnly)
-         return equals((Face3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
@@ -26,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Box3D implements Box3DBasics
+public class Box3D implements Box3DBasics, Settable<Box3D>
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** Pose of this box. */
@@ -199,6 +201,17 @@ public class Box3D implements Box3DBasics
       supplier = newSupplier;
    }
 
+   /**
+    * Copies the {@code other} box data into {@code this}.
+    *
+    * @param other the other box to copy. Not modified.
+    */
+   @Override
+   public void set(Box3D other)
+   {
+      Box3DBasics.super.set(other);
+   }
+
    @Override
    public Box3D copy()
    {
@@ -267,7 +280,7 @@ public class Box3D implements Box3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Box3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -276,7 +289,7 @@ public class Box3D implements Box3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Box3DReadOnly)
-         return Box3DBasics.super.equals((Box3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

@@ -1,8 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DBasics;
@@ -29,7 +31,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
+public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, Settable<FrameEllipsoid3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -375,6 +377,13 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameEllipsoid3D other)
+   {
+      FrameEllipsoid3DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public FrameEllipsoid3D copy()
    {
       return new FrameEllipsoid3D(this);
@@ -382,7 +391,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameEllipsoid3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two ellipsoids have different frames, this method returns {@code false}.
     * </p>
@@ -395,7 +404,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameEllipsoid3DReadOnly)
-         return FrameEllipsoid3DBasics.super.equals((FrameEllipsoid3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

@@ -3,6 +3,7 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -40,7 +41,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class QuaternionBasedTransform implements RigidBodyTransformBasics
+public class QuaternionBasedTransform implements RigidBodyTransformBasics, Settable<QuaternionBasedTransform>
 {
    /** The rotation part of this transform. */
    private final Quaternion quaternion = new Quaternion();
@@ -206,6 +207,17 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
    {
       quaternion.setUnsafe(qx, qy, qz, qs);
       translationVector.set(x, y, z);
+   }
+
+   /**
+    * Sets this quaternion-based transform to the given {@code other}.
+    *
+    * @param other the other quaternion-based transform. Not modified.
+    */
+   @Override
+   public void set(QuaternionBasedTransform other)
+   {
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -408,8 +420,8 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(QuaternionBasedTransform)}, it returns {@code false} otherwise or if the
-    * {@code object} is {@code null}.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -418,7 +430,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
    public boolean equals(Object object)
    {
       if (object instanceof QuaternionBasedTransform)
-         return equals((QuaternionBasedTransform) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

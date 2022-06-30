@@ -4,6 +4,7 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -51,7 +52,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform implements RigidBodyTransformBasics
+public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<RigidBodyTransform>
 {
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
@@ -265,6 +266,17 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
    {
       getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       getTranslation().set(m03, m13, m23);
+   }
+
+   /**
+    * Sets this rigid-body transform to {@code other}.
+    *
+    * @param other the other rigid-body transform to copy the values from. Not modified.
+    */
+   @Override
+   public void set(RigidBodyTransform other)
+   {
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -952,8 +964,8 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(RigidBodyTransform)}, it returns {@code false} otherwise or if the {@code object}
-    * is {@code null}.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -962,7 +974,7 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
    public boolean equals(Object object)
    {
       if (object instanceof RigidBodyTransform)
-         return equals((RigidBodyTransform) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

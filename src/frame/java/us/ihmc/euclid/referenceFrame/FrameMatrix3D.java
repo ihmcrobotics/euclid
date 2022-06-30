@@ -1,8 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -25,7 +28,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * requiring {@code FrameMatrix3D}.
  * </p>
  */
-public class FrameMatrix3D implements FrameMatrix3DBasics
+public class FrameMatrix3D implements FrameMatrix3DBasics, Settable<FrameMatrix3D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -74,6 +77,19 @@ public class FrameMatrix3D implements FrameMatrix3DBasics
    public FrameMatrix3D(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       setIncludingFrame(referenceFrame, matrix3DReadOnly);
+   }
+
+   /**
+    * Sets this frame matrix to {@code other}.
+    *
+    * @param other the other frame matrix to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FrameMatrix3D other)
+   {
+      FrameMatrix3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -232,7 +248,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two points have different frames, this method returns {@code false}.
     * </p>
@@ -245,7 +261,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameMatrix3DReadOnly)
-         return FrameMatrix3DBasics.super.equals((FrameMatrix3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

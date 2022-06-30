@@ -26,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface Face3DReadOnly extends SupportingVertexHolder
+public interface Face3DReadOnly extends SupportingVertexHolder, EuclidGeometry
 {
    /**
     * Gets the read-only reference to the centroid of the face.

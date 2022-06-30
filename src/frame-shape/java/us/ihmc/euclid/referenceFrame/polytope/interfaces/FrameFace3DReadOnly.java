@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
@@ -27,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVertexHolder
+public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVertexHolder, EuclidFrameGeometry
 {
    /** {@inheritDoc} */
    @Override

@@ -8,6 +8,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.epa.EPATools.BarycentricCoordinatesOutput;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -348,7 +349,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Face3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -357,7 +358,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
    public boolean equals(Object object)
    {
       if (object instanceof Face3DReadOnly)
-         return equals((Face3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

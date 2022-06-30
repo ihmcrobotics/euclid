@@ -3,6 +3,8 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -14,7 +16,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 /**
  * A {@code Pose3D} represents a position and orientation in 3 dimensions.
  */
-public class Pose3D implements Pose3DBasics
+public class Pose3D implements Pose3DBasics, Settable<Pose3D>
 {
    /** The position part of this pose 3D. */
    private final Point3D position = new Point3D();
@@ -121,8 +123,19 @@ public class Pose3D implements Pose3DBasics
    }
 
    /**
+    * Sets this pose 3D to the {@code other} pose 3D.
+    *
+    * @param other the other pose 3D. Not modified.
+    */
+   @Override
+   public void set(Pose3D other)
+   {
+      Pose3DBasics.super.set(other);
+   }
+
+   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Pose3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -131,7 +144,7 @@ public class Pose3D implements Pose3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Pose3DReadOnly)
-         return equals((Pose3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

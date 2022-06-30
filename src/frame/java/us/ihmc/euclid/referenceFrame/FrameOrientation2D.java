@@ -1,7 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
@@ -15,7 +17,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  *
  * @author Sylvain Bertrand
  */
-public class FrameOrientation2D implements FrameOrientation2DBasics
+public class FrameOrientation2D implements FrameOrientation2DBasics, Settable<FrameOrientation2D>
 {
    /** The reference frame is which this orientation is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -109,6 +111,13 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(FrameOrientation2D other)
+   {
+      FrameOrientation2DBasics.super.set(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
@@ -151,7 +160,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -160,7 +169,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameOrientation2DReadOnly)
-         return equals((FrameOrientation2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

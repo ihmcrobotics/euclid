@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -10,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D implements Sphere3DBasics
+public class Sphere3D implements Sphere3DBasics, Settable<Sphere3D>
 {
    /** The position of the center of this sphere. */
    private final Point3D position = new Point3D();
@@ -103,6 +105,17 @@ public class Sphere3D implements Sphere3DBasics
       this.radius = radius;
    }
 
+   /**
+    * Copies the {@code other} sphere data into {@code this}.
+    *
+    * @param other the other sphere to copy. Not modified.
+    */
+   @Override
+   public void set(Sphere3D other)
+   {
+      Sphere3DBasics.super.set(other);
+   }
+
    @Override
    public Sphere3D copy()
    {
@@ -111,7 +124,7 @@ public class Sphere3D implements Sphere3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Sphere3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -120,7 +133,7 @@ public class Sphere3D implements Sphere3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Sphere3DReadOnly)
-         return Sphere3DBasics.super.equals((Sphere3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

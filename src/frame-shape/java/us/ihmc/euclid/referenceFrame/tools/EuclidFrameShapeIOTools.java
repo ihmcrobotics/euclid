@@ -9,6 +9,7 @@ import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DStrin
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getShape3DPoseString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getTorus3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
@@ -21,6 +22,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTorus3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
@@ -302,6 +304,43 @@ public class EuclidFrameShapeIOTools
          return "null";
       else
          return getSphere3DString(format, sphere3D) + " - " + sphere3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code torus3D} as follows:
+    *
+    * <pre>
+    * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906] - worldFrame
+    * </pre>
+    *
+    * @param torus3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameTorus3DString(FrameTorus3DReadOnly torus3D)
+   {
+      return getFrameTorus3DString(DEFAULT_FORMAT, torus3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code torus3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format  the format to use for each number.
+    * @param torus3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameTorus3DString(String format, FrameTorus3DReadOnly torus3D)
+   {
+      if (torus3D == null)
+         return "null";
+      else
+         return getTorus3DString(format, torus3D) + " - " + torus3D.getReferenceFrame();
    }
 
    /**

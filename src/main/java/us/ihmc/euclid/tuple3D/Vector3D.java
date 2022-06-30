@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -16,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector3D implements Vector3DBasics
+public class Vector3D implements Vector3DBasics, Settable<Vector3D>
 {
    /** The x-component. */
    private double x;
@@ -74,6 +76,17 @@ public class Vector3D implements Vector3DBasics
    public Vector3D(Tuple3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this vector to {@code other}.
+    *
+    * @param other the other vector to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Vector3D other)
+   {
+      Vector3DBasics.super.set(other);
    }
 
    /**
@@ -144,7 +157,7 @@ public class Vector3D implements Vector3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -153,7 +166,7 @@ public class Vector3D implements Vector3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple3DReadOnly)
-         return equals((Tuple3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

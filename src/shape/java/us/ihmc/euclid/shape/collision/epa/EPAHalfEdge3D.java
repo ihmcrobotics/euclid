@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.collision.epa;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -188,7 +189,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(HalfEdge3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -199,7 +200,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
       if (object == this)
          return true;
       else if (object instanceof HalfEdge3DReadOnly)
-         return equals((HalfEdge3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

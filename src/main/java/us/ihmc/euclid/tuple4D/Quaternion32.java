@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -17,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Quaternion32 implements QuaternionBasics
+public class Quaternion32 implements QuaternionBasics, Settable<Quaternion32>
 {
    /** The x-component. */
    private float x;
@@ -107,6 +109,17 @@ public class Quaternion32 implements QuaternionBasics
       setYawPitchRoll(yaw, pitch, roll);
    }
 
+   /**
+    * Sets this quaternion to {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Quaternion32 other)
+   {
+      QuaternionBasics.super.set(other);
+   }
+
    /** {@inheritDoc} */
    @Override
    public void setUnsafe(double qx, double qy, double qz, double qs)
@@ -175,7 +188,7 @@ public class Quaternion32 implements QuaternionBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple4DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -184,7 +197,7 @@ public class Quaternion32 implements QuaternionBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple4DReadOnly)
-         return equals((Tuple4DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

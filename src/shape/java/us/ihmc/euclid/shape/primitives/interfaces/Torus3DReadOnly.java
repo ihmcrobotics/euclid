@@ -123,6 +123,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
+      // TODO Being lazy and using the cylinder method to approximate the bounding box, it could be tighter. 
       EuclidShapeTools.boundingBoxCylinder3D(getPosition(), getAxis(), getTubeRadius(), getRadius() + getTubeRadius(), boundingBoxToPack);
    }
 

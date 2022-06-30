@@ -5,6 +5,8 @@ import java.util.List;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
@@ -21,7 +23,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
  * @author Apoorv Shrivastava
  * @author Sylvain Bertrand
  */
-public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D>
+public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D> implements Settable<ConvexPolytope3D>
 {
    /** The centroid of this convex polytope. */
    private final Point3D centroid = new Point3D();
@@ -101,6 +103,18 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
       initialize(faces);
    }
 
+   /**
+    * Sets this convex polytope to be identical to {@code other}.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    */
+   @Override
+   public void set(ConvexPolytope3D other)
+   {
+      this.set((ConvexPolytope3DReadOnly) other);
+   }
+
    @Override
    public Point3D getCentroid()
    {
@@ -121,7 +135,7 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(ConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -130,7 +144,7 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
    public boolean equals(Object object)
    {
       if (object instanceof ConvexPolytope3DReadOnly)
-         return equals((ConvexPolytope3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

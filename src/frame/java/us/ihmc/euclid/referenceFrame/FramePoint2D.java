@@ -1,5 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -27,7 +30,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePoint2D}.
  * </p>
  */
-public class FramePoint2D implements FramePoint2DBasics
+public class FramePoint2D implements FramePoint2DBasics, Settable<FramePoint2D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -127,6 +130,19 @@ public class FramePoint2D implements FramePoint2DBasics
       setIncludingFrame(frameTuple3DReadOnly);
    }
 
+   /**
+    * Sets this frame point to {@code other}.
+    *
+    * @param other the other frame point to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FramePoint2D other)
+   {
+      FramePoint2DBasics.super.set(other);
+   }
+
    /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
@@ -219,7 +235,7 @@ public class FramePoint2D implements FramePoint2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two points have different frames, this method returns {@code false}.
     * </p>
@@ -232,7 +248,7 @@ public class FramePoint2D implements FramePoint2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple2DReadOnly)
-         return equals((FrameTuple2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

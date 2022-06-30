@@ -1,6 +1,8 @@
 package us.ihmc.euclid.tuple2D;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -24,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector2D implements UnitVector2DBasics
+public class UnitVector2D implements UnitVector2DBasics, Settable<UnitVector2D>
 {
    /** Tolerance used on this vector's components to identify if it can be normalized. */
    public static final double ZERO_TEST_EPSILON = UnitVector3D.ZERO_TEST_EPSILON;
@@ -138,6 +140,13 @@ public class UnitVector2D implements UnitVector2DBasics
 
    /** {@inheritDoc} */
    @Override
+   public void set(UnitVector2D other)
+   {
+      set((UnitVector2DReadOnly) other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void set(UnitVector2DReadOnly other)
    {
       x = other.getRawX();
@@ -183,7 +192,7 @@ public class UnitVector2D implements UnitVector2DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -192,7 +201,7 @@ public class UnitVector2D implements UnitVector2DBasics
    public boolean equals(Object object)
    {
       if (object instanceof Tuple2DReadOnly)
-         return UnitVector2DBasics.super.equals((Tuple2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

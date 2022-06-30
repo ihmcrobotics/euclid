@@ -2,6 +2,8 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -14,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box.
  */
-public class BoundingBox3D implements BoundingBox3DBasics
+public class BoundingBox3D implements BoundingBox3DBasics, Settable<BoundingBox3D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point3D minPoint = new Point3D();
@@ -123,6 +125,17 @@ public class BoundingBox3D implements BoundingBox3DBasics
    }
 
    /**
+    * Redefines this bounding box to be the same as the given {@code other}.
+    *
+    * @param other the bounding box used to redefine this bounding box. Not modified.
+    */
+   @Override
+   public void set(BoundingBox3D other)
+   {
+      BoundingBox3DBasics.super.set(other);
+   }
+
+   /**
     * Gets the read-only reference to the minimum coordinate of this bounding box.
     *
     * @return the read-only reference to the minimum coordinate.
@@ -146,7 +159,7 @@ public class BoundingBox3D implements BoundingBox3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(BoundingBox3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -155,7 +168,7 @@ public class BoundingBox3D implements BoundingBox3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof BoundingBox3DReadOnly)
-         return equals((BoundingBox3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

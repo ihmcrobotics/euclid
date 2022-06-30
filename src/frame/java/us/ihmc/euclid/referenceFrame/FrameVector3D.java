@@ -1,5 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
@@ -26,7 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * requiring {@code FrameVector3D}.
  * </p>
  */
-public class FrameVector3D implements FrameVector3DBasics
+public class FrameVector3D implements FrameVector3DBasics, Settable<FrameVector3D>
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -126,6 +129,19 @@ public class FrameVector3D implements FrameVector3DBasics
    }
 
    /**
+    * Sets this frame vector to {@code other}.
+    *
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FrameVector3D other)
+   {
+      FrameVector3DBasics.super.set(other);
+   }
+
+   /**
     * Sets the reference frame of this vector without updating or modifying its x, y, and z components.
     *
     * @param referenceFrame the new reference frame for this frame vector.
@@ -213,7 +229,7 @@ public class FrameVector3D implements FrameVector3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
@@ -226,7 +242,7 @@ public class FrameVector3D implements FrameVector3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple3DReadOnly)
-         return equals((FrameTuple3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

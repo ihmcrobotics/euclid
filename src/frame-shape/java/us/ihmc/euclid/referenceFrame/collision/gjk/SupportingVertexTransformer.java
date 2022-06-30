@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.collision.gjk;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -44,56 +43,5 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
       if (success)
          transform.transform(supportingVertexToPack);
       return success;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean equals(EuclidGeometry geometry)
-   {
-      if (geometry == this)
-         return true;
-      if (geometry == null)
-         return false;
-      if (!(geometry instanceof SupportingVertexTransformer))
-         return false;
-
-      SupportingVertexTransformer other = (SupportingVertexTransformer) geometry;
-      return original.equals(other.original) && transform.equals(other.transform);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (geometry == this)
-         return true;
-      if (geometry == null)
-         return false;
-      if (!(geometry instanceof SupportingVertexTransformer))
-         return false;
-      SupportingVertexTransformer other = (SupportingVertexTransformer) geometry;
-      return original.epsilonEquals(other.original, epsilon) && transform.epsilonEquals(other.transform, epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean geometricallyEquals(EuclidGeometry geometry, double epsilon)
-   {
-      if (geometry == this)
-         return true;
-      if (geometry == null)
-         return false;
-      if (!(geometry instanceof SupportingVertexTransformer))
-         return false;
-
-      SupportingVertexTransformer other = (SupportingVertexTransformer) geometry;
-      return original.geometricallyEquals(other.original, epsilon) && transform.geometricallyEquals(other.transform, epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public String toString(String format)
-   {
-      return "Original: " + original.toString(format) + "\nTransform: " + transform.toString(format);
    }
 }
