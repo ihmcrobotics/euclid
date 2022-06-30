@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -98,7 +99,7 @@ public class PointShape3D implements PointShape3DBasics
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -107,7 +108,7 @@ public class PointShape3D implements PointShape3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof PointShape3DReadOnly)
-         return PointShape3DBasics.super.equals((PointShape3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

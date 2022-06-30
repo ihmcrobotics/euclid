@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.collision.interfaces;
 
-import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -25,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @see GilbertJohnsonKeerthiCollisionDetector
  * @see ExpandingPolytopeAlgorithm
  */
-public interface SupportingVertexHolder extends EuclidGeometry
+public interface SupportingVertexHolder
 {
    /**
     * Finds the supporting vertex in the given direction.
