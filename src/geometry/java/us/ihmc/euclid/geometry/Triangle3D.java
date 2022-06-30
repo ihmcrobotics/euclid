@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Triangle3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -87,7 +88,7 @@ public class Triangle3D implements Triangle3DBasics, Settable<Triangle3D>
    public boolean equals(Object object)
    {
       if (object instanceof Triangle3DReadOnly)
-         return Triangle3DBasics.super.equals((Triangle3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

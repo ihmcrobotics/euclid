@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -272,7 +273,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two polytopes have different frames, this method returns {@code false}.
     * </p>
@@ -285,7 +286,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    public boolean equals(Object object)
    {
       if (object instanceof FrameConvexPolytope3DReadOnly)
-         return FrameConvexPolytope3DReadOnly.super.equals((FrameConvexPolytope3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

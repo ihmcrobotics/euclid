@@ -5,6 +5,7 @@ import java.util.Collection;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
@@ -127,7 +128,7 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameFace3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two faces have different frames, this method returns {@code false}.
     * </p>
@@ -140,7 +141,7 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    public boolean equals(Object object)
    {
       if (object instanceof FrameFace3DReadOnly)
-         return equals((FrameFace3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

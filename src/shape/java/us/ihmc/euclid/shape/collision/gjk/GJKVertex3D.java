@@ -1,9 +1,9 @@
 package us.ihmc.euclid.shape.collision.gjk;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * Vertex 3D that belongs to a simplex used in the Gilbert-Johnson-Keerthi algorithm.
@@ -82,7 +82,7 @@ public class GJKVertex3D implements Point3DReadOnly
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -91,7 +91,7 @@ public class GJKVertex3D implements Point3DReadOnly
    public boolean equals(Object object)
    {
       if (object instanceof GJKVertex3D)
-         return equals((Tuple3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

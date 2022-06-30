@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
@@ -170,7 +171,7 @@ public class FramePose2D implements FramePose2DBasics, Settable<FramePose2D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FramePose2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
@@ -182,7 +183,7 @@ public class FramePose2D implements FramePose2DBasics, Settable<FramePose2D>
    public boolean equals(Object object)
    {
       if (object instanceof FramePose2DReadOnly)
-         return equals((FramePose2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

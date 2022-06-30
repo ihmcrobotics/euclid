@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -407,7 +408,7 @@ public class RotationMatrix implements RotationMatrixBasics, Settable<RotationMa
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Matrix3DReadOnly)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
     * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
@@ -417,7 +418,7 @@ public class RotationMatrix implements RotationMatrixBasics, Settable<RotationMa
    public boolean equals(Object object)
    {
       if (object instanceof Matrix3DReadOnly)
-         return equals((Matrix3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

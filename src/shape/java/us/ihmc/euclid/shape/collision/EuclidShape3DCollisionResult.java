@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
@@ -145,7 +146,7 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(EuclidShape3DCollisionResultReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -154,7 +155,7 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
    public boolean equals(Object object)
    {
       if (object instanceof EuclidShape3DCollisionResultReadOnly)
-         return EuclidShape3DCollisionResultBasics.super.equals((EuclidShape3DCollisionResultReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

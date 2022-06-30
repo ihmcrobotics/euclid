@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -209,7 +210,7 @@ public class Vector3D32 implements Vector3DBasics, Settable<Vector3D32>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -218,7 +219,7 @@ public class Vector3D32 implements Vector3DBasics, Settable<Vector3D32>
    public boolean equals(Object object)
    {
       if (object instanceof Tuple3DReadOnly)
-         return equals((Tuple3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

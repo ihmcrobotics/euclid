@@ -46,8 +46,8 @@ public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolde
     * failing test does not necessarily mean that the two objects are different in a geometric way.
     * </p>
     *
-    * @param geometry the geometry to compare against {@code this}. Not modified.
-    * @param epsilon  tolerance to use when comparing each component.
+    * @param frameGeometry the geometry to compare against {@code this}. Not modified.
+    * @param epsilon       tolerance to use when comparing each component.
     * @return {@code true} if the two objects are of same type and are approximately equal
     *         component-wise, {@code false} otherwise.
     */
@@ -74,8 +74,9 @@ public interface EuclidFrameGeometry extends EuclidGeometry, ReferenceFrameHolde
     * than {@code epsilon}. The two object must represent the same type of geometry.
     * </p>
     *
-    * @param geometry the geometry to compare against {@code this}. Not modified.
-    * @param epsilon  tolerance to use when comparing the two geometries, usually refers to a distance.
+    * @param frameGeometry the geometry to compare against {@code this}. Not modified.
+    * @param epsilon       tolerance to use when comparing the two geometries, usually refers to a
+    *                      distance.
     * @return {@code true} if the two objects represent the same geometry, {@code false} otherwise.
     */
    default boolean geometricallyEquals(EuclidFrameGeometry frameGeometry, double epsilon)

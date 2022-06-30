@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
@@ -124,7 +125,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, Settable<Fr
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameLineSegment3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
@@ -137,7 +138,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, Settable<Fr
    public boolean equals(Object object)
    {
       if (object instanceof FrameLineSegment3DReadOnly)
-         return equals((FrameLineSegment3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

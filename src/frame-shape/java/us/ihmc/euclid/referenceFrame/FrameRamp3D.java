@@ -7,6 +7,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
@@ -615,7 +616,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, Settable<FrameRamp3D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameRamp3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two ramp have different frames, this method returns {@code false}.
     * </p>
@@ -628,7 +629,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, Settable<FrameRamp3D>
    public boolean equals(Object object)
    {
       if (object instanceof FrameRamp3DReadOnly)
-         return FrameRamp3DBasics.super.equals((FrameRamp3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }
@@ -652,7 +653,6 @@ public class FrameRamp3D implements FrameRamp3DBasics, Settable<FrameRamp3D>
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
     * @return the representative {@code String}.
     */
    @Override

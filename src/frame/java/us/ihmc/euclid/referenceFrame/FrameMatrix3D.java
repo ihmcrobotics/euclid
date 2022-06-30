@@ -4,6 +4,8 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -246,7 +248,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, Settable<FrameMatrix3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two points have different frames, this method returns {@code false}.
     * </p>
@@ -259,7 +261,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, Settable<FrameMatrix3
    public boolean equals(Object object)
    {
       if (object instanceof FrameMatrix3DReadOnly)
-         return FrameMatrix3DBasics.super.equals((FrameMatrix3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

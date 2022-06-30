@@ -13,6 +13,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DFactory;
@@ -642,7 +643,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(ConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -651,7 +652,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    public boolean equals(Object object)
    {
       if (object instanceof ConvexPolytope3DReadOnly)
-         return equals((ConvexPolytope3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

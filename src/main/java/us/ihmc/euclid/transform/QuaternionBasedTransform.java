@@ -420,8 +420,8 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(QuaternionBasedTransform)}, it returns {@code false} otherwise or if the
-    * {@code object} is {@code null}.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -430,7 +430,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Setta
    public boolean equals(Object object)
    {
       if (object instanceof QuaternionBasedTransform)
-         return equals((QuaternionBasedTransform) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

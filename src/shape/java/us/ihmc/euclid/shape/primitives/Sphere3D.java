@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
@@ -123,7 +124,7 @@ public class Sphere3D implements Sphere3DBasics, Settable<Sphere3D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Sphere3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -132,7 +133,7 @@ public class Sphere3D implements Sphere3DBasics, Settable<Sphere3D>
    public boolean equals(Object object)
    {
       if (object instanceof Sphere3DReadOnly)
-         return Sphere3DBasics.super.equals((Sphere3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

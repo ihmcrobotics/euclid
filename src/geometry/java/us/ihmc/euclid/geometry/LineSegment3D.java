@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -94,7 +95,7 @@ public class LineSegment3D implements LineSegment3DBasics, Settable<LineSegment3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(LineSegment3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -103,7 +104,7 @@ public class LineSegment3D implements LineSegment3DBasics, Settable<LineSegment3
    public boolean equals(Object object)
    {
       if (object instanceof LineSegment3DReadOnly)
-         return equals((LineSegment3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

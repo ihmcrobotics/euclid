@@ -10,6 +10,7 @@ import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
@@ -438,7 +439,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    public boolean equals(Object object)
    {
       if (object instanceof FrameConvexPolygon2DReadOnly)
-         return FrameConvexPolygon2DBasics.super.equals((FrameConvexPolygon2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

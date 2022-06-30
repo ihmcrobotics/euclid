@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
@@ -201,15 +202,15 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, Settable<Fram
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param object the other yaw-pitch-roll to compare against this. Not modified.
     * @return {@code true} if the two yaw-pitch-rolls are exactly equal component-wise and are
     *         expressed in the same reference frame, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object other)
+   public boolean equals(Object object)
    {
-      if (other instanceof FrameYawPitchRollReadOnly)
-         return equals((FrameYawPitchRollReadOnly) other);
+      if (object instanceof FrameYawPitchRollReadOnly)
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

@@ -3,6 +3,7 @@ package us.ihmc.euclid.axisAngle;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
@@ -191,7 +192,7 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(AxisAngleReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -200,7 +201,7 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>
    public boolean equals(Object object)
    {
       if (object instanceof AxisAngleReadOnly)
-         return AxisAngleBasics.super.equals((AxisAngleReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

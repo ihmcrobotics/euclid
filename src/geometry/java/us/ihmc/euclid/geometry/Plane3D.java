@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -117,7 +118,7 @@ public class Plane3D implements Plane3DBasics, Settable<Plane3D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Plane3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -126,7 +127,7 @@ public class Plane3D implements Plane3DBasics, Settable<Plane3D>
    public boolean equals(Object object)
    {
       if (object instanceof Plane3DReadOnly)
-         return Plane3DBasics.super.equals((Plane3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

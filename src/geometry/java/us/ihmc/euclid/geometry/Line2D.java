@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -122,7 +123,7 @@ public class Line2D implements Line2DBasics, Settable<Line2D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -131,7 +132,7 @@ public class Line2D implements Line2DBasics, Settable<Line2D>
    public boolean equals(Object object)
    {
       if (object instanceof Line2DReadOnly)
-         return equals((Line2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

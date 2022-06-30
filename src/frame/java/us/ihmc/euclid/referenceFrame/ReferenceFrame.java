@@ -323,6 +323,37 @@ public abstract class ReferenceFrame
       this(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame, false);
    }
 
+   /**
+    * Creates a new reference frame defined as being a child of the given {@code parentFrame} and
+    * initializes the transform to its parent.
+    * <p>
+    * The {@code transformFromParent} should describe the pose of the new frame expressed in its parent
+    * frame.
+    * </p>
+    * <p>
+    * This new reference frame defined in the {@code parentFrame} and moves with it.
+    * </p>
+    * <p>
+    * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
+    * </p>
+    *
+    * @param frameName          the name of the new frame.
+    * @param parentFrame        the parent frame of the new reference frame.
+    * @param transformToParent  the transform that can be used to transform a geometry object the new
+    *                           frame to its parent frame. Not modified.
+    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
+    *                           frame or moving. If {@code true}, the {@code parentFrame} has to also
+    *                           be stationary.
+    * @param isZupFrame         refers to whether this new frame has its z-axis aligned with the root
+    *                           frame at all time or not.
+    * @param isFixedInParent    refers to whether this new frame should be considered as rigidly
+    *                           attached to its parent, its pose is constant. This class does not use
+    *                           this flag internally, it can be later accessed via
+    *                           {@link #isFixedInParent()}.
+    * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
+    *                                  {@code parentFrame} is not a stationary frame.
+    */
    public ReferenceFrame(String frameName,
                          ReferenceFrame parentFrame,
                          RigidBodyTransformReadOnly transformToParent,
@@ -445,6 +476,12 @@ public abstract class ReferenceFrame
       return isZupFrame;
    }
 
+   /**
+    * Returns whether this reference frame should be considered as rigidly attached to its parent, i.e.
+    * its transform relative to its parent can be considered as constant.
+    * 
+    * @return {@code true} if this frame can be considered as fixed in parent.
+    */
    public boolean isFixedInParent()
    {
       checkIfRemoved();
@@ -581,6 +618,20 @@ public abstract class ReferenceFrame
       return frameName;
    }
 
+   /**
+    * A string that can be used to identify this reference frame.
+    * <p>
+    * It contains the name of the frame itself and all parents up to the root frame and is used for the
+    * {@link #hashCode()} and {@link #equals(Object)} methods.
+    * </p>
+    * <p>
+    * In contrast to the {@link #frameIndex} this is a name based identifier that is only dependent on
+    * names of frames. Note, that this means that two frames with the same name will be considered
+    * equal even though they might be in different locations.
+    * </p>
+    * 
+    * @return the name identifier for this reference frame.
+    */
    public String getNameId()
    {
       checkIfRemoved();

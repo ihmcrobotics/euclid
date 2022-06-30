@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
@@ -135,7 +136,7 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics, Settable<Fr
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameBoundingBox2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two bounding boxes have different frames, this method returns {@code false}.
     * </p>
@@ -147,7 +148,7 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics, Settable<Fr
    public boolean equals(Object object)
    {
       if (object instanceof FrameBoundingBox2DReadOnly)
-         return FrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

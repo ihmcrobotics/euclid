@@ -1,5 +1,6 @@
 package us.ihmc.euclid.yawPitchRoll;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -170,7 +171,7 @@ public class YawPitchRoll implements YawPitchRollBasics, Settable<YawPitchRoll>
    public boolean equals(Object object)
    {
       if (object instanceof YawPitchRollReadOnly)
-         return YawPitchRollBasics.super.equals((YawPitchRollReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

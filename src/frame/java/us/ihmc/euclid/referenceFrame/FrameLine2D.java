@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
@@ -249,7 +250,7 @@ public class FrameLine2D implements FrameLine2DBasics, Settable<FrameLine2D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameLine2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -258,7 +259,7 @@ public class FrameLine2D implements FrameLine2DBasics, Settable<FrameLine2D>
    public boolean equals(Object object)
    {
       if (object instanceof FrameLine2DReadOnly)
-         return equals((FrameLine2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

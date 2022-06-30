@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DBasics;
@@ -390,7 +391,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, Settable<FrameE
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameEllipsoid3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two ellipsoids have different frames, this method returns {@code false}.
     * </p>
@@ -403,7 +404,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, Settable<FrameE
    public boolean equals(Object object)
    {
       if (object instanceof FrameEllipsoid3DReadOnly)
-         return FrameEllipsoid3DBasics.super.equals((FrameEllipsoid3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

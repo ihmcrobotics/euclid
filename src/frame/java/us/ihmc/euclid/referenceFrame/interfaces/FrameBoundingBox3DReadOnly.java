@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -1308,7 +1309,7 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Eucli
    /**
     * Gets a representative {@code String} of this bounding box 3D given a specific format to use.
     * <p>
-    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * Using the default format {@link EuclidCoreIOTools#DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 ), worldFrame

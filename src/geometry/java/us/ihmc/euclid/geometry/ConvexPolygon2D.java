@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -331,7 +333,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    public boolean equals(Object object)
    {
       if (object instanceof ConvexPolygon2DReadOnly)
-         return ConvexPolygon2DBasics.super.equals((ConvexPolygon2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

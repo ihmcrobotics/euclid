@@ -1678,9 +1678,9 @@ public class QuaternionTools
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>] unless limitToPi is set to True.
     */
-   public static double angle(QuaternionReadOnly q, boolean limitToPi)
+   public static double angle(QuaternionReadOnly quaternion, boolean limitToPi)
    {
-      return angle(q.getX(), q.getY(), q.getZ(), q.getS(), limitToPi);
+      return angle(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), limitToPi);
    }
 
    /**
@@ -1690,9 +1690,9 @@ public class QuaternionTools
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>].
     */
-   public static double angle(QuaternionReadOnly q)
+   public static double angle(QuaternionReadOnly quaternion)
    {
-      return angle(q, false);
+      return angle(quaternion, false);
    }
 
    static double angle(double qx, double qy, double qz, double qs, boolean limitToPi)

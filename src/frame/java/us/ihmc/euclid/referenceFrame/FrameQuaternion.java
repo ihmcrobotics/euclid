@@ -4,6 +4,8 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
@@ -286,7 +288,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, Settable<FrameQua
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
@@ -299,7 +301,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, Settable<FrameQua
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple4DReadOnly)
-         return equals((FrameTuple4DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

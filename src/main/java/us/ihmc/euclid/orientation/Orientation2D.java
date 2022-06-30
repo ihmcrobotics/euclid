@@ -1,6 +1,7 @@
 package us.ihmc.euclid.orientation;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
@@ -116,7 +117,7 @@ public class Orientation2D implements Orientation2DBasics, Settable<Orientation2
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Orientation2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -125,7 +126,7 @@ public class Orientation2D implements Orientation2DBasics, Settable<Orientation2
    public boolean equals(Object object)
    {
       if (object instanceof Orientation2DReadOnly)
-         return equals((Orientation2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

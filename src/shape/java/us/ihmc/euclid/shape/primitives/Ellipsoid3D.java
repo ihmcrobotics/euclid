@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
@@ -202,7 +203,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, Settable<Ellipsoid3D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Ellipsoid3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -211,7 +212,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, Settable<Ellipsoid3D>
    public boolean equals(Object object)
    {
       if (object instanceof Ellipsoid3DReadOnly)
-         return Ellipsoid3DBasics.super.equals((Ellipsoid3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

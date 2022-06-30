@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DBasics;
@@ -179,7 +180,7 @@ public class FrameSphere3D implements FrameSphere3DBasics, Settable<FrameSphere3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameSphere3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two ellipsoids have different frames, this method returns {@code false}.
     * </p>
@@ -192,7 +193,7 @@ public class FrameSphere3D implements FrameSphere3DBasics, Settable<FrameSphere3
    public boolean equals(Object object)
    {
       if (object instanceof FrameSphere3DReadOnly)
-         return FrameSphere3DBasics.super.equals((FrameSphere3DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

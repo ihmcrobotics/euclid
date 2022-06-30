@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
@@ -198,7 +199,7 @@ public class Cylinder3D implements Cylinder3DBasics, Settable<Cylinder3D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Cylinder3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -207,7 +208,7 @@ public class Cylinder3D implements Cylinder3DBasics, Settable<Cylinder3D>
    public boolean equals(Object object)
    {
       if (object instanceof Cylinder3DReadOnly)
-         return Cylinder3DBasics.super.equals((Cylinder3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

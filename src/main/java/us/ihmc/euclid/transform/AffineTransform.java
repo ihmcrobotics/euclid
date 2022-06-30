@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -403,7 +404,7 @@ public class AffineTransform implements AffineTransformBasics, Settable<AffineTr
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(AffineTransformReadOnly)}, it returns {@code false} otherwise or if the
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the
     * {@code object} is {@code null}.
     *
     * @param object the object to compare against this. Not modified.
@@ -413,7 +414,7 @@ public class AffineTransform implements AffineTransformBasics, Settable<AffineTr
    public boolean equals(Object object)
    {
       if (object instanceof AffineTransformReadOnly)
-         return equals((AffineTransformReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

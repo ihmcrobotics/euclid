@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -164,7 +165,7 @@ public class Vector2D32 implements Vector2DBasics, Settable<Vector2D32>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -173,7 +174,7 @@ public class Vector2D32 implements Vector2DBasics, Settable<Vector2D32>
    public boolean equals(Object object)
    {
       if (object instanceof Tuple2DReadOnly)
-         return equals((Tuple2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

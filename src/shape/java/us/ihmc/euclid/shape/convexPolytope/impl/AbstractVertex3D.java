@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -177,7 +178,7 @@ public abstract class AbstractVertex3D<Vertex extends AbstractVertex3D<Vertex, E
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Vertex3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -186,7 +187,7 @@ public abstract class AbstractVertex3D<Vertex extends AbstractVertex3D<Vertex, E
    public boolean equals(Object object)
    {
       if (object instanceof Vertex3DReadOnly)
-         return equals((Vertex3DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

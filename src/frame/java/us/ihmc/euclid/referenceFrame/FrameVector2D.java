@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
@@ -237,7 +239,7 @@ public class FrameVector2D implements FrameVector2DBasics, Settable<FrameVector2
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidFrameGeometry)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
@@ -250,7 +252,7 @@ public class FrameVector2D implements FrameVector2DBasics, Settable<FrameVector2
    public boolean equals(Object object)
    {
       if (object instanceof FrameTuple2DReadOnly)
-         return equals((FrameTuple2DReadOnly) object);
+         return equals((EuclidFrameGeometry) object);
       else
          return false;
    }

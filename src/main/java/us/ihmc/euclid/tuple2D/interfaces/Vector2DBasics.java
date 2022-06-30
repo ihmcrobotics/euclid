@@ -1,11 +1,11 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * Write and read interface for a 2 dimensional vector.
@@ -43,7 +43,7 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     * {@code maxLength} and its direction is preserved.
     * </p>
     * <p>
-    * Edge case: if {@code maxLength <} {@value Vector3DBasics#EPS_MAX_LENGTH}, this vector is set to
+    * Edge case: if {@code maxLength <} {@value TupleTools#EPS_MAX_NORM}, this vector is set to
     * zero.
     * </p>
     *

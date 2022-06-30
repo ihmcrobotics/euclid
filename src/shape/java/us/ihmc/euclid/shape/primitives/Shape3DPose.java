@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
@@ -158,7 +159,7 @@ public class Shape3DPose implements Shape3DPoseBasics, Settable<Shape3DPose>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Shape3DPoseReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -167,7 +168,7 @@ public class Shape3DPose implements Shape3DPoseBasics, Settable<Shape3DPose>
    public boolean equals(Object object)
    {
       if (object instanceof Shape3DPoseReadOnly)
-         return Shape3DPoseBasics.super.equals((Shape3DPoseReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

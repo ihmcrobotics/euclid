@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
@@ -111,7 +112,7 @@ public class Pose2D implements Pose2DBasics, Settable<Pose2D>
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Pose2DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -120,7 +121,7 @@ public class Pose2D implements Pose2DBasics, Settable<Pose2D>
    public boolean equals(Object object)
    {
       if (object instanceof Pose2DReadOnly)
-         return equals((Pose2DReadOnly) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }

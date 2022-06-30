@@ -964,8 +964,8 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(RigidBodyTransform)}, it returns {@code false} otherwise or if the {@code object}
-    * is {@code null}.
+    * {@link #equals(EuclidGeometry)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -974,7 +974,7 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
    public boolean equals(Object object)
    {
       if (object instanceof RigidBodyTransform)
-         return equals((RigidBodyTransform) object);
+         return equals((EuclidGeometry) object);
       else
          return false;
    }
