@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCylinder3D implements FrameCylinder3DBasics
+public class FrameCylinder3D implements FrameCylinder3DBasics, Settable<FrameCylinder3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -134,6 +135,13 @@ public class FrameCylinder3D implements FrameCylinder3DBasics
    public FrameCylinder3D(FrameCylinder3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameCylinder3D other)
+   {
+      FrameCylinder3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

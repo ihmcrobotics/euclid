@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -37,7 +38,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRotationMatrix implements FrameRotationMatrixBasics
+public class FrameRotationMatrix implements FrameRotationMatrixBasics, Settable<FrameRotationMatrix>
 {
    /** The reference frame is which this rotation matrix is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -239,6 +240,13 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
    public FrameRotationMatrix(FrameVector3DReadOnly rotationVector)
    {
       setRotationVectorIncludingFrame(rotationVector);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameRotationMatrix other)
+   {
+      FrameRotationMatrixBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -17,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents a finite-length 1D line segment defined by its two 1D endpoints.
  */
-public class LineSegment1D implements Clearable, EuclidGeometry
+public class LineSegment1D implements Clearable, EuclidGeometry, Settable<LineSegment1D>
 {
    /** The first endpoint defining this line segment. */
    private double firstEndpoint = Double.NaN;
@@ -374,6 +375,7 @@ public class LineSegment1D implements Clearable, EuclidGeometry
     *
     * @param other the other line segment 1D to set this to. Not modified.
     */
+   @Override
    public void set(LineSegment1D other)
    {
       set(other.firstEndpoint, other.secondEndpoint);

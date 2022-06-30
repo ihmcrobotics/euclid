@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -43,7 +44,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class AffineTransform implements AffineTransformBasics
+public class AffineTransform implements AffineTransformBasics, Settable<AffineTransform>
 {
    /** The rotation plus scaling part of this transform. */
    private final LinearTransform3D linearTransform = new LinearTransform3D();
@@ -131,6 +132,17 @@ public class AffineTransform implements AffineTransformBasics
    public AffineTransform(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       set(orientation, translation);
+   }
+
+   /**
+    * Sets this affine transform to the {@code other}.
+    *
+    * @param other the other affine transform to copy the values from. Not modified.
+    */
+   @Override
+   public void set(AffineTransform other)
+   {
+      set((AffineTransformReadOnly) other);
    }
 
    /**

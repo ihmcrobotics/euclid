@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -16,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector3D32 implements Vector3DBasics
+public class Vector3D32 implements Vector3DBasics, Settable<Vector3D32>
 {
    /** The x-component. */
    private float x;
@@ -64,6 +65,17 @@ public class Vector3D32 implements Vector3DBasics
    public Vector3D32(Tuple3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this vector to {@code other}.
+    *
+    * @param other the other vector to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Vector3D32 other)
+   {
+      Vector3DBasics.super.set(other);
    }
 
    /**

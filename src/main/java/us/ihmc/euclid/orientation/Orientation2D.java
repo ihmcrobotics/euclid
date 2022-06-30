@@ -1,6 +1,7 @@
 package us.ihmc.euclid.orientation;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -13,7 +14,7 @@ import us.ihmc.euclid.tuple2D.Vector2D;
  * A {@code Orientation2D} represents an orientation in the XY-plane, i.e. the yaw angle about the
  * z-axis.
  */
-public class Orientation2D implements Orientation2DBasics
+public class Orientation2D implements Orientation2DBasics, Settable<Orientation2D>
 {
    /** The angle in radians about the z-axis. */
    private double yaw = 0.0;
@@ -56,6 +57,17 @@ public class Orientation2D implements Orientation2DBasics
     */
    @Override
    public void set(Orientation2DReadOnly other)
+   {
+      Orientation2DBasics.super.set(other);
+   }
+
+   /**
+    * Sets this orientation 2D to the {@code other} orientation 2D.
+    *
+    * @param other the other orientation 2D. Not modified.
+    */
+   @Override
+   public void set(Orientation2D other)
    {
       Orientation2DBasics.super.set(other);
    }

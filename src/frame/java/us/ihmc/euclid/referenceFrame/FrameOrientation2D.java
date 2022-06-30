@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  *
  * @author Sylvain Bertrand
  */
-public class FrameOrientation2D implements FrameOrientation2DBasics
+public class FrameOrientation2D implements FrameOrientation2DBasics, Settable<FrameOrientation2D>
 {
    /** The reference frame is which this orientation is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -105,6 +106,13 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
    public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
       setIncludingFrame(frameQuaternionReadOnly);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameOrientation2D other)
+   {
+      FrameOrientation2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

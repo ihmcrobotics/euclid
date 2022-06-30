@@ -1,12 +1,12 @@
 package us.ihmc.euclid.referenceFrame.polytope;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -33,7 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Sylvain Bertrand
  */
 public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D>
-      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, FrameChangeable
+      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, Settable<FrameConvexPolytope3D>
 {
    /** The reference frame in which this polytope is expressed. */
    private ReferenceFrame referenceFrame;
@@ -164,6 +164,18 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    private static Face3DFactory<FrameFace3D> faceFactory(ReferenceFrameHolder referenceFrameHolder)
    {
       return (initialGuessNormal, constructionEpsilon) -> new FrameFace3D(referenceFrameHolder, initialGuessNormal, constructionEpsilon);
+   }
+
+   /**
+    * Sets this convex polytope to be identical to {@code other}.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    */
+   @Override
+   public void set(FrameConvexPolytope3D other)
+   {
+      this.set((FrameConvexPolytope3DReadOnly) other);
    }
 
    /**

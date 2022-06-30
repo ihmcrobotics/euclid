@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Torus3D implements Torus3DBasics
+public class Torus3D implements Torus3DBasics, Settable<Torus3D>
 {
    /** Position of this torus' center. */
    private final Point3D position = new Point3D();
@@ -76,6 +77,17 @@ public class Torus3D implements Torus3DBasics
    public Torus3D(Torus3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Copies the {@code other} torus data into {@code this}.
+    *
+    * @param other the other torus to copy. Not modified.
+    */
+   @Override
+   public void set(Torus3D other)
+   {
+      Torus3DBasics.super.set(other);
    }
 
    /**

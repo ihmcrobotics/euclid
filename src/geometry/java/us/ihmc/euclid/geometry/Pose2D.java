@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 /**
  * A {@code Pose2D} represents a position and orientation in the XY-plane.
  */
-public class Pose2D implements Pose2DBasics
+public class Pose2D implements Pose2DBasics, Settable<Pose2D>
 {
    /** The position part of this pose 2D. */
    private final Point2D position = new Point2D();
@@ -95,6 +96,17 @@ public class Pose2D implements Pose2DBasics
    public Orientation2DBasics getOrientation()
    {
       return orientation;
+   }
+
+   /**
+    * Sets this pose 2D to the {@code other} pose 2D.
+    *
+    * @param other the other pose 2D. Not modified.
+    */
+   @Override
+   public void set(Pose2D other)
+   {
+      Pose2DBasics.super.set(other);
    }
 
    /**

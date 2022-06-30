@@ -1,5 +1,6 @@
 package us.ihmc.euclid.yawPitchRoll;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -33,7 +34,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class YawPitchRoll implements YawPitchRollBasics
+public class YawPitchRoll implements YawPitchRollBasics, Settable<YawPitchRoll>
 {
    /** The yaw angle representing the first rotation around the z-axis. */
    private double yaw;
@@ -101,6 +102,17 @@ public class YawPitchRoll implements YawPitchRollBasics
    public YawPitchRoll(double[] yawPitchRollArray)
    {
       set(yawPitchRollArray);
+   }
+
+   /**
+    * Sets this yaw-pitch-roll to the same value as the given {@code other}.
+    *
+    * @param other the other yaw-pitch-roll. Not modified.
+    */
+   @Override
+   public void set(YawPitchRoll other)
+   {
+      YawPitchRollBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

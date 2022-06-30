@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
@@ -25,7 +26,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
  * using methods requiring {@code FrameLineSegment3D}.
  * </p>
  */
-public class FrameLineSegment3D implements FrameLineSegment3DBasics
+public class FrameLineSegment3D implements FrameLineSegment3DBasics, Settable<FrameLineSegment3D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -84,6 +85,13 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics
    public FrameLineSegment3D(FrameLineSegment3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameLineSegment3D other)
+   {
+      FrameLineSegment3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

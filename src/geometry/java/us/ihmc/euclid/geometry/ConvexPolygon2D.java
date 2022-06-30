@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
  */
-public class ConvexPolygon2D implements ConvexPolygon2DBasics
+public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPolygon2D>
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -228,6 +229,24 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics
 
       updateCentroidAndArea();
       updateBoundingBox();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(Vertex2DSupplier)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param other the other convex polygon to copy. Not modified.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
+    *                                  other polygon's vertices were edited.
+    */
+   @Override
+   public void set(ConvexPolygon2D other)
+   {
+      ConvexPolygon2DBasics.super.set(other);
    }
 
    /**

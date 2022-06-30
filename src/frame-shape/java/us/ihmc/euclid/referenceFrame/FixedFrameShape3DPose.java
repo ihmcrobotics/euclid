@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics
+public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Settable<FixedFrameShape3DPose>
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -88,6 +89,13 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics
    {
       this(referenceFrameHolder);
       set(pose);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FixedFrameShape3DPose other)
+   {
+      FixedFrameShape3DPoseBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

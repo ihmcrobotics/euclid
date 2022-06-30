@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -11,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.
  */
-public class LineSegment3D implements LineSegment3DBasics
+public class LineSegment3D implements LineSegment3DBasics, Settable<LineSegment3D>
 {
    /** The first endpoint defining this line segment. */
    private final Point3D firstEndpoint = new Point3D();
@@ -64,6 +65,17 @@ public class LineSegment3D implements LineSegment3DBasics
                         double secondEndpointZ)
    {
       set(firstEndpointX, firstEndpointY, firstEndpointZ, secondEndpointX, secondEndpointY, secondEndpointZ);
+   }
+
+   /**
+    * Sets this line segment to be the same as the given line segment.
+    *
+    * @param other the other line segment to copy. Not modified.
+    */
+   @Override
+   public void set(LineSegment3D other)
+   {
+      LineSegment3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

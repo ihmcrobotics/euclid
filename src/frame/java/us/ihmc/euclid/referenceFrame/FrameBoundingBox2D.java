@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * A {@link FrameBoundingBox2D} can be used to define from a set of minimum and maximum coordinates
  * an axis-aligned bounding box in the XY-plane that is expressed in a given reference frame..
  */
-public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
+public class FrameBoundingBox2D implements FrameBoundingBox2DBasics, Settable<FrameBoundingBox2D>
 {
    /** The reference frame is which this bounding box is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -95,6 +96,13 @@ public class FrameBoundingBox2D implements FrameBoundingBox2DBasics
    public FrameBoundingBox2D(FrameBoundingBox2DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameBoundingBox2D other)
+   {
+      FrameBoundingBox2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

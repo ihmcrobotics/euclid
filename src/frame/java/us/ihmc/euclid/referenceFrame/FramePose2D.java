@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
@@ -30,7 +31,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * requiring {@code FramePose2D}.
  * </p>
  */
-public class FramePose2D implements FramePose2DBasics
+public class FramePose2D implements FramePose2DBasics, Settable<FramePose2D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -130,6 +131,13 @@ public class FramePose2D implements FramePose2DBasics
    public FramePose2D(FramePose3DReadOnly framePose3DReadOnly)
    {
       setIncludingFrame(framePose3DReadOnly);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FramePose2D other)
+   {
+      FramePose2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

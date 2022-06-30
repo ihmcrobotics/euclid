@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple4D;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -19,7 +20,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Quaternion implements QuaternionBasics
+public class Quaternion implements QuaternionBasics, Settable<Quaternion>
 {
    /** The x-component. */
    private double x;
@@ -141,6 +142,17 @@ public class Quaternion implements QuaternionBasics
    public Quaternion(double yaw, double pitch, double roll)
    {
       setYawPitchRoll(yaw, pitch, roll);
+   }
+
+   /**
+    * Sets this quaternion to {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Quaternion other)
+   {
+      QuaternionBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

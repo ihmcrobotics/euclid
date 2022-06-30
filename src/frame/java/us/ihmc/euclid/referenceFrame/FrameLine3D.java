@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -37,7 +38,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * requiring {@code FrameLine3D}.
  * </p>
  */
-public class FrameLine3D implements FrameLine3DBasics
+public class FrameLine3D implements FrameLine3DBasics, Settable<FrameLine3D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -256,6 +257,13 @@ public class FrameLine3D implements FrameLine3DBasics
    public FrameLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
       setIncludingFrame(pointOnLine, lineDirection);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameLine3D other)
+   {
+      FrameLine3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

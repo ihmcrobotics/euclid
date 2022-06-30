@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -10,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D implements Sphere3DBasics
+public class Sphere3D implements Sphere3DBasics, Settable<Sphere3D>
 {
    /** The position of the center of this sphere. */
    private final Point3D position = new Point3D();
@@ -101,6 +102,17 @@ public class Sphere3D implements Sphere3DBasics
       if (radius < 0.0)
          throw new IllegalArgumentException("The radius of a Sphere 3D cannot be negative.");
       this.radius = radius;
+   }
+
+   /**
+    * Copies the {@code other} sphere data into {@code this}.
+    *
+    * @param other the other sphere to copy. Not modified.
+    */
+   @Override
+   public void set(Sphere3D other)
+   {
+      Sphere3DBasics.super.set(other);
    }
 
    @Override

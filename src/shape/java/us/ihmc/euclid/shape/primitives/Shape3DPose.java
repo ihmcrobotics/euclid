@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
@@ -22,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Shape3DPose implements Shape3DPoseBasics
+public class Shape3DPose implements Shape3DPoseBasics, Settable<Shape3DPose>
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -64,6 +65,13 @@ public class Shape3DPose implements Shape3DPoseBasics
    public Shape3DPose(Pose3DReadOnly pose)
    {
       set(pose);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(Shape3DPose other)
+   {
+      Shape3DPoseBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

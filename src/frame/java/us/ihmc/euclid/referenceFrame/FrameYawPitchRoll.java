@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
@@ -36,7 +37,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public class FrameYawPitchRoll implements FrameYawPitchRollBasics
+public class FrameYawPitchRoll implements FrameYawPitchRollBasics, Settable<FrameYawPitchRoll>
 {
    /** The reference frame is which this yaw-pitch-roll is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -130,6 +131,12 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
    public FrameYawPitchRoll(FrameYawPitchRollReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   @Override
+   public void set(FrameYawPitchRoll other)
+   {
+      FrameYawPitchRollBasics.super.set(other);
    }
 
    @Override

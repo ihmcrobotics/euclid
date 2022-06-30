@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
@@ -28,7 +29,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * using methods requiring {@code FrameLineSegment2D}.
  * </p>
  */
-public class FrameLineSegment2D implements FrameLineSegment2DBasics
+public class FrameLineSegment2D implements FrameLineSegment2DBasics, Settable<FrameLineSegment2D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -102,6 +103,13 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics
    public FrameLineSegment2D(FramePoint2DReadOnly firstEndpoint, FramePoint2DReadOnly secondEndpoint)
    {
       setIncludingFrame(firstEndpoint, secondEndpoint);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameLineSegment2D other)
+   {
+      FrameLineSegment2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
@@ -31,7 +32,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * requiring {@code FrameQuaternion}.
  * </p>
  */
-public class FrameQuaternion implements FrameQuaternionBasics
+public class FrameQuaternion implements FrameQuaternionBasics, Settable<FrameQuaternion>
 {
    /** The reference frame is which this quaternion is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -197,6 +198,19 @@ public class FrameQuaternion implements FrameQuaternionBasics
    public FrameQuaternion(FrameOrientation3DReadOnly orientation)
    {
       setIncludingFrame(orientation);
+   }
+
+   /**
+    * Sets this frame quaternion to {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   @Override
+   public void set(FrameQuaternion other)
+   {
+      FrameQuaternionBasics.super.set(other);
    }
 
    /**

@@ -3,6 +3,7 @@ package us.ihmc.euclid.axisAngle;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class AxisAngle implements AxisAngleBasics
+public class AxisAngle implements AxisAngleBasics, Settable<AxisAngle>
 {
    /** The axis part of this axis-angle. */
    private final UnitVector3D axis = new UnitVector3D(Axis3D.X);
@@ -117,6 +118,17 @@ public class AxisAngle implements AxisAngleBasics
    public AxisAngle(double yaw, double pitch, double roll)
    {
       setYawPitchRoll(yaw, pitch, roll);
+   }
+
+   /**
+    * Sets this axis-angle to the same value as the given axis-angle {@code other}.
+    *
+    * @param other the other axis-angle. Not modified.
+    */
+   @Override
+   public void set(AxisAngle other)
+   {
+      AxisAngleBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

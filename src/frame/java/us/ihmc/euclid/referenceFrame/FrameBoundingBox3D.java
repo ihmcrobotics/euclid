@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
@@ -16,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box that is expressed in a reference frame.
  */
-public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
+public class FrameBoundingBox3D implements FrameBoundingBox3DBasics, Settable<FrameBoundingBox3D>
 
 {
    /** The reference frame is which this bounding box is currently expressed. */
@@ -97,6 +98,13 @@ public class FrameBoundingBox3D implements FrameBoundingBox3DBasics
    public FrameBoundingBox3D(FrameBoundingBox3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameBoundingBox3D other)
+   {
+      FrameBoundingBox3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

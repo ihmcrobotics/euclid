@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector2D implements UnitVector2DBasics
+public class UnitVector2D implements UnitVector2DBasics, Settable<UnitVector2D>
 {
    /** Tolerance used on this vector's components to identify if it can be normalized. */
    public static final double ZERO_TEST_EPSILON = UnitVector3D.ZERO_TEST_EPSILON;
@@ -134,6 +135,13 @@ public class UnitVector2D implements UnitVector2DBasics
    public boolean isDirty()
    {
       return dirty;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(UnitVector2D other)
+   {
+      set((UnitVector2DReadOnly) other);
    }
 
    /** {@inheritDoc} */

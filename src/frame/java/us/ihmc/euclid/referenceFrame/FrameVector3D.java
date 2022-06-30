@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
@@ -26,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * requiring {@code FrameVector3D}.
  * </p>
  */
-public class FrameVector3D implements FrameVector3DBasics
+public class FrameVector3D implements FrameVector3DBasics, Settable<FrameVector3D>
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -123,6 +124,19 @@ public class FrameVector3D implements FrameVector3DBasics
    public FrameVector3D(FrameTuple3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /**
+    * Sets this frame vector to {@code other}.
+    *
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FrameVector3D other)
+   {
+      FrameVector3DBasics.super.set(other);
    }
 
    /**

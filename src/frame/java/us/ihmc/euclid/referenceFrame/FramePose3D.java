@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -31,7 +32,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePose3D}.
  * </p>
  */
-public class FramePose3D implements FramePose3DBasics
+public class FramePose3D implements FramePose3DBasics, Settable<FramePose3D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -125,6 +126,19 @@ public class FramePose3D implements FramePose3DBasics
    public FramePose3D(FramePose3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /**
+    * Sets this frame pose 3D to the {@code other} frame pose 3D.
+    *
+    * @param other the other frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
+    */
+   @Override
+   public void set(FramePose3D other)
+   {
+      FramePose3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

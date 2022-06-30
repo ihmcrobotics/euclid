@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class PointShape3D implements PointShape3DBasics
+public class PointShape3D implements PointShape3DBasics, Settable<PointShape3D>
 {
    private double x, y, z;
 
@@ -47,6 +48,13 @@ public class PointShape3D implements PointShape3DBasics
    public PointShape3D(Tuple3DReadOnly tuple3DReadOnly)
    {
       set(tuple3DReadOnly);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(PointShape3D other)
+   {
+      PointShape3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

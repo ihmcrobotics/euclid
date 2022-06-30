@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -33,7 +34,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class RotationMatrix implements RotationMatrixBasics
+public class RotationMatrix implements RotationMatrixBasics, Settable<RotationMatrix>
 {
    /** The 1st row 1st column coefficient of this matrix. */
    private double m00;
@@ -293,6 +294,17 @@ public class RotationMatrix implements RotationMatrixBasics
       this.m22 = m22;
 
       markAsDirty();
+   }
+
+   /**
+    * Sets this rotation matrix to equal the given one {@code other}.
+    *
+    * @param other the other rotation matrix to copy the values from. Not modified.
+    */
+   @Override
+   public void set(RotationMatrix other)
+   {
+      set((RotationMatrixReadOnly) other);
    }
 
    /**

@@ -2,6 +2,7 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -45,7 +46,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * @see SingularValueDecomposition3D
  * @author Sylvain Bertrand
  */
-public class LinearTransform3D implements LinearTransform3DBasics
+public class LinearTransform3D implements LinearTransform3DBasics, Settable<LinearTransform3D>
 {
    /** The matrix coefficients. */
    private double m00, m01, m02, m10, m11, m12, m20, m21, m22;
@@ -536,6 +537,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
     *
     * @param other the other linear transform to copy the values from. Not modified.
     */
+   @Override
    public void set(LinearTransform3D other)
    {
       m00 = other.m00;

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple4D;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Vector2D32;
@@ -18,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector4D32 implements Vector4DBasics
+public class Vector4D32 implements Vector4DBasics, Settable<Vector4D32>
 {
    /** The x-component. */
    private float x;
@@ -97,6 +98,17 @@ public class Vector4D32 implements Vector4DBasics
    public Vector4D32(Point3DReadOnly point3D)
    {
       set(point3D);
+   }
+
+   /**
+    * Sets this vector to {@code other}.
+    *
+    * @param other the other vector to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Vector4D32 other)
+   {
+      Vector4DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

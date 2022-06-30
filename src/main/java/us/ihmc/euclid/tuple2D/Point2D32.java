@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Point2D32 implements Point2DBasics
+public class Point2D32 implements Point2DBasics, Settable<Point2D32>
 {
    /** The x-coordinate. */
    private float x;
@@ -60,6 +61,17 @@ public class Point2D32 implements Point2DBasics
    public Point2D32(Tuple2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this point to {@code other}.
+    *
+    * @param other the other point to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Point2D32 other)
+   {
+      Point2DBasics.super.set(other);
    }
 
    /**

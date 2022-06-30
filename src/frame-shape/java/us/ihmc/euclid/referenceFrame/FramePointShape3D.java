@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FramePointShape3D implements FramePointShape3DBasics
+public class FramePointShape3D implements FramePointShape3DBasics, Settable<FramePointShape3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -72,6 +73,13 @@ public class FramePointShape3D implements FramePointShape3DBasics
    public FramePointShape3D(FrameTuple3DReadOnly tuple3DReadOnly)
    {
       setIncludingFrame(tuple3DReadOnly);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FramePointShape3D other)
+   {
+      FramePointShape3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

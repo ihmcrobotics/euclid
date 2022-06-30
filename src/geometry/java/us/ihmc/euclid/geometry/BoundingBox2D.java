@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -13,7 +14,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * A {@link BoundingBox2D} can be used to define from a set of minimum and maximum coordinates an
  * axis-aligned bounding box in the XY-plane.
  */
-public class BoundingBox2D implements BoundingBox2DBasics
+public class BoundingBox2D implements BoundingBox2DBasics, Settable<BoundingBox2D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point2D minPoint = new Point2D();
@@ -117,6 +118,17 @@ public class BoundingBox2D implements BoundingBox2DBasics
    public BoundingBox2D(double minX, double minY, double maxX, double maxY)
    {
       set(minX, minY, maxX, maxY);
+   }
+
+   /**
+    * Redefines this bounding box to be the same as the given {@code other}.
+    *
+    * @param other the bounding box used to redefine this bounding box. Not modified.
+    */
+   @Override
+   public void set(BoundingBox2D other)
+   {
+      BoundingBox2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

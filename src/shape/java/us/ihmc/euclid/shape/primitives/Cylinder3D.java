@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -22,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Cylinder3D implements Cylinder3DBasics
+public class Cylinder3D implements Cylinder3DBasics, Settable<Cylinder3D>
 {
    /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
@@ -91,6 +92,17 @@ public class Cylinder3D implements Cylinder3DBasics
    public Cylinder3D(Cylinder3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Copies the {@code other} cylinder data into {@code this}.
+    *
+    * @param other the other cylinder to copy. Not modified.
+    */
+   @Override
+   public void set(Cylinder3D other)
+   {
+      Cylinder3DBasics.super.set(other);
    }
 
    /**

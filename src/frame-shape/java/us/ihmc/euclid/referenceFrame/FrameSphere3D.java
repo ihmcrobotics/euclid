@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DBasics;
@@ -14,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * {@code Sphere3D} represents a 3D sphere expressed in a given reference frame that is defined by
  * its radius and with its origin at its center.
  */
-public class FrameSphere3D implements FrameSphere3DBasics
+public class FrameSphere3D implements FrameSphere3DBasics, Settable<FrameSphere3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -167,6 +168,13 @@ public class FrameSphere3D implements FrameSphere3DBasics
    public FrameSphere3D copy()
    {
       return new FrameSphere3D(this);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameSphere3D other)
+   {
+      FrameSphere3DBasics.super.set(other);
    }
 
    /**

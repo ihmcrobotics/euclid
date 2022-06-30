@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -16,7 +17,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Represents an infinitely-long 2D line defined by a 2D point and a 2D unit-vector.
  */
-public class Line2D implements Line2DBasics
+public class Line2D implements Line2DBasics, Settable<Line2D>
 {
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
@@ -84,6 +85,17 @@ public class Line2D implements Line2DBasics
    public Line2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
       set(pointOnLine, lineDirection);
+   }
+
+   /**
+    * Sets this line to be the same as the given line.
+    *
+    * @param other the other line to copy. Not modified.
+    */
+   @Override
+   public void set(Line2D other)
+   {
+      Line2DBasics.super.set(other);
    }
 
    /**

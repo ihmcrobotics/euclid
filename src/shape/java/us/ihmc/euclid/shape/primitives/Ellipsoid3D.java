@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Ellipsoid3D implements Ellipsoid3DBasics
+public class Ellipsoid3D implements Ellipsoid3DBasics, Settable<Ellipsoid3D>
 {
    /** Pose of this ellipsoid. */
    private final Shape3DPose pose = new Shape3DPose();
@@ -179,6 +180,17 @@ public class Ellipsoid3D implements Ellipsoid3DBasics
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
       supplier = newSupplier;
+   }
+
+   /**
+    * Copies the {@code other} ellipsoid data into {@code this}.
+    *
+    * @param other the other ellipsoid to copy. Not modified.
+    */
+   @Override
+   public void set(Ellipsoid3D other)
+   {
+      Ellipsoid3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

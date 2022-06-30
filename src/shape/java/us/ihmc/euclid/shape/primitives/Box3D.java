@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
@@ -26,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Box3D implements Box3DBasics
+public class Box3D implements Box3DBasics, Settable<Box3D>
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** Pose of this box. */
@@ -197,6 +198,17 @@ public class Box3D implements Box3DBasics
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
       supplier = newSupplier;
+   }
+
+   /**
+    * Copies the {@code other} box data into {@code this}.
+    *
+    * @param other the other box to copy. Not modified.
+    */
+   @Override
+   public void set(Box3D other)
+   {
+      Box3DBasics.super.set(other);
    }
 
    @Override

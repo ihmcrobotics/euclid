@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Triangle3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -12,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Triangle3D implements Triangle3DBasics
+public class Triangle3D implements Triangle3DBasics, Settable<Triangle3D>
 {
    /** The first vertex defining this triangle. */
    private final Point3D a = new Point3D();
@@ -48,6 +49,17 @@ public class Triangle3D implements Triangle3DBasics
    public Triangle3D(Triangle3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this triangle to be the same as the given triangle.
+    *
+    * @param other the other triangle to copy. Not modified.
+    */
+   @Override
+   public void set(Triangle3D other)
+   {
+      Triangle3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

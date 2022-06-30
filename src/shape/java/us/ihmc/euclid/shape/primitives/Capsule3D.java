@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -22,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Capsule3D implements Capsule3DBasics
+public class Capsule3D implements Capsule3DBasics, Settable<Capsule3D>
 {
    /** Position of this capsule's center. */
    private final Point3D position = new Point3D();
@@ -87,6 +88,17 @@ public class Capsule3D implements Capsule3DBasics
    public Capsule3D(Capsule3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Copies the {@code other} capsule data into {@code this}.
+    *
+    * @param other the other capsule to copy. Not modified.
+    */
+   @Override
+   public void set(Capsule3D other)
+   {
+      Capsule3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -25,7 +26,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * requiring {@code FrameMatrix3D}.
  * </p>
  */
-public class FrameMatrix3D implements FrameMatrix3DBasics
+public class FrameMatrix3D implements FrameMatrix3DBasics, Settable<FrameMatrix3D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -74,6 +75,19 @@ public class FrameMatrix3D implements FrameMatrix3DBasics
    public FrameMatrix3D(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       setIncludingFrame(referenceFrame, matrix3DReadOnly);
+   }
+
+   /**
+    * Sets this frame matrix to {@code other}.
+    *
+    * @param other the other frame matrix to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FrameMatrix3D other)
+   {
+      FrameMatrix3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

@@ -4,6 +4,7 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -51,7 +52,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform implements RigidBodyTransformBasics
+public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<RigidBodyTransform>
 {
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
@@ -265,6 +266,17 @@ public class RigidBodyTransform implements RigidBodyTransformBasics
    {
       getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       getTranslation().set(m03, m13, m23);
+   }
+
+   /**
+    * Sets this rigid-body transform to {@code other}.
+    *
+    * @param other the other rigid-body transform to copy the values from. Not modified.
+    */
+   @Override
+   public void set(RigidBodyTransform other)
+   {
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**

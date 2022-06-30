@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -29,7 +30,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
+public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, Settable<FrameEllipsoid3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -371,6 +372,13 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
       supplier = newSupplier;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameEllipsoid3D other)
+   {
+      FrameEllipsoid3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

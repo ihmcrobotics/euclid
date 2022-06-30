@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
@@ -33,7 +34,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
  */
-public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
+public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settable<FrameConvexPolygon2D>
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -204,6 +205,17 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
    public FrameConvexPolygon2D(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
       setIncludingFrame(firstVertex2DSupplier, secondVertex2DSupplier);
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @see FrameConvexPolygon2D#set(FrameVertex2DSupplier)
+    */
+   @Override
+   public void set(FrameConvexPolygon2D other)
+   {
+      FrameConvexPolygon2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

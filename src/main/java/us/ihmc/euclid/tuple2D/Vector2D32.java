@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -17,7 +18,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector2D32 implements Vector2DBasics
+public class Vector2D32 implements Vector2DBasics, Settable<Vector2D32>
 {
    /** The x-component. */
    private float x;
@@ -62,6 +63,17 @@ public class Vector2D32 implements Vector2DBasics
    public Vector2D32(Tuple2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this vector to {@code other}.
+    *
+    * @param other the other vector to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Vector2D32 other)
+   {
+      Vector2DBasics.super.set(other);
    }
 
    /**

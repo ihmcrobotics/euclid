@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -23,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class UnitVector3D implements UnitVector3DBasics
+public class UnitVector3D implements UnitVector3DBasics, Settable<UnitVector3D>
 {
    /** Tolerance used on this vector's components to identify if it can be normalized. */
    public static final double ZERO_TEST_EPSILON = 1.0e-16;
@@ -139,6 +140,13 @@ public class UnitVector3D implements UnitVector3DBasics
    public boolean isDirty()
    {
       return dirty;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(UnitVector3D other)
+   {
+      set((UnitVector3DReadOnly) other);
    }
 
    /** {@inheritDoc} */

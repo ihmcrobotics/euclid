@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameCapsule3D implements FrameCapsule3DBasics
+public class FrameCapsule3D implements FrameCapsule3DBasics, Settable<FrameCapsule3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -134,6 +135,13 @@ public class FrameCapsule3D implements FrameCapsule3DBasics
    public FrameCapsule3D(FrameCapsule3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameCapsule3D other)
+   {
+      FrameCapsule3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

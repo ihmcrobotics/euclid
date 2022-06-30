@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DBasics;
@@ -25,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameUnitVector3D implements FrameUnitVector3DBasics
+public class FrameUnitVector3D implements FrameUnitVector3DBasics, Settable<FrameUnitVector3D>
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -157,6 +158,13 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics
    public boolean isDirty()
    {
       return vector.isDirty();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameUnitVector3D other)
+   {
+      FrameUnitVector3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

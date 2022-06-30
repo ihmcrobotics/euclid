@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
@@ -34,7 +35,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * requiring {@code FrameLine2D}.
  * </p>
  */
-public class FrameLine2D implements FrameLine2DBasics
+public class FrameLine2D implements FrameLine2DBasics, Settable<FrameLine2D>
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
@@ -179,6 +180,13 @@ public class FrameLine2D implements FrameLine2DBasics
    public FrameLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
       setIncludingFrame(pointOnLine, lineDirection);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameLine2D other)
+   {
+      FrameLine2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

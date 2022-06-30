@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -26,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePoint3D}.
  * </p>
  */
-public class FramePoint3D implements FramePoint3DBasics
+public class FramePoint3D implements FramePoint3DBasics, Settable<FramePoint3D>
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -123,6 +124,19 @@ public class FramePoint3D implements FramePoint3DBasics
    public FramePoint3D(FrameTuple3DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /**
+    * Sets this frame point to {@code other}.
+    *
+    * @param other the other frame point to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *                                         {@code this}.
+    */
+   @Override
+   public void set(FramePoint3D other)
+   {
+      FramePoint3DBasics.super.set(other);
    }
 
    /**

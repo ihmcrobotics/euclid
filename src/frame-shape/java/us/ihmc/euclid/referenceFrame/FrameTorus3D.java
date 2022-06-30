@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameTorus3D implements FrameTorus3DBasics
+public class FrameTorus3D implements FrameTorus3DBasics, Settable<FrameTorus3D>
 {
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
@@ -189,6 +190,13 @@ public class FrameTorus3D implements FrameTorus3DBasics
    public FrameTorus3D copy()
    {
       return new FrameTorus3D(this);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameTorus3D other)
+   {
+      FrameTorus3DBasics.super.set(other);
    }
 
    /**

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -46,7 +47,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRamp3D implements FrameRamp3DBasics
+public class FrameRamp3D implements FrameRamp3DBasics, Settable<FrameRamp3D>
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The reference frame in which this shape is expressed. */
@@ -557,6 +558,13 @@ public class FrameRamp3D implements FrameRamp3DBasics
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
       supplier = newSupplier;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameRamp3D other)
+   {
+      FrameRamp3DBasics.super.set(other);
    }
 
    /**

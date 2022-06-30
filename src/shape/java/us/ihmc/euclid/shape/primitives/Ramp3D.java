@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
@@ -36,7 +37,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Ramp3D implements Ramp3DBasics
+public class Ramp3D implements Ramp3DBasics, Settable<Ramp3D>
 {
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
 
@@ -243,6 +244,17 @@ public class Ramp3D implements Ramp3DBasics
 
       EuclidShapeTools.computeRamp3DCentroid(pose, size, centroid);
       centroidDirty = false;
+   }
+
+   /**
+    * Copies the {@code other} ramp data into {@code this}.
+    *
+    * @param other the other ramp to copy. Not modified.
+    */
+   @Override
+   public void set(Ramp3D other)
+   {
+      Ramp3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

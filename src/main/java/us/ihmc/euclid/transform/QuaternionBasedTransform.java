@@ -3,6 +3,7 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -40,7 +41,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class QuaternionBasedTransform implements RigidBodyTransformBasics
+public class QuaternionBasedTransform implements RigidBodyTransformBasics, Settable<QuaternionBasedTransform>
 {
    /** The rotation part of this transform. */
    private final Quaternion quaternion = new Quaternion();
@@ -206,6 +207,17 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics
    {
       quaternion.setUnsafe(qx, qy, qz, qs);
       translationVector.set(x, y, z);
+   }
+
+   /**
+    * Sets this quaternion-based transform to the given {@code other}.
+    *
+    * @param other the other quaternion-based transform. Not modified.
+    */
+   @Override
+   public void set(QuaternionBasedTransform other)
+   {
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**

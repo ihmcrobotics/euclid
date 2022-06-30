@@ -5,6 +5,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
  * @author Apoorv Shrivastava
  * @author Sylvain Bertrand
  */
-public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D>
+public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdge3D, Face3D> implements Settable<ConvexPolytope3D>
 {
    /** The centroid of this convex polytope. */
    private final Point3D centroid = new Point3D();
@@ -99,6 +100,18 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
    {
       this(constructionEpsilon);
       initialize(faces);
+   }
+
+   /**
+    * Sets this convex polytope to be identical to {@code other}.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    */
+   @Override
+   public void set(ConvexPolytope3D other)
+   {
+      this.set((ConvexPolytope3DReadOnly) other);
    }
 
    @Override

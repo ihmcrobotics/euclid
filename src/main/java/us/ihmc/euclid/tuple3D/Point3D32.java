@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Point3D32 implements Point3DBasics
+public class Point3D32 implements Point3DBasics, Settable<Point3D32>
 {
    /** The x-coordinate. */
    private float x;
@@ -63,6 +64,17 @@ public class Point3D32 implements Point3DBasics
    public Point3D32(Tuple3DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this point to {@code other}.
+    *
+    * @param other the other point to copy the values from. Not modified.
+    */
+   @Override
+   public void set(Point3D32 other)
+   {
+      Point3DBasics.super.set(other);
    }
 
    /**
