@@ -13,6 +13,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -7435,5 +7436,61 @@ public class EuclidFrameTools
       A.checkReferenceFrameMatch(B, C);
       XToPack.setReferenceFrame(A.getReferenceFrame());
       return EuclidGeometryTools.triangleBisector2D(A, B, C, XToPack);
+   }
+
+   /**
+    * Tests if the two arguments are equal on a per component basis.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidFrameGeometry#equals equals} method of the first argument.
+    * </p>
+    *
+    * @param a the first geometry in the comparison. Not modified.
+    * @param b the second geometry in the comparison. Not modified.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidFrameGeometry#equals(EuclidFrameGeometry)
+    */
+   public static boolean equals(EuclidFrameGeometry a, EuclidFrameGeometry b)
+   {
+      return (a == b) || (a != null && a.equals(b));
+   }
+
+   /**
+    * Tests if the two arguments are approximately equal on a per component basis.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidFrameGeometry#epsilonEquals epsilonEquals} method of the first argument.
+    * </p>
+    *
+    * @param a       the first geometry in the comparison. Not modified.
+    * @param b       the second geometry in the comparison. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidFrameGeometry#epsilonEquals(EuclidFrameGeometry, double)
+    */
+   public static boolean epsilonEquals(EuclidFrameGeometry a, EuclidFrameGeometry b, double epsilon)
+   {
+      return (a == b) || (a != null && a.epsilonEquals(b, epsilon));
+   }
+
+   /**
+    * Tests if the two arguments represent the same geometry to an {@code epsilon}.
+    * <p>
+    * If both arguments are {@code null}, {@code true} is returned and if exactly one argument is
+    * {@code null}, {@code false} is returned. Otherwise, equality is determined by using the
+    * {@link EuclidFrameGeometry#geometricallyEquals geometricallyEquals} method of the first argument.
+    * </p>
+    *
+    * @param a       the first geometry in the comparison. Not modified.
+    * @param b       the second geometry in the comparison. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the arguments are equal to each other and {@code false} otherwise
+    * @see EuclidFrameGeometry#geometricallyEquals(EuclidFrameGeometry, double)
+    */
+   public static boolean geometricallyEquals(EuclidFrameGeometry a, EuclidFrameGeometry b, double epsilon)
+   {
+      return (a == b) || (a != null && a.geometricallyEquals(b, epsilon));
    }
 }
