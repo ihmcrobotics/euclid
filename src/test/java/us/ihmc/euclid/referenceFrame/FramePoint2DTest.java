@@ -21,6 +21,7 @@ import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -127,7 +128,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          FramePoint2D framePoint2D = new FramePoint2D(randomTuple);
          assertTrue(framePoint2D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertEquals(randomTuple, framePoint2D, EPSILON);
-         EuclidCoreTestTools.assertEquals(randomTuple, framePoint2D, EPSILON);
+         EuclidFrameTestTools.assertEquals(randomTuple, framePoint2D, EPSILON);
       }
    }
 
@@ -152,7 +153,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          FramePoint2D expected = new FramePoint2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidCoreTestTools.assertEquals(expected, actual, EPSILON);
+         EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
    }
 
