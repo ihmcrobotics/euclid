@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.FramePointShape3D;
 import us.ihmc.euclid.referenceFrame.FrameRamp3D;
 import us.ihmc.euclid.referenceFrame.FrameShape3DPose;
 import us.ihmc.euclid.referenceFrame.FrameSphere3D;
+import us.ihmc.euclid.referenceFrame.FrameTorus3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -349,6 +350,55 @@ public class EuclidFrameShapeRandomTools
    public static FrameSphere3D nextFrameSphere3D(Random random, ReferenceFrame referenceFrame, double minRadius, double maxRadius)
    {
       return new FrameSphere3D(referenceFrame, EuclidShapeRandomTools.nextSphere3D(random, minRadius, maxRadius));
+   }
+
+   /**
+    * Generates a random torus 3D.
+    * <ul>
+    * <li>{@code radius} &in; [0.5; 2.0].
+    * <li>{@code tubeRadius} &in; [0.0; 0.5].
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code axis} is generated using
+    * {@link EuclidCoreRandomTools#nextVector3DWithFixedLength(Random, double)} with a length of 1.0.
+    * </ul>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame shape's reference frame.
+    * @return the random torus 3D.
+    */
+   public static FrameTorus3D nextFrameTorus3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameTorus3D(referenceFrame, EuclidShapeRandomTools.nextTorus3D(random));
+   }
+
+   /**
+    * Generates a random torus 3D.
+    * <ul>
+    * <li>{@code radius} &in; [{@code minRadius}; {@code maxRadius}].
+    * <li>{@code tubeRadius} &in; [{@code minTubeRadius}; {@code maxTubeRadius}].
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code axis} is generated using
+    * {@link EuclidCoreRandomTools#nextVector3DWithFixedLength(Random, double)} with a length of 1.0.
+    * </ul>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame shape's reference frame.
+    * @param minRadius      the minimum value for the radius.
+    * @param maxRadius      the maximum value for the radius.
+    * @param minTubeRadius  the minimum value for the tube radius.
+    * @param maxTubeRadius  the maximum value for the tube radius.
+    * @return the random torus 3D.
+    * @throws RuntimeException if {@code minRadius > maxRadius} or
+    *                          {@code minTubeRadius > maxTubeRadius}.
+    */
+   public static FrameTorus3D nextFrameTorus3D(Random random,
+                                               ReferenceFrame referenceFrame,
+                                               double minRadius,
+                                               double maxRadius,
+                                               double minTubeRadius,
+                                               double maxTubeRadius)
+   {
+      return new FrameTorus3D(referenceFrame, EuclidShapeRandomTools.nextTorus3D(random, minRadius, maxRadius, minTubeRadius, maxTubeRadius));
    }
 
    /**

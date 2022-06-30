@@ -8,6 +8,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTorus3DBasics;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameFace3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameHalfEdge3D;
@@ -25,7 +26,6 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 /**
@@ -46,7 +46,6 @@ public class EuclidFrameShapeAPIDefaultConfiguration extends EuclidFrameAPIDefau
       super.configure(testerToConfigure, builderToConfigure);
 
       builderToConfigure.registerRandomGeneratorClasses(EuclidFrameShapeRandomTools.class, EuclidShapeRandomTools.class);
-      testerToConfigure.registerFramelessTypesSmart(Torus3DBasics.class);
       testerToConfigure.registerFrameTypesSmart(FrameBox3DBasics.class,
                                                 FrameCapsule3DBasics.class,
                                                 FrameCylinder3DBasics.class,
@@ -54,7 +53,8 @@ public class EuclidFrameShapeAPIDefaultConfiguration extends EuclidFrameAPIDefau
                                                 FramePointShape3DBasics.class,
                                                 FrameRamp3DBasics.class,
                                                 FrameShape3DPoseBasics.class,
-                                                FrameSphere3DBasics.class);
+                                                FrameSphere3DBasics.class,
+                                                FrameTorus3DBasics.class);
       testerToConfigure.registerFrameType(FrameConvexPolytope3D.class,
                                           null,
                                           FrameConvexPolytope3DReadOnly.class,

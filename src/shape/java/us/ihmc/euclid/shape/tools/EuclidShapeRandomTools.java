@@ -341,7 +341,7 @@ public class EuclidShapeRandomTools
     * </ul>
     *
     * @param random the random generator to use.
-    * @return the random capsule 3D.
+    * @return the random torus 3D.
     */
    public static Torus3D nextTorus3D(Random random)
    {
@@ -349,7 +349,7 @@ public class EuclidShapeRandomTools
    }
 
    /**
-    * Generates a random capsule 3D.
+    * Generates a random torus 3D.
     * <ul>
     * <li>{@code radius} &in; [{@code minRadius}; {@code maxRadius}].
     * <li>{@code tubeRadius} &in; [{@code minTubeRadius}; {@code maxTubeRadius}].
@@ -363,7 +363,7 @@ public class EuclidShapeRandomTools
     * @param maxRadius     the maximum value for the radius.
     * @param minTubeRadius the minimum value for the tube radius.
     * @param maxTubeRadius the maximum value for the tube radius.
-    * @return the random capsule 3D.
+    * @return the random torus 3D.
     * @throws RuntimeException if {@code minRadius > maxRadius} or
     *                          {@code minTubeRadius > maxTubeRadius}.
     */

@@ -10,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTorus3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -20,6 +21,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -721,6 +723,133 @@ public class EuclidFrameShapeTools
          }
       }
    }
+
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given torus 3D.
+    *
+    * @param torus3D           the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
+   public static void boundingBoxTorus3D(FrameTorus3DReadOnly torus3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxTorus3D(torus3D.getReferenceFrame(), torus3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given torus 3D.
+    *
+    * @param torus3DFrame      the reference frame in which the shape is expressed.
+    * @param torus3D           the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
+   public static void boundingBoxTorus3D(ReferenceFrame torus3DFrame,
+                                         Torus3DReadOnly torus3D,
+                                         ReferenceFrame boundingBoxFrame,
+                                         BoundingBox3DBasics boundingBoxToPack)
+   {
+      // TODO Being lazy and using the cylinder method to approximate the bounding box, it could be tighter.
+      torus3DFrame.verifySameRoots(boundingBoxFrame);
+
+      if (torus3DFrame == boundingBoxFrame)
+      {
+         EuclidShapeTools.boundingBoxCylinder3D(torus3D.getPosition(),
+                                                torus3D.getAxis(),
+                                                torus3D.getTubeRadius(),
+                                                torus3D.getRadius() + torus3D.getTubeRadius(),
+                                                boundingBoxToPack);
+         return;
+      }
+
+      Point3DReadOnly position = torus3D.getPosition();
+
+      if (torus3DFrame.isRootFrame())
+      {
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+         boundingBoxRotationPartGeneric(rotFromBBX, true, torus3D, torus3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = torus3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(rotToRoot, false, torus3D, torus3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, torus3D, torus3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+      }
+   }
+
+   private static final BoundingBoxRotationPartCalculator<Torus3DReadOnly> torus3DCalculator = new BoundingBoxRotationPartCalculator<Torus3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Torus3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getTubeRadius();
+         double radius = shape.getRadius() + shape.getTubeRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = axis.getX();
+         double axisY = axis.getY();
+         double axisZ = axis.getZ();
+
+         double invNormSquared = 1.0 / axis.normSquared();
+         double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));
+
+         double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
+         double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
+         double rangeZ = halfLength * Math.abs(axisZ) + capMinMaxZ;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+
+      @Override
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Torus3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getTubeRadius();
+         double radius = shape.getRadius() + shape.getTubeRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = m00 * axis.getX() + m01 * axis.getY() + m02 * axis.getZ();
+         double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
+         double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
+
+         double invNormSquared = 1.0 / axis.normSquared();
+         double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));
+
+         double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
+         double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
+         double rangeZ = halfLength * Math.abs(axisZ) + capMinMaxZ;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+   };
 
    /**
     * Computes the tightest 3D axis-aligned bounding box that contains a given convex polytope 3D.
