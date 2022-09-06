@@ -121,9 +121,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the reference to the vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *                                  polygon's vertices were edited.
     */
+   @Override
    Point2DBasics getVertexUnsafe(int index);
 
    /**

@@ -147,7 +147,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    {
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         if (getVertexBufferView().get(i).containsNaN())
+         if (getVertexUnsafe(i).containsNaN())
             return true;
       }
 
@@ -170,8 +170,21 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    {
       checkIfUpToDate();
       checkIndexInBoundaries(index);
-      return getVertexBufferView().get(index);
+      return getVertexUnsafe(index);
    }
+
+   /**
+    * Gets the reference to the {@code index}<sup>th</sup> vertex of this polygon while skipping sanity
+    * checks.
+    * <p>
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
+    * x-coordinate.
+    * </p>
+    *
+    * @param index the index of the vertex in the clockwise ordered list.
+    * @return the reference to the vertex.
+    */
+   Point2DReadOnly getVertexUnsafe(int index);
 
    /**
     * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex of
@@ -1600,8 +1613,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         Point2DReadOnly thisVertex = getVertexBufferView().get(i);
-         Point2DReadOnly otherVertex = other.getVertexBufferView().get(i);
+         Point2DReadOnly thisVertex = getVertexUnsafe(i);
+         Point2DReadOnly otherVertex = other.getVertexUnsafe(i);
          if (!thisVertex.equals(otherVertex))
             return false;
       }
@@ -1628,8 +1641,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
 
       for (int i = 0; i < other.getNumberOfVertices(); i++)
       {
-         Point2DReadOnly thisVertex = getVertexBufferView().get(i);
-         Point2DReadOnly otherVertex = other.getVertexBufferView().get(i);
+         Point2DReadOnly thisVertex = getVertexUnsafe(i);
+         Point2DReadOnly otherVertex = other.getVertexUnsafe(i);
          if (!thisVertex.epsilonEquals(otherVertex, epsilon))
             return false;
       }
@@ -1670,8 +1683,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
          else
             otherPointIndex = (getNumberOfVertices() + indexOfClosestOtherPoint - thisPointIndex) % getNumberOfVertices();
 
-         Point2DReadOnly thisVertex = getVertexBufferView().get(thisPointIndex);
-         Point2DReadOnly otherVertex = other.getVertexBufferView().get(otherPointIndex);
+         Point2DReadOnly thisVertex = getVertexUnsafe(thisPointIndex);
+         Point2DReadOnly otherVertex = other.getVertexUnsafe(otherPointIndex);
          if (!thisVertex.geometricallyEquals(otherVertex, epsilon))
             return false;
       }
