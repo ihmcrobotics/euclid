@@ -169,7 +169,6 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    default Point2DReadOnly getVertex(int index)
    {
       checkIfUpToDate();
-      checkNonEmpty();
       checkIndexInBoundaries(index);
       return getVertexBufferView().get(index);
    }
@@ -297,7 +296,6 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    {
       checkIfUpToDate();
       checkIndexInBoundaries(currentVertexIndex);
-      checkNonEmpty();
 
       if (currentVertexIndex < getNumberOfVertices() - 1)
          return currentVertexIndex + 1;
@@ -325,7 +323,6 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier, EuclidGeometr
    {
       checkIfUpToDate();
       checkIndexInBoundaries(currentVertexIndex);
-      checkNonEmpty();
 
       if (currentVertexIndex < 1)
          return getNumberOfVertices() - 1;

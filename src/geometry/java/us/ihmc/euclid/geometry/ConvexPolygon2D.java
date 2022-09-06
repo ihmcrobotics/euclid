@@ -188,7 +188,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    @Override
    public void removeVertex(int indexOfVertexToRemove)
    {
-      checkNonEmpty();
       checkIndexInBoundaries(indexOfVertexToRemove);
 
       if (indexOfVertexToRemove == numberOfVertices - 1)
@@ -264,7 +263,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    @Override
    public Point2DBasics getVertexUnsafe(int index)
    {
-      checkNonEmpty();
       checkIndexInBoundaries(index);
       return vertexBuffer.get(index);
    }

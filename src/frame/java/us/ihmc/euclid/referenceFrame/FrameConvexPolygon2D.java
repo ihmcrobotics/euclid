@@ -223,7 +223,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    @Override
    public FixedFramePoint2DBasics getVertexUnsafe(int index)
    {
-      checkNonEmpty();
       checkIndexInBoundaries(index);
       return vertexBuffer.get(index);
    }
@@ -329,7 +328,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    @Override
    public void removeVertex(int indexOfVertexToRemove)
    {
-      checkNonEmpty();
       checkIndexInBoundaries(indexOfVertexToRemove);
 
       if (indexOfVertexToRemove == numberOfVertices - 1)
