@@ -180,7 +180,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    public void addVertex(double x, double y)
    {
       isUpToDate = false;
-      setOrCreate(x, y, numberOfVertices);
+      setOrCreate(numberOfVertices, x, y);
       numberOfVertices++;
    }
 
@@ -206,12 +206,12 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     * Sets the {@code i}<sup>th</sup> point in {@link #vertexBuffer} to the given point. The list is
     * extended if needed.
     * </p>
-    *
+    * 
+    * @param i the position in the list {@link #vertexBuffer} to copy the given point.
     * @param x the x-coordinate of the point to copy. Not modified.
     * @param y the y-coordinate of the point to copy. Not modified.
-    * @param i the position in the list {@link #vertexBuffer} to copy the given point.
     */
-   private void setOrCreate(double x, double y, int i)
+   private void setOrCreate(int i, double x, double y)
    {
       while (i >= vertexBuffer.size())
          vertexBuffer.add(new Point2D());
@@ -247,7 +247,65 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    @Override
    public void set(ConvexPolygon2D other)
    {
-      ConvexPolygon2DBasics.super.set(other);
+      if (clockwiseOrdered != other.clockwiseOrdered)
+      {
+         // TODO For now relying on the expensive method to ensure consistent ordering.
+         ConvexPolygon2DBasics.super.set(other);
+         return;
+      }
+
+      numberOfVertices = other.numberOfVertices;
+
+      for (int i = 0; i < other.numberOfVertices; i++)
+      {
+         Point2D otherVertex = other.vertexBuffer.get(i);
+         setOrCreate(i, otherVertex.getX(), otherVertex.getY());
+      }
+      boundingBox.set(other.boundingBox);
+      centroid.set(other.centroid);
+      area = other.area;
+      isUpToDate = other.isUpToDate;
+   }
+
+   @Override
+   public void set(Vertex2DSupplier vertex2DSupplier)
+   {
+      if (vertex2DSupplier instanceof ConvexPolygon2D)
+      {
+         set((ConvexPolygon2D) vertex2DSupplier);
+      }
+      else if (vertex2DSupplier instanceof ConvexPolygon2DReadOnly)
+      {
+         ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) vertex2DSupplier;
+
+         if (clockwiseOrdered != other.isClockwiseOrdered())
+         {
+            // TODO For now relying on the expensive method to ensure consistent ordering.
+            ConvexPolygon2DBasics.super.set(vertex2DSupplier);
+            return;
+         }
+
+         clear();
+         numberOfVertices = other.getNumberOfVertices();
+
+         for (int i = 0; i < numberOfVertices; i++)
+         {
+            Point2DReadOnly otherVertex = other.getVertexUnsafe(i);
+            setOrCreate(i, otherVertex.getX(), otherVertex.getY());
+         }
+
+         if (other.isUpToDate())
+         {
+            boundingBox.set(other.getBoundingBox());
+            centroid.set(other.getCentroid());
+            area = other.getArea();
+            isUpToDate = true;
+         }
+      }
+      else
+      {
+         ConvexPolygon2DBasics.super.set(vertex2DSupplier);
+      }
    }
 
    /**

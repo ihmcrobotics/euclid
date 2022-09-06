@@ -6,6 +6,7 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
@@ -216,7 +217,116 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    @Override
    public void set(FrameConvexPolygon2D other)
    {
-      FrameConvexPolygon2DBasics.super.set(other);
+      if (clockwiseOrdered != other.clockwiseOrdered)
+      {
+         // TODO For now relying on the expensive method to ensure consistent ordering.
+         FrameConvexPolygon2DBasics.super.set(other);
+         return;
+      }
+
+      checkReferenceFrameMatch(other);
+
+      numberOfVertices = other.numberOfVertices;
+
+      for (int i = 0; i < other.numberOfVertices; i++)
+      {
+         FixedFramePoint2DBasics otherVertex = other.vertexBuffer.get(i);
+         setOrCreate(i, otherVertex.getX(), otherVertex.getY());
+      }
+      boundingBox.set(other.boundingBox);
+      centroid.set(other.centroid);
+      area = other.area;
+      isUpToDate = other.isUpToDate;
+   }
+
+   @Override
+   public void set(Vertex2DSupplier vertex2DSupplier)
+   {
+      if (vertex2DSupplier instanceof ConvexPolygon2DReadOnly)
+      {
+         ConvexPolygon2DReadOnly other = (ConvexPolygon2DReadOnly) vertex2DSupplier;
+
+         if (clockwiseOrdered != other.isClockwiseOrdered())
+         {
+            // TODO For now relying on the expensive method to ensure consistent ordering.
+            FrameConvexPolygon2DBasics.super.set(vertex2DSupplier);
+            return;
+         }
+
+         clear();
+         numberOfVertices = other.getNumberOfVertices();
+         for (int i = 0; i < numberOfVertices; i++)
+         {
+            Point2DReadOnly otherVertex = other.getVertexUnsafe(i);
+            setOrCreate(i, otherVertex.getX(), otherVertex.getY());
+         }
+
+         if (other.isUpToDate())
+         {
+            boundingBox.set(other.getBoundingBox());
+            centroid.set(other.getCentroid());
+            area = other.getArea();
+            isUpToDate = true;
+         }
+      }
+      else
+      {
+         FrameConvexPolygon2DBasics.super.set(vertex2DSupplier);
+      }
+   }
+
+   @Override
+   public void set(FrameVertex2DSupplier frameVertex2DSupplier)
+   {
+      if (frameVertex2DSupplier instanceof FrameConvexPolygon2D)
+      {
+         set((FrameConvexPolygon2D) frameVertex2DSupplier);
+      }
+      else if (frameVertex2DSupplier instanceof FrameConvexPolygon2DReadOnly)
+      {
+         FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) frameVertex2DSupplier;
+
+         if (clockwiseOrdered != other.isClockwiseOrdered())
+         {
+            // TODO For now relying on the expensive method to ensure consistent ordering.
+            FrameConvexPolygon2DBasics.super.set(frameVertex2DSupplier);
+            return;
+         }
+
+         clear();
+         numberOfVertices = other.getNumberOfVertices();
+
+         for (int i = 0; i < numberOfVertices; i++)
+         {
+            FramePoint2DReadOnly otherVertex = other.getVertexUnsafe(i);
+            checkReferenceFrameMatch(otherVertex);
+            setOrCreate(i, otherVertex.getX(), otherVertex.getY());
+         }
+
+         if (other.isUpToDate())
+         {
+            boundingBox.set(other.getBoundingBox());
+            centroid.set(other.getCentroid());
+            area = other.getArea();
+            isUpToDate = true;
+         }
+      }
+      else
+      {
+         FrameConvexPolygon2DBasics.super.set(frameVertex2DSupplier);
+      }
+   }
+
+   @Override
+   public void setMatchingFrame(FrameVertex2DSupplier frameVertex2DSupplier, boolean checkIfTransformInXYPlane)
+   {
+      set((Vertex2DSupplier) frameVertex2DSupplier);
+
+      if (frameVertex2DSupplier.getReferenceFrame() != referenceFrame)
+      {
+         frameVertex2DSupplier.getReferenceFrame().getTransformToDesiredFrame(transformToDesiredFrame, referenceFrame);
+         applyTransform(transformToDesiredFrame, checkIfTransformInXYPlane);
+      }
    }
 
    /** {@inheritDoc} */
@@ -313,11 +423,11 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    public void addVertex(double x, double y)
    {
       isUpToDate = false;
-      setOrCreate(x, y, numberOfVertices);
+      setOrCreate(numberOfVertices, x, y);
       numberOfVertices++;
    }
 
-   private void setOrCreate(double x, double y, int i)
+   private void setOrCreate(int i, double x, double y)
    {
       while (i >= vertexBuffer.size())
          vertexBuffer.add(EuclidFrameFactories.newFixedFramePoint2DBasics(this));
