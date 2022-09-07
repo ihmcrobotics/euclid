@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreTools.EPS_NORM_FAST_SQRT;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -636,5 +639,30 @@ public class EuclidCoreToolsTest
       }
 
       System.out.println("EuclidCoreToolsTest.testFastAcos: max error=" + maxError + " at x=" + maxErrorX);
+   }
+
+   @Test
+   public void testReverse()
+   {
+      Random random = new Random(234234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<Integer> originalList = new ArrayList<>();
+
+         int size = random.nextInt(20);
+         while (originalList.size() < size)
+            originalList.add(Integer.valueOf(originalList.size()));
+
+         int fromIndex = size == 0 ? 0 : random.nextInt(size);
+         int toIndex = size == 0 ? 0 : fromIndex + random.nextInt(originalList.size() - fromIndex);
+
+         List<Integer> expected = new ArrayList<>(originalList);
+         Collections.reverse(expected.subList(fromIndex, toIndex));
+         List<Integer> actual = new ArrayList<>(originalList);
+         EuclidCoreTools.reverse(actual, fromIndex, toIndex);
+
+         assertEquals(expected, actual);
+      }
    }
 }

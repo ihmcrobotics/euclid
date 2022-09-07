@@ -1,5 +1,8 @@
 package us.ihmc.euclid.tools;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.Matrix;
 
@@ -1253,5 +1256,24 @@ public class EuclidCoreTools
          throw new MatrixDimensionException("The matrix is too small, expected: [nRows >= " + minRows + ", nColumns >= " + minColumns + "], was: [nRows = "
                + matrixToTest.getNumRows() + ", nCols = " + matrixToTest.getNumCols() + "].");
       }
+   }
+
+   /**
+    * Reverses in the specified list the order of the elements that are in the range
+    * [{@code fromIndex}, {@code toIndex - 1}].
+    * <p>
+    * This method is garbage free and is equivalent to
+    * {@code Collections.reverse(list.subList(fromIndex, toIndex))}.
+    * </p>
+    * 
+    * @param fromIndex low endpoint (inclusive) of the range to be reversed.
+    * @param toIndex   high endpoint (exclusive) of the range to be reversed.
+    * @param list      the list whose elements are to be reversed.
+    */
+   public static void reverse(List<?> list, int fromIndex, int toIndex)
+   {
+      int size = toIndex - fromIndex;
+      for (int i = fromIndex, mid = size >> 1, j = fromIndex + size - 1; i < fromIndex + mid; i++, j--)
+         Collections.swap(list, i, j);
    }
 }
