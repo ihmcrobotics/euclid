@@ -8,6 +8,7 @@ import java.util.List;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -3432,9 +3433,7 @@ public class EuclidGeometryTools
       if (tymax < tmax)
          tmax = tymax;
 
-      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
-         return 0;
-      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
+      if ((!canIntersectionOccurAfterEnd && tmin > 1.0) || (!canIntersectionOccurBeforeStart && tmax < 0.0))
          return 0;
 
       int numberOfIntersections = 0;
@@ -4288,9 +4287,7 @@ public class EuclidGeometryTools
       if (tzmax < tmax)
          tmax = tzmax;
 
-      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
-         return 0;
-      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
+      if ((!canIntersectionOccurAfterEnd && tmin > 1.0) || (!canIntersectionOccurBeforeStart && tmax < 0.0))
          return 0;
 
       int numberOfIntersections = 0;
@@ -6421,11 +6418,9 @@ public class EuclidGeometryTools
 
       double normalMagnitude2 = planeNormal2.norm();
 
-      if (normalMagnitude2 < ONE_TRILLIONTH)
-         return false;
-
       // Check if planes are parallel.
-      if (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > EuclidCoreTools.cos(Math.abs(angleThreshold)))
+      if ((normalMagnitude2 < ONE_TRILLIONTH)
+            || (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > EuclidCoreTools.cos(Math.abs(angleThreshold))))
          return false;
 
       intersectionDirectionToPack.cross(planeNormal1, planeNormal2);
@@ -6541,19 +6536,62 @@ public class EuclidGeometryTools
       if (lengthSideC < 0.0)
          throw new IllegalArgumentException("The side C cannot have a negative length, lengthSideC = " + lengthSideC);
 
-      if (lengthSideA + lengthSideB <= lengthSideC)
-         return false;
-      if (lengthSideB + lengthSideC <= lengthSideA)
-         return false;
-      if (lengthSideA + lengthSideC <= lengthSideB)
+      if ((lengthSideA + lengthSideB <= lengthSideC) || (lengthSideB + lengthSideC <= lengthSideA) || (lengthSideA + lengthSideC <= lengthSideB))
          return false;
       return true;
    }
 
    /**
-    * Determines if the query is exactly on or on the right side of the infinitely long line that goes
-    * through the ray origin and which direction is perpendicular to the ray and directed towards the
-    * left side.
+    * Determines if the query is: ahead of the ray, i.e. the projection onto ray lies in front of the
+    * ray's origin, behind the ray, or neither, i.e. the projection is equal to the ray origin.
+    *
+    * @param pointX        the x-coordinate of the query.
+    * @param pointY        the y-coordinate of the query.
+    * @param rayOriginX    the x-coordinate of the ray's origin.
+    * @param rayOriginY    the y-coordinate of the ray's origin.
+    * @param rayDirectionX the x-component of the ray's direction.
+    * @param rayDirectionY the y-component of the ray's direction.
+    * @return {@link Location#AHEAD} if the query is located in front of the ray,
+    *         {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
+    *         projection onto the ray is exactly equal to the ray origin.
+    */
+   public static Location whichPartOfRay2DIsPoint2DOn(double pointX,
+                                                      double pointY,
+                                                      double rayOriginX,
+                                                      double rayOriginY,
+                                                      double rayDirectionX,
+                                                      double rayDirectionY)
+   {
+      double rayStartToVertexX = pointX - rayOriginX;
+      double rayStartToVertexY = pointY - rayOriginY;
+      double dotProduct = rayStartToVertexX * rayDirectionX + rayStartToVertexY * rayDirectionY;
+      if (dotProduct > 0.0)
+         return Location.AHEAD;
+      else if (dotProduct < 0.0)
+         return Location.BEHIND;
+      else
+         return null;
+   }
+
+   /**
+    * Determines if the query is: ahead of the ray, i.e. the projection onto ray lies in front of the
+    * ray's origin, behind the ray, or neither, i.e. the projection is equal to the ray origin.
+    *
+    * @param point        the query. Not modified.
+    * @param rayOrigin    the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @return {@link Location#AHEAD} if the query is located in front of the ray,
+    *         {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
+    *         projection onto the ray is exactly equal to the ray origin.
+    */
+   public static Location whichPartOfRay2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   {
+      return whichPartOfRay2DIsPoint2DOn(point.getX(), point.getY(), rayOrigin.getX(), rayOrigin.getY(), rayDirection.getX(), rayDirection.getY());
+   }
+
+   /**
+    * Determines if the query is: ahead of the ray, i.e. the projection onto ray lies in front of the
+    * ray's origin, behind the ray, or neither, i.e. the projection is equal to the ray origin.
     *
     * @param pointX        the x-coordinate of the query.
     * @param pointY        the y-coordinate of the query.
@@ -6565,16 +6603,12 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint2DInFrontOfRay2D(double pointX, double pointY, double rayOriginX, double rayOriginY, double rayDirectionX, double rayDirectionY)
    {
-      double rayStartToVertexX = pointX - rayOriginX;
-      double rayStartToVertexY = pointY - rayOriginY;
-      double dotProduct = rayStartToVertexX * rayDirectionX + rayStartToVertexY * rayDirectionY;
-      return dotProduct >= 0.0;
+      return whichPartOfRay2DIsPoint2DOn(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY) != Location.BEHIND;
    }
 
    /**
-    * Determines if the query is exactly on or on the right side of the infinitely long line that goes
-    * through the ray origin and which direction is perpendicular to the ray and directed towards the
-    * left side.
+    * Determines if the query is: ahead of the ray, i.e. the projection onto ray lies in front of the
+    * ray's origin, behind the ray, or neither, i.e. the projection is equal to the ray origin.
     *
     * @param point        the query. Not modified.
     * @param rayOrigin    the ray's origin. Not modified.
@@ -6583,7 +6617,7 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint2DInFrontOfRay2D(Point2DReadOnly point, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
    {
-      return isPoint2DInFrontOfRay2D(point.getX(), point.getY(), rayOrigin.getX(), rayOrigin.getY(), rayDirection.getX(), rayDirection.getY());
+      return whichPartOfRay2DIsPoint2DOn(point, rayOrigin, rayDirection) != Location.BEHIND;
    }
 
    /**
@@ -6602,11 +6636,8 @@ public class EuclidGeometryTools
       // This makes the assertion working for both clockwise and counter-clockwise ordered vertices.
       boolean checkForLeftSide = isPoint2DOnLeftSideOfLine2D(b, a, c);
 
-      if (isPoint2DOnSideOfLine2D(point, a, b, checkForLeftSide))
-         return false;
-      if (isPoint2DOnSideOfLine2D(point, b, c, checkForLeftSide))
-         return false;
-      if (isPoint2DOnSideOfLine2D(point, c, a, checkForLeftSide))
+      if (isPoint2DOnSideOfLine2D(point, a, b, checkForLeftSide) || isPoint2DOnSideOfLine2D(point, b, c, checkForLeftSide)
+            || isPoint2DOnSideOfLine2D(point, c, a, checkForLeftSide))
          return false;
 
       return true;
@@ -6703,7 +6734,7 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint2DOnLeftSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
-      return isPoint2DOnSideOfLine2D(point, firstPointOnLine, secondPointOnLine, true);
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.LEFT;
    }
 
    /**
@@ -6725,7 +6756,7 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint2DOnRightSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
-      return isPoint2DOnSideOfLine2D(point, firstPointOnLine, secondPointOnLine, false);
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.RIGHT;
    }
 
    /**
@@ -6751,7 +6782,11 @@ public class EuclidGeometryTools
     *                       left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, double, double, double, double)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
                                                  double pointY,
                                                  double pointOnLineX,
@@ -6760,13 +6795,157 @@ public class EuclidGeometryTools
                                                  double lineDirectionY,
                                                  boolean testLeftSide)
    {
+      Location side = whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
+
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line defined by two
+    * points. The idea of "side" is determined based on order of {@code firstPointOnLine} and
+    * {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param pointX            the x-coordinate of the query point.
+    * @param pointY            the y-coordinate of the query point.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(double pointX, double pointY, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      double pointOnLineX = firstPointOnLine.getX();
+      double pointOnLineY = firstPointOnLine.getY();
+      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
+      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
+      return whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line. The idea of
+    * "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
+    * @param lineDirection the direction of the infinite line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      double pointOnLineX = pointOnLine.getX();
+      double pointOnLineY = pointOnLine.getY();
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+      return whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line defined by two
+    * points. The idea of "side" is determined based on order of {@code firstPointOnLine} and
+    * {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      return whichSideOfLine2DIsPoint2DOn(point.getX(), point.getY(), firstPointOnLine, secondPointOnLine);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line. The idea of
+    * "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param point         the query point. Not modified.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
+    * @param lineDirection the direction of the infinite line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return whichSideOfLine2DIsPoint2DOn(point.getX(), point.getY(), pointOnLine, lineDirection);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line. The idea of
+    * "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param pointX         the x-coordinate of the query point.
+    * @param pointY         the y-coordinate of the query point.
+    * @param pointOnLineX   the x-coordinate of a point positioned on the infinite line.
+    * @param pointOnLineY   the y-coordinate of a point positioned on the infinite line.
+    * @param lineDirectionX the x-component of the direction of the infinite line.
+    * @param lineDirectionY the y-component of the direction of the infinite line.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(double pointX,
+                                                       double pointY,
+                                                       double pointOnLineX,
+                                                       double pointOnLineY,
+                                                       double lineDirectionX,
+                                                       double lineDirectionY)
+   {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
       double crossProduct = lineDirectionX * dy - dx * lineDirectionY;
-      if (testLeftSide)
-         return crossProduct > 0.0;
+      if (crossProduct > 0.0)
+         return Location.LEFT;
+      else if (crossProduct < 0.0)
+         return Location.RIGHT;
       else
-         return crossProduct < 0.0;
+         return null;
    }
 
    /**
@@ -6791,18 +6970,19 @@ public class EuclidGeometryTools
     *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Point2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
                                                  double pointY,
                                                  Point2DReadOnly firstPointOnLine,
                                                  Point2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
    {
-      double pointOnLineX = firstPointOnLine.getX();
-      double pointOnLineY = firstPointOnLine.getY();
-      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
-      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
-      return isPoint2DOnSideOfLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, testLeftSide);
+      Location side = whichSideOfLine2DIsPoint2DOn(pointX, pointY, firstPointOnLine, secondPointOnLine);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
    }
 
    /**
@@ -6826,18 +7006,19 @@ public class EuclidGeometryTools
     *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Vector2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
                                                  double pointY,
                                                  Point2DReadOnly pointOnLine,
                                                  Vector2DReadOnly lineDirection,
                                                  boolean testLeftSide)
    {
-      double pointOnLineX = pointOnLine.getX();
-      double pointOnLineY = pointOnLine.getY();
-      double lineDirectionX = lineDirection.getX();
-      double lineDirectionY = lineDirection.getY();
-      return isPoint2DOnSideOfLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, testLeftSide);
+      Location side = whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLine, lineDirection);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
    }
 
    /**
@@ -6861,13 +7042,18 @@ public class EuclidGeometryTools
     *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(Point2DReadOnly point,
                                                  Point2DReadOnly firstPointOnLine,
                                                  Point2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
    {
-      return isPoint2DOnSideOfLine2D(point.getX(), point.getY(), firstPointOnLine, secondPointOnLine, testLeftSide);
+      Location side = whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
    }
 
    /**
@@ -6890,10 +7076,247 @@ public class EuclidGeometryTools
     *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Vector2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, boolean testLeftSide)
    {
-      return isPoint2DOnSideOfLine2D(point.getX(), point.getY(), pointOnLine, lineDirection, testLeftSide);
+      Location side = whichSideOfLine2DIsPoint2DOn(point, pointOnLine, lineDirection);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the plane.
+    *
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointZ        the z-coordinate of the query point.
+    * @param pointOnPlaneX the x-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneY the y-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneZ the z-coordinate of a point positioned on the infinite plane.
+    * @param planeNormalX  the x-component of the normal of the infinite plane.
+    * @param planeNormalY  the y-component of the normal of the infinite plane.
+    * @param planeNormalZ  the z-component of the normal of the infinite plane.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
+                                                        double pointY,
+                                                        double pointZ,
+                                                        double pointOnPlaneX,
+                                                        double pointOnPlaneY,
+                                                        double pointOnPlaneZ,
+                                                        double planeNormalX,
+                                                        double planeNormalY,
+                                                        double planeNormalZ)
+   {
+      double dx = (pointX - pointOnPlaneX) * planeNormalX;
+      double dy = (pointY - pointOnPlaneY) * planeNormalY;
+      double dz = (pointZ - pointOnPlaneZ) * planeNormalZ;
+      double signedDistance = dx + dy + dz;
+
+      if (signedDistance > 0.0)
+         return Location.ABOVE;
+      else if (signedDistance < 0.0)
+         return Location.BELOW;
+      else
+         return null;
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the plane.
+    *
+    * @param pointX       the x-coordinate of the query point.
+    * @param pointY       the y-coordinate of the query point.
+    * @param pointZ       the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return whichSideOfPlane3DIsPoint3DOn(pointX,
+                                           pointY,
+                                           pointZ,
+                                           pointOnPlane.getX(),
+                                           pointOnPlane.getY(),
+                                           pointOnPlane.getZ(),
+                                           planeNormal.getX(),
+                                           planeNormal.getY(),
+                                           planeNormal.getZ());
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the plane.
+    *
+    * @param point        the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return whichSideOfPlane3DIsPoint3DOn(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    *
+    * @param pointX              the x-coordinate of the query point.
+    * @param pointY              the y-coordinate of the query point.
+    * @param pointZ              the z-coordinate of the query point.
+    * @param pointOnPlaneX       the x-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneY       the y-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneZ       the z-coordinate of a point positioned on the infinite plane.
+    * @param planeFirstTangentX  the x-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentY  the y-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentZ  the z-component of a first tangent of the infinite plane.
+    * @param planeSecondTangentX the x-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentY the y-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentZ the z-component of a second tangent of the infinite plane.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
+    *      double, double)
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
+                                                        double pointY,
+                                                        double pointZ,
+                                                        double pointOnPlaneX,
+                                                        double pointOnPlaneY,
+                                                        double pointOnPlaneZ,
+                                                        double planeFirstTangentX,
+                                                        double planeFirstTangentY,
+                                                        double planeFirstTangentZ,
+                                                        double planeSecondTangentX,
+                                                        double planeSecondTangentY,
+                                                        double planeSecondTangentZ)
+   {
+      double planeNormalX = planeFirstTangentY * planeSecondTangentZ - planeFirstTangentZ * planeSecondTangentY;
+      double planeNormalY = planeFirstTangentZ * planeSecondTangentX - planeFirstTangentX * planeSecondTangentZ;
+      double planeNormalZ = planeFirstTangentX * planeSecondTangentY - planeFirstTangentY * planeSecondTangentX;
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeNormalX, planeNormalY, planeNormalZ);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    *
+    * @param pointX             the x-coordinate of the query point.
+    * @param pointY             the y-coordinate of the query point.
+    * @param pointZ             the z-coordinate of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
+    *      double, double)
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
+                                                        double pointY,
+                                                        double pointZ,
+                                                        Point3DReadOnly pointOnPlane,
+                                                        Vector3DReadOnly planeFirstTangent,
+                                                        Vector3DReadOnly planeSecondTangent)
+   {
+      return whichSideOfPlane3DIsPoint3DOn(pointX,
+                                           pointY,
+                                           pointZ,
+                                           pointOnPlane.getX(),
+                                           pointOnPlane.getY(),
+                                           pointOnPlane.getZ(),
+                                           planeFirstTangent.getX(),
+                                           planeFirstTangent.getY(),
+                                           planeFirstTangent.getZ(),
+                                           planeSecondTangent.getX(),
+                                           planeSecondTangent.getY(),
+                                           planeSecondTangent.getZ());
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    *
+    * @param point              the coordinates of the query point. Not modified.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
+    *      double, double)
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly point,
+                                                        Point3DReadOnly pointOnPlane,
+                                                        Vector3DReadOnly planeFirstTangent,
+                                                        Vector3DReadOnly planeSecondTangent)
+   {
+      return whichSideOfPlane3DIsPoint3DOn(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeFirstTangent, planeSecondTangent);
    }
 
    /**
@@ -6922,7 +7345,11 @@ public class EuclidGeometryTools
     *                      above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
     *         is on the opposite side or exactly on the plane.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -6934,15 +7361,16 @@ public class EuclidGeometryTools
                                                       double planeNormalZ,
                                                       boolean testForAbove)
    {
-      double dx = (pointX - pointOnPlaneX) * planeNormalX;
-      double dy = (pointY - pointOnPlaneY) * planeNormalY;
-      double dz = (pointZ - pointOnPlaneZ) * planeNormalZ;
-      double signedDistance = dx + dy + dz;
-
-      if (testForAbove)
-         return signedDistance > 0.0;
-      else
-         return signedDistance < 0.0;
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX,
+                                                    pointY,
+                                                    pointZ,
+                                                    pointOnPlaneX,
+                                                    pointOnPlaneY,
+                                                    pointOnPlaneZ,
+                                                    planeNormalX,
+                                                    planeNormalY,
+                                                    planeNormalZ);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -6967,7 +7395,11 @@ public class EuclidGeometryTools
     *                     above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
     *         is on the opposite side or exactly on the plane.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, boolean)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -6975,16 +7407,8 @@ public class EuclidGeometryTools
                                                       Vector3DReadOnly planeNormal,
                                                       boolean testForAbove)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX,
-                                          pointY,
-                                          pointZ,
-                                          pointOnPlane.getX(),
-                                          pointOnPlane.getY(),
-                                          pointOnPlane.getZ(),
-                                          planeNormal.getX(),
-                                          planeNormal.getY(),
-                                          planeNormal.getZ(),
-                                          testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -7007,10 +7431,15 @@ public class EuclidGeometryTools
     *                     above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
     *         is on the opposite side or exactly on the plane.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, boolean testForAbove)
    {
-      return isPoint3DAboveOrBelowPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -7036,7 +7465,7 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal) == Location.ABOVE;
    }
 
    /**
@@ -7060,7 +7489,7 @@ public class EuclidGeometryTools
     */
    public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, true);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal) == Location.ABOVE;
    }
 
    /**
@@ -7083,10 +7512,14 @@ public class EuclidGeometryTools
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
     *         above or exactly on the plane.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, boolean)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal) == Location.BELOW;
    }
 
    /**
@@ -7107,10 +7540,14 @@ public class EuclidGeometryTools
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
     *         above or exactly on the plane.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, false);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal) == Location.BELOW;
    }
 
    /**
@@ -7144,7 +7581,11 @@ public class EuclidGeometryTools
     *         is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double, double, double, double)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -7159,19 +7600,20 @@ public class EuclidGeometryTools
                                                       double planeSecondTangentZ,
                                                       boolean testForAbove)
    {
-      double planeNormalX = planeFirstTangentY * planeSecondTangentZ - planeFirstTangentZ * planeSecondTangentY;
-      double planeNormalY = planeFirstTangentZ * planeSecondTangentX - planeFirstTangentX * planeSecondTangentZ;
-      double planeNormalZ = planeFirstTangentX * planeSecondTangentY - planeFirstTangentY * planeSecondTangentX;
-      return isPoint3DAboveOrBelowPlane3D(pointX,
-                                          pointY,
-                                          pointZ,
-                                          pointOnPlaneX,
-                                          pointOnPlaneY,
-                                          pointOnPlaneZ,
-                                          planeNormalX,
-                                          planeNormalY,
-                                          planeNormalZ,
-                                          testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX,
+                                                    pointY,
+                                                    pointZ,
+                                                    pointOnPlaneX,
+                                                    pointOnPlaneY,
+                                                    pointOnPlaneZ,
+                                                    planeFirstTangentX,
+                                                    planeFirstTangentY,
+                                                    planeFirstTangentZ,
+                                                    planeSecondTangentX,
+                                                    planeSecondTangentY,
+                                                    planeSecondTangentZ);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
+
    }
 
    /**
@@ -7200,7 +7642,11 @@ public class EuclidGeometryTools
     *         is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -7209,19 +7655,9 @@ public class EuclidGeometryTools
                                                       Vector3DReadOnly planeSecondTangent,
                                                       boolean testForAbove)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX,
-                                          pointY,
-                                          pointZ,
-                                          pointOnPlane.getX(),
-                                          pointOnPlane.getY(),
-                                          pointOnPlane.getZ(),
-                                          planeFirstTangent.getX(),
-                                          planeFirstTangent.getY(),
-                                          planeFirstTangent.getZ(),
-                                          planeSecondTangent.getX(),
-                                          planeSecondTangent.getY(),
-                                          planeSecondTangent.getZ(),
-                                          testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
+
    }
 
    /**
@@ -7248,14 +7684,20 @@ public class EuclidGeometryTools
     *         is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point,
                                                       Point3DReadOnly pointOnPlane,
                                                       Vector3DReadOnly planeFirstTangent,
                                                       Vector3DReadOnly planeSecondTangent,
                                                       boolean testForAbove)
    {
-      return isPoint3DAboveOrBelowPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
+
    }
 
    /**
@@ -7282,7 +7724,11 @@ public class EuclidGeometryTools
     *         below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAbovePlane3D(double pointX,
                                                double pointY,
                                                double pointZ,
@@ -7290,7 +7736,7 @@ public class EuclidGeometryTools
                                                Vector3DReadOnly planeFirstTangent,
                                                Vector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.ABOVE;
    }
 
    /**
@@ -7315,13 +7761,17 @@ public class EuclidGeometryTools
     *         below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
                                                Vector3DReadOnly planeFirstTangent,
                                                Vector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.ABOVE;
    }
 
    /**
@@ -7348,7 +7798,11 @@ public class EuclidGeometryTools
     *         above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DBelowPlane3D(double pointX,
                                                double pointY,
                                                double pointZ,
@@ -7356,7 +7810,7 @@ public class EuclidGeometryTools
                                                Vector3DReadOnly planeFirstTangent,
                                                Vector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.BELOW;
    }
 
    /**
@@ -7381,13 +7835,17 @@ public class EuclidGeometryTools
     *         above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
                                                Vector3DReadOnly planeFirstTangent,
                                                Vector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.BELOW;
    }
 
    /**
