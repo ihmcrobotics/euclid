@@ -6716,91 +6716,6 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Returns a boolean value, stating whether a 2D point is on the left side of an infinitely long
-    * line defined by two points. "Left side" is determined based on order of {@code firstPointOnLine}
-    * and {@code secondPointOnLine}.
-    * <p>
-    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
-    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the left side of this line
-    * has a negative x coordinate.
-    * </p>
-    * This method will return {@code false} if the point is on the line.
-    *
-    * @param point             the query point. Not modified.
-    * @param firstPointOnLine  a first point located on the line. Not modified.
-    * @param secondPointOnLine a second point located on the line. Not modified.
-    * @return {@code true} if the point is on the left side of the line, {@code false} if the point is
-    *         on the right side or exactly on the line.
-    */
-   public static boolean isPoint2DOnLeftSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
-   {
-      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.LEFT;
-   }
-
-   /**
-    * Returns a boolean value, stating whether a 2D point is on the right side of an infinitely long
-    * line defined by two points. "Right side" is determined based on order of {@code firstPointOnLine}
-    * and {@code secondPointOnLine}.
-    * <p>
-    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
-    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the right side of this
-    * line has a positive x coordinate.
-    * </p>
-    * This method will return {@code false} if the point is on the line.
-    *
-    * @param point             the query point. Not modified.
-    * @param firstPointOnLine  a first point located on the line. Not modified.
-    * @param secondPointOnLine a second point located on the line. Not modified.
-    * @return {@code true} if the point is on the right side of the line, {@code false} if the point is
-    *         on the left side or exactly on the line.
-    */
-   public static boolean isPoint2DOnRightSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
-   {
-      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.RIGHT;
-   }
-
-   /**
-    * Returns a boolean value, stating whether a 2D point is on the left or right side of an infinitely
-    * long line. The idea of "side" is determined based on the direction of the line.
-    * <p>
-    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
-    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
-    * <ul>
-    * <li>the left side of this line has a negative x coordinate.
-    * <li>the right side of this line has a positive x coordinate.
-    * </ul>
-    * </p>
-    * This method will return {@code false} if the point is on the line.
-    *
-    * @param pointX         the x-coordinate of the query point.
-    * @param pointY         the y-coordinate of the query point.
-    * @param pointOnLineX   the x-coordinate of a point positioned on the infinite line.
-    * @param pointOnLineY   the y-coordinate of a point positioned on the infinite line.
-    * @param lineDirectionX the x-component of the direction of the infinite line.
-    * @param lineDirectionY the y-component of the direction of the infinite line.
-    * @param testLeftSide   the query of the side, when equal to {@code true} this will test for the
-    *                       left side, {@code false} this will test for the right side.
-    * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
-    * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, double, double, double, double)}
-    *             instead.
-    */
-   @Deprecated
-   public static boolean isPoint2DOnSideOfLine2D(double pointX,
-                                                 double pointY,
-                                                 double pointOnLineX,
-                                                 double pointOnLineY,
-                                                 double lineDirectionX,
-                                                 double lineDirectionY,
-                                                 boolean testLeftSide)
-   {
-      Location side = whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
-      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
-
-   }
-
-   /**
     * Returns whether a 2D point is on the left or right side of an infinitely long line defined by two
     * points. The idea of "side" is determined based on order of {@code firstPointOnLine} and
     * {@code secondPointOnLine}.
@@ -6946,6 +6861,90 @@ public class EuclidGeometryTools
          return Location.RIGHT;
       else
          return null;
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 2D point is on the left side of an infinitely long
+    * line defined by two points. "Left side" is determined based on order of {@code firstPointOnLine}
+    * and {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the left side of this line
+    * has a negative x coordinate.
+    * </p>
+    * This method will return {@code false} if the point is on the line.
+    *
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@code true} if the point is on the left side of the line, {@code false} if the point is
+    *         on the right side or exactly on the line.
+    */
+   public static boolean isPoint2DOnLeftSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.LEFT;
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 2D point is on the right side of an infinitely long
+    * line defined by two points. "Right side" is determined based on order of {@code firstPointOnLine}
+    * and {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the right side of this
+    * line has a positive x coordinate.
+    * </p>
+    * This method will return {@code false} if the point is on the line.
+    *
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@code true} if the point is on the right side of the line, {@code false} if the point is
+    *         on the left side or exactly on the line.
+    */
+   public static boolean isPoint2DOnRightSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.RIGHT;
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 2D point is on the left or right side of an infinitely
+    * long line. The idea of "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the line.
+    *
+    * @param pointX         the x-coordinate of the query point.
+    * @param pointY         the y-coordinate of the query point.
+    * @param pointOnLineX   the x-coordinate of a point positioned on the infinite line.
+    * @param pointOnLineY   the y-coordinate of a point positioned on the infinite line.
+    * @param lineDirectionX the x-component of the direction of the infinite line.
+    * @param lineDirectionY the y-component of the direction of the infinite line.
+    * @param testLeftSide   the query of the side, when equal to {@code true} this will test for the
+    *                       left side, {@code false} this will test for the right side.
+    * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
+    *         on the opposite side or exactly on the line.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, double, double, double, double)}
+    *             instead.
+    */
+   @Deprecated
+   public static boolean isPoint2DOnSideOfLine2D(double pointX,
+                                                 double pointY,
+                                                 double pointOnLineX,
+                                                 double pointOnLineY,
+                                                 double lineDirectionX,
+                                                 double lineDirectionY,
+                                                 boolean testLeftSide)
+   {
+      Location side = whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+      return testLeftSide ? side == Location.LEFT : side == Location.RIGHT;
    }
 
    /**
@@ -7512,11 +7511,7 @@ public class EuclidGeometryTools
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
     *         above or exactly on the plane.
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, boolean)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
       return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal) == Location.BELOW;
@@ -7540,11 +7535,7 @@ public class EuclidGeometryTools
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
     *         above or exactly on the plane.
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
       return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal) == Location.BELOW;
@@ -7724,11 +7715,7 @@ public class EuclidGeometryTools
     *         below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DAbovePlane3D(double pointX,
                                                double pointY,
                                                double pointZ,
@@ -7761,11 +7748,7 @@ public class EuclidGeometryTools
     *         below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
                                                Vector3DReadOnly planeFirstTangent,
@@ -7798,11 +7781,7 @@ public class EuclidGeometryTools
     *         above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DBelowPlane3D(double pointX,
                                                double pointY,
                                                double pointZ,
@@ -7835,11 +7814,7 @@ public class EuclidGeometryTools
     *         above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
     *      double, double, boolean)
-    * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
     */
-   @Deprecated
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
                                                Vector3DReadOnly planeFirstTangent,
