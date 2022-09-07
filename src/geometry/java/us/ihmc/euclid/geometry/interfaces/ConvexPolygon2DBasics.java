@@ -22,12 +22,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearable, Transformable
 {
    /**
-    * Gets the reference to this polygon's axis-aligned bounding box.
-    */
-   @Override
-   BoundingBox2DBasics getBoundingBox();
-
-   /**
     * Notifies the vertices have changed and that this polygon has to be updated.
     */
    void notifyVerticesChanged();
@@ -89,22 +83,6 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     */
    void update();
-
-   /**
-    * Updates the bounding box properties.
-    */
-   default void updateBoundingBox()
-   {
-      BoundingBox2DBasics boundingBox = getBoundingBox();
-      boundingBox.setToNaN();
-      boundingBox.updateToIncludePoints(this);
-   }
-
-   /**
-    * Compute centroid and area of this polygon. Formula taken from
-    * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
-    */
-   void updateCentroidAndArea();
 
    /**
     * Gets the reference to the {@code index}<sup>th</sup> vertex of this polygon.
@@ -308,12 +286,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *                          nothing.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *                                  polygon's vertices were edited.
-    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    default void scale(Point2DReadOnly pointToScaleAbout, double scaleFactor)
    {
       checkIfUpToDate();
-      notifyVerticesChanged();
+
+      if (isEmpty())
+         return;
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
@@ -323,6 +302,7 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
          vertex.add(pointToScaleAbout);
       }
 
+      notifyVerticesChanged();
       update();
    }
 
@@ -348,18 +328,7 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *                                  polygon's vertices were edited.
     * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
-   default void translate(double x, double y)
-   {
-      checkIfUpToDate();
-
-      for (int i = 0; i < getNumberOfVertices(); i++)
-      {
-         getVertexUnsafe(i).add(x, y);
-      }
-
-      updateBoundingBox();
-      updateCentroidAndArea();
-   }
+   void translate(double x, double y);
 
    /**
     * Transforms this convex polygon using the given homogeneous transformation matrix.
@@ -394,12 +363,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
       checkIfUpToDate();
-      notifyVerticesChanged();
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          getVertexUnsafe(i).applyTransform(transform, checkIfTransformInXYPlane);
       }
+
+      notifyVerticesChanged();
       update();
    }
 
@@ -436,12 +406,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
       checkIfUpToDate();
-      notifyVerticesChanged();
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          getVertexUnsafe(i).applyInverseTransform(transform, checkIfTransformInXYPlane);
       }
+
+      notifyVerticesChanged();
       update();
    }
 }

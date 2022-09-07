@@ -5,15 +5,21 @@ import java.util.Collections;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Convexity;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -55,11 +61,11 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     */
    private final List<Point2D> vertexBuffer = new ArrayList<>();
    private final List<Point2D> vertexBufferView = Collections.unmodifiableList(vertexBuffer);
+
    /**
     * The smallest axis-aligned bounding box that contains all this polygon's vertices.
     * <p>
-    * It is updated in the method {@link #updateBoundingBox()} which is itself called in
-    * {@link #update()}.
+    * It is updated in the method {@link #updateBoundingBox()} when calling {@link #getBoundingBox()}.
     * </p>
     */
    private final BoundingBox2D boundingBox = new BoundingBox2D();
@@ -67,16 +73,14 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     * The centroid of this polygon which is located at the center of mass of this polygon when
     * considered as a physical object with constant thickness and density.
     * <p>
-    * It is updated in the method {@link #updateCentroidAndArea()} which is itself called in
-    * {@link #update()}.
+    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getCentroid()}.
     * </p>
     */
    private final Point2D centroid = new Point2D();
    /**
     * The area of this convex polygon.
     * <p>
-    * It is updated in the method {@link #updateCentroidAndArea()} which is itself called in
-    * {@link #update()}.
+    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getArea()}
     * </p>
     * <p>
     * When a polygon is empty, i.e. has no vertices, the area is equal to {@link Double#NaN}.
@@ -91,6 +95,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     * </p>
     */
    private boolean isUpToDate = false;
+   private boolean boundingBoxDirty = true;
+   private boolean areaCentroidDirty = true;
 
    /**
     * Creates an empty convex polygon.
@@ -165,6 +171,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
       centroid.setToNaN();
       boundingBox.setToNaN();
       isUpToDate = false;
+      boundingBoxDirty = true;
+      areaCentroidDirty = true;
    }
 
    /** {@inheritDoc} */
@@ -173,6 +181,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    {
       clear();
       isUpToDate = true;
+      boundingBoxDirty = false;
+      areaCentroidDirty = false;
    }
 
    /** {@inheritDoc} */
@@ -206,7 +216,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     * Sets the {@code i}<sup>th</sup> point in {@link #vertexBuffer} to the given point. The list is
     * extended if needed.
     * </p>
-    * 
+    *
     * @param i the position in the list {@link #vertexBuffer} to copy the given point.
     * @param x the x-coordinate of the point to copy. Not modified.
     * @param y the y-coordinate of the point to copy. Not modified.
@@ -227,9 +237,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
 
       numberOfVertices = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(vertexBuffer, numberOfVertices);
       isUpToDate = true;
-
-      updateCentroidAndArea();
-      updateBoundingBox();
+      boundingBoxDirty = true;
+      areaCentroidDirty = true;
    }
 
    /**
@@ -265,6 +274,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
       centroid.set(other.centroid);
       area = other.area;
       isUpToDate = other.isUpToDate;
+      boundingBoxDirty = other.boundingBoxDirty;
+      areaCentroidDirty = other.areaCentroidDirty;
    }
 
    @Override
@@ -296,10 +307,9 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
 
          if (other.isUpToDate())
          {
-            boundingBox.set(other.getBoundingBox());
-            centroid.set(other.getCentroid());
-            area = other.getArea();
             isUpToDate = true;
+            boundingBoxDirty = true;
+            areaCentroidDirty = true;
          }
       }
       else
@@ -309,13 +319,29 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    }
 
    /**
-    * Compute centroid and area of this polygon. Formula taken from <a href=
-    * "https://www.seas.upenn.edu/~sys502/extra_materials/Polygon%20Area%20and%20Centroid.pdf">here</a>.
+    * Compute centroid and area of this polygon. Formula taken from
+    * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
     */
-   @Override
-   public void updateCentroidAndArea()
+   private void updateCentroidAndArea()
    {
-      area = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
+      if (areaCentroidDirty)
+      {
+         areaCentroidDirty = false;
+         area = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
+      }
+   }
+
+   /**
+    * Updates the bounding box properties.
+    */
+   private void updateBoundingBox()
+   {
+      if (boundingBoxDirty)
+      {
+         boundingBoxDirty = false;
+         boundingBox.setToNaN();
+         boundingBox.updateToIncludePoints(this);
+      }
    }
 
    @Override
@@ -330,6 +356,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    public double getArea()
    {
       checkIfUpToDate();
+      updateCentroidAndArea();
       return area;
    }
 
@@ -338,14 +365,16 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    public Point2DReadOnly getCentroid()
    {
       checkIfUpToDate();
+      updateCentroidAndArea();
       return centroid;
    }
 
    /** {@inheritDoc} */
    @Override
-   public BoundingBox2D getBoundingBox()
+   public BoundingBox2DReadOnly getBoundingBox()
    {
       checkIfUpToDate();
+      updateBoundingBox();
       return boundingBox;
    }
 
@@ -383,6 +412,103 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    public void notifyVerticesChanged()
    {
       isUpToDate = false;
+   }
+
+   @Override
+   public void translate(double x, double y)
+   {
+      checkIfUpToDate();
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         getVertexUnsafe(i).add(x, y);
+      }
+
+      if (!boundingBoxDirty)
+      {
+         boundingBox.getMinPoint().add(x, y);
+         boundingBox.getMaxPoint().add(x, y);
+      }
+      if (!areaCentroidDirty)
+      {
+         centroid.add(x, y);
+      }
+   }
+
+   @Override
+   public void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      checkIfUpToDate();
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         getVertexUnsafe(i).applyTransform(transform, checkIfTransformInXYPlane);
+      }
+
+      postTransform(transform);
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      checkIfUpToDate();
+
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         getVertexUnsafe(i).applyInverseTransform(transform, checkIfTransformInXYPlane);
+      }
+
+      postTransform(transform);
+   }
+
+   private void postTransform(Transform transform)
+   {
+      if (numberOfVertices <= 3)
+      { // It's real cheap to update when dealing with few vertices.
+         notifyVerticesChanged();
+         update();
+         return;
+      }
+
+      boolean updateVertices = true;
+
+      if (transform instanceof RigidBodyTransformReadOnly)
+      {
+         RigidBodyTransformReadOnly rbTransform = (RigidBodyTransformReadOnly) transform;
+         updateVertices = rbTransform.hasRotation();
+      }
+      else if (transform instanceof AffineTransformReadOnly)
+      {
+         AffineTransformReadOnly aTransform = (AffineTransformReadOnly) transform;
+         updateVertices = aTransform.hasLinearTransform();
+      }
+
+      if (updateVertices)
+      {
+         // Testing ordering by looking at the convexity
+         Convexity convexity = null;
+
+         for (int vertexIndex = 0; vertexIndex < numberOfVertices; vertexIndex++)
+         {
+            if (convexity == null)
+               convexity = EuclidGeometryPolygonTools.polygon2DConvexityAtVertex(vertexIndex, vertexBuffer, vertexIndex, clockwiseOrdered);
+            if (convexity != null)
+               break;
+         }
+
+         if (convexity == Convexity.CONCAVE)
+         { // The polygon got flipped, need to reverse the order to preserve the order.
+            EuclidCoreTools.reverse(vertexBuffer, 0, numberOfVertices);
+         }
+
+         // Shifting vertices around to ensure the first vertex is min-x (and max-y if multiple min-xs)
+         int minXMaxYVertexIndex = EuclidGeometryPolygonTools.findMinXMaxYVertexIndex(vertexBuffer, numberOfVertices);
+         EuclidCoreTools.rotate(vertexBuffer, 0, numberOfVertices, -minXMaxYVertexIndex);
+      }
+
+      // Being lazy, could transform these too.
+      boundingBoxDirty = true;
+      areaCentroidDirty = true;
    }
 
    @Override

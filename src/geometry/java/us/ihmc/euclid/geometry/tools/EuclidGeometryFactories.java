@@ -213,6 +213,82 @@ public class EuclidGeometryFactories
    }
 
    /**
+    * Creates a linked bounding box that can be used to observe read operations on the source.
+    *
+    * @param valueAccessedListener the listener to be notified whenever a component of the bounding box
+    *                              is being accessed. The corresponding constants {@link Axis2D} and
+    *                              {@link Bound} will be passed to indicate the component being
+    *                              accessed. Can be {@code null}.
+    * @param source                the original bounding box to link and observe. Modifiable via the
+    *                              linked point interface.
+    * @return the observable bounding box.
+    */
+   public static BoundingBox2DReadOnly newObservableBoundingBox2DReadOnly(BiConsumer<Axis2D, Bound> valueAccessedListener, BoundingBox2DReadOnly source)
+   {
+      return new BoundingBox2DReadOnly()
+      {
+         private final Point2DReadOnly minPoint, maxPoint;
+         private boolean isNotifying = false;
+
+         {
+            Consumer<Axis2D> minAccessedListener = toPoint2DValueAccessedListener(valueAccessedListener, Bound.MIN);
+            Consumer<Axis2D> maxAccessedListener = toPoint2DValueAccessedListener(valueAccessedListener, Bound.MAX);
+
+            minPoint = EuclidCoreFactories.newObservablePoint2DReadOnly(minAccessedListener, source.getMinPoint());
+            maxPoint = EuclidCoreFactories.newObservablePoint2DReadOnly(maxAccessedListener, source.getMaxPoint());
+         }
+
+         private Consumer<Axis2D> toPoint2DValueAccessedListener(BiConsumer<Axis2D, Bound> valueAccessedListener, Bound bound)
+         {
+            if (valueAccessedListener == null)
+               return null;
+            else
+               return axis ->
+               {
+                  if (isNotifying)
+                     return;
+                  isNotifying = true;
+                  valueAccessedListener.accept(axis, bound);
+                  isNotifying = false;
+               };
+         }
+
+         @Override
+         public Point2DReadOnly getMinPoint()
+         {
+            return minPoint;
+         }
+
+         @Override
+         public Point2DReadOnly getMaxPoint()
+         {
+            return maxPoint;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof BoundingBox2DReadOnly)
+               return equals((BoundingBox2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+         }
+      };
+   }
+
+   /**
     * Creates a new bounding box that can be used to observe read and write operations.
     *
     * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
