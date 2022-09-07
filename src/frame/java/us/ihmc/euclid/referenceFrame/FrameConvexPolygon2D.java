@@ -325,10 +325,13 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
    @Override
    public void setMatchingFrame(FrameVertex2DSupplier frameVertex2DSupplier, boolean checkIfTransformInXYPlane)
    {
-      set((Vertex2DSupplier) frameVertex2DSupplier);
-
-      if (frameVertex2DSupplier.getReferenceFrame() != referenceFrame)
+      if (frameVertex2DSupplier.getReferenceFrame() == referenceFrame)
       {
+         set(frameVertex2DSupplier);
+      }
+      else
+      {
+         set((Vertex2DSupplier) frameVertex2DSupplier);
          frameVertex2DSupplier.getReferenceFrame().getTransformToDesiredFrame(transformToDesiredFrame, referenceFrame);
          applyTransform(transformToDesiredFrame, checkIfTransformInXYPlane);
       }
@@ -437,7 +440,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
     */
    private void updateBoundingBox()
    {
-      checkIfUpToDate();
       if (boundingBoxDirty)
       {
          boundingBoxDirty = false;
