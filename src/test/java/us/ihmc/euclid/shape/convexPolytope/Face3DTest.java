@@ -18,7 +18,6 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line3D;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -328,8 +327,8 @@ public class Face3DTest
          List<HalfEdge3D> edges = face.getEdges();
          for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
          {
-            int previousIndex = EuclidGeometryPolygonTools.previous(edgeIndex, edges.size());
-            int nextIndex = EuclidGeometryPolygonTools.next(edgeIndex, edges.size());
+            int previousIndex = EuclidCoreTools.previous(edgeIndex, edges.size());
+            int nextIndex = EuclidCoreTools.next(edgeIndex, edges.size());
             HalfEdge3D prevEdge = edges.get(previousIndex);
             HalfEdge3D nextEdge = edges.get(nextIndex);
             HalfEdge3D edge = edges.get(edgeIndex);
@@ -355,8 +354,8 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
          {
-            int previousIndex = EuclidGeometryPolygonTools.previous(edgeIndex, edges.size());
-            int nextIndex = EuclidGeometryPolygonTools.next(edgeIndex, edges.size());
+            int previousIndex = EuclidCoreTools.previous(edgeIndex, edges.size());
+            int nextIndex = EuclidCoreTools.next(edgeIndex, edges.size());
 
             HalfEdge3D prevEdge = edges.get(previousIndex);
             HalfEdge3D nextEdge = edges.get(nextIndex);
@@ -390,8 +389,8 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
          {
-            int previousIndex = EuclidGeometryPolygonTools.previous(edgeIndex, edges.size());
-            int nextIndex = EuclidGeometryPolygonTools.next(edgeIndex, edges.size());
+            int previousIndex = EuclidCoreTools.previous(edgeIndex, edges.size());
+            int nextIndex = EuclidCoreTools.next(edgeIndex, edges.size());
 
             HalfEdge3D prevEdge = edges.get(previousIndex);
             HalfEdge3D nextEdge = edges.get(nextIndex);

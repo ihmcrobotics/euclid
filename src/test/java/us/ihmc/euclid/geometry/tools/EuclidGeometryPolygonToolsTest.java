@@ -26,12 +26,9 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2D
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightEndIndex;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightStartIndex;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.nextEdgeIndexIntersectingWithLine2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextPointCloud2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.averagePoint2Ds;
@@ -48,6 +45,9 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreTools.next;
+import static us.ihmc.euclid.tools.EuclidCoreTools.previous;
+import static us.ihmc.euclid.tools.EuclidCoreTools.wrap;
 
 import java.util.ArrayList;
 import java.util.Arrays;

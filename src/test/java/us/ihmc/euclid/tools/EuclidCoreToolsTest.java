@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreTools.EPS_NORM_FAST_SQRT;
+import static us.ihmc.euclid.tools.EuclidCoreTools.wrap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -664,5 +665,68 @@ public class EuclidCoreToolsTest
 
          assertEquals(expected, actual);
       }
+   }
+
+   @Test
+   public void testRotate()
+   {
+      Random random = new Random(3453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<Integer> originalList = new ArrayList<>();
+
+         int shift = random.nextInt(100);
+
+         int size = random.nextInt(100);
+         while (originalList.size() < size)
+            originalList.add(Integer.valueOf(originalList.size()));
+
+         int fromIndex = size == 0 ? 0 : random.nextInt(size);
+         int toIndex = size == 0 ? 0 : fromIndex + random.nextInt(originalList.size() - fromIndex);
+         int subSize = toIndex - fromIndex;
+
+         List<Integer> expectedList = new ArrayList<>(originalList);
+
+         for (int j = fromIndex; j < toIndex; j++)
+         {
+            int originalIndex = wrap(j - fromIndex - shift, subSize) + fromIndex;
+            expectedList.set(j, originalList.get(originalIndex));
+         }
+
+         List<Integer> actualList = new ArrayList<>(originalList);
+         EuclidCoreTools.rotate(actualList, fromIndex, toIndex, shift);
+
+         assertEquals(expectedList, actualList);
+
+         expectedList = new ArrayList<>(originalList);
+         Collections.rotate(expectedList.subList(fromIndex, toIndex), shift);
+         assertEquals(expectedList, actualList);
+      }
+
+      { // Example 1
+         List<Integer> list = Arrays.asList(0, 1, 2, 3, 4);
+         EuclidCoreTools.rotate(list, 0, list.size(), -1);
+         assertEquals(Arrays.asList(1, 2, 3, 4, 0), list);
+      }
+
+      { // Example 2
+         List<Integer> list = Arrays.asList(0, 1, 2, 3, 4);
+         EuclidCoreTools.rotate(list, 0, list.size(), +1);
+         assertEquals(Arrays.asList(4, 0, 1, 2, 3), list);
+      }
+
+      { // Example 3
+         List<Integer> list = Arrays.asList(9, 0, 1, 2, 9);
+         EuclidCoreTools.rotate(list, 1, 4, -1);
+         assertEquals(Arrays.asList(9, 1, 2, 0, 9), list);
+      }
+
+      { // Example 4
+         List<Integer> list = Arrays.asList(9, 0, 1, 2, 9);
+         EuclidCoreTools.rotate(list, 1, 4, +1);
+         assertEquals(Arrays.asList(9, 2, 0, 1, 9), list);
+      }
+
    }
 }

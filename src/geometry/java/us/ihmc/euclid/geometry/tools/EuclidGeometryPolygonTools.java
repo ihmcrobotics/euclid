@@ -2815,13 +2815,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped index.
+    * @deprecated Use {@link EuclidCoreTools#wrap(int,int)} instead
     */
    public static int wrap(int index, int listSize)
    {
-      index %= listSize;
-      if (index < 0)
-         index += listSize;
-      return index;
+      return EuclidCoreTools.wrap(index, listSize);
    }
 
    /**
@@ -2838,10 +2836,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be incremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped incremented index.
+    * @deprecated Use {@link EuclidCoreTools#next(int,int)} instead
     */
    public static int next(int index, int listSize)
    {
-      return wrap(index + 1, listSize);
+      return EuclidCoreTools.next(index, listSize);
    }
 
    /**
@@ -2858,10 +2857,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be decremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped decremented index.
+    * @deprecated Use {@link EuclidCoreTools#previous(int,int)} instead
     */
    public static int previous(int index, int listSize)
    {
-      return wrap(index - 1, listSize);
+      return EuclidCoreTools.previous(index, listSize);
    }
 
    private static void checkEdgeIndex(int edgeIndex, int numberOfVertices)

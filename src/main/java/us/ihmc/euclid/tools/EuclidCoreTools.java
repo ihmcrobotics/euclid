@@ -1260,20 +1260,147 @@ public class EuclidCoreTools
 
    /**
     * Reverses in the specified list the order of the elements that are in the range
-    * [{@code fromIndex}, {@code toIndex - 1}].
+    * [{@code fromIndex}, {@code toIndex}[.
     * <p>
     * This method is garbage free and is equivalent to
     * {@code Collections.reverse(list.subList(fromIndex, toIndex))}.
     * </p>
     * 
+    * @param list      the list whose elements are to be reversed. Modified.
     * @param fromIndex low endpoint (inclusive) of the range to be reversed.
     * @param toIndex   high endpoint (exclusive) of the range to be reversed.
-    * @param list      the list whose elements are to be reversed.
     */
    public static void reverse(List<?> list, int fromIndex, int toIndex)
    {
+      int start = fromIndex;
+      int end = toIndex - 1;
+
+      while (start < end)
+      {
+         Collections.swap(list, start++, end--);
+      }
+   }
+
+   /**
+    * Rotates the elements of the {@code list} in the range [{@code fromIndex}, {@code toIndex}[ by the
+    * given {@code distance}.
+    * <p>
+    * This method is garbage free and is equivalent to
+    * {@code Collections.rotate(list.subList(fromIndex, toIndex), shift)}.
+    * </p>
+    * <p>
+    * Here are few examples:
+    * <ul>
+    * <li>{@code list=[0, 1, 2, 3, 4]}, {@code rotate(list, 0, list.size(), -1)} gives:
+    * {@code [1, 2, 3, 4, 0]}.
+    * <li>{@code list=[0, 1, 2, 3, 4]}, {@code rotate(list, 0, list.size(), +1)} gives:
+    * {@code [4, 0, 1, 2, 3]}.
+    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, -1)} gives:
+    * {@code [9, 1, 2, 0, 9]}.
+    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, +1)} gives:
+    * {@code [9, 2, 0, 1, 9]}.
+    * </ul>
+    * </p>
+    * 
+    * @param <T>       the element type.
+    * @param list      the list whose elements are to be rotated. Modified.
+    * @param fromIndex low endpoint (inclusive) of the range to be rotated.
+    * @param toIndex   high endpoint (exclusive) of the range to be rotated.
+    * @param distance  the distance by which the elements are to be rotated. There are no constraints
+    *                  on this value; it may be zero, negative, or greater than {@code list.size()}.
+    * @see Collections#rotate(List, int)
+    */
+   public static <T> void rotate(List<T> list, int fromIndex, int toIndex, int distance)
+   {
       int size = toIndex - fromIndex;
-      for (int i = fromIndex, mid = size >> 1, j = fromIndex + size - 1; i < fromIndex + mid; i++, j--)
-         Collections.swap(list, i, j);
+
+      if (size <= 1)
+         return;
+
+      distance = wrap(distance, size);
+
+      if (distance == 0)
+         return;
+
+      for (int cycleStart = fromIndex, nMoved = 0; nMoved != size; cycleStart++)
+      {
+         T shifted = list.get(cycleStart);
+         int i = cycleStart;
+         do
+         {
+            i += distance;
+            if (i >= toIndex)
+               i -= size;
+            shifted = list.set(i, shifted);
+            nMoved++;
+         }
+         while (i != cycleStart);
+      }
+   }
+
+   /**
+    * Recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
+    * <p>
+    * The {@code index} remains unchanged if already &in; [0, {@code listSize}[.
+    * <p>
+    * Examples:
+    * <ul>
+    * <li>{@code wrap(-1, 10)} returns 9.
+    * <li>{@code wrap(10, 10)} returns 0.
+    * <li>{@code wrap( 5, 10)} returns 5.
+    * <li>{@code wrap(15, 10)} returns 5.
+    * </ul>
+    * </p>
+    *
+    * @param index    the index to be wrapped if necessary.
+    * @param listSize the size of the list around which the index is to be wrapped.
+    * @return the wrapped index.
+    */
+   public static int wrap(int index, int listSize)
+   {
+      index %= listSize;
+      if (index < 0)
+         index += listSize;
+      return index;
+   }
+
+   /**
+    * Increments then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
+    * Examples:
+    * <ul>
+    * <li>{@code next(-1, 10)} returns 0.
+    * <li>{@code next(10, 10)} returns 1.
+    * <li>{@code next( 5, 10)} returns 6.
+    * <li>{@code next(15, 10)} returns 6.
+    * </ul>
+    * </p>
+    *
+    * @param index    the index to be incremented and wrapped if necessary.
+    * @param listSize the size of the list around which the index is to be wrapped.
+    * @return the wrapped incremented index.
+    */
+   public static int next(int index, int listSize)
+   {
+      return wrap(index + 1, listSize);
+   }
+
+   /**
+    * Decrements then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
+    * Examples:
+    * <ul>
+    * <li>{@code next(-1, 10)} returns 10.
+    * <li>{@code next(10, 10)} returns 9.
+    * <li>{@code next( 5, 10)} returns 4.
+    * <li>{@code next(15, 10)} returns 4.
+    * </ul>
+    * </p>
+    *
+    * @param index    the index to be decremented and wrapped if necessary.
+    * @param listSize the size of the list around which the index is to be wrapped.
+    * @return the wrapped decremented index.
+    */
+   public static int previous(int index, int listSize)
+   {
+      return wrap(index - 1, listSize);
    }
 }
