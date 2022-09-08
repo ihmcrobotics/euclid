@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
@@ -45,7 +44,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
     */
    private int numberOfVertices = 0;
    /**
-    * The internal memory of {@code ConvexPolygon2d}.
+    * The internal memory of {@code ConvexPolygon2D}.
     * <p>
     * New vertices can be added to this polygon, after which the method {@link #update()} has to be
     * called to ensure that this polygon is convex.
@@ -80,7 +79,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    /**
     * The area of this convex polygon.
     * <p>
-    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getArea()}
+    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getArea()}.
     * </p>
     * <p>
     * When a polygon is empty, i.e. has no vertices, the area is equal to {@link Double#NaN}.
@@ -242,16 +241,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
    }
 
    /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(Vertex2DSupplier)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param other the other convex polygon to copy. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *                                  other polygon's vertices were edited.
+    * {@inheritDoc}
     */
    @Override
    public void set(ConvexPolygon2D other)
@@ -429,6 +419,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, Settable<ConvexPo
          boundingBox.getMinPoint().add(x, y);
          boundingBox.getMaxPoint().add(x, y);
       }
+
       if (!areaCentroidDirty)
       {
          centroid.add(x, y);

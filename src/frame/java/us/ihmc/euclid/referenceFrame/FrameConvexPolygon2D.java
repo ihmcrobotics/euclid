@@ -55,7 +55,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
     */
    private int numberOfVertices = 0;
    /**
-    * The internal memory of {@code FrameConvexPolygon2d}.
+    * The internal memory of {@code FrameConvexPolygon2D}.
     * <p>
     * New vertices can be added to this polygon, after which the method {@link #update()} has to be
     * called to ensure that this polygon is convex.
@@ -83,14 +83,14 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Settabl
     * The centroid of this polygon which is located at the center of mass of this polygon when
     * considered as a physical object with constant thickness and density.
     * <p>
-    * It is updated in the method {@link #updateCentroidAndArea()} when {@link #getCentroid()}
+    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getCentroid()}.
     * </p>
     */
    private final FixedFramePoint2DBasics centroid = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
    /**
     * The area of this convex polygon.
     * <p>
-    * It is updated in the method {@link #updateCentroidAndArea()} when {@link #getArea()}.
+    * It is updated in the method {@link #updateCentroidAndArea()} when calling {@link #getArea()}.
     * </p>
     * <p>
     * When a polygon is empty, i.e. has no vertices, the area is equal to {@link Double#NaN}.
