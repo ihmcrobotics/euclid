@@ -18,11 +18,13 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideO
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.orthogonalProjectionOnLineSegment2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageOfIntersectionBetweenTwoLine2Ds;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.Location;
 import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -41,6 +43,11 @@ public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
    static final double EPSILON = 1.0e-7;
+
+   public enum Convexity
+   {
+      CONVEX, CONCAVE;
+   };
 
    private EuclidGeometryPolygonTools()
    {
@@ -108,7 +115,53 @@ public class EuclidGeometryPolygonTools
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
 
-      return isPoint2DOnSideOfLine2D(vertex, previousVertex, nextVertex, clockwiseOrdered);
+      Location side = whichSideOfLine2DIsPoint2DOn(vertex, previousVertex, nextVertex);
+      return clockwiseOrdered ? side == Location.LEFT : side == Location.RIGHT;
+   }
+
+   /**
+    * Tests the convexity of the polygon at the requested vertex.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the method returns {@code null} if the vertex, next and previous vertices lie on the same
+    * line.
+    * <li>the method returns {@code null} if the polygon has less than 3 vertices.
+    * </ul>
+    * </p>
+    *
+    * @param vertexIndex      the index of the vertex to be tested for convexity.
+    * @param vertices         the list of vertices defining the polygon to test. Not modified.
+    * @param numberOfVertices the number of vertices relevant to the polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@link Convexity#CONVEX}/{@link Convexity#CONCAVE} if the polygon is convex/concave at
+    *         the given vertex, {@code null} for the above mentioned edge cases.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
+    *                                   than {@code numberOfVertices}.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
+    *                                   than {@code numberOfVertices}.
+    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
+    *                                   size of the given list of vertices.
+    */
+   public static Convexity polygon2DConvexityAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(vertices, numberOfVertices);
+
+      if (numberOfVertices <= 2)
+         return null;
+
+      Point2DReadOnly vertex = vertices.get(vertexIndex);
+      Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
+      Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
+
+      Location side = whichSideOfLine2DIsPoint2DOn(vertex, previousVertex, nextVertex);
+
+      if (side == null)
+         return null;
+      else if (clockwiseOrdered)
+         return side == Location.LEFT ? Convexity.CONVEX : Convexity.CONCAVE;
+      else
+         return side == Location.RIGHT ? Convexity.CONVEX : Convexity.CONCAVE;
    }
 
    /**
@@ -2719,7 +2772,7 @@ public class EuclidGeometryPolygonTools
     *                         range [{@code 0}, {@code numberOfVertices}].
     * @return the index of the vertex with min x-coordinate.
     */
-   static int findMinXMaxYVertexIndex(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   public static int findMinXMaxYVertexIndex(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
       if (numberOfVertices == 0)
          return -1;
@@ -2815,13 +2868,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped index.
+    * @deprecated Use {@link EuclidCoreTools#wrap(int,int)} instead
     */
    public static int wrap(int index, int listSize)
    {
-      index %= listSize;
-      if (index < 0)
-         index += listSize;
-      return index;
+      return EuclidCoreTools.wrap(index, listSize);
    }
 
    /**
@@ -2838,10 +2889,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be incremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped incremented index.
+    * @deprecated Use {@link EuclidCoreTools#next(int,int)} instead
     */
    public static int next(int index, int listSize)
    {
-      return wrap(index + 1, listSize);
+      return EuclidCoreTools.next(index, listSize);
    }
 
    /**
@@ -2858,10 +2910,11 @@ public class EuclidGeometryPolygonTools
     * @param index    the index to be decremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped decremented index.
+    * @deprecated Use {@link EuclidCoreTools#previous(int,int)} instead
     */
    public static int previous(int index, int listSize)
    {
-      return wrap(index - 1, listSize);
+      return EuclidCoreTools.previous(index, listSize);
    }
 
    private static void checkEdgeIndex(int edgeIndex, int numberOfVertices)

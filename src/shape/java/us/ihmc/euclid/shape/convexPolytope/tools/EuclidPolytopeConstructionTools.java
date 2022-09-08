@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
+import static us.ihmc.euclid.tools.EuclidCoreTools.next;
+import static us.ihmc.euclid.tools.EuclidCoreTools.previous;
 
 import java.util.ArrayList;
 import java.util.Collection;

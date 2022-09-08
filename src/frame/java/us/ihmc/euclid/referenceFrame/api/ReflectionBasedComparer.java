@@ -109,6 +109,9 @@ class ReflectionBasedComparer
       if (framelessParameter instanceof Class && frameParameter instanceof Class)
          return true;
 
+      if (framelessParameter.getClass().isEnum() && frameParameter.getClass().isEnum())
+         return framelessParameter == frameParameter;
+
       throw new ReflectionBasedComparerException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
             + frameParameter.getClass().getSimpleName());
    }
