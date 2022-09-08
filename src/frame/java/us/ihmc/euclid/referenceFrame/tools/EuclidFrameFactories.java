@@ -40,7 +40,6 @@ import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
-import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.BoundingBoxChangedListener;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -1865,67 +1864,6 @@ public class EuclidFrameFactories
             return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
          }
       };
-   }
-
-   /**
-    * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
-    * box and {@code referenceFrameHolder}.
-    *
-    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
-    * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
-    *                             on either the {@code originalBoundingBox} or the new frame bounding
-    *                             box will be propagated to the other.
-    * @return the new linked frame bounding box.
-    */
-   public static FrameBoundingBox2DReadOnly newLinkedFrameBoundingBox2DReadOnly(ReferenceFrameHolder referenceFrameHolder,
-                                                                                BoundingBox2DReadOnly originalBoundingBox)
-   {
-      FrameBoundingBox2DReadOnly fixedFrameBoundingBox2DBasics = new FrameBoundingBox2DReadOnly()
-      {
-         private final FramePoint2DReadOnly minPoint = newLinkedFramePoint2DReadOnly(referenceFrameHolder, originalBoundingBox.getMinPoint());
-         private final FramePoint2DReadOnly maxPoint = newLinkedFramePoint2DReadOnly(referenceFrameHolder, originalBoundingBox.getMaxPoint());
-
-         @Override
-         public ReferenceFrame getReferenceFrame()
-         {
-            return referenceFrameHolder.getReferenceFrame();
-         }
-
-         @Override
-         public FramePoint2DReadOnly getMinPoint()
-         {
-            return minPoint;
-         }
-
-         @Override
-         public FramePoint2DReadOnly getMaxPoint()
-         {
-            return maxPoint;
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof FrameBoundingBox2DReadOnly)
-               return equals((FrameBoundingBox2DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return toIntHashCode(minPoint, maxPoint);
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
-
-      return fixedFrameBoundingBox2DBasics;
    }
 
    /**
