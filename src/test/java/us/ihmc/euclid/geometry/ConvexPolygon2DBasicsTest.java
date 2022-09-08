@@ -111,6 +111,58 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       Vector2D translation1 = new Vector2D(-0.1, 0.0);
       polygon.translate(translation1);
       assertTrue(polygon.getVertex(0).epsilonEquals(translation1, EPSILON));
+
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector2D translate = EuclidCoreRandomTools.nextVector2D(random);
+         T originalPolygon = createRandomConvexPolygon2D(random);
+
+         Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
+                                                                                                   .peek(v -> v.add(translate)).toList());
+         T expectedPolygon = createConvexPolygon2D(transformedVertices);
+
+         T actualPolygon = createConvexPolygon2D(originalPolygon);
+         if (random.nextBoolean())
+         {
+            actualPolygon.getBoundingBox();
+            actualPolygon.getCentroid();
+         }
+         actualPolygon.translate(translate);
+
+         EuclidCoreTestTools.assertEquals(expectedPolygon, actualPolygon, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolygon.getCentroid(), actualPolygon.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolygon.getBoundingBox(), actualPolygon.getBoundingBox(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Compare against applyTransform
+         Vector2D translate = EuclidCoreRandomTools.nextVector2D(random);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         transform.getTranslation().set(translate);
+         T originalPolygon = createRandomConvexPolygon2D(random);
+
+         T expectedPolygon = createConvexPolygon2D(originalPolygon);
+         if (random.nextBoolean())
+         {
+            expectedPolygon.getBoundingBox(); // Highlight a bug introduce when switching to lazy update.
+            expectedPolygon.getCentroid();
+         }
+         expectedPolygon.applyTransform(transform);
+
+         T actualPolygon = createConvexPolygon2D(originalPolygon);
+         if (random.nextBoolean())
+         {
+            actualPolygon.getBoundingBox();
+            actualPolygon.getCentroid();
+         }
+         actualPolygon.translate(translate);
+
+         EuclidCoreTestTools.assertEquals(expectedPolygon, actualPolygon, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolygon.getCentroid(), actualPolygon.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolygon.getBoundingBox(), actualPolygon.getBoundingBox(), EPSILON);
+      }
    }
 
    @Test
