@@ -3433,7 +3433,9 @@ public class EuclidGeometryTools
       if (tymax < tmax)
          tmax = tymax;
 
-      if ((!canIntersectionOccurAfterEnd && tmin > 1.0) || (!canIntersectionOccurBeforeStart && tmax < 0.0))
+      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
+         return 0;
+      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
 
       int numberOfIntersections = 0;
@@ -4287,7 +4289,9 @@ public class EuclidGeometryTools
       if (tzmax < tmax)
          tmax = tzmax;
 
-      if ((!canIntersectionOccurAfterEnd && tmin > 1.0) || (!canIntersectionOccurBeforeStart && tmax < 0.0))
+      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
+         return 0;
+      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
 
       int numberOfIntersections = 0;
@@ -6418,9 +6422,11 @@ public class EuclidGeometryTools
 
       double normalMagnitude2 = planeNormal2.norm();
 
+      if (normalMagnitude2 < ONE_TRILLIONTH)
+         return false;
+
       // Check if planes are parallel.
-      if ((normalMagnitude2 < ONE_TRILLIONTH)
-            || (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > EuclidCoreTools.cos(Math.abs(angleThreshold))))
+      if (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > EuclidCoreTools.cos(Math.abs(angleThreshold)))
          return false;
 
       intersectionDirectionToPack.cross(planeNormal1, planeNormal2);
@@ -6536,7 +6542,11 @@ public class EuclidGeometryTools
       if (lengthSideC < 0.0)
          throw new IllegalArgumentException("The side C cannot have a negative length, lengthSideC = " + lengthSideC);
 
-      if ((lengthSideA + lengthSideB <= lengthSideC) || (lengthSideB + lengthSideC <= lengthSideA) || (lengthSideA + lengthSideC <= lengthSideB))
+      if (lengthSideA + lengthSideB <= lengthSideC)
+         return false;
+      if (lengthSideB + lengthSideC <= lengthSideA)
+         return false;
+      if (lengthSideA + lengthSideC <= lengthSideB)
          return false;
       return true;
    }
@@ -6636,8 +6646,11 @@ public class EuclidGeometryTools
       // This makes the assertion working for both clockwise and counter-clockwise ordered vertices.
       boolean checkForLeftSide = isPoint2DOnLeftSideOfLine2D(b, a, c);
 
-      if (isPoint2DOnSideOfLine2D(point, a, b, checkForLeftSide) || isPoint2DOnSideOfLine2D(point, b, c, checkForLeftSide)
-            || isPoint2DOnSideOfLine2D(point, c, a, checkForLeftSide))
+      if (isPoint2DOnSideOfLine2D(point, a, b, checkForLeftSide))
+         return false;
+      if (isPoint2DOnSideOfLine2D(point, b, c, checkForLeftSide))
+         return false;
+      if (isPoint2DOnSideOfLine2D(point, c, a, checkForLeftSide))
          return false;
 
       return true;
