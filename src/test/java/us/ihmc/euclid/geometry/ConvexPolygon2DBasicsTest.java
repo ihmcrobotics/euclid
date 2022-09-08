@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -120,7 +121,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.add(translate)).toList());
+                                                                                                   .peek(v -> v.add(translate))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1752,7 +1754,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1771,7 +1774,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1791,7 +1795,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1812,7 +1817,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1831,7 +1837,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform, false)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform, false))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
@@ -1850,7 +1857,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
          T originalPolygon = createRandomConvexPolygon2D(random);
 
          Vertex2DSupplier transformedVertices = Vertex2DSupplier.asVertex2DSupplier(originalPolygon.getPolygonVerticesView().stream().map(Point2D::new)
-                                                                                                   .peek(v -> v.applyTransform(transform, false)).toList());
+                                                                                                   .peek(v -> v.applyTransform(transform, false))
+                                                                                                   .collect(Collectors.toList()));
          T expectedPolygon = createConvexPolygon2D(transformedVertices);
 
          T actualPolygon = createConvexPolygon2D(originalPolygon);
