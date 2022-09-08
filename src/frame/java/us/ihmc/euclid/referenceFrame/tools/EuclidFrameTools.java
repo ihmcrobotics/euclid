@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -4838,6 +4839,25 @@ public class EuclidFrameTools
    }
 
    /**
+    * Determines if the query is: ahead of the ray, i.e. the projection onto ray lies in front of the
+    * ray's origin, behind the ray, or neither, i.e. the projection is equal to the ray origin.
+    *
+    * @param point        the query. Not modified.
+    * @param rayOrigin    the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @return {@link Location#AHEAD} if the query is located in front of the ray,
+    *         {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
+    *         projection onto the ray is exactly equal to the ray origin.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichPartOfRay2DIsPoint2DOn(FramePoint2DReadOnly point, FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
+   {
+      point.checkReferenceFrameMatch(rayOrigin, rayDirection);
+      return EuclidGeometryTools.whichPartOfRay2DIsPoint2DOn(point, rayOrigin, rayDirection);
+   }
+
+   /**
     * Determines if the query is exactly on or on the right side of the infinitely long line that goes
     * through the ray origin and which direction is perpendicular to the ray and directed towards the
     * left side.
@@ -4851,8 +4871,7 @@ public class EuclidFrameTools
     */
    public static boolean isPoint2DInFrontOfRay2D(FramePoint2DReadOnly point, FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
    {
-      point.checkReferenceFrameMatch(rayOrigin, rayDirection);
-      return EuclidGeometryTools.isPoint2DInFrontOfRay2D(point, rayOrigin, rayDirection);
+      return whichPartOfRay2DIsPoint2DOn(point, rayOrigin, rayDirection) != Location.BEHIND;
    }
 
    /**
@@ -4936,6 +4955,123 @@ public class EuclidFrameTools
    }
 
    /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line defined by two
+    * points. The idea of "side" is determined based on order of {@code firstPointOnLine} and
+    * {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param pointX            the x-coordinate of the query point.
+    * @param pointY            the y-coordinate of the query point.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(double pointX,
+                                                       double pointY,
+                                                       FramePoint2DReadOnly firstPointOnLine,
+                                                       FramePoint2DReadOnly secondPointOnLine)
+   {
+      firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
+      return EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn(pointX, pointY, firstPointOnLine, secondPointOnLine);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line. The idea of
+    * "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
+    * @param lineDirection the direction of the infinite line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn(pointX, pointY, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line defined by two
+    * points. The idea of "side" is determined based on order of {@code firstPointOnLine} and
+    * {@code secondPointOnLine}.
+    * <p>
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(FramePoint2DReadOnly point,
+                                                       FramePoint2DReadOnly firstPointOnLine,
+                                                       FramePoint2DReadOnly secondPointOnLine)
+   {
+      point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
+      return EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine);
+   }
+
+   /**
+    * Returns whether a 2D point is on the left or right side of an infinitely long line. The idea of
+    * "side" is determined based on the direction of the line.
+    * <p>
+    * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
+    * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
+    * <ul>
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the line.
+    *
+    * @param point         the query point. Not modified.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
+    * @param lineDirection the direction of the infinite line. Not modified.
+    * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
+    *         the line, or {@code null} if the point is exactly on the line.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfLine2DIsPoint2DOn(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      point.checkReferenceFrameMatch(pointOnLine, lineDirection);
+      return EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn(point, pointOnLine, lineDirection);
+   }
+
+   /**
     * Returns a boolean value, stating whether a 2D point is on the left side of an infinitely long
     * line defined by two points. "Left side" is determined based on order of {@code lineStart} and
     * {@code lineEnd}.
@@ -4956,8 +5092,7 @@ public class EuclidFrameTools
     */
    public static boolean isPoint2DOnLeftSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
-      point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
-      return EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(point, firstPointOnLine, secondPointOnLine);
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.LEFT;
    }
 
    /**
@@ -4981,8 +5116,7 @@ public class EuclidFrameTools
     */
    public static boolean isPoint2DOnRightSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
-      point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
-      return EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(point, firstPointOnLine, secondPointOnLine);
+      return whichSideOfLine2DIsPoint2DOn(point, firstPointOnLine, secondPointOnLine) == Location.RIGHT;
    }
 
    /**
@@ -5009,7 +5143,11 @@ public class EuclidFrameTools
     *         on the opposite side or exactly on the line.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, FramePoint2DReadOnly, FramePoint2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
                                                  double pointY,
                                                  FramePoint2DReadOnly firstPointOnLine,
@@ -5043,7 +5181,11 @@ public class EuclidFrameTools
     *         on the opposite side or exactly on the line.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, FramePoint2DReadOnly, FrameVector2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
                                                  double pointY,
                                                  FramePoint2DReadOnly pointOnLine,
@@ -5077,7 +5219,11 @@ public class EuclidFrameTools
     *         on the opposite side or exactly on the line.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(FramePoint2DReadOnly, FramePoint2DReadOnly, FramePoint2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point,
                                                  FramePoint2DReadOnly firstPointOnLine,
                                                  FramePoint2DReadOnly secondPointOnLine,
@@ -5109,7 +5255,11 @@ public class EuclidFrameTools
     *         on the opposite side or exactly on the line.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfLine2DIsPoint2DOn(FramePoint2DReadOnly, FramePoint2DReadOnly, FrameVector2DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point,
                                                  FramePoint2DReadOnly pointOnLine,
                                                  FrameVector2DReadOnly lineDirection,
@@ -5117,6 +5267,138 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(pointOnLine, lineDirection);
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(point, pointOnLine, lineDirection, testLeftSide);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the plane.
+    *
+    * @param pointX       the x-coordinate of the query point.
+    * @param pointY       the y-coordinate of the query point.
+    * @param pointZ       the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
+                                                        double pointY,
+                                                        double pointZ,
+                                                        FramePoint3DReadOnly pointOnPlane,
+                                                        FrameVector3DReadOnly planeNormal)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeNormal);
+      return EuclidGeometryTools.whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code null} if the point is on the plane.
+    *
+    * @param point        the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane, planeNormal);
+      return EuclidGeometryTools.whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    *
+    * @param pointX             the x-coordinate of the query point.
+    * @param pointY             the y-coordinate of the query point.
+    * @param pointZ             the z-coordinate of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @see EuclidGeometryTools#whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double,
+    *      double, double, double, double)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
+                                                        double pointY,
+                                                        double pointZ,
+                                                        FramePoint3DReadOnly pointOnPlane,
+                                                        FrameVector3DReadOnly planeFirstTangent,
+                                                        FrameVector3DReadOnly planeSecondTangent)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent, planeSecondTangent);
+      return EuclidGeometryTools.whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
+   }
+
+   /**
+    * Returns whether a 3D point is above or below of an infinitely large 3D plane. The idea of "above"
+    * and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    *
+    * @param point              the coordinates of the query point. Not modified.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
+    *         {@code null} if the point is exactly on the plane.
+    * @see EuclidGeometryTools#whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double,
+    *      double, double, double, double)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static Location whichSideOfPlane3DIsPoint3DOn(FramePoint3DReadOnly point,
+                                                        FramePoint3DReadOnly pointOnPlane,
+                                                        FrameVector3DReadOnly planeFirstTangent,
+                                                        FrameVector3DReadOnly planeSecondTangent)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane, planeFirstTangent, planeSecondTangent);
+      return EuclidGeometryTools.whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
    }
 
    /**
@@ -5143,7 +5425,11 @@ public class EuclidFrameTools
     *         is on the opposite side or exactly on the plane.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, FramePoint3DReadOnly, FrameVector3DReadOnly, boolean)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -5151,8 +5437,8 @@ public class EuclidFrameTools
                                                       FrameVector3DReadOnly planeNormal,
                                                       boolean testForAbove)
    {
-      pointOnPlane.checkReferenceFrameMatch(planeNormal);
-      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -5177,14 +5463,18 @@ public class EuclidFrameTools
     *         is on the opposite side or exactly on the plane.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(FramePoint3DReadOnly, FramePoint3DReadOnly, FrameVector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point,
                                                       FramePoint3DReadOnly pointOnPlane,
                                                       FrameVector3DReadOnly planeNormal,
                                                       boolean testForAbove)
    {
-      point.checkReferenceFrameMatch(pointOnPlane, planeNormal);
-      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -5216,7 +5506,7 @@ public class EuclidFrameTools
                                                FramePoint3DReadOnly pointOnPlane,
                                                FrameVector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal) == Location.ABOVE;
    }
 
    /**
@@ -5242,7 +5532,7 @@ public class EuclidFrameTools
     */
    public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, true);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal) == Location.ABOVE;
    }
 
    /**
@@ -5274,7 +5564,7 @@ public class EuclidFrameTools
                                                FramePoint3DReadOnly pointOnPlane,
                                                FrameVector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeNormal) == Location.BELOW;
    }
 
    /**
@@ -5300,7 +5590,7 @@ public class EuclidFrameTools
     */
    public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, false);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeNormal) == Location.BELOW;
    }
 
    /**
@@ -5331,7 +5621,11 @@ public class EuclidFrameTools
     *      double, double, double, double, boolean)
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, FramePoint3DReadOnly, FrameVector3DReadOnly, FrameVector3DReadOnly)}
+    *             instead.
     */
+   @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
                                                       double pointY,
                                                       double pointZ,
@@ -5340,8 +5634,8 @@ public class EuclidFrameTools
                                                       FrameVector3DReadOnly planeSecondTangent,
                                                       boolean testForAbove)
    {
-      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent, planeSecondTangent);
-      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -5370,6 +5664,9 @@ public class EuclidFrameTools
     *      double, double, double, double, boolean)
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
+    * @deprecated Use
+    *             {@link #whichSideOfPlane3DIsPoint3DOn(FramePoint3DReadOnly, FramePoint3DReadOnly, FrameVector3DReadOnly, FrameVector3DReadOnly)}
+    *             instead.
     */
    public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point,
                                                       FramePoint3DReadOnly pointOnPlane,
@@ -5377,8 +5674,8 @@ public class EuclidFrameTools
                                                       FrameVector3DReadOnly planeSecondTangent,
                                                       boolean testForAbove)
    {
-      point.checkReferenceFrameMatch(pointOnPlane, planeFirstTangent, planeSecondTangent);
-      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+      Location side = whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
+      return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
    }
 
    /**
@@ -5415,7 +5712,7 @@ public class EuclidFrameTools
                                                FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.ABOVE;
    }
 
    /**
@@ -5448,7 +5745,7 @@ public class EuclidFrameTools
                                                FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.ABOVE;
    }
 
    /**
@@ -5485,7 +5782,7 @@ public class EuclidFrameTools
                                                FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+      return whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.BELOW;
    }
 
    /**
@@ -5518,7 +5815,7 @@ public class EuclidFrameTools
                                                FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
-      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+      return whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent) == Location.BELOW;
    }
 
    /**

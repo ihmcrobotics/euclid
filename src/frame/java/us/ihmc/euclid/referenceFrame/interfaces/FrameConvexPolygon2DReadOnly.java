@@ -34,6 +34,10 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
 
    /** {@inheritDoc} */
    @Override
+   FramePoint2DReadOnly getVertexUnsafe(int index);
+
+   /** {@inheritDoc} */
+   @Override
    default List<? extends FramePoint2DReadOnly> getPolygonVerticesView()
    {
       return getVertexBufferView().subList(0, getNumberOfVertices());
@@ -750,7 +754,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, F
          return null;
       else
          return new FramePoint2DBasics[] {new FramePoint2D(getReferenceFrame(), lineOfSightVertices[0]),
-               new FramePoint2D(getReferenceFrame(), lineOfSightVertices[1])};
+                                          new FramePoint2D(getReferenceFrame(), lineOfSightVertices[1])};
    }
 
    /**

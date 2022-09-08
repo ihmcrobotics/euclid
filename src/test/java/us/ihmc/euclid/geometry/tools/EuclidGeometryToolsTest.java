@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -10237,7 +10238,7 @@ public class EuclidGeometryToolsTest
          Vector3D planeNormal = EuclidCoreRandomTools.nextVector3D(random);
          Point3D pointOnPlane = EuclidCoreRandomTools.nextPoint3D(random);
 
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, null);
 
          double shift = EuclidCoreRandomTools.nextDouble(random, 1.0e-17, 1.0);
 
@@ -10246,15 +10247,15 @@ public class EuclidGeometryToolsTest
          Point3D pointBelow = new Point3D();
          pointBelow.scaleAdd(-shift, planeNormal, pointOnPlane);
 
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Location.ABOVE);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Location.BELOW);
 
          Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, planeNormal, true);
 
          pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointAbove);
          pointBelow.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointBelow);
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Location.ABOVE);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Location.BELOW);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -10262,7 +10263,7 @@ public class EuclidGeometryToolsTest
          Axis3D planeNormal = Axis3D.values[random.nextInt(3)];
          Point3D pointOnPlane = EuclidCoreRandomTools.nextPoint3D(random);
 
-         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, null);
 
          Axis3D otherAxis1 = planeNormal.previous();
          Axis3D otherAxis2 = otherAxis1.previous();
@@ -10280,20 +10281,15 @@ public class EuclidGeometryToolsTest
 
          Point3D anotherPointOnPlane = new Point3D();
          anotherPointOnPlane.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointOnPlane);
-         performAssertionsForPoint3DOnSideOfPlane3D(random, anotherPointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, anotherPointOnPlane, pointOnPlane, planeNormal, null);
       }
-   }
-
-   private enum Plane3DSide
-   {
-      EXACTLY_ON, ABOVE, BELOW
    }
 
    private static void performAssertionsForPoint3DOnSideOfPlane3D(Random random,
                                                                   Point3DReadOnly query,
                                                                   Point3DReadOnly pointOnPlane,
                                                                   Vector3DReadOnly planeNormal,
-                                                                  Plane3DSide expected)
+                                                                  Location expected)
    {
       double queryX = query.getX();
       double queryY = query.getY();
@@ -10321,7 +10317,7 @@ public class EuclidGeometryToolsTest
       double planeSecondTangentY = planeSecondTangent.getY();
       double planeSecondTangentZ = planeSecondTangent.getZ();
 
-      if (expected == Plane3DSide.EXACTLY_ON)
+      if (expected == null)
       {
          assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX,
                                                                       queryY,
@@ -10389,8 +10385,8 @@ public class EuclidGeometryToolsTest
          return;
       }
 
-      boolean isAboveExpectedResult = expected == Plane3DSide.ABOVE;
-      boolean isBelowExpectedResult = expected == Plane3DSide.BELOW;
+      boolean isAboveExpectedResult = expected == Location.ABOVE;
+      boolean isBelowExpectedResult = expected == Location.BELOW;
 
       assertEquals(isAboveExpectedResult,
                    EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX,
