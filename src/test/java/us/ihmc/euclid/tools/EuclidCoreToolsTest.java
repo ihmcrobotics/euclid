@@ -519,6 +519,53 @@ public class EuclidCoreToolsTest
    }
 
    @Test
+   public void testEpsilonEquals() throws Exception
+   {
+      Random random = new Random(34235);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Tests with epsilon == 0
+         double epsilon = 0;
+         double value = random.nextDouble(-1.0e32, 1.0e32);
+         assertTrue(EuclidCoreTools.epsilonEquals(value, value, epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(value, Math.nextUp(value), epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(value, Math.nextDown(value), epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Typical use test
+         double epsilon = random.nextDouble();
+         double expectedValue = random.nextDouble(-1.0e32, 1.0e32);
+         double actualValue = expectedValue + random.nextDouble(0, epsilon);
+         assertTrue(EuclidCoreTools.epsilonEquals(expectedValue, actualValue, epsilon));
+         actualValue = expectedValue - random.nextDouble(0, epsilon);
+         assertTrue(EuclidCoreTools.epsilonEquals(expectedValue, actualValue, epsilon));
+
+         actualValue = expectedValue + random.nextDouble(epsilon, 10.0 * epsilon);
+         assertTrue(EuclidCoreTools.epsilonEquals(expectedValue, actualValue, epsilon));
+         actualValue = expectedValue - random.nextDouble(epsilon, 10.0 * epsilon);
+         assertTrue(EuclidCoreTools.epsilonEquals(expectedValue, actualValue, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with infinity and NaN
+         double epsilon = random.nextDouble();
+
+         assertFalse(EuclidCoreTools.epsilonEquals(Double.NaN, Double.NaN, epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(Double.NaN, random.nextDouble(-1.0e32, 1.0e32), epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(random.nextDouble(-1.0e32, 1.0e32), Double.NaN, epsilon));
+
+         assertTrue(EuclidCoreTools.epsilonEquals(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(Double.POSITIVE_INFINITY, random.nextDouble(-1.0e32, 1.0e32), epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(random.nextDouble(-1.0e32, 1.0e32), Double.POSITIVE_INFINITY, epsilon));
+
+         assertTrue(EuclidCoreTools.epsilonEquals(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(Double.NEGATIVE_INFINITY, random.nextDouble(-1.0e32, 1.0e32), epsilon));
+         assertFalse(EuclidCoreTools.epsilonEquals(random.nextDouble(-1.0e32, 1.0e32), Double.NEGATIVE_INFINITY, epsilon));
+      }
+   }
+
+   @Test
    public void testInterpolate() throws Exception
    {
       Random random = new Random(3665L);

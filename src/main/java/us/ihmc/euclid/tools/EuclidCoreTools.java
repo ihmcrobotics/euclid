@@ -924,7 +924,7 @@ public class EuclidCoreTools
     */
    public static boolean epsilonEquals(double expectedValue, double actualValue, double epsilon)
    {
-      return Math.abs(expectedValue - actualValue) <= epsilon;
+      return expectedValue == actualValue || Math.abs(expectedValue - actualValue) <= epsilon;
    }
 
    /**
