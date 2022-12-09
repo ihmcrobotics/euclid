@@ -5,7 +5,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "0.19.0"
+   version = "0.19.1"
    vcsUrl = "https://github.com/ihmcrobotics/euclid"
    openSource = true
 
@@ -46,5 +46,5 @@ testDependencies {
    api(ihmc.sourceSetProject("frame-shape"))
 
    api("org.ejml:ejml-ddense:0.39")
-   api("us.ihmc:ihmc-commons-testing:0.31.0")
+   api("us.ihmc:ihmc-commons-testing:0.32.0")
 }
