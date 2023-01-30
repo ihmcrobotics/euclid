@@ -12,6 +12,7 @@ import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -28,6 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 /**
  * This class provides a large variety of basics geometry operations.
@@ -4224,75 +4226,144 @@ public class EuclidGeometryTools
       double dy = endY - startY;
       double dz = endZ - startZ;
 
+      if (Math.abs(dx) != 0.0 && Math.abs(dx) < ONE_MILLIONTH)
+      {
+         dx = 0.0 * Math.signum(dx);
+      }
+      if (Math.abs(dy) != 0.0 && Math.abs(dy) < ONE_MILLIONTH)
+      {
+         dy = 0.0 * Math.signum(dy);
+      }
+
+      if (Math.abs(dz) != 0.0 && Math.abs(dz) < ONE_MILLIONTH)
+      {
+         dz = 0.0 * Math.signum(dz);
+      }
+
       double invXDir = 1.0 / dx;
       double invYDir = 1.0 / dy;
       double invZDir = 1.0 / dz;
 
       double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
+      double deltaXmin = boundingBoxMinX - startX;
+      double deltaXmax = boundingBoxMaxX - startX;
+
+      if (Math.abs(deltaXmin) != 0.0 && Math.abs(deltaXmin) < ONE_MILLIONTH)
+      {
+         deltaXmin = 0.0 * Math.signum(deltaXmin);
+      }
+      if (Math.abs(deltaXmax) != 0.0 && Math.abs(deltaXmax) < ONE_MILLIONTH)
+      {
+         deltaXmax = 0.0 * Math.signum(deltaXmax);
+      }
+
+      //      double tmintest  = ( boundingBoxMinX - startX) * invXDir;
+      //      double tmaxtest  = ( boundingBoxMaxX - startX) * invXDir;
+      //      
       if (invXDir > 0.0)
       {
-         tmin = (boundingBoxMinX - startX) * invXDir;
-         tmax = (boundingBoxMaxX - startX) * invXDir;
+         tmin = (deltaXmin) * invXDir;
+         tmax = (deltaXmax) * invXDir;
+
       }
       else
       {
-         tmin = (boundingBoxMaxX - startX) * invXDir;
-         tmax = (boundingBoxMinX - startX) * invXDir;
+         tmin = (deltaXmax) * invXDir;
+         tmax = (deltaXmin) * invXDir;
+
+      }
+
+      double deltaYmin = boundingBoxMinY - startY;
+      double deltaYmax = boundingBoxMaxY - startY;
+
+      if (Math.abs(deltaYmin) != 0.0 && Math.abs(deltaYmin) < ONE_MILLIONTH)
+      {
+         deltaYmin = 0.0 * Math.signum(deltaYmin);
+      }
+      if (Math.abs(deltaYmax) != 0.0 && Math.abs(deltaYmax) < ONE_MILLIONTH)
+      {
+         deltaYmax = 0.0 * Math.signum(deltaYmax);
       }
 
       if (invYDir > 0.0)
       {
-         tymin = (boundingBoxMinY - startY) * invYDir;
-         tymax = (boundingBoxMaxY - startY) * invYDir;
+         tymin = (deltaYmin) * invYDir;
+         tymax = (deltaYmax) * invYDir;
+
       }
       else
       {
-         tymin = (boundingBoxMaxY - startY) * invYDir;
-         tymax = (boundingBoxMinY - startY) * invYDir;
+         tymin = (deltaYmax) * invYDir;
+         tymax = (deltaYmin) * invYDir;
+
       }
 
       // if regions do not overlap, return false
-      if (tmin > tymax || tmax < tymin)
+      // check size of delta to catch the edge case of 1 intersection with box edge
+      double delta1 = Math.abs(tmin - tymax);
+      double delta2 = Math.abs(tmax - tymin);
+      if (delta1 > ONE_MILLIONTH && delta2 > ONE_MILLIONTH && (tmin > tymax || tmax < tymin))
       {
          return 0;
       }
 
-      // update tmin
-      if (tymin > tmin)
+      // update tmin - make sure its not NaN
+      if ((tymin > tmin || Double.isNaN(tmin)) && !Double.isNaN(tymin))
          tmin = tymin;
 
-      if (tymax < tmax)
+      if ((tymax < tmax || Double.isNaN(tmax)) && !Double.isNaN(tymax))
          tmax = tymax;
+
+      double deltaZmin = boundingBoxMinZ - startZ;
+      double deltaZmax = boundingBoxMaxZ - startZ;
+
+      if (Math.abs(deltaZmin) != 0.0 && Math.abs(deltaZmin) < ONE_MILLIONTH)
+      {
+         deltaZmin = 0.0 * Math.signum(deltaZmin);
+      }
+      if (Math.abs(deltaZmax) != 0.0 && Math.abs(deltaZmax) < ONE_MILLIONTH)
+      {
+         deltaZmax = 0.0 * Math.signum(deltaZmax);
+      }
 
       if (invZDir > 0.0)
       {
-         tzmin = (boundingBoxMinZ - startZ) * invZDir;
-         tzmax = (boundingBoxMaxZ - startZ) * invZDir;
+         tzmin = (deltaZmin) * invZDir;
+         tzmax = (deltaZmax) * invZDir;
       }
       else
       {
-         tzmin = (boundingBoxMaxZ - startZ) * invZDir;
-         tzmax = (boundingBoxMinZ - startZ) * invZDir;
+         tzmin = (deltaZmax) * invZDir;
+         tzmax = (deltaZmin) * invZDir;
       }
 
       // if regions do not overlap, return false
-      if (tmin > tzmax || tmax < tzmin)
+      delta1 = Math.abs(tmin - tzmax);
+      delta2 = Math.abs(tmax - tzmin);
+
+      if (delta1 > ONE_MILLIONTH && delta2 > ONE_MILLIONTH && (tmin > tzmax || tmax < tzmin))
       {
          return 0;
       }
 
       // update tmin
-      if (tzmin > tmin)
+      if ((tzmin > tmin || Double.isNaN(tmin)) && !Double.isNaN(tzmin))
          tmin = tzmin;
 
-      if (tzmax < tmax)
+      if ((tzmax < tmax || Double.isNaN(tmax)) && !Double.isNaN(tzmax))
          tmax = tzmax;
 
       if (!canIntersectionOccurAfterEnd && tmin > 1.0)
          return 0;
       if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
+
+      //TODO:remove this
+      if (Double.isNaN(tmin) || Double.isNaN(tmax))
+      {
+         double wehavetouchdownonnan = 0;
+      }
 
       int numberOfIntersections = 0;
 
@@ -4303,6 +4374,7 @@ public class EuclidGeometryTools
          numberOfIntersections++;
       if (isIntersectingAtTmax)
          numberOfIntersections++;
+
 
       switch (numberOfIntersections)
       {
@@ -4322,7 +4394,18 @@ public class EuclidGeometryTools
             }
             if (secondIntersectionToPack != null)
                secondIntersectionToPack.setToNaN();
+            
+//            // check if ray origin lies on bounding box surface
+//            if (deltaXmin == 0.0 || deltaXmax == 0.0 || deltaYmin == 0.0 || deltaYmax == 0.0 || deltaZmin == 0.0 || deltaZmax == 0.0)
+//            {
+//               secondIntersectionToPack.set(firstIntersectionToPack);
+//               firstIntersectionToPack.set(startX,startY,startZ);
+//               return 2;
+//            }
+//            else
+//            {
             return 1;
+//            }
          case 2:
             if (firstIntersectionToPack != null)
             {
@@ -5890,6 +5973,85 @@ public class EuclidGeometryTools
                                                            true,
                                                            firstIntersectionToPack,
                                                            secondIntersectionToPack);
+   }
+
+   /**
+    * TODO: write description
+    */
+   public static int intersectionBetweenRay3DAndBox3D(Point3DReadOnly boxPosition,
+                                                      Orientation3DReadOnly boxOrientation,
+                                                      Vector3DReadOnly boxSize,
+                                                      Point3DReadOnly rayOrigin,
+                                                      Vector3DReadOnly rayDirection,
+                                                      Point3DBasics firstIntersectionToPack,
+                                                      Point3DBasics secondIntersectionToPack)
+   {
+
+      // if arguments null:
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToNaN();
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToNaN();
+
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+
+      firstIntersectionToPack.set(rayOrigin);
+      firstIntersectionToPack.sub(boxPosition);
+      boxOrientation.inverseTransform(firstIntersectionToPack);
+
+      double firstPointOnLineX = firstIntersectionToPack.getX();
+      double firstPointOnLineY = firstIntersectionToPack.getY();
+      double firstPointOnLineZ = firstIntersectionToPack.getZ();
+
+      // second point on line
+      secondIntersectionToPack.set(rayDirection);
+      boxOrientation.inverseTransform(secondIntersectionToPack);
+
+      double secondPointOnLineX = firstPointOnLineX + secondIntersectionToPack.getX();
+      double secondPointOnLineY = firstPointOnLineY + secondIntersectionToPack.getY();
+      double secondPointOnLineZ = firstPointOnLineZ + secondIntersectionToPack.getZ();
+
+      double boundingBoxMinX = -0.5 * boxSize.getX();
+      double boundingBoxMinY = -0.5 * boxSize.getY();
+      double boundingBoxMinZ = -0.5 * boxSize.getZ();
+      double boundingBoxMaxX = 0.5 * boxSize.getX();
+      double boundingBoxMaxY = 0.5 * boxSize.getY();
+      double boundingBoxMaxZ = 0.5 * boxSize.getZ();
+
+      int numIntersections = intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMinX,
+                                                                           boundingBoxMinY,
+                                                                           boundingBoxMinZ,
+                                                                           boundingBoxMaxX,
+                                                                           boundingBoxMaxY,
+                                                                           boundingBoxMaxZ,
+                                                                           firstPointOnLineX,
+                                                                           firstPointOnLineY,
+                                                                           firstPointOnLineZ,
+                                                                           false,
+                                                                           secondPointOnLineX,
+                                                                           secondPointOnLineY,
+                                                                           secondPointOnLineZ,
+                                                                           true,
+                                                                           firstIntersectionToPack,
+                                                                           secondIntersectionToPack);
+
+      boxOrientation.transform(firstIntersectionToPack);
+      firstIntersectionToPack.add(boxPosition);
+      boxOrientation.transform(secondIntersectionToPack);
+      secondIntersectionToPack.add(boxPosition);
+
+      //TODO: catch this edge case in function - two identical intersection points     
+      if (firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_MILLIONTH) && !Double.isNaN(firstIntersectionToPack.getX()))
+      {
+         secondIntersectionToPack.setToNaN();
+         numIntersections = 1;
+      }
+
+      return numIntersections;
+
    }
 
    /**
