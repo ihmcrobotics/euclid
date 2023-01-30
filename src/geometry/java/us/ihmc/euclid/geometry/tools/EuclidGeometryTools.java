@@ -4258,9 +4258,6 @@ public class EuclidGeometryTools
          deltaXmax = 0.0 * Math.signum(deltaXmax);
       }
 
-      //      double tmintest  = ( boundingBoxMinX - startX) * invXDir;
-      //      double tmaxtest  = ( boundingBoxMaxX - startX) * invXDir;
-      //      
       if (invXDir > 0.0)
       {
          tmin = (deltaXmin) * invXDir;
@@ -4359,12 +4356,6 @@ public class EuclidGeometryTools
       if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
 
-      //TODO:remove this
-      if (Double.isNaN(tmin) || Double.isNaN(tmax))
-      {
-         double wehavetouchdownonnan = 0;
-      }
-
       int numberOfIntersections = 0;
 
       boolean isIntersectingAtTmin = canIntersectionOccurBeforeStart || tmin >= 0.0;
@@ -4375,10 +4366,35 @@ public class EuclidGeometryTools
       if (isIntersectingAtTmax)
          numberOfIntersections++;
 
-
       switch (numberOfIntersections)
       {
          case 0:
+            if ((deltaXmin == 0.0 && dx == 0.0) || (deltaXmax == 0.0 && dx == 0.0) || (deltaYmin == 0.0 && dy == 0.0) || (deltaYmax == 0.0 && dy == 0.0)
+                  || (deltaZmin == 0.0 && dz == 0.0) || (deltaZmax == 0.0 && dz == 0.0))
+            {
+               // check if line segment start/end lie on bounding box surface and line is colinear  with surface
+               if (firstIntersectionToPack != null)
+               {
+                  firstIntersectionToPack.set(startX, startY, startZ);
+               }
+               if (secondIntersectionToPack != null)
+               {
+                  secondIntersectionToPack.setToNaN();
+               }
+               // end point is on box surface
+               if (endX <= boundingBoxMaxX && endY <= boundingBoxMaxY && endZ <= boundingBoxMaxZ && endX >= boundingBoxMinX && endY >= boundingBoxMinY
+                     && endZ >= boundingBoxMinZ)
+               {
+                  if (secondIntersectionToPack != null)
+                  {
+                     secondIntersectionToPack.set(endX, endY, endZ);
+                  }
+                  return 2;
+               }
+
+               return 1;
+            }
+
             return 0;
          case 1:
             if (firstIntersectionToPack != null)
@@ -4392,20 +4408,28 @@ public class EuclidGeometryTools
                   firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
                }
             }
-            if (secondIntersectionToPack != null)
-               secondIntersectionToPack.setToNaN();
-            
-//            // check if ray origin lies on bounding box surface
-//            if (deltaXmin == 0.0 || deltaXmax == 0.0 || deltaYmin == 0.0 || deltaYmax == 0.0 || deltaZmin == 0.0 || deltaZmax == 0.0)
-//            {
-//               secondIntersectionToPack.set(firstIntersectionToPack);
-//               firstIntersectionToPack.set(startX,startY,startZ);
-//               return 2;
-//            }
-//            else
-//            {
-            return 1;
-//            }
+            // check if ray origin lies on bounding box surface and ray or line are colinear  with surface
+            if ((deltaXmin == 0.0 && dx == 0.0) || (deltaXmax == 0.0 && dx == 0.0) || (deltaYmin == 0.0 && dy == 0.0) || (deltaYmax == 0.0 && dy == 0.0)
+                  || (deltaZmin == 0.0 && dz == 0.0) || (deltaZmax == 0.0 && dz == 0.0))
+            {
+
+               if (secondIntersectionToPack != null)
+               {
+                  secondIntersectionToPack.set(firstIntersectionToPack);
+               }
+               if (firstIntersectionToPack != null)
+               {
+                  firstIntersectionToPack.set(startX, startY, startZ);
+               }
+               return 2;
+            }
+
+            else
+            {
+               if (secondIntersectionToPack != null)
+                  secondIntersectionToPack.setToNaN();
+               return 1;
+            }
          case 2:
             if (firstIntersectionToPack != null)
             {
@@ -4417,10 +4441,25 @@ public class EuclidGeometryTools
                secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
             }
 
+            //in case of two identical intersection points only return one
+            if (firstIntersectionToPack != null)
+            {
+               if (firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_MILLIONTH) && !Double.isNaN(firstIntersectionToPack.getX()))
+               {
+                  if (secondIntersectionToPack != null)
+                  {
+                     secondIntersectionToPack.setToNaN();
+                  }
+                  return 1;
+               }
+            }
+
             return 2;
+
          default:
             throw new IllegalStateException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
       }
+
    }
 
    /**
@@ -6043,15 +6082,7 @@ public class EuclidGeometryTools
       boxOrientation.transform(secondIntersectionToPack);
       secondIntersectionToPack.add(boxPosition);
 
-      //TODO: catch this edge case in function - two identical intersection points     
-      if (firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_MILLIONTH) && !Double.isNaN(firstIntersectionToPack.getX()))
-      {
-         secondIntersectionToPack.setToNaN();
-         numIntersections = 1;
-      }
-
       return numIntersections;
-
    }
 
    /**
