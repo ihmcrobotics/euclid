@@ -6015,7 +6015,30 @@ public class EuclidGeometryTools
    }
 
    /**
-    * TODO: write description
+    * Computes the coordinates of the possible intersections between a 3D ray and a 3D box
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param rayOrigin                the origin point of the 3D ray. Not modified.
+    * @param rayDirection             the direction of the 3D ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
     */
    public static int intersectionBetweenRay3DAndBox3D(Point3DReadOnly boxPosition,
                                                       Orientation3DReadOnly boxOrientation,
@@ -6025,6 +6048,9 @@ public class EuclidGeometryTools
                                                       Point3DBasics firstIntersectionToPack,
                                                       Point3DBasics secondIntersectionToPack)
    {
+
+      if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
+         throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
       // if arguments null:
       if (firstIntersectionToPack != null)
