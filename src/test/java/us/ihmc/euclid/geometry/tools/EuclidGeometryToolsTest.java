@@ -5832,7 +5832,7 @@ public class EuclidGeometryToolsTest
                                                                                                                       secondIntersection);
 
                      assertEquals(1, numberOfIntersections, "Was expecting only one intersection");
-            
+
                      EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection1, firstIntersection, LARGE_EPSILON);
                      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(secondIntersection);
                      assertPointIsBetweenEndPointsOfLineSegment(firstIntersection, onEdgePoint, outsideEndpoint, EPSILON);
@@ -6031,7 +6031,7 @@ public class EuclidGeometryToolsTest
 
          }
       }
-      
+
       // (two intersection) Making both endpoints of the line segment to be on one (same) of the bounding box faces.
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -8820,11 +8820,14 @@ public class EuclidGeometryToolsTest
 
    @Test
    public void testIntersectionBetweenRay3DAndBox3DEdgeCases() throws Exception
-   {
+   {// This test fails if the success rate fall below the threshold 
+    // the edge case for this ray box intersection where the ray touches a box edge sometimes is not correctly handles by the method in rare cases. In case of failure the method returns the wrong number of intersections (0 or 2). The returned  intersection points are checked to be correct. 
+
       Random random = new Random(65226L);
       int successCounter = 0;
       int FailureCounter = 0;
       double successRate = 0;
+      double rateThreshold = 99.9;
 
       // 1 intersection 
       for (int i = 0; i < ITERATIONS; i++)
@@ -8928,7 +8931,7 @@ public class EuclidGeometryToolsTest
       }
 
       successRate = (100.0 / (successCounter + FailureCounter)) * successCounter;
-      assertTrue(successRate >= 99.9);
+      assertTrue(successRate >= rateThreshold);
 
    }
 
