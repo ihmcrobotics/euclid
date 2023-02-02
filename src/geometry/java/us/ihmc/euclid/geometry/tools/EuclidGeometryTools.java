@@ -4243,7 +4243,7 @@ public class EuclidGeometryTools
       if (Math.abs(dx) < ONE_TRILLIONTH)
       {
          dx = 0.0 * dx;
-         isColinearX = true;  
+         isColinearX = true;
       }
       if (Math.abs(dy) < ONE_TRILLIONTH)
       {
@@ -4268,7 +4268,7 @@ public class EuclidGeometryTools
 
       if (Math.abs(deltaXmin) < ONE_TRILLIONTH)
       {
-         deltaXmin = 0.0 * deltaXmin; 
+         deltaXmin = 0.0 * deltaXmin;
       }
       if (Math.abs(deltaXmax) < ONE_TRILLIONTH)
       {
@@ -4279,13 +4279,13 @@ public class EuclidGeometryTools
       {
          tmin = (deltaXmin) * invXDir;
          tmax = (deltaXmax) * invXDir;
-
+         
       }
       else
       {
          tmin = (deltaXmax) * invXDir;
          tmax = (deltaXmin) * invXDir;
-
+         
       }
 
       double deltaYmin = boundingBoxMinY - startY;
@@ -4304,13 +4304,12 @@ public class EuclidGeometryTools
       {
          tymin = (deltaYmin) * invYDir;
          tymax = (deltaYmax) * invYDir;
-
+         
       }
       else
       {
          tymin = (deltaYmax) * invYDir;
          tymax = (deltaYmin) * invYDir;
-
       }
 
       // if regions do not overlap, return false
@@ -4324,13 +4323,7 @@ public class EuclidGeometryTools
          return 0;
       }
 
-//      double delta1 = Math.abs(tmin - tymax);
-//      double delta2 = Math.abs(tmax - tymin);
-//      double deltaEpsSquare = EuclidCoreTools.square(ONE_TRILLIONTH) * EuclidCoreTools.normSquared(dx, dy, dz);
-//      if (delta1 * delta1 > deltaEpsSquare && delta2 * delta2 > deltaEpsSquare && (tmin > tymax || tmax < tymin))
-//      {
-//         return 0;
-//      }
+
 
       // update tmin - make sure its not NaN
       if ((tymin > tmin || Double.isNaN(tmin)))
@@ -4348,24 +4341,21 @@ public class EuclidGeometryTools
       }
       if (Math.abs(deltaZmax) < ONE_TRILLIONTH)
       {
-         deltaZmax = 0.0 * deltaZmax; 
+         deltaZmax = 0.0 * deltaZmax;
       }
 
-      if (invZDir > 0.0) 
+      if (invZDir > 0.0)
       {
          tzmin = (deltaZmin) * invZDir;
          tzmax = (deltaZmax) * invZDir;
       }
       else
-      { 
+      {
          tzmin = (deltaZmax) * invZDir;
          tzmax = (deltaZmin) * invZDir;
       }
 
       // if regions do not overlap, return false
-//      delta1 = Math.abs(tmin - tzmax); 
-//      delta2 = Math.abs(tmax - tzmin);
-
       if (tmin > tzmax + ONE_TRILLIONTH)
       {
          return 0;
@@ -4431,15 +4421,7 @@ public class EuclidGeometryTools
             secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
          }
       }
-
-//      if (firstIntersectionToPack != null && secondIntersectionToPack != null)
-//      {
-//         if (firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH) && !Double.isNaN(firstIntersectionToPack.getX()))
-//         {
-//            secondIntersectionToPack.setToNaN();
-//            numberOfIntersections = 1;
-//         }
-//      }
+      
       if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
       {
 
@@ -4450,157 +4432,157 @@ public class EuclidGeometryTools
             secondIntersectionToPack.setToNaN();
          }
       }
-      
+
       if (canIntersectionOccurAfterEnd && canIntersectionOccurBeforeStart)
       {// we have a infinite line and we are done here
          return numberOfIntersections;
       }
 
-      // if we get here we have a line-segment or a ray
-      // if the line-segment or ray is colinear with a box surface we need to check for edge cases
-      if (isColinearX || isColinearY || isColinearZ)
-      {
-         if (!canIntersectionOccurBeforeStart && canIntersectionOccurAfterEnd)
-         {// we have a ray and need to test for the edge-case that can only occur with ray at this point
-          // check if ray origin lies on bounding box surface and ray or line are colinear  with that bounding box surface
-            boolean isRayEdgeCase = false;
+      if (!isColinearX && !isColinearY && !isColinearZ)
+      { // No edge case, we good
+         return numberOfIntersections;
+      }
 
-            if (isColinearX)
-            {// check if start point of ray lies on bounding box surface
-               if (deltaXmin == 0.0 || deltaXmax == 0.0)
-               {
-                  if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
-                  { // ray origin lies on x surface of box
-                     isRayEdgeCase = true;
-                  }
-               }
-            }
-            else if (isColinearY)
-            {// check if start point of ray lies on bounding box surface
-               if (deltaYmin == 0.0 || deltaYmax == 0.0)
-               {
-                  if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
-                  { // ray origin lies on y surface of box
-                     isRayEdgeCase = true;
-                  }
-               }
-            }
-            else if (isColinearZ)
-            {// check if start point of ray lies on bounding box surface
-               if (deltaZmin == 0.0 || deltaZmax == 0.0)
-               {
-                  if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
-                  { // ray origin lies on z surface of box
-                     isRayEdgeCase = true;
-                  }
-               }
-            }
+      // if we get here we have a line-segment or a ray colinear with one of the box surfaces and we need to check for edge cases
+      if (canIntersectionOccurAfterEnd)
+      {// we have a ray and need to test for the edge-case that can only occur with ray at this point
+       // check if ray origin lies on bounding box surface and ray or line are colinear  with that bounding box surface
+         boolean isRayEdgeCase = false;
 
-            if (isRayEdgeCase)
+         if (isColinearX)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaXmin == 0.0 || deltaXmax == 0.0)
             {
-               if (secondIntersectionToPack != null)
-               {
-                  secondIntersectionToPack.set(firstIntersectionToPack);
+               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+               { // ray origin lies on x surface of box
+                  isRayEdgeCase = true;
                }
-               if (firstIntersectionToPack != null)
-               {
-                  firstIntersectionToPack.set(startX, startY, startZ);
-                  tmin = 0.0;
+            }
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaYmin == 0.0 || deltaYmax == 0.0)
+            {
+               if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+               { // ray origin lies on y surface of box
+                  isRayEdgeCase = true;
                }
-               numberOfIntersections = 2;
+            }
+         }
+         else if (isColinearZ)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaZmin == 0.0 || deltaZmax == 0.0)
+            {
+               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
+               { // ray origin lies on z surface of box
+                  isRayEdgeCase = true;
+               }
             }
          }
 
-         if (!canIntersectionOccurAfterEnd && !canIntersectionOccurBeforeStart)
-         {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
-          // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
-            boolean isLineSegmentStartOnBox = false;
-            boolean isLineSegmentEndOnBox = false;
-            double deltaXEndmin = boundingBoxMinX - endX;
-            double deltaXEndmax = boundingBoxMaxX - endX;
-            double deltaYEndmin = boundingBoxMinY - endY;
-            double deltaYEndmax = boundingBoxMaxY - endY;
-            double deltaZEndmin = boundingBoxMinZ - endZ;
-            double deltaZEndmax = boundingBoxMaxZ - endZ;
-
-            if (isColinearX)
-            {// check if start point of line-segment lies on bounding box surface   
-
-               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
-               { // line-segment start point lies on x surface of box
-                  isLineSegmentStartOnBox = true;
-               }
-               if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
-               { // line-segment end point also lies on x surface of box
-                  isLineSegmentEndOnBox = true;
-               }
-
-            }
-            else if (isColinearY)
-            {// check if start point of ray lies on bounding box surface
-
-               if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
-               { // line-segment start point lies on x surface of box
-                  isLineSegmentStartOnBox = true;
-               }
-               if (deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
-               { // line-segment end point also lies on x surface of box
-                  isLineSegmentEndOnBox = true;
-
-               }
-            }
-            else if (isColinearZ)
-            {// check if start point of ray lies on bounding box surface
-
-               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
-               { // line-segment start point lies on x surface of box
-                  isLineSegmentStartOnBox = true;
-               }
-               if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0)
-               { // line-segment end point also lies on x surface of box
-                  isLineSegmentEndOnBox = true;
-               }
-
-            }
-
-            if (isLineSegmentStartOnBox && !isLineSegmentEndOnBox)
+         if (isRayEdgeCase)
+         {
+            if (secondIntersectionToPack != null)
             {
-               if (secondIntersectionToPack != null)
-               {
-                  secondIntersectionToPack.set(firstIntersectionToPack);
-               }
-               if (firstIntersectionToPack != null)
-               {
-                  firstIntersectionToPack.set(startX, startY, startZ);
-                  tmin = 0.0;
-               }
-               numberOfIntersections = 2;
+               secondIntersectionToPack.set(firstIntersectionToPack);
+            }
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
+      }
+      else
+      {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
+       // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
+         boolean isLineSegmentStartOnBox = false;
+         boolean isLineSegmentEndOnBox = false;
+         double deltaXEndmin = boundingBoxMinX - endX;
+         double deltaXEndmax = boundingBoxMaxX - endX;
+         double deltaYEndmin = boundingBoxMinY - endY;
+         double deltaYEndmax = boundingBoxMaxY - endY;
+         double deltaZEndmin = boundingBoxMinZ - endZ;
+         double deltaZEndmax = boundingBoxMaxZ - endZ;
+
+         if (isColinearX)
+         {// check if start point of line-segment lies on bounding box surface   
+
+            if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
             }
 
-            if (numberOfIntersections == 1 && !isLineSegmentStartOnBox && isLineSegmentEndOnBox)
-            {
-               if (secondIntersectionToPack != null)
-               {
-                  secondIntersectionToPack.set(endX, endY, endZ);
-                  tmax = 1.0;
-               }
-               numberOfIntersections = 2;
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+
+            if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+
+            }
+         }
+         else if (isColinearZ)
+         {// check if start point of ray lies on bounding box surface
+
+            if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
             }
 
-            if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         }
+
+         if (isLineSegmentStartOnBox && !isLineSegmentEndOnBox)
+         {
+            if (secondIntersectionToPack != null)
             {
-               if (firstIntersectionToPack != null)
-               {
-                  firstIntersectionToPack.set(startX, startY, startZ);
-                  tmin = 0.0;
-               }
-               if (secondIntersectionToPack != null)
-               {
-                  secondIntersectionToPack.set(endX, endY, endZ);
-                  tmax = 1.0;
-               }
-               numberOfIntersections = 2;
+               secondIntersectionToPack.set(firstIntersectionToPack);
             }
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
+
+         if (numberOfIntersections == 1 && !isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         {
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY, endZ);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+
+         if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         {
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY, endZ);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
          }
       }
 
@@ -6382,7 +6364,7 @@ public class EuclidGeometryTools
       double firstPointOnLineY = firstIntersectionToPack.getY();
       double firstPointOnLineZ = firstIntersectionToPack.getZ();
 
-      // second point on line
+      // construct the second point on line
       secondIntersectionToPack.set(rayDirection);
       boxOrientation.inverseTransform(secondIntersectionToPack);
 
