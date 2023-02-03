@@ -29,7 +29,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.Quaternion;
 
 /**
  * This class provides a large variety of basics geometry operations.
@@ -3843,6 +3842,16 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3939,6 +3948,16 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
@@ -4006,7 +4025,17 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
-    *
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
+    * 
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
     * @param boundingBoxMinZ          the minimum z-coordinate of the bounding box.
@@ -4086,7 +4115,17 @@ public class EuclidGeometryTools
     * intersection.
     * </ul>
     * </p>
-    *
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
+    * 
     * @param boundingBoxMin                  the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax                  the maximum coordinate of the bounding box. Not modified.
     * @param startX                          the x-coordinate of a point located on the
@@ -4277,15 +4316,13 @@ public class EuclidGeometryTools
 
       if (invXDir > 0.0)
       {
-         tmin = (deltaXmin) * invXDir;
-         tmax = (deltaXmax) * invXDir;
-         
+         tmin = deltaXmin * invXDir;
+         tmax = deltaXmax * invXDir;
       }
       else
       {
-         tmin = (deltaXmax) * invXDir;
-         tmax = (deltaXmin) * invXDir;
-         
+         tmin = deltaXmax * invXDir;
+         tmax = deltaXmin * invXDir;
       }
 
       double deltaYmin = boundingBoxMinY - startY;
@@ -4302,18 +4339,16 @@ public class EuclidGeometryTools
 
       if (invYDir > 0.0)
       {
-         tymin = (deltaYmin) * invYDir;
-         tymax = (deltaYmax) * invYDir;
-         
+         tymin = deltaYmin * invYDir;
+         tymax = deltaYmax * invYDir;
       }
       else
       {
-         tymin = (deltaYmax) * invYDir;
-         tymax = (deltaYmin) * invYDir;
+         tymin = deltaYmax * invYDir;
+         tymax = deltaYmin * invYDir;
       }
 
       // if regions do not overlap, return false
-      // check size of delta to catch the edge case of 1 intersection with box edge
       if (tmin > tymax + ONE_TRILLIONTH)
       {
          return 0;
@@ -4323,13 +4358,11 @@ public class EuclidGeometryTools
          return 0;
       }
 
-
-
       // update tmin - make sure its not NaN
-      if ((tymin > tmin || Double.isNaN(tmin)))
+      if (tymin > tmin || Double.isNaN(tmin))
          tmin = tymin;
 
-      if ((tymax < tmax || Double.isNaN(tmax)))
+      if (tymax < tmax || Double.isNaN(tmax))
          tmax = tymax;
 
       double deltaZmin = boundingBoxMinZ - startZ;
@@ -4346,13 +4379,13 @@ public class EuclidGeometryTools
 
       if (invZDir > 0.0)
       {
-         tzmin = (deltaZmin) * invZDir;
-         tzmax = (deltaZmax) * invZDir;
+         tzmin = deltaZmin * invZDir;
+         tzmax = deltaZmax * invZDir;
       }
       else
       {
-         tzmin = (deltaZmax) * invZDir;
-         tzmax = (deltaZmin) * invZDir;
+         tzmin = deltaZmax * invZDir;
+         tzmax = deltaZmin * invZDir;
       }
 
       // if regions do not overlap, return false
@@ -4366,10 +4399,10 @@ public class EuclidGeometryTools
       }
 
       // update tmin
-      if ((tzmin > tmin || Double.isNaN(tmin)))
+      if (tzmin > tmin || Double.isNaN(tmin))
          tmin = tzmin;
 
-      if ((tzmax < tmax || Double.isNaN(tmax)))
+      if (tzmax < tmax || Double.isNaN(tmax))
          tmax = tzmax;
 
       // From here, we know that the support line is intersecting with the bounding-box.
@@ -4410,7 +4443,6 @@ public class EuclidGeometryTools
       // 2 intersections
       if (numberOfIntersections == 2)
       {
-
          if (firstIntersectionToPack != null)
          {
             firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
@@ -4421,16 +4453,17 @@ public class EuclidGeometryTools
             secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
          }
       }
-      
+
+      // check if the two intersection points are (almost) identical
       if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
       {
-
          numberOfIntersections = 1;
 
          if (secondIntersectionToPack != null)
          {
             secondIntersectionToPack.setToNaN();
          }
+         return numberOfIntersections;
       }
 
       if (canIntersectionOccurAfterEnd && canIntersectionOccurBeforeStart)
@@ -4447,7 +4480,7 @@ public class EuclidGeometryTools
       if (canIntersectionOccurAfterEnd)
       {// we have a ray and need to test for the edge-case that can only occur with ray at this point
        // check if ray origin lies on bounding box surface and ray or line are colinear  with that bounding box surface
-         boolean isRayEdgeCase = false;
+         boolean isRayOriginOnBox = false;
 
          if (isColinearX)
          {// check if start point of ray lies on bounding box surface
@@ -4455,7 +4488,7 @@ public class EuclidGeometryTools
             {
                if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
                { // ray origin lies on x surface of box
-                  isRayEdgeCase = true;
+                  isRayOriginOnBox = true;
                }
             }
          }
@@ -4465,7 +4498,7 @@ public class EuclidGeometryTools
             {
                if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
                { // ray origin lies on y surface of box
-                  isRayEdgeCase = true;
+                  isRayOriginOnBox = true;
                }
             }
          }
@@ -4475,13 +4508,13 @@ public class EuclidGeometryTools
             {
                if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
                { // ray origin lies on z surface of box
-                  isRayEdgeCase = true;
+                  isRayOriginOnBox = true;
                }
             }
          }
 
-         if (isRayEdgeCase)
-         {
+         if (isRayOriginOnBox)
+         {// the ray origin lies on the bounding box surface, we consider the ray origin the first intersection
             if (secondIntersectionToPack != null)
             {
                secondIntersectionToPack.set(firstIntersectionToPack);
@@ -4545,9 +4578,22 @@ public class EuclidGeometryTools
             }
 
          }
-
-         if (isLineSegmentStartOnBox && !isLineSegmentEndOnBox)
-         {
+         if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         { // start and end are on the box, we consider them intersections
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY, endZ);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+         else if (isLineSegmentStartOnBox)
+         { // only the  start is on the box, we consider the segment start as the first intersection
             if (secondIntersectionToPack != null)
             {
                secondIntersectionToPack.set(firstIntersectionToPack);
@@ -4559,24 +4605,8 @@ public class EuclidGeometryTools
             }
             numberOfIntersections = 2;
          }
-
-         if (numberOfIntersections == 1 && !isLineSegmentStartOnBox && isLineSegmentEndOnBox)
-         {
-            if (secondIntersectionToPack != null)
-            {
-               secondIntersectionToPack.set(endX, endY, endZ);
-               tmax = 1.0;
-            }
-            numberOfIntersections = 2;
-         }
-
-         if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
-         {
-            if (firstIntersectionToPack != null)
-            {
-               firstIntersectionToPack.set(startX, startY, startZ);
-               tmin = 0.0;
-            }
+         else
+         { // only the  end is on the box, we consider the segment end as the first intersection
             if (secondIntersectionToPack != null)
             {
                secondIntersectionToPack.set(endX, endY, endZ);
@@ -4586,9 +4616,9 @@ public class EuclidGeometryTools
          }
       }
 
+      // check if the two intersection points are (almost) identical
       if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
       {
-
          numberOfIntersections = 1;
 
          if (secondIntersectionToPack != null)
@@ -4953,7 +4983,6 @@ public class EuclidGeometryTools
       double bottomZ = -halfLength * axisZ + cylinderPositionZ;
       double lineDirectionDotCylinderAxis = dx * axisX + dy * axisY + dz * axisZ;
 
-
       if (Math.abs(lineDirectionDotCylinderAxis) >= ONE_TRILLIONTH)
       {
          double dTop = Double.NaN;
@@ -5156,7 +5185,6 @@ public class EuclidGeometryTools
       return 2;
    }
 
- 
    /**
     * Computes the coordinates of the possible intersections between a line and an ellipsoid.
     * <p>
@@ -5688,7 +5716,17 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
-    *
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
+    * 
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
     * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
@@ -6113,7 +6151,17 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
-    *
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
+    * 
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
     * @param rayOrigin                the coordinate of the ray origin. Not modified.
@@ -6180,6 +6228,8 @@ public class EuclidGeometryTools
     * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
     *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
     * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
+    *      Vector3DReadOnly, Point3DBasics, Point3DBasics)
     */
    public static int intersectionBetweenRay3DAndBox3D(Point3DReadOnly boxPosition,
                                                       Orientation3DReadOnly boxOrientation,

@@ -19,9 +19,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.builder.Diff;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.Location;
@@ -146,65 +144,56 @@ public class EuclidGeometryToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D firstPointOnLine1 = null;
-         try
-         {
-            Vector2D lineDirection1 = EuclidCoreRandomTools.nextVector2D(random);
-            lineDirection1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D lineDirection1 = EuclidCoreRandomTools.nextVector2D(random);
+         lineDirection1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
 
-            double angleEpsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI / 2.0);
-            double rotationAngle = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI / 2.0);
+         double angleEpsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI / 2.0);
+         double rotationAngle = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI / 2.0);
 
-            Vector2D lineDirection2 = new Vector2D();
-            RotationMatrixTools.applyYawRotation(rotationAngle, lineDirection1, lineDirection2);
-            lineDirection2.normalize();
-            lineDirection2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
+         Vector2D lineDirection2 = new Vector2D();
+         RotationMatrixTools.applyYawRotation(rotationAngle, lineDirection1, lineDirection2);
+         lineDirection2.normalize();
+         lineDirection2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
-            firstPointOnLine1 = EuclidCoreRandomTools.nextPoint2D(random);
-            firstPointOnLine1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
-            Point2D secondPointOnLine1 = new Point2D();
-            secondPointOnLine1.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection1, firstPointOnLine1);
+         Point2D firstPointOnLine1 = EuclidCoreRandomTools.nextPoint2D(random);
+         firstPointOnLine1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D secondPointOnLine1 = new Point2D();
+         secondPointOnLine1.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection1, firstPointOnLine1);
 
-            Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineDirection1);
-            orthogonal.normalize();
-            double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-            double distanceEspilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineDirection1);
+         orthogonal.normalize();
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double distanceEspilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
 
-            Point2D firstPointOnLine2 = new Point2D();
-            firstPointOnLine2.scaleAdd(distance, orthogonal, firstPointOnLine1);
-            Point2D secondPointOnLine2 = new Point2D();
-            secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         Point2D firstPointOnLine2 = new Point2D();
+         firstPointOnLine2.scaleAdd(distance, orthogonal, firstPointOnLine1);
+         Point2D secondPointOnLine2 = new Point2D();
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, firstPointOnLine2);
 
-            boolean expectedCollinear = rotationAngle < angleEpsilon && distance < distanceEspilon;
-            boolean actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
-                                                                              secondPointOnLine1,
-                                                                              firstPointOnLine2,
-                                                                              secondPointOnLine2,
-                                                                              angleEpsilon,
-                                                                              distanceEspilon);
-            assertEquals(expectedCollinear, actualCollinear);
+         boolean expectedCollinear = rotationAngle < angleEpsilon && distance < distanceEspilon;
+         boolean actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
+                                                                           secondPointOnLine1,
+                                                                           firstPointOnLine2,
+                                                                           secondPointOnLine2,
+                                                                           angleEpsilon,
+                                                                           distanceEspilon);
+         assertEquals(expectedCollinear, actualCollinear);
 
-            actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
-                                                                      lineDirection1,
-                                                                      firstPointOnLine2,
-                                                                      lineDirection2,
-                                                                      angleEpsilon,
-                                                                      distanceEspilon);
-            assertEquals(expectedCollinear, actualCollinear);
+         actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
+                                                                   lineDirection1,
+                                                                   firstPointOnLine2,
+                                                                   lineDirection2,
+                                                                   angleEpsilon,
+                                                                   distanceEspilon);
+         assertEquals(expectedCollinear, actualCollinear);
 
-            actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
-                                                                      lineDirection1,
-                                                                      firstPointOnLine2,
-                                                                      secondPointOnLine2,
-                                                                      angleEpsilon,
-                                                                      distanceEspilon);
-            assertEquals(expectedCollinear, actualCollinear);
-         }
-         catch (AssertionFailedError e)
-         {
-            System.out.println("Point1: " + firstPointOnLine1.toString(null));
-            throw e;
-         }
+         actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
+                                                                   lineDirection1,
+                                                                   firstPointOnLine2,
+                                                                   secondPointOnLine2,
+                                                                   angleEpsilon,
+                                                                   distanceEspilon);
+         assertEquals(expectedCollinear, actualCollinear);
       }
 
       // Test only the distance with parallel line segments.
@@ -4037,10 +4026,9 @@ public class EuclidGeometryToolsTest
          actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
-
-      // Make the intersection happen outside the line segment
+   
       for (int i = 0; i < ITERATIONS; i++)
-      {
+      {  // Make the intersection happen outside the line segment
          Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
          lineSegmentStart.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
          Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
@@ -4094,7 +4082,7 @@ public class EuclidGeometryToolsTest
          actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
       }
-
+      
       // Make the intersection happen on each end point of the line segment
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -4462,12 +4450,10 @@ public class EuclidGeometryToolsTest
 
       // (2 intersections) line colinear with box surface
       for (int i = 0; i < ITERATIONS; i++)
-      {
-         // two points on box edges (but cannot be the same edge)
+      {// define two points on box edges (but cannot be the same edge)
          for (int index = 0; index < 3; index++)
          {
             for (int index2 = 0; index2 < 3; index2++)
-
             {
                if (index != index2)
                {
@@ -4478,25 +4464,13 @@ public class EuclidGeometryToolsTest
                   Point3D firstEdgePoint = new Point3D();
                   Point3D secondEdgePoint = new Point3D();
 
-                  firstEdgePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(),
-                                                                  boundingBoxMax.getX(),
-                                                                  EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
-                  firstEdgePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(),
-                                                                  boundingBoxMax.getY(),
-                                                                  EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
-                  firstEdgePoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(),
-                                                                  boundingBoxMax.getZ(),
-                                                                  EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
+                  firstEdgePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), random.nextDouble()));
+                  firstEdgePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), random.nextDouble()));
+                  firstEdgePoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), random.nextDouble()));
 
-                  secondEdgePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(),
-                                                                   boundingBoxMax.getX(),
-                                                                   EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
-                  secondEdgePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(),
-                                                                   boundingBoxMax.getY(),
-                                                                   EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
-                  secondEdgePoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(),
-                                                                   boundingBoxMax.getZ(),
-                                                                   EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0)));
+                  secondEdgePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), random.nextDouble()));
+                  secondEdgePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), random.nextDouble()));
+                  secondEdgePoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), random.nextDouble()));
 
                   if (random.nextBoolean())
                      firstEdgePoint.setElement(index, boundingBoxMin.getElement(index));
@@ -4617,58 +4591,6 @@ public class EuclidGeometryToolsTest
          assertNotEquals(1, numberOfIntersections);
       }
    }
-
-   //   @Test
-   //   public void testIntersectionBetweenLine2DAndCircle2D() throws Exception
-   //   {
-   //      Random random = new Random(65226L);
-   //
-   //      for (int i = 0; i < ITERATIONS; i++)
-   //      { // 2 intersections: 2 random points on circle edge
-   //         double circleRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
-   //         Point2D circlePosition = new Point2D();
-   //
-   //         Point2D firstPointOnCircle = new Point2D(circleRadius, 0.0);
-   //         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI), firstPointOnCircle, firstPointOnCircle);
-   //
-   //         Point2D secondPointOnCircle = new Point2D(circleRadius, 0.0);
-   //         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI), secondPointOnCircle, secondPointOnCircle);
-   //
-   //         Point2D expectedIntersection1 = new Point2D();
-   //         Point2D expectedIntersection2 = new Point2D();
-   //         expectedIntersection1.set(firstPointOnCircle);
-   //         expectedIntersection2.set(secondPointOnCircle);
-   //
-   //         Vector2D lineDirection = new Vector2D();
-   //         Vector2D invLineDirection = new Vector2D();
-   //         lineDirection.sub(firstPointOnCircle, secondPointOnCircle);
-   //         invLineDirection.sub(secondPointOnCircle, firstPointOnCircle);
-   //         firstPointOnCircle.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), invLineDirection, firstPointOnCircle);
-   //         secondPointOnCircle.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, secondPointOnCircle);
-   //
-   //         Point2D firstIntersection = new Point2D();
-   //         Point2D secondIntersection = new Point2D();
-   //
-   //         // Now we transform everything randomly:
-   //         //         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-   //         //         Arrays.asList(cylinderPosition, cylinderAxis, firstPointOnLine, secondPointOnLine, lineDirection)
-   //         //               .forEach(transformable -> transformable.applyTransform(transform));
-   //
-   //         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DandCircle2D(circleRadius,
-   //                                                                                              firstPointOnCircle.getX(),
-   //                                                                                              firstPointOnCircle.getY(),
-   //                                                                                              true,
-   //                                                                                              secondPointOnCircle.getX(),
-   //                                                                                              secondPointOnCircle.getY(),
-   //                                                                                              true,
-   //                                                                                              firstIntersection,
-   //                                                                                              secondIntersection);
-   //         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-   //         EuclidCoreTestTools.assertEquals(expectedIntersection1, firstIntersection, EPSILON);
-   //         EuclidCoreTestTools.assertEquals(expectedIntersection2, secondIntersection, EPSILON);
-   //
-   //      }
-   //   }
 
    @Test
    public void testIntersectionBetweenLine3DAndCylinder3D() throws Exception
@@ -8825,7 +8747,7 @@ public class EuclidGeometryToolsTest
 
       Random random = new Random(65226L);
       int successCounter = 0;
-      int FailureCounter = 0;
+      int failureCounter = 0;
       double successRate = 0;
       double rateThreshold = 99.9;
 
@@ -8912,7 +8834,7 @@ public class EuclidGeometryToolsTest
                         }
                         else
                         { // failed to have the correct intersections 
-                           FailureCounter = FailureCounter + 1;
+                           failureCounter = failureCounter + 1;
                            if (numberOfIntersections == 2)
                            {//check if the 2 intersection points make some sense (need to be very close to expected intersection point)
                               EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection, actualIntersection1, LARGE_EPSILON);
@@ -8930,7 +8852,7 @@ public class EuclidGeometryToolsTest
          }
       }
 
-      successRate = (100.0 / (successCounter + FailureCounter)) * successCounter;
+      successRate = (100.0 / (successCounter + failureCounter)) * successCounter;
       assertTrue(successRate >= rateThreshold);
 
    }
