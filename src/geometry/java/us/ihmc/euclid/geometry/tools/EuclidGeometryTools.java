@@ -3842,16 +3842,6 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the bounding box, the points where the line
-    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
-    * intersection points.
-    * </ul>
-    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3948,16 +3938,6 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the bounding box, the points where the line
-    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
-    * intersection points.
-    * </ul>
-    * </p>
     *
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
@@ -4024,16 +4004,6 @@ public class EuclidGeometryTools
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
-    * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the bounding box, the points where the line
-    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
-    * intersection points.
-    * </ul>
     * </p>
     * 
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
@@ -5719,11 +5689,11 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the bounding box, the points where the line
-    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
-    * intersection points.
+    * <li>if the start or end point of the line segment lie on the surface of the bounding box they are
+    * considered as intersection points.
+    * <li>if the line segment is colinear with a surface of the bounding box, the points where the line
+    * segment first/last intersects with the bounding box (on the bounding box boundary) are returned
+    * as intersection points.
     * </ul>
     * </p>
     * 
@@ -6152,11 +6122,12 @@ public class EuclidGeometryTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     * <p>
+    * <p>
     * Edge cases:
     * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * <li>if the start of the ray lies on the surface of the bounding box it is considered as
+    * intersection point.
+    * <li>if the ray is colinear with a surface of the bounding box, the points where the ray
     * first/last intersects with the bounding box (on the bounding box boundary) are returned as
     * intersection points.
     * </ul>
