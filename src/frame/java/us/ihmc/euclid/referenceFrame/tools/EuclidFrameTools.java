@@ -3989,6 +3989,8 @@ public class EuclidFrameTools
     * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
     *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
     * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
     * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
     *      Vector3DReadOnly, Point3DBasics, Point3DBasics)
     */
@@ -4014,6 +4016,61 @@ public class EuclidFrameTools
          firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
+
+      return numberOfIntersections;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a 3D ray and a 3D box
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param rayOrigin                the origin point of the 3D ray. Not modified.
+    * @param rayDirection             the direction of the 3D ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
+    * @throws IllegalArgumentException        if {@code boxSize} contains values <= 0.0
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
+    *      Vector3DReadOnly, Point3DBasics, Point3DBasics)
+    */
+   public static int intersectionBetweenRay3DAndBox3D(FramePoint3DReadOnly boxPosition,
+                                                      FrameOrientation3DReadOnly boxOrientation,
+                                                      FrameVector3DReadOnly boxSize,
+                                                      FramePoint3DReadOnly rayOrigin,
+                                                      FrameVector3DReadOnly rayDirection,
+                                                      FixedFramePoint3DBasics firstIntersectionToPack,
+                                                      FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      boxPosition.checkReferenceFrameMatch(boxSize, rayOrigin, rayDirection, boxOrientation);
+      if (firstIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
+
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBox3D(boxPosition,
+                                                                                       boxOrientation,
+                                                                                       boxSize,
+                                                                                       rayOrigin,
+                                                                                       rayDirection,
+                                                                                       firstIntersectionToPack,
+                                                                                       secondIntersectionToPack);
 
       return numberOfIntersections;
    }
