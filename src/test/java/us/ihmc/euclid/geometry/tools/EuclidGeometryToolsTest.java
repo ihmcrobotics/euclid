@@ -9828,7 +9828,6 @@ public class EuclidGeometryToolsTest
                                                                                                              null);
 
                         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-
                      }
                   }
                }
