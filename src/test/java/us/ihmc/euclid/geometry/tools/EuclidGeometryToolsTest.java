@@ -4026,9 +4026,9 @@ public class EuclidGeometryToolsTest
          actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertEquals(expectedIntersection, actualIntersection, epsilon);
       }
-   
+
       for (int i = 0; i < ITERATIONS; i++)
-      {  // Make the intersection happen outside the line segment
+      { // Make the intersection happen outside the line segment
          Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
          lineSegmentStart.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
          Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
@@ -4082,7 +4082,7 @@ public class EuclidGeometryToolsTest
          actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
       }
-      
+
       // Make the intersection happen on each end point of the line segment
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -4304,6 +4304,100 @@ public class EuclidGeometryToolsTest
                                                                                                            null,
                                                                                                            null);
                assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+            }
+         }
+      }
+
+      // 1 intersection 
+      for (int i = 0; i < ITERATIONS; i++)
+      {//try line with line going through a box edge but stays outside the box 
+
+         for (Axis3D hoveringAxis : Axis3D.values())
+         {
+            for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
+            {
+               for (Axis3D edgeAxis : Axis3D.values())
+               {// random point on one edge of the box 
+                  if (edgeAxis.ordinal() != hoveringAxis.ordinal())
+                  {
+                     for (double edgeDirection = -1.0; edgeDirection <= 1.0; edgeDirection += 2.0)
+                     {
+                        Point3D boxPosition = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
+                        Vector3D boxSize = EuclidCoreRandomTools.nextVector3D(random, 1.0, 10.0);
+                        Vector3D lineDirection = new Vector3D();
+                        Point3D boxEdgePoint = new Point3D();
+                        Point3D firstPointOnLine = new Point3D();
+                        Point3D secondPointOnLine = new Point3D();
+
+                        firstPointOnLine.add(boxPosition,
+                                             EuclidCoreRandomTools.nextPoint3D(random,
+                                                                               0.5 * boxSize.getElement(0),
+                                                                               0.5 * boxSize.getElement(1),
+                                                                               0.5 * boxSize.getElement(2)));
+                        firstPointOnLine.setElement(hoveringAxis,
+                                                    boxPosition.getElement(hoveringAxis) + axisDirection
+                                                          * (0.5 * boxSize.getElement(hoveringAxis) + EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0)));
+
+                        boxEdgePoint.add(boxPosition,
+                                         EuclidCoreRandomTools.nextPoint3D(random,
+                                                                           0.5 * boxSize.getElement(0),
+                                                                           0.5 * boxSize.getElement(1),
+                                                                           0.5 * boxSize.getElement(2)));
+                        boxEdgePoint.setElement(edgeAxis, boxPosition.getElement(edgeAxis) + edgeDirection * 0.5 * boxSize.getElement(edgeAxis));
+                        boxEdgePoint.setElement(hoveringAxis, boxPosition.getElement(hoveringAxis) + axisDirection * 0.5 * boxSize.getElement(hoveringAxis));
+
+                        Point3D boundingBoxMin = new Point3D();
+                        Point3D boundingBoxMax = new Point3D();
+                        boundingBoxMin.scaleAdd(-0.5, boxSize, boxPosition);
+                        boundingBoxMax.scaleAdd(0.5, boxSize, boxPosition);
+
+                        Point3D actualFirstIntersection = new Point3D();
+                        Point3D actualSecondIntersection = new Point3D();
+
+                        secondPointOnLine.set(boxEdgePoint);
+                        lineDirection.sub(secondPointOnLine, firstPointOnLine);
+
+                        Point3D expectedIntersection = new Point3D();
+                        expectedIntersection.set(boxEdgePoint);
+
+                        int expectedNumberOfIntersections = 1;
+                        int actualNumberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                                        boundingBoxMax,
+                                                                                                                        firstPointOnLine,
+                                                                                                                        secondPointOnLine,
+                                                                                                                        actualFirstIntersection,
+                                                                                                                        actualSecondIntersection);
+                        assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+                        EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection, actualFirstIntersection, LARGE_EPSILON);
+                        EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+                        actualNumberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                                    boundingBoxMax,
+                                                                                                                    firstPointOnLine,
+                                                                                                                    secondPointOnLine,
+                                                                                                                    null,
+                                                                                                                    null);
+                        assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+                        actualNumberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                                    boundingBoxMax,
+                                                                                                                    firstPointOnLine,
+                                                                                                                    lineDirection,
+                                                                                                                    actualFirstIntersection,
+                                                                                                                    actualSecondIntersection);
+                        assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+                        EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection, actualFirstIntersection, LARGE_EPSILON);
+                        EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+                        actualNumberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                                    boundingBoxMax,
+                                                                                                                    firstPointOnLine,
+                                                                                                                    lineDirection,
+                                                                                                                    null,
+                                                                                                                    null);
+                        assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+                     }
+                  }
+               }
             }
          }
       }
@@ -4562,33 +4656,6 @@ public class EuclidGeometryToolsTest
                }
             }
          }
-      }
-
-      // Assert that is not case where there is only one intersection
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Point3D boundingBoxMin = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         Point3D boundingBoxMax = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         boundingBoxMax.absolute();
-         boundingBoxMax.add(boundingBoxMin);
-         Point3D firstPointOnLine = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         Point3D secondPointOnLine = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         Vector3D lineDirection = new Vector3D();
-         lineDirection.sub(secondPointOnLine, firstPointOnLine);
-         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
-                                                                                                   boundingBoxMax,
-                                                                                                   firstPointOnLine,
-                                                                                                   secondPointOnLine,
-                                                                                                   null,
-                                                                                                   null);
-         assertNotEquals(1, numberOfIntersections);
-         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
-                                                                                               boundingBoxMax,
-                                                                                               firstPointOnLine,
-                                                                                               lineDirection,
-                                                                                               null,
-                                                                                               null);
-         assertNotEquals(1, numberOfIntersections);
       }
    }
 
@@ -8930,7 +8997,6 @@ public class EuclidGeometryToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {// ray origin outside box and ray pointing away from box
 
-         // vector orthogonal to normal axis on box side
          for (Axis3D hoveringAxis : Axis3D.values())
          {
             for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
@@ -9054,10 +9120,8 @@ public class EuclidGeometryToolsTest
 
          for (Axis3D hoveringAxis : Axis3D.values())
          {
-
             for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
             {
-
                Point3D boxPosition = new Point3D();
                Vector3D boxSize = EuclidCoreRandomTools.nextVector3D(random, 0.01, 10.0);
                //assume box orientation aligned with x,z,y
@@ -9257,7 +9321,7 @@ public class EuclidGeometryToolsTest
 
       }
 
-      // 2 intersection
+      // 2 intersections
       for (int i = 0; i < ITERATIONS; i++)
       {//intersecting ray with ray origin outside box and ray going through two box sides
 
@@ -9346,6 +9410,7 @@ public class EuclidGeometryToolsTest
 
       }
 
+      // 2 intersections
       // Ray colinear with box side - ray origin on box surface
       for (int i = 0; i < ITERATIONS; i++)
       {
