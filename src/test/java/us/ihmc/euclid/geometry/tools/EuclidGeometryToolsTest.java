@@ -4139,6 +4139,101 @@ public class EuclidGeometryToolsTest
          }
       }
 
+      // 2 intersections   
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Line segment colinear with box side - start or end point of line segment on box edge, other point outside box
+         for (Axis2D hoveringAxis : Axis2D.values())
+         {
+            for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
+            {
+               for (double edgeDirection = -1.0; edgeDirection <= 1.0; edgeDirection += 2.0)
+               {
+                  Point2D boxPosition = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 10.0);
+                  Vector2D boxSize = EuclidCoreRandomTools.nextVector2D(random, 0.001, 10.0);
+                  Point2D boundingBoxMin = new Point2D();
+                  Point2D boundingBoxMax = new Point2D();
+                  boundingBoxMin.scaleAdd(-0.5, boxSize, boxPosition);
+                  boundingBoxMax.scaleAdd(0.5, boxSize, boxPosition);
+                  Vector2D lineDirection = new Vector2D();
+
+                  // random point on one box side 
+                  Point2D firstPointOnLine = EuclidCoreRandomTools.nextPoint2D(random,
+                                                                               boundingBoxMin.getX(),
+                                                                               boundingBoxMax.getX(),
+                                                                               boundingBoxMin.getY(),
+                                                                               boundingBoxMax.getY());
+                  firstPointOnLine.setElement(hoveringAxis, boxPosition.getElement(hoveringAxis) + axisDirection * 0.5 * boxSize.getElement(hoveringAxis));
+
+                  //random point on edge of that box side
+                  Point2D boxEdgePoint = new Point2D();
+                  boxEdgePoint.setElement(hoveringAxis, boxPosition.getElement(hoveringAxis) + axisDirection * 0.5 * boxSize.getElement(hoveringAxis));
+                  boxEdgePoint.setElement(hoveringAxis.other(),
+                                          boxPosition.getElement(hoveringAxis.other()) + edgeDirection * (0.5 * boxSize.getElement(hoveringAxis.other())));
+
+                  lineDirection.sub(boxEdgePoint, firstPointOnLine);
+
+                  Point2D expectedIntersection1 = new Point2D();
+                  expectedIntersection1.set(firstPointOnLine);
+                  Point2D expectedIntersection2 = new Point2D();
+                  expectedIntersection2.set(boxEdgePoint);
+
+                  Point2D secondPointOnLine = new Point2D();
+                  secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection, boxEdgePoint);
+
+                  Point2D actualIntersection1 = new Point2D();
+                  Point2D actualIntersection2 = new Point2D();
+
+                  int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                                   boundingBoxMax,
+                                                                                                                   firstPointOnLine,
+                                                                                                                   secondPointOnLine,
+                                                                                                                   actualIntersection1,
+                                                                                                                   actualIntersection2);
+
+                  assertEquals(2, numberOfIntersections, "Iteration: " + i);
+
+                  EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+                  EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+                  actualIntersection1.setToNaN();
+                  actualIntersection2.setToNaN();
+
+                  numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                           boundingBoxMax,
+                                                                                           firstPointOnLine,
+                                                                                           secondPointOnLine,
+                                                                                           null,
+                                                                                           null);
+
+                  assertEquals(2, numberOfIntersections, "Iteration: " + i);
+
+                  // flip line end-points   
+                  expectedIntersection1.set(boxEdgePoint);
+                  expectedIntersection2.set(firstPointOnLine);
+
+                  numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                               boundingBoxMax,
+                                                                                                               secondPointOnLine,
+                                                                                                               firstPointOnLine,
+                                                                                                               actualIntersection1,
+                                                                                                               actualIntersection2);
+
+                  assertEquals(2, numberOfIntersections, "Iteration: " + i);
+
+                  EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+                  EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+                  actualIntersection1.setToNaN();
+                  actualIntersection2.setToNaN();
+
+                  numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                               boundingBoxMax,
+                                                                                                               secondPointOnLine,
+                                                                                                               firstPointOnLine,
+                                                                                                               null,
+                                                                                                               null);
+               }
+            }
+         }
+      }
       // 2 intersections 
       for (int i = 0; i < ITERATIONS; i++)
       {//Making both endpoints of the line segment to be on one (same) of the bounding box faces.
