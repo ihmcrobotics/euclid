@@ -6185,7 +6185,6 @@ public class EuclidGeometryToolsTest
                      assertPointIsBetweenEndPointsOfLineSegment(firstIntersection, onEdgePoint, outsideEndpoint, EPSILON);
                      assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
                      firstIntersection.setToNaN();
-
                   }
                }
             }
@@ -6357,7 +6356,6 @@ public class EuclidGeometryToolsTest
                   assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
                   firstIntersection.setToNaN();
                   secondIntersection.setToNaN();
-
                }
             }
 
@@ -9483,7 +9481,6 @@ public class EuclidGeometryToolsTest
       // 1 intersections
       for (int i = 0; i < ITERATIONS; i++)
       {// ray origin on box surface and ray pointing away from box
-
          for (Axis3D hoveringAxis : Axis3D.values())
          {
             for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
@@ -9539,7 +9536,6 @@ public class EuclidGeometryToolsTest
       // 1 intersections
       for (int i = 0; i < ITERATIONS; i++)
       {// ray origin on box edge and ray pointing away from box
-
          for (Axis3D hoveringAxis : Axis3D.values())
          {
             for (double axisDirection = -1.0; axisDirection <= 1.0; axisDirection += 2.0)
@@ -10528,16 +10524,13 @@ public class EuclidGeometryToolsTest
                EuclidCoreTestTools.assertGeometricallyEquals(expectedIntersection, actualIntersection1, LARGE_EPSILON);
                EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
                actualIntersection1.setToNaN();
-
             }
          }
-
       }
 
       // 2 intersections
       for (int i = 0; i < ITERATIONS; i++)
       {//intersecting ray with ray origin outside box and ray going through two box sides
-
          for (Axis3D hoveringAxis1 : Axis3D.values())
          {// two random points on two different sides of the box
 
@@ -10620,7 +10613,6 @@ public class EuclidGeometryToolsTest
                }
             }
          }
-
       }
 
       // 2 intersections
@@ -10703,7 +10695,6 @@ public class EuclidGeometryToolsTest
                                                                                                      null);
 
                         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-
                      }
                   }
                }
@@ -10731,7 +10722,6 @@ public class EuclidGeometryToolsTest
                               for (double edgeDirection2 = -1.0; edgeDirection2 <= 1.0; edgeDirection2 += 2.0)
                               {
                                  Point3D boxPosition = new Point3D();
-
                                  Vector3D boxSize = EuclidCoreRandomTools.nextVector3D(random, 0.01, 10.0);
                                  //assume box orientation aligned with x,z,y
                                  Quaternion boxOrientation = new Quaternion();
@@ -10827,7 +10817,6 @@ public class EuclidGeometryToolsTest
                      {
 
                         Point3D boxPosition = new Point3D();
-
                         Vector3D boxSize = EuclidCoreRandomTools.nextVector3D(random, 0.01, 10.0);
                         //assume box orientation aligned with x,z,y
                         Quaternion boxOrientation = new Quaternion();
@@ -10888,14 +10877,12 @@ public class EuclidGeometryToolsTest
                                                                                                      null);
 
                         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-
                      }
                   }
                }
             }
          }
       }
-
    }
 
    @Test
@@ -11787,10 +11774,8 @@ public class EuclidGeometryToolsTest
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
             actualIntersection1.setToNaN();
          }
-
          assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
-
    }
 
    @Test
