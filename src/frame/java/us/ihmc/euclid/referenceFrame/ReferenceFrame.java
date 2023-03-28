@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -117,6 +118,11 @@ public abstract class ReferenceFrame
     * garbage collector to dispose of the children that are not referenced outside this class.
     */
    private final List<WeakReference<ReferenceFrame>> children = new ArrayList<>();
+
+   /**
+    * Set containing the {@link #frameName} of this frame's {@link #children}.
+    */
+   private final HashSet<String> childrenNames = new HashSet<>();
 
    /**
     * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree. In
@@ -386,16 +392,17 @@ public abstract class ReferenceFrame
       else
       {
          parentFrame.checkIfRemoved();
-
          nameId = parentFrame.nameId + SEPARATOR + frameName;
+
+         if (parentFrame.childrenNames.contains(frameName))
+         {
+            throw new RuntimeException("Duplicate reference frame: " + nameId);
+         }
+
          frameIndex = parentFrame.incrementFramesAdded();
 
-         // TODO We need to enable unique frames at some point.
-         // if (parentFrame.hasChildWithName(frameName))
-         // {
-         //    throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
-         // }
          parentFrame.children.add(new WeakReference<>(this));
+         parentFrame.childrenNames.add(frameName);
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -1186,6 +1193,7 @@ public abstract class ReferenceFrame
             if (parentFrame.children.get(i).get() == this)
             {
                parentFrame.children.remove(i);
+               parentFrame.childrenNames.remove(frameName);
                break;
             }
          }
@@ -1225,6 +1233,7 @@ public abstract class ReferenceFrame
       checkIfRemoved();
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
       children.clear();
+      childrenNames.clear();
 
       if (isRootFrame())
          framesAddedToTree = 0L;
