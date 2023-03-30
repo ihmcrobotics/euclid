@@ -68,6 +68,18 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to world frame.
     *
+    * @param frameName reference frame name
+    * @param random the random generator to use.
+    * @return the new random reference frame.
+    */
+   public static ReferenceFrame nextReferenceFrame(String frameName, Random random)
+   {
+      return nextReferenceFrame(frameName, random, false);
+   }
+
+   /**
+    * Generates a reference frame with a random transform to world frame.
+    *
     * @param random         the random generator to use.
     * @param use2DTransform whether to use a 2D or 3D rotation for the transform used to create the
     *                       random frame.
@@ -76,6 +88,20 @@ public class EuclidFrameRandomTools
    public static ReferenceFrame nextReferenceFrame(Random random, boolean use2DTransform)
    {
       return nextReferenceFrame(random, ReferenceFrame.getWorldFrame(), use2DTransform);
+   }
+
+   /**
+    * Generates a reference frame with a random transform to world frame.
+    *
+    * @param frameName      the reference frame name.
+    * @param random         the random generator to use.
+    * @param use2DTransform whether to use a 2D or 3D rotation for the transform used to create the
+    *                       random frame.
+    * @return the new random reference frame.
+    */
+   public static ReferenceFrame nextReferenceFrame(String frameName, Random random, boolean use2DTransform)
+   {
+      return nextReferenceFrame(frameName, random, ReferenceFrame.getWorldFrame(), use2DTransform);
    }
 
    /**
@@ -151,6 +177,20 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Creates a tree structure of 20 random reference frames starting off
+    * {@code ReferenceFrame.getWorldFrame()}.
+    *
+    * @param namePrefix name prefix for each frame
+    * @param random the random generator to use.
+    * @return the array containing the random reference frames and
+    *         {@code ReferenceFrame.getWorldFrame()} at the first index.
+    */
+   public static ReferenceFrame[] nextReferenceFrameTree(String namePrefix, Random random)
+   {
+      return nextReferenceFrameTree(namePrefix, random, false);
+   }
+
+   /**
     * Creates a tree structure of 20 random reference frames start off
     * {@link ReferenceFrame#getWorldFrame()}.
     *
@@ -163,6 +203,22 @@ public class EuclidFrameRandomTools
    public static ReferenceFrame[] nextReferenceFrameTree(Random random, boolean use2DTransforms)
    {
       return nextReferenceFrameTree(random, 20, use2DTransforms);
+   }
+
+   /**
+    * Creates a tree structure of 20 random reference frames start off
+    * {@link ReferenceFrame#getWorldFrame()}.
+    *
+    * @param namePrefix name prefix for each frame
+    * @param random          the random generator to use.
+    * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
+    *                        random frames.
+    * @return the array containing the random reference frames and
+    *         {@code ReferenceFrame.getWorldFrame()} at the first index.
+    */
+   public static ReferenceFrame[] nextReferenceFrameTree(String namePrefix, Random random, boolean use2DTransforms)
+   {
+      return nextReferenceFrameTree(namePrefix, random, ReferenceFrame.getWorldFrame(), 20, use2DTransforms);
    }
 
    /**
