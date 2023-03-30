@@ -531,6 +531,7 @@ public abstract class ReferenceFrame
 
    public FrameNameRestrictionLevel getNameRestrictionLevel()
    {
+      checkIfRemoved();
       return nameRestrictionLevel;
    }
 
