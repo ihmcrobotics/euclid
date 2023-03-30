@@ -1,11 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.function.Predicate;
-
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.ReferenceFrameChangedListener.Change;
@@ -15,6 +9,12 @@ import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * {@code ReferenceFrame} represents a reference coordinate frame.
@@ -60,9 +60,9 @@ public abstract class ReferenceFrame
    /** A string used to separate frame names in the {@link #nameId} of the reference frame */
    public static final String SEPARATOR = ":";
 
-   private static final FrameNameRestrictionLevel DEFAULT_RESTRICTION_LEVEL = FrameNameRestrictionLevel.loadFromEnvironment("euclid.referenceFrame.restrictionLevel",
-                                                                                                                            "FrameNameRestrictionLevel",
-                                                                                                                            FrameNameRestrictionLevel.NONE);
+   public static FrameNameRestrictionLevel DEFAULT_RESTRICTION_LEVEL = FrameNameRestrictionLevel.loadFromEnvironment("euclid.referenceFrame.restrictionLevel",
+                                                                                                                     "FrameNameRestrictionLevel",
+                                                                                                                     FrameNameRestrictionLevel.NONE);
 
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
@@ -1307,6 +1307,10 @@ public abstract class ReferenceFrame
                break;
             }
          }
+
+         if (topFrameNameRestriction != null)
+            topFrameNameRestriction.subtreeFrameNames.remove(frameName);
+
          notifyListeners(ChangeType.FRAME_REMOVED, this, parentFrame);
          disableRecursivly();
       }
@@ -1344,6 +1348,8 @@ public abstract class ReferenceFrame
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
       children.clear();
       childrenNames.clear();
+      if (topFrameNameRestriction != null)
+         topFrameNameRestriction.subtreeFrameNames.remove(frameName);
 
       if (isRootFrame())
          framesAddedToTree = 0L;
@@ -1354,6 +1360,9 @@ public abstract class ReferenceFrame
       hasBeenRemoved = true;
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
       changedListeners = null;
+
+      if (topFrameNameRestriction != null)
+         topFrameNameRestriction.subtreeFrameNames.remove(frameName);
    }
 
    /**
