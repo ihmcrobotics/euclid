@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +35,12 @@ public class ReferenceFrameTest
 
    private static final double EPSILON = 1.0e-12;
 
+   @AfterEach
+   public void cleanup()
+   {
+      ReferenceFrame.getWorldFrame().clearChildren();
+   }
+
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
@@ -47,7 +54,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constantA" + i, world, expected);
 
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -62,7 +69,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constantB" + i, world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -91,7 +98,7 @@ public class ReferenceFrameTest
          runGarbageCollector();
          long usedMemoryStart = runtime.totalMemory() - runtime.freeMemory() >> 20;
 
-         EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
+         EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random, worldFrame, 100000);
          runGarbageCollector();
 
          long usedMemoryEnd = runtime.totalMemory() - runtime.freeMemory() >> 20;
@@ -177,7 +184,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame frameA = treeFrame[random.nextInt(treeFrame.length)];
          ReferenceFrame frameB = treeFrame[random.nextInt(treeFrame.length)];
@@ -196,7 +203,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          checkRepInvariants(frame);
@@ -295,7 +302,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("treeA" + i + "_", random);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(worldFrame);
@@ -306,7 +313,7 @@ public class ReferenceFrameTest
       {
          ReferenceFrame anotherRoot = ReferenceFrameTools.constructARootFrame("anotherRoot");
 
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("blop", random, anotherRoot, 20);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("blop" + i + "_", random, anotherRoot, 20);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(anotherRoot);
@@ -315,7 +322,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         RandomlyChangingFrame[] treeFrame = nextRandomlyChangingFrameTree(random, 100);
+         RandomlyChangingFrame[] treeFrame = nextRandomlyChangingFrameTree("treeB" + i + "_", random, 100);
 
          int numberOfRandomUpdates = random.nextInt(treeFrame.length / 2) + 1;
          for (int j = 0; j < numberOfRandomUpdates; j++)
@@ -337,7 +344,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToSelf = frame.getTransformToDesiredFrame(frame);
          EuclidCoreTestTools.assertGeometricallyEquals(new RigidBodyTransform(), transformToSelf, EPSILON);
@@ -351,7 +358,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
          ReferenceFrame frame1 = treeFrame[random.nextInt(treeFrame.length)];
          ReferenceFrame frame2 = treeFrame[random.nextInt(treeFrame.length)];
 
@@ -428,7 +435,7 @@ public class ReferenceFrameTest
          Point3D expected = new Point3D(original);
          Point3D actual = new Point3D(expected);
 
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame desiredFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -468,7 +475,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree("treeA" + i + "_", random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
             if (referenceFrame == ReferenceFrameTools.getWorldFrame())
@@ -502,7 +509,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree("treeB" + i + "_", random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
             if (referenceFrame == ReferenceFrameTools.getWorldFrame())
