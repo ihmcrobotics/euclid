@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -26,6 +27,12 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 
 public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<FrameConvexPolygon2D>
 {
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
+
    @Override
    public FrameConvexPolygon2D createFrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier)
    {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -30,6 +31,12 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
    public static final double EPSILON = 1.0e-15;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public FramePose3D createFramePose(ReferenceFrame referenceFrame, Pose3DReadOnly pose)

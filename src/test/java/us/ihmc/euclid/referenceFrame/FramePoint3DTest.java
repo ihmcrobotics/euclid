@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -35,6 +36,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 {
    public static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public Tuple3DBasics createRandomFramelessTuple(Random random)

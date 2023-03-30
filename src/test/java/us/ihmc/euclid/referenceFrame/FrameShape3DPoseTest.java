@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -21,6 +22,12 @@ import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 public class FrameShape3DPoseTest
 {
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
+
    @Test
    public void testAPIOverloading()
    {

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -33,6 +34,12 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public Tuple4DBasics createRandomFramelessTuple(Random random)

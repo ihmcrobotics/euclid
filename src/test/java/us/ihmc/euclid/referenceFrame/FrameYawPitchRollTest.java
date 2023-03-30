@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -52,6 +53,12 @@ public class FrameYawPitchRollTest
 {
    public static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    public static final double EPSILON = 1e-10;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Test
    public void testConstructors() throws Exception

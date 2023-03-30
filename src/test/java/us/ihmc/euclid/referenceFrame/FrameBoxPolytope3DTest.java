@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
@@ -41,6 +42,12 @@ public class FrameBoxPolytope3DTest
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final double EPSILON = 1.0e-12;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Test
    public void testIntegrity()

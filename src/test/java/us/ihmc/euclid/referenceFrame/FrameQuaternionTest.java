@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -51,6 +52,12 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
 {
    public static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    public static final double EPSILON = 1e-10;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public FrameQuaternion createFrameTuple(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)

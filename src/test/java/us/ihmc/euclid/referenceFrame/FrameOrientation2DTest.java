@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -27,6 +28,12 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<FrameOrientation2D>
 {
    public static final double EPSILON = 1.0e-15;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public FrameOrientation2D createFrameOrientation(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation)

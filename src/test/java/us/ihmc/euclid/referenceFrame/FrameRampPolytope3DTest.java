@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
@@ -26,6 +27,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameRampPolytope3DTest
 {
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
+
    @Test
    public void testAPIOverloading()
    {

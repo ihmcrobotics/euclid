@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -26,6 +27,12 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
 {
    public static final double EPSILON = 1.0e-15;
+
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
 
    @Override
    public FrameLine3D createFrameLine(ReferenceFrame referenceFrame, Line3DReadOnly line)

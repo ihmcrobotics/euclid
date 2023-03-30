@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -21,6 +22,12 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<FrameBoundingBox3D>
 {
+   @BeforeEach
+   public void disableNameRestriction()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+   }
+
    @Override
    public FrameBoundingBox3D createFrameBoundingBox(ReferenceFrame referenceFrame, BoundingBox3DReadOnly boundingBox)
    {
