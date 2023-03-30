@@ -129,6 +129,23 @@ public abstract class ReferenceFrame
    private final HashSet<String> childrenNames = new HashSet<>();
 
    /**
+    * Flag to record if {@link #children} has duplicate occurrences of a {@link #frameName}.
+    */
+   private boolean hasDuplicateChildrenNames = false;
+
+   /**
+    * If this frame has restriction level {@link FrameNameRestrictionLevel#FRAME_NAME}, this object stores the highest
+    * frame up the tree with this same restriction level.
+    */
+   private ReferenceFrame topFrameNameRestriction = null;
+
+   /**
+    * Set containing the {@link #frameName} of this and all subtree frames. Only populated if this frame has restriction level
+    * {@link FrameNameRestrictionLevel#FRAME_NAME} and {@link this#parentFrame} has a lesser restriction.
+    */
+   private final HashSet<String> subtreeFrameNames = new HashSet<>();
+
+   /**
     * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree. In
     * this case all references to the frame should be dropped so it can be garbage collected.
     */
@@ -398,17 +415,26 @@ public abstract class ReferenceFrame
          this.isZupFrame = true;
          this.isFixedInParent = true;
          this.nameRestrictionLevel = DEFAULT_RESTRICTION_LEVEL;
+
+         if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
+         {
+            topFrameNameRestriction = this;
+            subtreeFrameNames.add(frameName);
+         }
       }
       else
       {
          parentFrame.checkIfRemoved();
          nameId = parentFrame.nameId + SEPARATOR + frameName;
-         doNameCheck();
+         nameRestrictionLevel = parentFrame.nameRestrictionLevel;
+
+         if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
+            topFrameNameRestriction = parentFrame.topFrameNameRestriction;
+
+         checkAndProcessNewFrameName();
 
          frameIndex = parentFrame.incrementFramesAdded();
-
          parentFrame.children.add(new WeakReference<>(this));
-         parentFrame.childrenNames.add(frameName);
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -425,81 +451,87 @@ public abstract class ReferenceFrame
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
          this.isFixedInParent = isFixedInParent;
-         this.nameRestrictionLevel = parentFrame.nameRestrictionLevel;
 
          notifyListeners(ChangeType.FRAME_ADDED, this, parentFrame);
-         doNameCheck();
       }
    }
 
+   /**
+    * <p>
+    * Sets the level of naming restriction for the sub-tree of reference frames at and below this frame.
+    * </p>
+    * <p>
+    * Three levels of restriction are possible. Restriction is only allowed to increase.
+    * </p>
+    * <ul>
+    *    <li>NONE: no restrictions on reference frame names are imposed</li>
+    *    <li>NAME_ID: each fully qualified nameId must be unique, e.g. "World:elevator:pelvis" </li>
+    *    <li>FRAME_NAME: each frame name must be unique, e.g. "afterKneePitchFrame" </li>
+    * </ul>
+    */
    public void setNameRestrictionLevel(FrameNameRestrictionLevel nameRestrictionLevel)
    {
       if (this.nameRestrictionLevel == nameRestrictionLevel)
          return;
 
-      if (this.nameRestrictionLevel.ordinal() > nameRestrictionLevel.ordinal())
-         throw new IllegalArgumentException("Cannot reduce restriction level. Current mode: " + nameRestrictionLevel + ", tried to set to: " + nameRestrictionLevel);
+      if (nameRestrictionLevel.ordinal() < this.nameRestrictionLevel.ordinal())
+         throw new IllegalArgumentException("Cannot reduce name restriction level. Current mode: " + this.nameRestrictionLevel + ", tried to set to: " + nameRestrictionLevel);
 
-      setNameRestrictionLevelRecursively(nameRestrictionLevel);
+      setAndCheckRestrictionLevelRecursively(nameRestrictionLevel, this);
+   }
+
+   private void setAndCheckRestrictionLevelRecursively(FrameNameRestrictionLevel nameRestrictionLevel, ReferenceFrame frameWithNewRestrictionLevel)
+   {
+      this.nameRestrictionLevel = nameRestrictionLevel;
 
       if (nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
       {
-         // TODO
+         if (hasDuplicateChildrenNames)
+            throw new RuntimeException("Duplicate ReferenceFrame nameId's detected!");
       }
       else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
       {
-         // TODO
-      }
-   }
+         topFrameNameRestriction = frameWithNewRestrictionLevel;
 
-   private void setNameRestrictionLevelRecursively(FrameNameRestrictionLevel nameRestrictionLevel)
-   {
-      this.nameRestrictionLevel = nameRestrictionLevel;
+         if (topFrameNameRestriction.subtreeFrameNames.contains(frameName))
+            throw new RuntimeException("Duplicate ReferenceFrame names detected: " + frameName);
+
+         topFrameNameRestriction.subtreeFrameNames.add(frameName);
+      }
 
       for (int i = 0; i < children.size(); i++)
       {
          ReferenceFrame childFrame = children.get(i).get();
          if (childFrame != null)
-            childFrame.setNameRestrictionLevelRecursively(nameRestrictionLevel);
+            childFrame.setAndCheckRestrictionLevelRecursively(nameRestrictionLevel, frameWithNewRestrictionLevel);
       }
    }
 
-   private static int counter = 0;
-
-   private void doNameCheck()
+   /**
+    * When a new reference frame is created, this checks the validity of the frame's name given the {@link #nameRestrictionLevel}.
+    */
+   private void checkAndProcessNewFrameName()
    {
       if (nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
       {
          if (parentFrame.childrenNames.contains(frameName))
-         {
-            System.out.println(counter++);
-            //            throw new RuntimeException("Duplicate reference frame: " + nameId);
-         }
+            throw new RuntimeException("Duplicate reference frame: " + nameId);
       }
       else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
       {
-         ReferenceFrame parentFrame = this.parentFrame;
-         if (parentFrame == null || parentFrame.nameRestrictionLevel.ordinal() < nameRestrictionLevel.ordinal())
-         {
-            return;
-         }
+         if (topFrameNameRestriction.subtreeFrameNames.contains(frameName))
+            throw new RuntimeException("Frame " + frameName + " already exists: " + nameId);
 
-         ReferenceFrame topFrameNameRestriction = parentFrame;
-         while (topFrameNameRestriction.getParent() != null && topFrameNameRestriction.getParent().nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
-         {
-            topFrameNameRestriction = topFrameNameRestriction.getParent();
-         }
-
-         topFrameNameRestriction.recursivelyCheckUniqueFrameName(frameName);
+         topFrameNameRestriction.subtreeFrameNames.add(frameName);
       }
+
+      parentFrame.hasDuplicateChildrenNames = hasDuplicateChildrenNames || parentFrame.childrenNames.contains(frameName);
+      parentFrame.childrenNames.add(frameName);
    }
 
-   private void recursivelyCheckUniqueFrameName(String frameName)
+   public FrameNameRestrictionLevel getNameRestrictionLevel()
    {
-      if (this.frameName.equals(frameName))
-      {
-         throw new RuntimeException("Frame " + frameName + " already exists: " + nameId);
-      }
+      return nameRestrictionLevel;
    }
 
    private long incrementFramesAdded()
