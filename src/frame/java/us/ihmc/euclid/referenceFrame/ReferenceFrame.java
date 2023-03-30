@@ -475,7 +475,17 @@ public abstract class ReferenceFrame
          return;
 
       if (nameRestrictionLevel.ordinal() < this.nameRestrictionLevel.ordinal())
-         throw new IllegalArgumentException("Cannot reduce name restriction level. Current mode: " + this.nameRestrictionLevel + ", tried to set to: " + nameRestrictionLevel);
+      {
+         if (parentFrame == null && children.isEmpty())
+         {
+            topFrameNameRestriction = null;
+            this.nameRestrictionLevel = nameRestrictionLevel;
+         }
+         else
+         {
+            throw new IllegalArgumentException("Cannot reduce name restriction level. Current mode: " + this.nameRestrictionLevel + ", tried to set to: " + nameRestrictionLevel);
+         }
+      }
 
       setAndCheckRestrictionLevelRecursively(nameRestrictionLevel, this);
    }
