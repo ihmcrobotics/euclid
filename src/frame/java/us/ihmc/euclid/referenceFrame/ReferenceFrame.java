@@ -129,11 +129,6 @@ public abstract class ReferenceFrame
    private final HashSet<String> childrenNames = new HashSet<>();
 
    /**
-    * Flag to record if {@link #children} has duplicate occurrences of a {@link #frameName}.
-    */
-   private boolean hasDuplicateChildrenNames = false;
-
-   /**
     * If this frame has restriction level {@link FrameNameRestrictionLevel#FRAME_NAME}, this object stores the highest
     * frame up the tree with this same restriction level.
     */
@@ -480,6 +475,7 @@ public abstract class ReferenceFrame
          {
             topFrameNameRestriction = null;
             this.nameRestrictionLevel = nameRestrictionLevel;
+            subtreeFrameNames.clear();
          }
          else
          {
@@ -487,6 +483,7 @@ public abstract class ReferenceFrame
          }
       }
 
+      updateChildren();
       setAndCheckRestrictionLevelRecursively(nameRestrictionLevel, this);
    }
 
@@ -496,8 +493,30 @@ public abstract class ReferenceFrame
 
       if (nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
       {
-         if (hasDuplicateChildrenNames)
-            throw new RuntimeException("Duplicate ReferenceFrame nameId's detected!");
+         if (children.size() >= 2)
+         {
+            boolean foundDuplicate = false;
+            String nameId = null;
+
+            outerLoop:
+            for (int i = 0; i < children.size() - 1; i++)
+            {
+               for (int j = i + 1; j < children.size(); j++)
+               {
+                  ReferenceFrame childA = children.get(i).get();
+                  ReferenceFrame childB = children.get(j).get();
+                  if (childA != null && childB != null && childA.frameName.equals(childB.frameName))
+                  {
+                     foundDuplicate = true;
+                     nameId = childA.nameId;
+                     break outerLoop;
+                  }
+               }
+            }
+
+            if (foundDuplicate)
+               throw new RuntimeException("Duplicate ReferenceFrame nameId's detected: " + nameId);
+         }
       }
       else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
       {
@@ -535,7 +554,6 @@ public abstract class ReferenceFrame
          topFrameNameRestriction.subtreeFrameNames.add(frameName);
       }
 
-      parentFrame.hasDuplicateChildrenNames = hasDuplicateChildrenNames || parentFrame.childrenNames.contains(frameName);
       parentFrame.childrenNames.add(frameName);
    }
 
