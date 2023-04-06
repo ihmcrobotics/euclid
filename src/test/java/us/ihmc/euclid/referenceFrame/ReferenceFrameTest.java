@@ -753,6 +753,58 @@ public class ReferenceFrameTest
       }
    }
 
+   @Test
+   public void testAncestorCheck()
+   {
+      ReferenceFrame rootA = ReferenceFrameTools.constructARootFrame("rootA");
+      ReferenceFrame rootB = ReferenceFrameTools.constructARootFrame("rootB");
+
+      ReferenceFrame childA0 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childA0", rootA, new RigidBodyTransform());
+      ReferenceFrame childA1 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childA1", childA0, new RigidBodyTransform());
+
+      ReferenceFrame childB0 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childB0", rootB, new RigidBodyTransform());
+
+      childA0.verifyIsAncestor(rootA);
+      childA1.verifyIsAncestor(rootA);
+      childA1.verifyIsAncestor(childA0);
+
+      try
+      {
+         childB0.verifyIsAncestor(rootA);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         rootA.verifyIsAncestor(rootB);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         childA0.verifyIsAncestor(childA0);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         childA0.verifyIsAncestor(childA1);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+   }
+
    @Deprecated
    @Test
    public void testDisabling() throws InstantiationException, IllegalAccessException

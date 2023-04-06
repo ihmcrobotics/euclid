@@ -957,6 +957,36 @@ public abstract class ReferenceFrame
    }
 
    /**
+    * Asserts that {@code referenceFrame} is an ancestor of this frame.
+    *
+    * @param referenceFrame the query.
+    * @throws RuntimeException if this frame and the query do not share the same root frame.
+    */
+   public void verifyIsAncestor(ReferenceFrame referenceFrame)
+   {
+      if (isRootFrame() || !parentFrame.checkIsAncestorRecursively(referenceFrame))
+      {
+         throw new RuntimeException(referenceFrame.getNameId() + " is not an ancestor of " + getNameId());
+      }
+   }
+
+   private boolean checkIsAncestorRecursively(ReferenceFrame referenceFrame)
+   {
+      if (this == referenceFrame)
+      {
+         return true;
+      }
+      else if (isRootFrame())
+      {
+         return false;
+      }
+      else
+      {
+         return parentFrame.checkIsAncestorRecursively(referenceFrame);
+      }
+   }
+
+   /**
     * Transforms the given {@code objectToTransform} by the transform from this reference frame to the
     * given {@code desiredFrame}.
     * <p>
