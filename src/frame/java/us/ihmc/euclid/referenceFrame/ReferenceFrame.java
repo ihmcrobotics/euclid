@@ -1269,6 +1269,18 @@ public abstract class ReferenceFrame
    }
 
    /**
+    * A hash code computed from the {@link #frameName}, which is only guarunteed to be unique within subtrees that have
+    * {@link FrameNameRestrictionLevel#FRAME_NAME}.
+    *
+    * @return the hash code of the {@link #frameName} of this frame.
+    */
+   public int getFrameNameHashCode()
+   {
+      checkIfRemoved();
+      return frameName.hashCode();
+   }
+
+   /**
     * This method will return true if the provided object is a reference frame with the same
     * {@link #nameId} as this frame. This means that two distinct frames with the same name are
     * considered equal. To differentiate all frames in a tree regardless of their name use the
