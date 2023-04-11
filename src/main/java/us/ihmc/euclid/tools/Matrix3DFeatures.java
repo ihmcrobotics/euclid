@@ -3,6 +3,7 @@ package us.ihmc.euclid.tools;
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.exceptions.NotAPositiveDefiniteMatrixException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 
@@ -61,6 +62,80 @@ public class Matrix3DFeatures
       det += m01 * (m12 * m20 - m10 * m22);
       det += m02 * (m10 * m21 - m11 * m20);
       return det;
+   }
+
+   /**
+    * Asserts that the given coefficients describe a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param matrix the matrix to verify. Not modified.
+    * @throws NotAPositiveDefiniteMatrixException if the matrix is not a positive definite matrix.
+    */
+   public static void checkIfPositiveDefiniteMatrix(DMatrix matrix)
+   {
+      Matrix3DFeatures.checkMatrixSize(matrix);
+      double m00 = matrix.unsafe_get(0, 0);
+      double m01 = matrix.unsafe_get(0, 1);
+      double m02 = matrix.unsafe_get(0, 2);
+      double m10 = matrix.unsafe_get(1, 0);
+      double m11 = matrix.unsafe_get(1, 1);
+      double m12 = matrix.unsafe_get(1, 2);
+      double m20 = matrix.unsafe_get(2, 0);
+      double m21 = matrix.unsafe_get(2, 1);
+      double m22 = matrix.unsafe_get(2, 2);
+      checkIfPositiveDefiniteMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Asserts that the given coefficients describe a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param matrixArray the matrix to verify, not null, not modified. The array is expected to be
+    *                    encoded in a row-major format.
+    * @throws NotAPositiveDefiniteMatrixException if the matrix is not a positive definite matrix.
+    */
+   public static void checkIfPositiveDefiniteMatrix(double[] matrixArray)
+   {
+      checkIfPositiveDefiniteMatrix(matrixArray[0],
+                                    matrixArray[1],
+                                    matrixArray[2],
+                                    matrixArray[3],
+                                    matrixArray[4],
+                                    matrixArray[5],
+                                    matrixArray[6],
+                                    matrixArray[7],
+                                    matrixArray[8]);
+   }
+
+   /**
+    * Asserts that the given coefficients describe a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @throws NotAPositiveDefiniteMatrixException if the matrix is not a positive definite matrix.
+    */
+   public static void checkIfPositiveDefiniteMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      boolean isPositiveDefiniteMatrix = Matrix3DFeatures.isPositiveDefiniteMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      if (!isPositiveDefiniteMatrix)
+         throw new NotAPositiveDefiniteMatrixException(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
@@ -266,6 +341,80 @@ public class Matrix3DFeatures
    {
       return Math.abs(m00) <= epsilon && Math.abs(m01) <= epsilon && Math.abs(m02) <= epsilon && Math.abs(m10) <= epsilon && Math.abs(m11) <= epsilon
             && Math.abs(m12) <= epsilon && Math.abs(m20) <= epsilon && Math.abs(m21) <= epsilon && Math.abs(m22) <= epsilon;
+   }
+
+   /**
+    * Tests if the given matrix is a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param matrix the matrix to verify, not null, not modified.
+    * @return {@code true} if the given matrix is a positive definite matrix, {@code false} otherwise.
+    */
+   public static boolean isPositiveDefiniteMatrix(DMatrix matrix)
+   {
+      checkMatrixSize(matrix);
+      return isPositiveDefiniteMatrix(matrix.unsafe_get(0, 0),
+                                      matrix.unsafe_get(0, 1),
+                                      matrix.unsafe_get(0, 2),
+                                      matrix.unsafe_get(1, 0),
+                                      matrix.unsafe_get(1, 1),
+                                      matrix.unsafe_get(1, 2),
+                                      matrix.unsafe_get(2, 0),
+                                      matrix.unsafe_get(2, 1),
+                                      matrix.unsafe_get(2, 2));
+   }
+
+   /**
+    * Tests if the given matrix is a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param matrixArray the matrix to verify, not null, not modified. The array is expected to be
+    *                    encoded in a row-major format.
+    * @return {@code true} if the given matrix is a positive definite matrix, {@code false} otherwise.
+    */
+   public static boolean isPositiveDefiniteMatrix(double[] matrixArray)
+   {
+      return isPositiveDefiniteMatrix(matrixArray[0],
+                                      matrixArray[1],
+                                      matrixArray[2],
+                                      matrixArray[3],
+                                      matrixArray[4],
+                                      matrixArray[5],
+                                      matrixArray[6],
+                                      matrixArray[7],
+                                      matrixArray[8]);
+   }
+
+   /**
+    * Tests if the given coefficients describe a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return {@code true} if the given matrix is a positive definite matrix, {@code false} otherwise.
+    */
+   public static boolean isPositiveDefiniteMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double firstPrincipalMinorDeterminant = m00;
+      double secondPrincipalMinorDeterminant = (m00 * m11) - (m01 * m10);
+      double thirdPrincipalMinorDeterminant = determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      return firstPrincipalMinorDeterminant > 0 && secondPrincipalMinorDeterminant > 0 && thirdPrincipalMinorDeterminant > 0;
    }
 
    /**

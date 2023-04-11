@@ -16,6 +16,7 @@ import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.exceptions.NotAPositiveDefiniteMatrixException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -49,6 +50,174 @@ public class Matrix3DFeaturesTest
       assertTrue(matrix.containsNaN());
       matrix.set(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN);
       assertTrue(matrix.containsNaN());
+   }
+
+   @Test
+   public void testCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrix() throws Exception
+   {
+      Random random = new Random(93486534L);
+      Matrix3D matrix = new Matrix3D();
+
+      matrix.setIdentity();
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.setToZero();
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+      matrix.setToNaN();
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+      // Let's first test that it returns true for an actual positive definite matrix
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+         // The inverse for a positive definite matrix should always exist, and that inverse should be positive definite
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         matrix.invert();
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+         // Positive definiteness should be invariant to scalar multiplication by a positive scalar
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         double positiveScalar = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         matrix.scale(positiveScalar);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+         // The sum of two positive definite matrices should be positive definite
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         Matrix3D other = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         matrix.add(other);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+         // The multiplication of two positive definite matrices should be positive definite
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         other = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         matrix.multiply(other);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+         // The diagonal entries of a positive definite matrix should all be positive, resulting in a positive trace
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         assertTrue(matrix.getM00() >= 0.0);
+         assertTrue(matrix.getM11() >= 0.0);
+         assertTrue(matrix.getM22() >= 0.0);
+
+         // Start from a positive definite matrix and apply changes to make it not a positive definite matrix
+         // Negate the entire matrix
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         matrix.negate();
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+         // Negate one of the diagonals (randomly chosen)
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         int diagonalToNegate = random.nextInt(3);
+         matrix.setElement(diagonalToNegate, diagonalToNegate, -1.0 * matrix.getElement(diagonalToNegate, diagonalToNegate));
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+         // Set a diagonal to zero (randomly chosen)
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         int diagonalToZero = random.nextInt(3);
+         matrix.setElement(diagonalToNegate, diagonalToNegate, 0.0);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+      }
+
+      // Also test the check on the DMatrixRMaj dimension
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfPositiveDefiniteMatrix(new DMatrixRMaj(2, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfPositiveDefiniteMatrix(new DMatrixRMaj(3, 2)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfPositiveDefiniteMatrix(new DMatrixRMaj(4, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfPositiveDefiniteMatrix(new DMatrixRMaj(3, 4)));
+   }
+
+   private void testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(Matrix3DReadOnly matrix, boolean isPositiveDefiniteMatrix)
+   {
+      Matrix3D matrixCopy = new Matrix3D(matrix);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      matrix.get(denseMatrix);
+      DMatrixRMaj denseMatrixCopy = new DMatrixRMaj(denseMatrix);
+      double[] matrixArray = new double[9];
+      matrix.get(matrixArray);
+      double[] matrixArrayCopy = new double[9];
+      System.arraycopy(matrixArray, 0, matrixArrayCopy, 0, 9);
+
+      double m00 = matrix.getM00();
+      double m01 = matrix.getM01();
+      double m02 = matrix.getM02();
+      double m10 = matrix.getM10();
+      double m11 = matrix.getM11();
+      double m12 = matrix.getM12();
+      double m20 = matrix.getM20();
+      double m21 = matrix.getM21();
+      double m22 = matrix.getM22();
+
+      try
+      {
+         Matrix3DFeatures.checkIfPositiveDefiniteMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         if (!isPositiveDefiniteMatrix)
+            fail("Should have thrown a NotAPositiveDefiniteMatrixException.");
+      }
+      catch (NotAPositiveDefiniteMatrixException e)
+      {
+         if (isPositiveDefiniteMatrix)
+            throw e;
+         // else it is good
+         assertTrue(e.getMessage().equals("The matrix is not a positive definite matrix: \n" + matrix));
+      }
+      assertTrue(Matrix3DFeatures.isPositiveDefiniteMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22) == isPositiveDefiniteMatrix);
+
+      try
+      {
+         matrix.checkIfPositiveDefiniteMatrix();
+         if (!isPositiveDefiniteMatrix)
+            fail("Should have thrown a NotAPositiveDefiniteMatrixException.");
+      }
+      catch (NotAPositiveDefiniteMatrixException e)
+      {
+         if (isPositiveDefiniteMatrix)
+            throw e;
+         // else it is good
+         assertTrue(e.getMessage().equals("The matrix is not a positive definite matrix: \n" + matrix));
+      }
+      for (int row = 0; row < 3; row++)
+         for (int column = 0; column < 3; column++)
+            assertTrue(Double.compare(matrix.getElement(row, column), matrixCopy.getElement(row, column)) == 0);
+      assertTrue(matrix.isPositiveDefiniteMatrix() == isPositiveDefiniteMatrix);
+      for (int row = 0; row < 3; row++)
+         for (int column = 0; column < 3; column++)
+            assertTrue(Double.compare(matrix.getElement(row, column), matrixCopy.getElement(row, column)) == 0);
+
+      try
+      {
+         Matrix3DFeatures.checkIfPositiveDefiniteMatrix(denseMatrix);
+         if (!isPositiveDefiniteMatrix)
+            fail("Should have thrown a NotAPositiveDefiniteMatrixException.");
+      }
+      catch (NotAPositiveDefiniteMatrixException e)
+      {
+         if (isPositiveDefiniteMatrix)
+            throw e;
+         // else it is good
+         assertTrue(e.getMessage().contains("The matrix is not a positive definite matrix: \n" + matrix));
+      }
+      for (int index = 0; index < denseMatrix.getNumElements(); index++)
+         assertTrue(Double.compare(denseMatrix.get(index), denseMatrixCopy.get(index)) == 0);
+      assertTrue(Matrix3DFeatures.isPositiveDefiniteMatrix(denseMatrix) == isPositiveDefiniteMatrix);
+
+      try
+      {
+         Matrix3DFeatures.checkIfPositiveDefiniteMatrix(matrixArray);
+         if (!isPositiveDefiniteMatrix)
+            fail("Should have thrown a NotAPositiveDefiniteMatrixException.");
+      }
+      catch (NotAPositiveDefiniteMatrixException e)
+      {
+         if (isPositiveDefiniteMatrix)
+            throw e;
+         // else it is good
+         assertTrue(e.getMessage().contains("The matrix is not a positive definite matrix: \n" + matrix));
+      }
+      for (int index = 0; index < 9; index++)
+         assertTrue(Double.compare(matrixArray[index], matrixArrayCopy[index]) == 0);
+      assertTrue(Matrix3DFeatures.isPositiveDefiniteMatrix(matrixArray) == isPositiveDefiniteMatrix);
+      for (int index = 0; index < 9; index++)
+         assertTrue(Double.compare(matrixArray[index], matrixArrayCopy[index]) == 0);
    }
 
    /** This is a tough one to test. */
