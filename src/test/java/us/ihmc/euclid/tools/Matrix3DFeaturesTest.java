@@ -115,7 +115,7 @@ public class Matrix3DFeaturesTest
          // Set a diagonal to zero (randomly chosen)
          matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
          int diagonalToZero = random.nextInt(3);
-         matrix.setElement(diagonalToNegate, diagonalToNegate, 0.0);
+         matrix.setElement(diagonalToZero, diagonalToZero, 0.0);
          testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
       }
 
