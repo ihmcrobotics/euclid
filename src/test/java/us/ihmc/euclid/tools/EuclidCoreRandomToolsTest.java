@@ -418,7 +418,7 @@ public class EuclidCoreRandomToolsTest
 
          // Using Sylvester's criterion of all the leading principal minors having positive determinant to verify that matrix is positive definite
          double firstPrincipalMinorDeterminant = matrix3D.getM00();
-         double secondPrincipalMinorDeterminant = matrix3D.getM00() * matrix3D.getM11() - matrix3D.getM01() * matrix3D.getM21();
+         double secondPrincipalMinorDeterminant = matrix3D.getM00() * matrix3D.getM11() - matrix3D.getM01() * matrix3D.getM10();
          double thirdPrincipalMinorDeterminant = matrix3D.determinant();
          assertTrue(firstPrincipalMinorDeterminant > 0.0);
          assertTrue(secondPrincipalMinorDeterminant > 0.0);
