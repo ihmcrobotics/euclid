@@ -21,6 +21,7 @@ import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Matrix3DFeaturesTest
 {
@@ -58,6 +59,7 @@ public class Matrix3DFeaturesTest
       Random random = new Random(93486534L);
       Matrix3D matrix = new Matrix3D();
 
+      // Expectations of common matrices
       matrix.setIdentity();
       testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
       matrix.setToZero();
@@ -117,6 +119,21 @@ public class Matrix3DFeaturesTest
          int diagonalToZero = random.nextInt(3);
          matrix.setElement(diagonalToZero, diagonalToZero, 0.0);
          testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+         // Create a matrix with random diagonal entries in [-10.0, 10.0]. If all the diagonals are positive, the matrix
+         // is positive definite. If any diagonals are negative, the matrix is not positive definite. Multiplying by a
+         // rotation matrix should preserve definiteness.
+         Vector3D diagonal = EuclidCoreRandomTools.nextVector3D(random);
+         matrix = new Matrix3D();
+         matrix.setToDiagonal(EuclidCoreRandomTools.nextDouble(random, 10.0),
+                              EuclidCoreRandomTools.nextDouble(random, 10.0),
+                              EuclidCoreRandomTools.nextDouble(random, 10.0));
+         boolean positiveDefinite = matrix.getM00() > 0 && matrix.getM11() > 0 && matrix.getM22() > 0;
+
+         RotationMatrix rotation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Matrix3D afterRotation = new Matrix3D();
+         rotation.transform(matrix, afterRotation);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(afterRotation, positiveDefinite);
       }
 
       // Also test the check on the DMatrixRMaj dimension
