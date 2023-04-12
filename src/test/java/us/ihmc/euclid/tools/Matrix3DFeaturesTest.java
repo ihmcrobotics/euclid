@@ -105,7 +105,8 @@ public class Matrix3DFeaturesTest
          // Start from a positive definite matrix and apply changes to make it not a positive definite matrix
          // Negate the entire matrix
          matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
-         matrix.negate();
+         double negativeScalar = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
+         matrix.scale(negativeScalar);
          testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
 
          // Negate one of the diagonals (randomly chosen)
