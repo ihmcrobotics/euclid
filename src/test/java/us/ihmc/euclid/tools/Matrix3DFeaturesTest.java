@@ -67,6 +67,47 @@ public class Matrix3DFeaturesTest
       matrix.setToNaN();
       testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
 
+      // Sanity checks on some simple known matrices
+      // Positive definite due to being pure positive diagonal matrix
+      matrix.setToDiagonal(1.0, 3.0, 5.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.invert();
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.scale(3.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.scale(-1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+      // Positive definite despite non-zero off-diagonal terms
+      matrix.set(4.0, -1.0, 0.0, -1.0, 3.0, -1.0, 0.0, -1.0, 2.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.invert();
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.scale(7.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+      matrix.scale(-5.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+      // Not positive definite because of negative diagonal element
+      matrix.setToDiagonal(4.0, -3.0, 1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+      matrix.scaleM11(-1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+      // Not positive definite because of zero diagonal element
+      matrix.setToDiagonal(2.0, 0.0, 1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+      matrix.addM11(1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
+      // Not positive definite because of overwhelming off-diagonal terms, despite positive diagonal terms
+      matrix.set(1.0, -3.0, -3.0, -3.0, 1.0, 2.0, -3.0, 2.0, 1.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+      matrix.addM00(10.0);  // Add some diagonal terms of sufficient size to make the matrix positive definite
+      matrix.addM11(10.0);
+      matrix.addM22(10.0);
+      testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, true);
+
       // Let's first test that it returns true for an actual positive definite matrix
       for (int i = 0; i < ITERATIONS; i++)
       {
