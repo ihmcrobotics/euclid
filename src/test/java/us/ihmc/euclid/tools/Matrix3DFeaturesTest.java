@@ -121,6 +121,34 @@ public class Matrix3DFeaturesTest
          matrix.setElement(diagonalToZero, diagonalToZero, 0.0);
          testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
 
+         // Swapping rows should break definiteness
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         int row = random.nextInt(3);
+         int row2 = random.nextInt(2);
+         if (row2 == row)
+            row2++;
+         double[] swapArray = new double[3];
+         double[] swapArray2 = new double[3];
+         matrix.getRow(row, swapArray);
+         matrix.getRow(row2, swapArray2);
+         matrix.setRow(row, swapArray2);
+         matrix.setRow(row2, swapArray);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
+         // Swapping columns should break definiteness
+         matrix = new Matrix3D(EuclidCoreRandomTools.nextPositiveDefiniteMatrix3D(random));
+         int col = random.nextInt(3);
+         int col2 = random.nextInt(2);
+         if (col2 == col)
+            col2++;
+         swapArray = new double[3];
+         swapArray2 = new double[3];
+         matrix.getColumn(col, swapArray);
+         matrix.getColumn(col2, swapArray2);
+         matrix.setColumn(col, swapArray2);
+         matrix.setColumn(col2, swapArray);
+         testAllCheckIfPositiveDefiniteMatrixAndIsPositiveDefiniteMatrixMethods(matrix, false);
+
          // Create a matrix with random diagonal entries in [-10.0, 10.0]. If all the diagonals are positive, the matrix
          // is positive definite. If any diagonals are negative, the matrix is not positive definite. Multiplying by a
          // rotation matrix should preserve definiteness.
