@@ -124,7 +124,7 @@ public class EuclidCoreRandomTools
     * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
     * @return the random yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *                          {@code minMaxRoll < 0}.
+    *       {@code minMaxRoll < 0}.
     */
    public static YawPitchRoll nextYawPitchRoll(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
@@ -424,6 +424,56 @@ public class EuclidCoreRandomTools
             matrix3D.setElement(col, row, value);
          }
       }
+      return matrix3D;
+   }
+
+   /**
+    * Generates a random positive definite matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
+    * </p>
+    * <p>
+    * The approach used here generates a random 3D matrix with values in [-1.0, 1.0], and then performs A * A<sup>T</sup> which is guaranteed to result in a
+    * symmetric positive semi-definite matrix. We then add diagonal terms to make the matrix positive definite, and finally scale the matrix by a random double
+    * that upper bounds the absolute values of the positive definite matrix elements to 1.0.
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random positive definite matrix.
+    */
+   public static Matrix3D nextPositiveDefiniteMatrix3D(Random random)
+   {
+      return nextPositiveDefiniteMatrix3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random positive definite matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-minMaxValue, minMaxValue]
+    * </p>
+    * <p>
+    * The approach used here generates a random 3D matrix with values in [{@code -minMaxValue}, {@code minMaxValue}], and then performs A * A<sup>T</sup>,
+    * which is guaranteed to result in a symmetric positive semi-definite matrix. We then add diagonal terms to make the matrix positive definite, and finally
+    * scale the matrix by a random double that upper bounds the absolute values of the positive definite matrix elements to {@code minMaxValue}.
+    * </p>
+    *
+    * @param random      the random generator to use.
+    * @param minMaxValue the maximum value for each element.
+    * @return the random positive definite matrix.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    */
+   public static Matrix3D nextPositiveDefiniteMatrix3D(Random random, double minMaxValue)
+   {
+      Matrix3D matrix3D = nextMatrix3D(random, minMaxValue);
+      matrix3D.multiplyTransposeOther(matrix3D);
+
+      double diagonalDominanceScalar = Math.abs(minMaxValue);
+      matrix3D.addM00(diagonalDominanceScalar);
+      matrix3D.addM11(diagonalDominanceScalar);
+      matrix3D.addM22(diagonalDominanceScalar);
+
+      double scalarToShrinkMatrixWithinBounds = nextDouble(random, 0.0, minMaxValue / matrix3D.maxAbsElement());
+      matrix3D.scale(scalarToShrinkMatrixWithinBounds);
       return matrix3D;
    }
 
@@ -921,7 +971,7 @@ public class EuclidCoreRandomTools
     * @param maxAbsoluteZ the maximum absolute value for the z-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
-    *                          {@code maxAbsoluteZ < 0}.
+    *       {@code maxAbsoluteZ < 0}.
     */
    public static Point3D nextPoint3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
