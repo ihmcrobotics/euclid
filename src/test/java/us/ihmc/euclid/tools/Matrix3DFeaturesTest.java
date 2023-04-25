@@ -193,7 +193,6 @@ public class Matrix3DFeaturesTest
          // Create a matrix with random diagonal entries in [-10.0, 10.0]. If all the diagonals are positive, the matrix
          // is positive definite. If any diagonals are negative, the matrix is not positive definite. Multiplying by a
          // rotation matrix should preserve definiteness.
-         Vector3D diagonal = EuclidCoreRandomTools.nextVector3D(random);
          matrix = new Matrix3D();
          matrix.setToDiagonal(EuclidCoreRandomTools.nextDouble(random, 10.0),
                               EuclidCoreRandomTools.nextDouble(random, 10.0),
