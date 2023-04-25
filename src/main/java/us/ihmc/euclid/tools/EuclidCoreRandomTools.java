@@ -124,7 +124,7 @@ public class EuclidCoreRandomTools
     * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
     * @return the random yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *                          {@code minMaxRoll < 0}.
+    *       {@code minMaxRoll < 0}.
     */
    public static YawPitchRoll nextYawPitchRoll(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
@@ -446,7 +446,8 @@ public class EuclidCoreRandomTools
       return nextPositiveDefiniteMatrix3D(random, 1.0);
    }
 
-   /** Generates a random positive definite matrix.
+   /**
+    * Generates a random positive definite matrix.
     * <p>
     * {@code matrix}<sub>ij</sub> &in; [-minMaxValue, minMaxValue]
     * </p>
@@ -456,7 +457,7 @@ public class EuclidCoreRandomTools
     * scale the matrix by a random double that upper bounds the absolute values of the positive definite matrix elements to {@code minMaxValue}.
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxValue the maximum value for each element.
     * @return the random positive definite matrix.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -970,7 +971,7 @@ public class EuclidCoreRandomTools
     * @param maxAbsoluteZ the maximum absolute value for the z-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
-    *                          {@code maxAbsoluteZ < 0}.
+    *       {@code maxAbsoluteZ < 0}.
     */
    public static Point3D nextPoint3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
