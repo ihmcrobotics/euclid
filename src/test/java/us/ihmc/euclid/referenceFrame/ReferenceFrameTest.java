@@ -38,7 +38,7 @@ public class ReferenceFrameTest
    @AfterEach
    public void cleanup()
    {
-      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    /**
@@ -526,6 +526,7 @@ public class ReferenceFrameTest
    @Test
    public void testUniqueNaming()
    {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
       Random random = new Random(13L);
       ReferenceFrame someFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
       String frameName = someFrame.getName();
@@ -552,6 +553,10 @@ public class ReferenceFrameTest
 
       ReferenceFrameTools.clearWorldFrameTree();
       ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    @Test
@@ -621,6 +626,10 @@ public class ReferenceFrameTest
       {
          // good
       }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    @Test
@@ -685,6 +694,10 @@ public class ReferenceFrameTest
       {
          // good
       }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    @Test
@@ -716,6 +729,10 @@ public class ReferenceFrameTest
 
       frameC.remove();
       worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    @Test
@@ -751,6 +768,10 @@ public class ReferenceFrameTest
       {
          // good
       }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
    }
 
    @Test

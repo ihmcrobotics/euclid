@@ -125,6 +125,7 @@ public abstract class ReferenceFrame
 
    /**
     * Set containing the {@link #frameName} of this frame's {@link #children}.
+    * This is only used when {@link #nameRestrictionLevel} is set to {@link FrameNameRestrictionLevel#NAME_ID}.
     */
    private final HashSet<String> childrenNames = new HashSet<>();
 
@@ -472,13 +473,13 @@ public abstract class ReferenceFrame
       if (nameRestrictionLevel.ordinal() < this.nameRestrictionLevel.ordinal())
       {
          if (parentFrame == null && children.isEmpty())
-         {
+         { // allow decreased restriction for root frames without children
             topFrameNameRestriction = null;
             this.nameRestrictionLevel = nameRestrictionLevel;
             subtreeFrameNames.clear();
          }
          else
-         {
+         { // otherwise decreasing restriction level is not allowed
             throw new IllegalArgumentException("Cannot reduce name restriction level. Current mode: " + this.nameRestrictionLevel + ", tried to set to: " + nameRestrictionLevel);
          }
       }
@@ -493,39 +494,20 @@ public abstract class ReferenceFrame
 
       if (nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
       {
-         if (children.size() >= 2)
+         for (int i = 0; i < children.size(); i++)
          {
-            boolean foundDuplicate = false;
-            String nameId = null;
-
-            outerLoop:
-            for (int i = 0; i < children.size() - 1; i++)
-            {
-               for (int j = i + 1; j < children.size(); j++)
-               {
-                  ReferenceFrame childA = children.get(i).get();
-                  ReferenceFrame childB = children.get(j).get();
-                  if (childA != null && childB != null && childA.frameName.equals(childB.frameName))
-                  {
-                     foundDuplicate = true;
-                     nameId = childA.nameId;
-                     break outerLoop;
-                  }
-               }
-            }
-
-            if (foundDuplicate)
+            ReferenceFrame childFrame = children.get(i).get();
+            if (childFrame == null)
+               continue;
+            if (!childrenNames.add(childFrame.frameName))
                throw new RuntimeException("Duplicate ReferenceFrame nameId's detected: " + nameId);
          }
       }
       else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
       {
          topFrameNameRestriction = frameWithNewRestrictionLevel;
-
-         if (topFrameNameRestriction.subtreeFrameNames.contains(frameName))
+         if (!topFrameNameRestriction.subtreeFrameNames.add(frameName))
             throw new RuntimeException("Duplicate ReferenceFrame names detected: " + frameName);
-
-         topFrameNameRestriction.subtreeFrameNames.add(frameName);
       }
 
       for (int i = 0; i < children.size(); i++)
@@ -543,7 +525,7 @@ public abstract class ReferenceFrame
    {
       if (nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
       {
-         if (parentFrame.childrenNames.contains(frameName))
+         if (!parentFrame.childrenNames.add(frameName))
             throw new RuntimeException("Duplicate reference frame: " + nameId);
       }
       else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
@@ -553,8 +535,6 @@ public abstract class ReferenceFrame
 
          topFrameNameRestriction.subtreeFrameNames.add(frameName);
       }
-
-      parentFrame.childrenNames.add(frameName);
    }
 
    public FrameNameRestrictionLevel getNameRestrictionLevel()
