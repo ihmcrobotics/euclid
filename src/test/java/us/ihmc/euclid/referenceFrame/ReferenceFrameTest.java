@@ -526,6 +526,9 @@ public class ReferenceFrameTest
    @Test
    public void testUniqueNaming()
    {
+      // FRAME_NAME is expensive when the tree has not been cleared. Some tests here end with 5000+ trees and setting to FRAME_NAME takes forever
+      ReferenceFrame.getWorldFrame().clearChildren();
+
       ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
       Random random = new Random(13L);
       ReferenceFrame someFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
