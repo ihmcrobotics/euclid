@@ -443,6 +443,52 @@ public abstract class ReferenceFrame
    }
 
    /**
+    * When a new reference frame is created, this checks the validity of the frame's name given the {@link #nameRestrictionLevel}.
+    */
+   private void checkAndProcessNewFrameName()
+   {
+      if (parentFrame.nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
+      {
+         if (parentFrame.childrenNames.contains(frameName))
+            throw new RuntimeException("Duplicate reference frame: " + nameId);
+         parentFrame.childrenNames.add(frameName);
+      }
+      else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
+      {
+         topFrameNameRestriction.checkUniqueFrameNameInSubtree(this);
+      }
+   }
+
+   /**
+    * When increasing the name restriction level to {@link FrameNameRestrictionLevel#FRAME_NAME},
+    * this will check that frameToCheck has a distinct name from this frame and it's subtree.
+    */
+   private void checkUniqueFrameNameInSubtree(ReferenceFrame frameToCheck)
+   {
+      checkUniqueFrameNames(this, frameToCheck);
+
+      for (int i = 0; i < children.size(); i++)
+      {
+         ReferenceFrame childFrame = children.get(i).get();
+         if (childFrame != null)
+            childFrame.checkUniqueFrameNameInSubtree(frameToCheck);
+      }
+   }
+
+   /**
+    * Performs a check that the two given frames have unique {@link #frameName}'s unless they are the same object.
+    */
+   private static void checkUniqueFrameNames(ReferenceFrame frameA, ReferenceFrame frameB)
+   {
+      if (frameA == frameB)
+         return;
+      if (frameA.frameName.hashCode() != frameB.frameName.hashCode())
+         return;
+      if (frameA.frameName.equals(frameB.frameName))
+         throw new RuntimeException("Duplicate reference frame names detected: " + frameA.frameName);
+   }
+
+   /**
     * <p>
     * Sets the level of naming restriction for the sub-tree of reference frames at and below this frame.
     * </p>
@@ -487,7 +533,7 @@ public abstract class ReferenceFrame
 
    /**
     * Increases the name restriction level of this frame to {@link FrameNameRestrictionLevel#NAME_ID}. <br>
-    * This will check that this frame has a distinct name from it's sibling frames.
+    * This will check that this frame has a distinct name from its sibling frames.
     */
    private void setAndCheckNameIdRestrictionRecursively()
    {
@@ -496,9 +542,14 @@ public abstract class ReferenceFrame
       {
          ReferenceFrame childFrame = children.get(i).get();
          if (childFrame == null)
+         { // children and childrenNames are kept in same order. This will be cleared on the next updateChildren
+            childrenNames.add(null);
             continue;
+         }
          if (childrenNames.contains(childFrame.frameName))
+         {
             throw new RuntimeException("Duplicate ReferenceFrame nameId's detected: " + childFrame.nameId);
+         }
          childrenNames.add(childFrame.frameName);
          childFrame.setAndCheckNameIdRestrictionRecursively();
       }
@@ -523,51 +574,8 @@ public abstract class ReferenceFrame
    }
 
    /**
-    * When increasing the name restriction level to {@link FrameNameRestrictionLevel#FRAME_NAME},
-    * this will check that frameToCheck has a distinct name from this frame and it's subtree.
+    * Returns the name restriction level for this reference frame, see {@link #setNameRestrictionLevel(FrameNameRestrictionLevel)}
     */
-   private void checkUniqueFrameNameInSubtree(ReferenceFrame frameToCheck)
-   {
-      checkUniqueFrameNames(this, frameToCheck);
-
-      for (int i = 0; i < children.size(); i++)
-      {
-         ReferenceFrame childFrame = children.get(i).get();
-         if (childFrame != null)
-            childFrame.checkUniqueFrameNameInSubtree(frameToCheck);
-      }
-   }
-
-   /**
-    * Performs a check that the two given frames have unique {@link #frameName}'s unless they are the same object.
-    */
-   private static void checkUniqueFrameNames(ReferenceFrame frameA, ReferenceFrame frameB)
-   {
-      if (frameA == frameB)
-         return;
-      if (frameA.frameName.hashCode() != frameB.frameName.hashCode())
-         return;
-      if (frameA.frameName.equals(frameB.frameName))
-         throw new RuntimeException("Duplicate reference frame names detected: " + frameA.frameName);
-   }
-
-   /**
-    * When a new reference frame is created, this checks the validity of the frame's name given the {@link #nameRestrictionLevel}.
-    */
-   private void checkAndProcessNewFrameName()
-   {
-      if (parentFrame.nameRestrictionLevel == FrameNameRestrictionLevel.NAME_ID)
-      {
-         if (parentFrame.childrenNames.contains(frameName))
-            throw new RuntimeException("Duplicate reference frame: " + nameId);
-         parentFrame.childrenNames.add(frameName);
-      }
-      else if (nameRestrictionLevel == FrameNameRestrictionLevel.FRAME_NAME)
-      {
-         topFrameNameRestriction.checkUniqueFrameNameInSubtree(this);
-      }
-   }
-
    public FrameNameRestrictionLevel getNameRestrictionLevel()
    {
       checkIfRemoved();
