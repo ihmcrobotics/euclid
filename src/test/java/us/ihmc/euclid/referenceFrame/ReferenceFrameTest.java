@@ -16,7 +16,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidMutationTesting;
@@ -34,6 +35,12 @@ public class ReferenceFrameTest
 
    private static final double EPSILON = 1.0e-12;
 
+   @AfterEach
+   public void cleanup()
+   {
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
@@ -47,7 +54,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constantA" + i, world, expected);
 
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -62,7 +69,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constantB" + i, world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertGeometricallyEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -91,7 +98,7 @@ public class ReferenceFrameTest
          runGarbageCollector();
          long usedMemoryStart = runtime.totalMemory() - runtime.freeMemory() >> 20;
 
-         EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
+         EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random, worldFrame, 100000);
          runGarbageCollector();
 
          long usedMemoryEnd = runtime.totalMemory() - runtime.freeMemory() >> 20;
@@ -177,7 +184,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame frameA = treeFrame[random.nextInt(treeFrame.length)];
          ReferenceFrame frameB = treeFrame[random.nextInt(treeFrame.length)];
@@ -196,7 +203,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          checkRepInvariants(frame);
@@ -295,7 +302,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("treeA" + i + "_", random);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(worldFrame);
@@ -306,7 +313,7 @@ public class ReferenceFrameTest
       {
          ReferenceFrame anotherRoot = ReferenceFrameTools.constructARootFrame("anotherRoot");
 
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("blop", random, anotherRoot, 20);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("blop" + i + "_", random, anotherRoot, 20);
 
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(anotherRoot);
@@ -315,7 +322,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         RandomlyChangingFrame[] treeFrame = nextRandomlyChangingFrameTree(random, 100);
+         RandomlyChangingFrame[] treeFrame = nextRandomlyChangingFrameTree("treeB" + i + "_", random, 100);
 
          int numberOfRandomUpdates = random.nextInt(treeFrame.length / 2) + 1;
          for (int j = 0; j < numberOfRandomUpdates; j++)
@@ -337,7 +344,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToSelf = frame.getTransformToDesiredFrame(frame);
          EuclidCoreTestTools.assertGeometricallyEquals(new RigidBodyTransform(), transformToSelf, EPSILON);
@@ -351,7 +358,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] treeFrame = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
          ReferenceFrame frame1 = treeFrame[random.nextInt(treeFrame.length)];
          ReferenceFrame frame2 = treeFrame[random.nextInt(treeFrame.length)];
 
@@ -428,7 +435,7 @@ public class ReferenceFrameTest
          Point3D expected = new Point3D(original);
          Point3D actual = new Point3D(expected);
 
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree("tree" + i + "_", random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame desiredFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -468,7 +475,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree("treeA" + i + "_", random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
             if (referenceFrame == ReferenceFrameTools.getWorldFrame())
@@ -502,7 +509,7 @@ public class ReferenceFrameTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree("treeB" + i + "_", random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
             if (referenceFrame == ReferenceFrameTools.getWorldFrame())
@@ -516,11 +523,13 @@ public class ReferenceFrameTest
       }
    }
 
-   // TODO Re-enable when unique names are enforce in ReferenceFrame.
-   @Disabled
    @Test
    public void testUniqueNaming()
    {
+      // FRAME_NAME is expensive when the tree has not been cleared. Some tests here end with 5000+ trees and setting to FRAME_NAME takes forever
+      ReferenceFrame.getWorldFrame().clearChildren();
+
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
       Random random = new Random(13L);
       ReferenceFrame someFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
       String frameName = someFrame.getName();
@@ -547,11 +556,282 @@ public class ReferenceFrameTest
 
       ReferenceFrameTools.clearWorldFrameTree();
       ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
+   @Test
+   public void testNameRestrictionWhenCreatingFrames()
+   {
+      String frameName0 = "testName0";
+      String frameName1 = "testName1";
+
+      /* Test with NameRestrictionLevel.NONE at various levels */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      ReferenceFrame frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      ReferenceFrame frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameB, new RigidBodyTransform());
+
+      /* Test with NameRestrictionLevel.NAME_ID at various levels */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      try
+      {
+         frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      try
+      {
+         ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameB, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      /* Test with NameRestrictionLevel.FRAME_NAME at various levels */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, worldFrame, new RigidBodyTransform());
+
+      try
+      {
+         ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, frameB, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
+   @Test
+   public void testChangingNameRestrictionOnExistingFrames()
+   {
+      String frameName0 = "testName0";
+      String frameName1 = "testName1";
+      String frameName2 = "testName2";
+
+      /* Test valid change to NAME_ID */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      ReferenceFrame frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      ReferenceFrame frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, worldFrame, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, frameB, new RigidBodyTransform());
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+
+      /* Test invalid change to NAME_ID */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+
+      try
+      {
+         worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      /* Test valid change to FRAME_NAME */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, worldFrame, new RigidBodyTransform());
+      ReferenceFrame frameC = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName2, frameB, new RigidBodyTransform());
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+
+      /* Test invalid change to FRAME_NAME */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, worldFrame, new RigidBodyTransform());
+      frameC = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName2, frameB, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, frameC, new RigidBodyTransform());
+
+      try
+      {
+         worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
+   @Test
+   public void testNameRestrictionWithRemovedFrames()
+   {
+      String frameName0 = "testName0";
+      String frameName1 = "testName1";
+      String frameName2 = "testName2";
+
+      /* Try removing frame that would otherwise invalidate changing to NAME_ID */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      ReferenceFrame frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      ReferenceFrame frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      ReferenceFrame frameC = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, frameA, new RigidBodyTransform());
+      frameC.remove();
+
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+
+      /* Try removing frame that would otherwise invalidate changing to FRAME_NAME */
+      worldFrame.clearChildren();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      frameA = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, worldFrame, new RigidBodyTransform());
+      frameB = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName1, worldFrame, new RigidBodyTransform());
+      frameC = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName2, frameB, new RigidBodyTransform());
+      ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName0, frameC, new RigidBodyTransform());
+
+      frameC.remove();
+      worldFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
+   @Test
+   public void testNameRestrictionChanges()
+   {
+      // Root frames without children allow all restriction level changes
+      ReferenceFrame rootFrame = ReferenceFrameTools.constructARootFrame("root");
+      rootFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+      rootFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+      rootFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NONE);
+
+      // Non-root frames or frames with children cannot have less restriction
+      rootFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.FRAME_NAME);
+      ReferenceFrame childFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("testFrame", rootFrame, new RigidBodyTransform());
+
+      Assertions.assertEquals(childFrame.getNameRestrictionLevel(), FrameNameRestrictionLevel.FRAME_NAME, "Child frame did not inherit the parent's restriction level");
+      try
+      {
+         rootFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         childFrame.setNameRestrictionLevel(FrameNameRestrictionLevel.NAME_ID);
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      // Cleanup and reset world frame for other tests
+      ReferenceFrame.getWorldFrame().clearChildren();
+      ReferenceFrame.getWorldFrame().setNameRestrictionLevel(ReferenceFrame.DEFAULT_RESTRICTION_LEVEL);
+   }
+
+   @Test
+   public void testAncestorCheck()
+   {
+      ReferenceFrame rootA = ReferenceFrameTools.constructARootFrame("rootA");
+      ReferenceFrame rootB = ReferenceFrameTools.constructARootFrame("rootB");
+
+      ReferenceFrame childA0 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childA0", rootA, new RigidBodyTransform());
+      ReferenceFrame childA1 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childA1", childA0, new RigidBodyTransform());
+
+      ReferenceFrame childB0 = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("childB0", rootB, new RigidBodyTransform());
+
+      childA0.verifyIsAncestor(rootA);
+      childA1.verifyIsAncestor(rootA);
+      childA1.verifyIsAncestor(childA0);
+
+      try
+      {
+         childB0.verifyIsAncestor(rootA);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         rootA.verifyIsAncestor(rootB);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         childA0.verifyIsAncestor(childA0);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
+
+      try
+      {
+         childA0.verifyIsAncestor(childA1);
+         fail("Invalid ancestor check");
+      }
+      catch (RuntimeException e)
+      {
+      }
    }
 
    @Deprecated
    @Test
-   public void testDisabeling() throws InstantiationException, IllegalAccessException
+   public void testDisabling() throws InstantiationException, IllegalAccessException
    {
       Random random = new Random(314114L);
       ReferenceFrame[] someFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
