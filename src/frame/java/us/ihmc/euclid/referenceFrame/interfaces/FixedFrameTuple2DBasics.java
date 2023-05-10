@@ -139,14 +139,14 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
-    * Sets this frame tuple to {@code tuple2DReadOnly}.
+    * Sets this frame tuple components to {@code x} and {@code y}.
     * <p>
-    * If {@code tuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
-    * equivalent to {@link #set(ReferenceFrame, Tuple2DReadOnly)}.
+    * If the frame of {@code this} is {@code referenceFrame}, then this method is equivalent to
+    * {@link #set(ReferenceFrame, double, double)}.
     * </p>
     * <p>
-    * If {@code tuple2DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
-    * is set to {@code tuple2DReadOnly} and then transformed to be expressed in
+    * If {@referenceFrame} is different from the frame of {@code this}, then {@code this} components
+    * are set to {@code x} and {@code y} and then transformed to be expressed in
     * {@code this.getReferenceFrame()}.
     * </p>
     *

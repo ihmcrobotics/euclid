@@ -167,7 +167,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
 
          EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
@@ -183,8 +183,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          FrameVector3D expected = new FrameVector3D(); // 0, 0, 0 - worldFrame
          expected.setIncludingFrame(sourceFrame, x, y, z);
          expected.changeFrame(destinationFrame);
-         
-         
+
          EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
    }

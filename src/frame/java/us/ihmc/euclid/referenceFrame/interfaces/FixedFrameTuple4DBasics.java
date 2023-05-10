@@ -74,7 +74,22 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
       Tuple4DBasics.super.set(other);
    }
 
-   // TODO
+   /**
+    * Sets this frame tuple to {@code tuple4DReadOnly}.
+    * <p>
+    * If {@code tuple4DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(ReferenceFrame, FrameTuple4DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code tuple4DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
+    * is set to {@code tuple4DReadOnly} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple4DReadOnly} is
+    *                        expressed.
+    * @param tuple4DReadOnly the other tuple to set this to. Not modified.
+    */
    default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
    {
       Tuple4DBasics.super.set(tuple4DReadOnly);
@@ -102,17 +117,21 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
    }
 
    /**
-    * Sets this frame tuple to {@code other}.
+    * Sets this frame tuple components to {@code x}, {@code y}, {@code z} and {@code s}.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FrameTuple4DReadOnly)}.
+    * If the frame of {@code this} is {@code referenceFrame}, then this method is equivalent to
+    * {@link #set(ReferenceFrame, double, double, double, double)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@referenceFrame} is different from the frame of {@code this}, then {@code this} components
+    * are set to {@code x}, {@code y}, {@code z} and {@code s} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param other the other tuple to copy the values from. Not modified.
+    * @param x the new x-coordinate for this tuple.
+    * @param y the new y-coordinate for this tuple.
+    * @param z the new z-coordinate for this tuple.
+    * @param s the new s-coordinate for this tuple.
     */
    default void setMatchingFrame(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {

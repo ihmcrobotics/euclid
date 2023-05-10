@@ -185,7 +185,6 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          expected.setIncludingFrame(sourceFrame, x, y, z);
          expected.changeFrame(destinationFrame);
          
-         
          EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
    }

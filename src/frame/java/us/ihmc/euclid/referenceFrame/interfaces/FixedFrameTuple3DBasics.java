@@ -222,33 +222,30 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    {
       setMatchingFrame(other.getReferenceFrame(), other);
    }
-   
+
    /**
-    * Sets the x and y components of this frame tuple with the x and y components of the given
-    * {@code tuple2DReadOnly} and the z-component to the given {@code z}.
+    * Sets this frame tuple components to {@code x}, {@code y} and {@code z}.
     * <p>
-    * If {@code tuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
-    * equivalent to {@link #set(ReferenceFrame, Tuple2DReadOnly, double)}.
+    * If the frame of {@code this} is {@code referenceFrame}, then this method is equivalent to
+    * {@link #set(ReferenceFrame, double, double, double)}.
     * </p>
     * <p>
-    * If {@code tuple2DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
-    * is set with {@code tuple2DReadOnly} and {@code z}, and then transformed to be expressed in
+    * If {@referenceFrame} is different from the frame of {@code this}, then {@code this} components
+    * are set to {@code x}, {@code y} and {@code z} and then transformed to be expressed in
     * {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param referenceFrame  the coordinate system in which the given {@code x,y,z} is
-    *                        expressed.
-    * @param x               the new x-coordinate for this tuple.
-    * @param y               the new y-coordinate for this tuple.
-    * @param z               the new z-coordinate for this tuple.
+    * @param referenceFrame the coordinate system in which the given {@code x}, {@code y} and {@code z}
+    *                       is expressed.
+    * @param x              the new x-coordinate for this tuple.
+    * @param y              the new y-coordinate for this tuple.
+    * @param z              the new z-coordinate for this tuple.
     */
    default void setMatchingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
    {
       Tuple3DBasics.super.set(x, y, z);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
-   
-
 
    /**
     * Sets this frame tuple to {@code tuple3DReadOnly} and then calls {@link #absolute()}.
