@@ -70,7 +70,9 @@ public class EuclidFrameAPITester
    public static final String READ_ONLY = "ReadOnly";
    /** Expected suffix for the name of a write and read interface. */
    public static final String BASICS = "Basics";
-   /** Expected prefix for the name of an interface for frame geometry which frame can be modified. */
+   /**
+    * Expected prefix for the name of an interface for frame geometry which frame can be modified.
+    */
    public static final String FRAME = "Frame";
    /**
     * Expected prefix for the name of an interface for frame geometry which frame cannot be modified.
@@ -466,7 +468,9 @@ public class EuclidFrameAPITester
    {
       // The frame methods are all the methods from 'typeWithFramelessMethods' that have at least one geometry argument.
       Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(minNumberOfFramelessArguments));
-      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods()).filter(filter).map(MethodSignature::new)
+      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods())
+                                                        .filter(filter)
+                                                        .map(MethodSignature::new)
                                                         .collect(Collectors.toList());
 
       for (MethodSignature framelessSignature : framelessSignatures)
@@ -510,7 +514,7 @@ public class EuclidFrameAPITester
             if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
             {
                String message = "Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
-                     + overloadingReturnType.getSimpleName();
+                                + overloadingReturnType.getSimpleName();
                message += "\nOriginal    method: " + originalSignature.getMethodSimpleName();
                message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
                message += "\nOriginal type declaring method: " + typeWithOriginalMethods.getSimpleName();
@@ -522,8 +526,8 @@ public class EuclidFrameAPITester
       catch (NoSuchMethodException e)
       {
          throw new AssertionError("The original method in " + typeWithOriginalMethods.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
-               + "\nis not properly overloaded, expected to find in " + typeWithOverloadingMethods.getSimpleName() + ":\n"
-               + overloadingSignature.getMethodSimpleName());
+                                  + "\nis not properly overloaded, expected to find in " + typeWithOverloadingMethods.getSimpleName() + ":\n"
+                                  + overloadingSignature.getMethodSimpleName());
       }
    }
 
@@ -545,7 +549,9 @@ public class EuclidFrameAPITester
    public void assertAPIDeclareMatchingFrameSetters(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, Predicate<Method> framelessMethodFilter)
    {
       Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(1)).and(m -> m.getName().equals("set"));
-      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods()).filter(filter).map(MethodSignature::new)
+      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods())
+                                                        .filter(filter)
+                                                        .map(MethodSignature::new)
                                                         .collect(Collectors.toList());
 
       for (MethodSignature framelessSetterSignature : framelessSignatures)
@@ -578,14 +584,14 @@ public class EuclidFrameAPITester
 
                   if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
                      throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName()
-                           + ", actual: " + overloadingReturnType.getSimpleName());
+                                              + ", actual: " + overloadingReturnType.getSimpleName());
                }
             }
             catch (NoSuchMethodException e)
             {
                throw new AssertionError("Could not find setMatchingFrame correspond to the original setter in " + typeWithFramelessMethods.getSimpleName()
-                     + ":\n" + framelessSetterSignature.getMethodSimpleName() + "\nExpected to find in " + typeWithFrameMethods.getSimpleName() + ":\n"
-                     + expectedSetMatchingFrameSignature.getMethodSimpleName());
+                                        + ":\n" + framelessSetterSignature.getMethodSimpleName() + "\nExpected to find in "
+                                        + typeWithFrameMethods.getSimpleName() + ":\n" + expectedSetMatchingFrameSignature.getMethodSimpleName());
             }
          }
       }
@@ -692,6 +698,7 @@ public class EuclidFrameAPITester
     */
    public void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter, int numberOfIterations)
    {
+      // FIXME I don't think it works properly for setMatchingFrame(ReferenceFrame, double, double) and such
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_MATCHING_FRAME));
@@ -716,7 +723,7 @@ public class EuclidFrameAPITester
                if (setterMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
-                        + getArgumentTypeString(matchingFrameMethodParameters));
+                                     + getArgumentTypeString(matchingFrameMethodParameters));
                   retryCounter++;
                   if (retryCounter > 50)
                      throw new AssertionError("Retried too many times, aborting.");
@@ -727,7 +734,8 @@ public class EuclidFrameAPITester
                }
 
                boolean isLastParameterToCheck2DTransform = is2DType(frameType)
-                     && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
+                                                           && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1]
+                                                              == boolean.class;
 
                if (matchingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class)
                {
@@ -767,7 +775,7 @@ public class EuclidFrameAPITester
                      if (setterMethodParameters == null)
                      {
                         System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
-                              + getArgumentTypeString(matchingFrameMethodParameters));
+                                           + getArgumentTypeString(matchingFrameMethodParameters));
                         retryCounter++;
                         if (retryCounter > 50)
                            throw new AssertionError("Retried too many times, aborting.");
@@ -886,7 +894,7 @@ public class EuclidFrameAPITester
    private Method findFramelessSetter(Class<?> frameTypeToSearchFrameSetter)
    {
       Predicate<Method> filter = m -> m.getName().equals("set") && m.getParameterCount() == 1 && isFramelessType(m.getParameterTypes()[0])
-            && m.getParameterTypes()[0].isAssignableFrom(frameTypeToSearchFrameSetter);
+                                      && m.getParameterTypes()[0].isAssignableFrom(frameTypeToSearchFrameSetter);
       return Stream.of(frameTypeToSearchFrameSetter.getMethods()).filter(filter).findFirst().orElse(null);
    }
 
@@ -945,7 +953,7 @@ public class EuclidFrameAPITester
                if (setterMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(includingFrameMethod) + "\n\tparameters: "
-                        + getArgumentTypeString(includingFrameMethodParameters));
+                                     + getArgumentTypeString(includingFrameMethodParameters));
                   retryCounter++;
                   if (retryCounter > 50)
                      throw new AssertionError("Retried too many times, aborting.");
@@ -1049,8 +1057,8 @@ public class EuclidFrameAPITester
       catch (NoSuchMethodException e)
       {
          throw new AssertionError("Could not find the frameless setter that corresponds to :\n" + getMethodSimpleName(setMatchingIncludingFrameMethod)
-               + ", declared in " + setMatchingIncludingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + frameType.getSimpleName()
-               + ":\n" + frameSetterSignature.getMethodSimpleName());
+                                  + ", declared in " + setMatchingIncludingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in "
+                                  + frameType.getSimpleName() + ":\n" + frameSetterSignature.getMethodSimpleName());
       }
    }
 
@@ -1107,7 +1115,8 @@ public class EuclidFrameAPITester
    public void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter, int numberOfIterations)
          throws Throwable
    {
-      Predicate<Method> filter = methodFilter.and(atLeastNFrameParameters(2)).and(m -> Modifier.isStatic(m.getModifiers()))
+      Predicate<Method> filter = methodFilter.and(atLeastNFrameParameters(2))
+                                             .and(m -> Modifier.isStatic(m.getModifiers()))
                                              .and(m -> Modifier.isPublic(m.getModifiers()));
       List<Method> frameMethods = Stream.of(typeDeclaringStaticMethodsToTest.getMethods()).filter(filter).collect(Collectors.toList());
       // Methods returning a frame type
@@ -1629,7 +1638,7 @@ public class EuclidFrameAPITester
                   if (DEBUG)
                   {
                      String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod)
-                           + ". The method is not tested.";
+                                      + ". The method is not tested.";
                      System.err.println(message);
                   }
                   break;
@@ -1639,7 +1648,7 @@ public class EuclidFrameAPITester
                if (framelessMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "
-                        + getArgumentTypeString(frameMethodParameters));
+                                     + getArgumentTypeString(frameMethodParameters));
                   retryCounter++;
                   if (retryCounter > 50)
                      throw new AssertionError("Retried too many times, aborting.");
@@ -1802,7 +1811,7 @@ public class EuclidFrameAPITester
                   if (DEBUG)
                   {
                      String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod)
-                           + ". The method is not tested.";
+                                      + ". The method is not tested.";
                      System.err.println(message);
                   }
                   break;
@@ -1812,7 +1821,7 @@ public class EuclidFrameAPITester
                if (framelessMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "
-                        + getArgumentTypeString(frameMethodParameters));
+                                     + getArgumentTypeString(frameMethodParameters));
                   retryCounter++;
                   if (retryCounter > 50)
                      throw new AssertionError("Retried too many times, aborting.");
@@ -1881,7 +1890,7 @@ public class EuclidFrameAPITester
             catch (RuntimeException e)
             {
                System.err.println("Problem when evaluating the method: "
-                     + getMethodSimpleName(frameMethod.getReturnType(), frameMethodName, frameMethodParameterTypes));
+                                  + getMethodSimpleName(frameMethod.getReturnType(), frameMethodName, frameMethodParameterTypes));
                throw e;
             }
          }
@@ -1997,7 +2006,7 @@ public class EuclidFrameAPITester
       message += "\nOriginal     method: " + getMethodSimpleName(framelessMethod);
       message += "\nActual   arguments after call:\n" + Arrays.toString(frameMethodParameters);
       message += "\nExpected arguments after call:\n"
-            + EuclidCoreIOTools.getCollectionString("[", "]", ", ", Arrays.asList(framelessMethodParameters), this::toStringAsFramelessObject);
+                 + EuclidCoreIOTools.getCollectionString("[", "]", ", ", Arrays.asList(framelessMethodParameters), this::toStringAsFramelessObject);
       throw new AssertionError(message);
    }
 
@@ -2123,7 +2132,8 @@ public class EuclidFrameAPITester
       }
       else
       {
-         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessSignature.toParameterTypeArray()).filter(t -> isFramelessTypeWithFrameEquivalent(t))
+         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessSignature.toParameterTypeArray())
+                                                       .filter(t -> isFramelessTypeWithFrameEquivalent(t))
                                                        .count();
          int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToOverload);
 
@@ -2245,12 +2255,26 @@ public class EuclidFrameAPITester
 
    private boolean is2DType(Class<?> type)
    {
-      return findCorrespondingFramelessType(type).getSimpleName().contains("2D");
+      try
+      {
+         return findCorrespondingFramelessType(type).getSimpleName().contains("2D");
+      }
+      catch (IllegalArgumentException e)
+      {
+         return false;
+      }
    }
 
    private boolean is3DType(Class<?> type)
    {
-      return findCorrespondingFramelessType(type).getSimpleName().contains("3D");
+      try
+      {
+         return findCorrespondingFramelessType(type).getSimpleName().contains("3D");
+      }
+      catch (IllegalArgumentException e)
+      {
+         return false;
+      }
    }
 
    private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)

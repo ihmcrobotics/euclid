@@ -139,6 +139,29 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
+    * Sets this frame tuple components to {@code x} and {@code y}.
+    * <p>
+    * If the frame of {@code this} is {@code referenceFrame}, then this method is equivalent to
+    * {@link #set(ReferenceFrame, double, double)}.
+    * </p>
+    * <p>
+    * If {@referenceFrame} is different from the frame of {@code this}, then {@code this} components
+    * are set to {@code x} and {@code y} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the coordinate system in which the given {@code x,y} is expressed.
+    * @param x              the new x-coordinate for this tuple.
+    * @param y              the new y-coordinate for this tuple.
+    */
+
+   default void setMatchingFrame(ReferenceFrame referenceFrame, double x, double y)
+   {
+      Tuple2DBasics.super.set(x, y);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #absolute()}.
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
