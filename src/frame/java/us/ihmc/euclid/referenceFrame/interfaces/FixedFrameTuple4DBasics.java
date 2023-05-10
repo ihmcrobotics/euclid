@@ -109,7 +109,6 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     *
     * @param other the other tuple to copy the values from. Not modified.
     */
-
    default void setMatchingFrame(FrameTuple4DReadOnly other)
    {
       Tuple4DBasics.super.set(other);
