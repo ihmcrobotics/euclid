@@ -168,6 +168,26 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 
          EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test setMatchingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         double x = EuclidCoreRandomTools.nextDouble(random);
+         double y = EuclidCoreRandomTools.nextDouble(random);
+         double z = EuclidCoreRandomTools.nextDouble(random);
+         FramePoint3D actual = createEmptyFrameTuple(destinationFrame);
+
+         actual.setMatchingFrame(sourceFrame, x, y, z);
+
+         FramePoint3D expected = new FramePoint3D(); 
+         expected.setIncludingFrame(sourceFrame, x, y, z);
+         expected.changeFrame(destinationFrame);
+         
+         
+         EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
+      }
    }
 
    @Test
