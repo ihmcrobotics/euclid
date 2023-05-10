@@ -236,7 +236,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    * @param referenceFrame  the coordinate system in which the given {@code x,y,z} is
     *                        expressed.
     * @param x               the new x-coordinate for this tuple.
     * @param y               the new y-coordinate for this tuple.
@@ -247,6 +247,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
       Tuple3DBasics.super.set(x, y, z);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
+   
 
 
    /**

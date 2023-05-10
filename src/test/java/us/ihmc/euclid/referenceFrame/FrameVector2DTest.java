@@ -145,6 +145,25 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
 
          EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test setMatchingFrame(ReferenceFrame referenceFrame, double x, double y)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         double x = EuclidCoreRandomTools.nextDouble(random);
+         double y = EuclidCoreRandomTools.nextDouble(random);
+         FrameVector2D actual = createEmptyFrameTuple(destinationFrame);
+
+         actual.setMatchingFrame(sourceFrame, x, y);
+
+         FrameVector2D expected = new FrameVector2D();
+         expected.setIncludingFrame(sourceFrame, x, y);
+         expected.changeFrame(destinationFrame);
+
+         EuclidFrameTestTools.assertEquals(expected, actual, EPSILON);
+      }
+
    }
 
    @Override
