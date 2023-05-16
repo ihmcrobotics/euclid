@@ -4060,7 +4060,7 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the line is in the bounding box surface, the points where the line first/last intersects
+    * <li>if the line is on a face of the bounding box, the points where the line first/last intersects
     * with the bounding box are returned as intersection points.
     * </ul>
     * </p>
@@ -4116,7 +4116,7 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the line is in the bounding box surface, the points where the line first/last intersects
+    * <li>if the line is on a face of the bounding box, the points where the line first/last intersects
     * with the bounding box are returned as intersection points.
     * </ul>
     * </p>
@@ -4170,7 +4170,7 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the line is in the bounding box surface, the points where the line first/last intersects
+    * <li>if the line is on a face of the bounding box, the points where the line first/last intersects
     * with the bounding box are returned as intersection points.
     * </ul>
     * </p>
@@ -4244,7 +4244,7 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the line is in the bounding box surface, the points where the line first/last intersects
+    * <li>if the line is on a face of the bounding box, the points where the line first/last intersects
     * with the bounding box are returned as intersection points.
     * </ul>
     * </p>
@@ -4333,9 +4333,8 @@ public class EuclidGeometryTools
     * <ul>
     * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
     * they are considered as intersection points.
-    * <li>if a line is in a surface of the bounding box, the points where the line first/last
-    * intersects with the bounding box (on the bounding box boundary) are returned as intersection
-    * points.
+    * <li>if a line is on a face of the bounding box, the points where the line first/last intersects
+    * with the bounding box (on the bounding box boundary) are returned as intersection points.
     * </ul>
     * </p>
     * 
@@ -4421,9 +4420,8 @@ public class EuclidGeometryTools
     * <ul>
     * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
     * they are considered as intersection points.
-    * <li>if the line is in a surface of the bounding box, the points where the line first/last
-    * intersects with the bounding box (on the bounding box boundary) are returned as intersection
-    * points.
+    * <li>if the line is on a face of the bounding box, the points where the line first/last intersects
+    * with the bounding box (on the bounding box boundary) are returned as intersection points.
     * </ul>
     * </p>
     *
@@ -4862,8 +4860,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the line is in a surface of the box, the points where the line first/last intersects with
-    * the box are returned as intersection points.
+    * <li>if the line is on a face of the box, the points where the line first/last intersects with the
+    * box are returned as intersection points.
     * </ul>
     * </p>
     * 
@@ -6135,7 +6133,7 @@ public class EuclidGeometryTools
     * <ul>
     * <li>if the start or end point of the line segment lie on the boundary of the box they are
     * considered as intersection points.
-    * <li>if the line segment is in one of the box's faces, the points where the line segment
+    * <li>if the line segment is on one of the box's faces, the points where the line segment
     * first/last intersects with the bounding box boundary are returned as intersection points.
     * </ul>
     * </p>
