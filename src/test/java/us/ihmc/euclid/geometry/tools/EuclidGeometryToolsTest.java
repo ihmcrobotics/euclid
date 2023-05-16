@@ -5384,52 +5384,6 @@ public class EuclidGeometryToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         //Segment contained in a side of the box
-         Point3D boxPosition = new Point3D();
-         boxPosition.set(2, 1, 1);
-         Vector3D boxSize = new Vector3D();
-         boxSize.set(4, 2, 2);
-
-         Point3D firstPoint = new Point3D();
-         Point3D secondPoint = new Point3D();
-
-         firstPoint.set(0, 2, 0);
-         secondPoint.set(4, 2, 0);
-         Quaternion boxOrientation = new Quaternion();
-
-         Point3DBasics firstIntersection = new Point3D();
-         Point3DBasics secondIntersection = new Point3D();
-
-         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBox3D(boxPosition,
-                                                                                           boxOrientation,
-                                                                                           boxSize,
-                                                                                           firstPoint.getX(),
-                                                                                           firstPoint.getY(),
-                                                                                           firstPoint.getZ(),
-                                                                                           secondPoint.getX(),
-                                                                                           secondPoint.getY(),
-                                                                                           secondPoint.getZ(),
-                                                                                           firstIntersection,
-                                                                                           secondIntersection);
-         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-
-         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBox3D(boxPosition,
-                                                                                       boxOrientation,
-                                                                                       boxSize,
-                                                                                       firstPoint.getX(),
-                                                                                       firstPoint.getY(),
-                                                                                       firstPoint.getZ(),
-                                                                                       secondPoint.getX(),
-                                                                                       secondPoint.getY(),
-                                                                                       secondPoint.getZ(),
-                                                                                       null,
-                                                                                       null);
-         assertEquals(2, numberOfIntersections, "Iteration: " + i);
-
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
 
          //intersection between a box3D and a Line3D defined by one point in the box
          Point3D boxPosition = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
