@@ -4952,11 +4952,178 @@ public class EuclidGeometryTools
                                                                            true,
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
-      if (firstIntersectionToPack != null) {
+      if (firstIntersectionToPack != null)
+      {
          boxOrientation.transform(firstIntersectionToPack);
          firstIntersectionToPack.add(boxPosition);
       }
-      if (firstIntersectionToPack != null) {
+      if (firstIntersectionToPack != null)
+      {
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
+      }
+
+      return numIntersections;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line3D and a box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersections between the line and the box are not restricted to exist between the two given
+    * points defining the line.
+    * <p>
+    * In the case the line and the box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is on a face of the box, the points where the line first/last intersects with the
+    * box are returned as intersection points.
+    * </ul>
+    * </p>
+    * 
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    */
+   public static int intersectionBetweenLine3DAndBox3D(Point3DReadOnly boxPosition,
+                                                       Orientation3DReadOnly boxOrientation,
+                                                       Vector3DReadOnly boxSize,
+                                                       Point3DReadOnly firstPointOnLine,
+                                                       Point3DReadOnly secondPointOnLine,
+                                                       Point3DBasics firstIntersectionToPack,
+                                                       Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine3DAndBox3D(boxPosition,
+                                               boxOrientation,
+                                               boxSize,
+                                               firstPointOnLine.getX(),
+                                               firstPointOnLine.getY(),
+                                               firstPointOnLine.getZ(),
+                                               secondPointOnLine.getX(),
+                                               secondPointOnLine.getY(),
+                                               secondPointOnLine.getZ(),
+                                               firstIntersectionToPack,
+                                               secondIntersectionToPack);
+   }
+
+   /**
+    * TODO Computes the coordinates of the possible intersections between a line3D and a box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersections between the line and the box are not restricted to exist between the two given
+    * points defining the line.
+    * <p>
+    * In the case the line and the box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is on a face of the box, the points where the line first/last intersects with the
+    * box are returned as intersection points.
+    * </ul>
+    * </p>
+    * 
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param PointOnLine              a first point located on the infinitely long line. Not modified.
+    * @param lineDirection            vector giving the line direction. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    */
+   public static int intersectionBetweenLine3DAndBox3D(Point3DReadOnly boxPosition,
+                                                       Orientation3DReadOnly boxOrientation,
+                                                       Vector3DReadOnly boxSize,
+                                                       Point3DReadOnly pointOnLine,
+                                                       Vector3DReadOnly lineDirection,
+                                                       Point3DBasics firstIntersectionToPack,
+                                                       Point3DBasics secondIntersectionToPack)
+   {
+      if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
+         throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
+
+      // if arguments null:
+
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+
+      firstIntersectionToPack.set(pointOnLine);
+      firstIntersectionToPack.sub(boxPosition);
+      boxOrientation.inverseTransform(firstIntersectionToPack);
+
+      double firstPointOnLineX = firstIntersectionToPack.getX();
+      double firstPointOnLineY = firstIntersectionToPack.getY();
+      double firstPointOnLineZ = firstIntersectionToPack.getZ();
+
+      // construct the second point on line
+      secondIntersectionToPack.add(pointOnLine, lineDirection);
+      secondIntersectionToPack.sub(boxPosition);
+      boxOrientation.inverseTransform(secondIntersectionToPack);
+
+      double secondPointOnLineX = secondIntersectionToPack.getX();
+      double secondPointOnLineY = secondIntersectionToPack.getY();
+      double secondPointOnLineZ = secondIntersectionToPack.getZ();
+
+      double boundingBoxMinX = -0.5 * boxSize.getX();
+      double boundingBoxMinY = -0.5 * boxSize.getY();
+      double boundingBoxMinZ = -0.5 * boxSize.getZ();
+      double boundingBoxMaxX = 0.5 * boxSize.getX();
+      double boundingBoxMaxY = 0.5 * boxSize.getY();
+      double boundingBoxMaxZ = 0.5 * boxSize.getZ();
+
+      int numIntersections = intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMinX,
+                                                                           boundingBoxMinY,
+                                                                           boundingBoxMinZ,
+                                                                           boundingBoxMaxX,
+                                                                           boundingBoxMaxY,
+                                                                           boundingBoxMaxZ,
+                                                                           firstPointOnLineX,
+                                                                           firstPointOnLineY,
+                                                                           firstPointOnLineZ,
+                                                                           true,
+                                                                           secondPointOnLineX,
+                                                                           secondPointOnLineY,
+                                                                           secondPointOnLineZ,
+                                                                           true,
+                                                                           firstIntersectionToPack,
+                                                                           secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+      {
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
+      if (firstIntersectionToPack != null)
+      {
          boxOrientation.transform(secondIntersectionToPack);
          secondIntersectionToPack.add(boxPosition);
       }
@@ -6225,16 +6392,83 @@ public class EuclidGeometryTools
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
 
-      if (firstIntersectionToPack != null) {
+      if (firstIntersectionToPack != null)
+      {
          boxOrientation.transform(firstIntersectionToPack);
          firstIntersectionToPack.add(boxPosition);
       }
-      if (firstIntersectionToPack != null) {
+      if (firstIntersectionToPack != null)
+      {
          boxOrientation.transform(secondIntersectionToPack);
          secondIntersectionToPack.add(boxPosition);
       }
-      
+
       return numIntersections;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line segment and a box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersection(s) between the line segment and the box can only exist between the endpoints of the
+    * line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and the box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the start or end point of the line segment lie on the boundary of the box they are
+    * considered as intersection points.
+    * <li>if the line segment is on one of the box's faces, the points where the line segment
+    * first/last intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
+    * 
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param firstPointOnLine         a first point defining the line segment. Not modified.
+    * @param secondPointOnLine        a second point defining the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    */
+   public static int intersectionBetweenLineSegment3DAndBox3D(Point3DReadOnly boxPosition,
+                                                              Orientation3DReadOnly boxOrientation,
+                                                              Vector3DReadOnly boxSize,
+                                                              Point3DReadOnly firstPointOnLine,
+                                                              Point3DReadOnly secondPointOnLine,
+                                                              Point3DBasics firstIntersectionToPack,
+                                                              Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLineSegment3DAndBox3D(boxPosition,
+                                                      boxOrientation,
+                                                      boxSize,
+                                                      firstPointOnLine.getX(),
+                                                      firstPointOnLine.getY(),
+                                                      firstPointOnLine.getZ(),
+                                                      secondPointOnLine.getX(),
+                                                      secondPointOnLine.getY(),
+                                                      secondPointOnLine.getZ(),
+                                                      firstIntersectionToPack,
+                                                      secondIntersectionToPack);
    }
 
    /**
@@ -6730,7 +6964,6 @@ public class EuclidGeometryTools
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
       // if arguments null:
-
 
       if (firstIntersectionToPack == null)
          firstIntersectionToPack = new Point3D();
