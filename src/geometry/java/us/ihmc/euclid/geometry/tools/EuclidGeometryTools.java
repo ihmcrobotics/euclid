@@ -4906,11 +4906,6 @@ public class EuclidGeometryTools
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
       // if arguments null:
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setToNaN();
-
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setToNaN();
 
       if (firstIntersectionToPack == null)
          firstIntersectionToPack = new Point3D();
@@ -4957,11 +4952,14 @@ public class EuclidGeometryTools
                                                                            true,
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
-
-      boxOrientation.transform(firstIntersectionToPack);
-      firstIntersectionToPack.add(boxPosition);
-      boxOrientation.transform(secondIntersectionToPack);
-      secondIntersectionToPack.add(boxPosition);
+      if (firstIntersectionToPack != null) {
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
+      if (firstIntersectionToPack != null) {
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
+      }
 
       return numIntersections;
    }
@@ -6180,10 +6178,6 @@ public class EuclidGeometryTools
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
       // if arguments null:
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setToNaN();
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setToNaN();
 
       if (firstIntersectionToPack == null)
          firstIntersectionToPack = new Point3D();
@@ -6231,11 +6225,15 @@ public class EuclidGeometryTools
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
 
-      boxOrientation.transform(firstIntersectionToPack);
-      firstIntersectionToPack.add(boxPosition);
-      boxOrientation.transform(secondIntersectionToPack);
-      secondIntersectionToPack.add(boxPosition);
-
+      if (firstIntersectionToPack != null) {
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
+      if (firstIntersectionToPack != null) {
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
+      }
+      
       return numIntersections;
    }
 
@@ -6732,10 +6730,7 @@ public class EuclidGeometryTools
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
       // if arguments null:
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setToNaN();
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setToNaN();
+
 
       if (firstIntersectionToPack == null)
          firstIntersectionToPack = new Point3D();
