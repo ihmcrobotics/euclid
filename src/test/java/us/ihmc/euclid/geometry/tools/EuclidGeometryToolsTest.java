@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
@@ -5505,6 +5506,41 @@ public class EuclidGeometryToolsTest
                   }
                }
             }
+         }
+      }
+
+      for (int i = 0; i <= ITERATIONS; i++)
+      {
+         // test alternative calling
+
+         Point3D boxPosition = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
+         Vector3D boxSize = EuclidCoreRandomTools.nextVector3D(random, 0.001, 10.0);
+
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D lineDirection = EuclidCoreRandomTools.nextVector3D(random);
+
+         Quaternion boxOrientation = new Quaternion();
+
+         Point3DBasics firstIntersection = new Point3D();
+         Point3DBasics secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBox3D(boxPosition,
+                                                                                           boxOrientation,
+                                                                                           boxSize,
+                                                                                           point,
+                                                                                           lineDirection,
+                                                                                           firstIntersection,
+                                                                                           secondIntersection);
+
+         if (numberOfIntersections > 2 || numberOfIntersections < 0)
+         {
+            throw new AssertionFailedError("wrong behavior", "0,1 or 2", numberOfIntersections);
+         }
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBox3D(boxPosition, boxOrientation, boxSize, point, lineDirection, null, null);
+         if (numberOfIntersections > 2 || numberOfIntersections < 0)
+         {
+            throw new AssertionFailedError("incorrect behavior", "0,1 or 2", numberOfIntersections);
          }
       }
    }
