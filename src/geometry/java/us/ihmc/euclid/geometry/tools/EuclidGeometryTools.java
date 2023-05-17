@@ -5024,7 +5024,7 @@ public class EuclidGeometryTools
    }
 
    /**
-    * TODO Computes the coordinates of the possible intersections between a line3D and a box.
+    * Computes the coordinates of the possible intersections between a line3D and a box.
     * <p>
     * <a href=
     * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
