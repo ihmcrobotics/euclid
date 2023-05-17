@@ -4905,21 +4905,15 @@ public class EuclidGeometryTools
       if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
-      boolean firstIntersectionWasNull = false;
-      boolean secondIntersectionWasNull = false;
+      boolean firstIntersectionWasNull = firstIntersectionToPack == null;
+      boolean secondIntersectionWasNull = secondIntersectionToPack == null;
 
       // if arguments null:
-      if (firstIntersectionToPack == null)
-      {
+      if (firstIntersectionWasNull)
          firstIntersectionToPack = new Point3D();
-         firstIntersectionWasNull = true;
-      }
 
-      if (secondIntersectionToPack == null)
-      {
+      if (secondIntersectionWasNull)
          secondIntersectionToPack = new Point3D();
-         secondIntersectionWasNull = true;
-      }
 
       firstIntersectionToPack.set(startX, startY, startZ);
       firstIntersectionToPack.sub(boxPosition);
@@ -4961,26 +4955,16 @@ public class EuclidGeometryTools
                                                                            true,
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
-      switch (numIntersections)
-      {
-         case 1:
-            if (firstIntersectionWasNull == false)
-            {
-               boxOrientation.transform(firstIntersectionToPack);
-               firstIntersectionToPack.add(boxPosition);
-            }
+      if (!firstIntersectionWasNull && numIntersections >= 1)
+      { // Lazy update
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
 
-         case 2:
-            if (firstIntersectionWasNull == false)
-            {
-               boxOrientation.transform(firstIntersectionToPack);
-               firstIntersectionToPack.add(boxPosition);
-            }
-            if (secondIntersectionWasNull == false)
-            {
-               boxOrientation.transform(secondIntersectionToPack);
-               secondIntersectionToPack.add(boxPosition);
-            }
+      if (!secondIntersectionWasNull && numIntersections >= 2)
+      { // Lazy update
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
       }
 
       return numIntersections;
@@ -6313,21 +6297,15 @@ public class EuclidGeometryTools
       if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
-      boolean firstIntersectionWasNull = false;
-      boolean secondIntersectionWasNull = false;
+      boolean firstIntersectionWasNull = firstIntersectionToPack == null;
+      boolean secondIntersectionWasNull = secondIntersectionToPack == null;
 
       // if arguments null:
-      if (firstIntersectionToPack == null)
-      {
+      if (firstIntersectionWasNull)
          firstIntersectionToPack = new Point3D();
-         firstIntersectionWasNull = true;
-      }
 
-      if (secondIntersectionToPack == null)
-      {
+      if (secondIntersectionWasNull)
          secondIntersectionToPack = new Point3D();
-         secondIntersectionWasNull = true;
-      }
 
       firstIntersectionToPack.set(startX, startY, startZ);
       firstIntersectionToPack.sub(boxPosition);
@@ -6370,26 +6348,16 @@ public class EuclidGeometryTools
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
 
-      switch (numIntersections)
-      {
-         case 1:
-            if (firstIntersectionWasNull == false)
-            {
-               boxOrientation.transform(firstIntersectionToPack);
-               firstIntersectionToPack.add(boxPosition);
-            }
+      if (!firstIntersectionWasNull && numIntersections >= 1)
+      { // Lazy update
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
 
-         case 2:
-            if (firstIntersectionWasNull == false)
-            {
-               boxOrientation.transform(firstIntersectionToPack);
-               firstIntersectionToPack.add(boxPosition);
-            }
-            if (secondIntersectionWasNull == false)
-            {
-               boxOrientation.transform(secondIntersectionToPack);
-               secondIntersectionToPack.add(boxPosition);
-            }
+      if (!secondIntersectionWasNull && numIntersections >= 2)
+      { // Lazy update
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
       }
 
       return numIntersections;
@@ -6952,11 +6920,14 @@ public class EuclidGeometryTools
       if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
          throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
 
-      // if arguments null:
+      boolean firstIntersectionWasNull = firstIntersectionToPack == null;
+      boolean secondIntersectionWasNull = secondIntersectionToPack == null;
 
-      if (firstIntersectionToPack == null)
+      // if arguments null:
+      if (firstIntersectionWasNull)
          firstIntersectionToPack = new Point3D();
-      if (secondIntersectionToPack == null)
+
+      if (secondIntersectionWasNull)
          secondIntersectionToPack = new Point3D();
 
       firstIntersectionToPack.set(rayOrigin);
@@ -6999,10 +6970,17 @@ public class EuclidGeometryTools
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
 
-      boxOrientation.transform(firstIntersectionToPack);
-      firstIntersectionToPack.add(boxPosition);
-      boxOrientation.transform(secondIntersectionToPack);
-      secondIntersectionToPack.add(boxPosition);
+      if (!firstIntersectionWasNull && numIntersections >= 1)
+      { // Lazy update
+         boxOrientation.transform(firstIntersectionToPack);
+         firstIntersectionToPack.add(boxPosition);
+      }
+
+      if (!secondIntersectionWasNull && numIntersections >= 2)
+      { // Lazy update
+         boxOrientation.transform(secondIntersectionToPack);
+         secondIntersectionToPack.add(boxPosition);
+      }
 
       return numIntersections;
    }
