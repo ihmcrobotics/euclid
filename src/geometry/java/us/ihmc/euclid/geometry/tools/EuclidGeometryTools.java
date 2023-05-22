@@ -4479,6 +4479,7 @@ public class EuclidGeometryTools
 
       if (firstIntersectionToPack != null)
          firstIntersectionToPack.setToNaN();
+
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToNaN();
 
@@ -4640,6 +4641,8 @@ public class EuclidGeometryTools
             if (isIntersectingAtTmin)
             {
                firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
+               //               System.out.println("New value ( if 1 intersection)"+firstIntersectionToPack);
+
             }
             else
             {
@@ -4729,16 +4732,19 @@ public class EuclidGeometryTools
             if (secondIntersectionToPack != null)
             {
                secondIntersectionToPack.set(firstIntersectionToPack);
+
             }
             if (firstIntersectionToPack != null)
             {
                firstIntersectionToPack.set(startX, startY, startZ);
                tmin = 0.0;
+               //               System.out.println("New value ( if RayOriginOnBox)"+firstIntersectionToPack);
+
             }
             numberOfIntersections = 2;
          }
       }
-      else
+      else 
       {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
        // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
          boolean isLineSegmentStartOnBox = false;
@@ -4795,6 +4801,7 @@ public class EuclidGeometryTools
             {
                firstIntersectionToPack.set(startX, startY, startZ);
                tmin = 0.0;
+
             }
             if (secondIntersectionToPack != null)
             {
@@ -4816,7 +4823,7 @@ public class EuclidGeometryTools
             }
             numberOfIntersections = 2;
          }
-         else
+         else if (isLineSegmentEndOnBox)
          { // only the  end is on the box, we consider the segment end as the first intersection
             if (secondIntersectionToPack != null)
             {
@@ -4955,6 +4962,7 @@ public class EuclidGeometryTools
                                                                            true,
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
+
       if (!firstIntersectionWasNull && numIntersections >= 1)
       { // Lazy update
          boxOrientation.transform(firstIntersectionToPack);
@@ -6344,7 +6352,7 @@ public class EuclidGeometryTools
                                                                            secondPointOnLineX,
                                                                            secondPointOnLineY,
                                                                            secondPointOnLineZ,
-                                                                           false,
+                                                                           false, //TODO fix bug here if false, wrong value returned, poor precision
                                                                            firstIntersectionToPack,
                                                                            secondIntersectionToPack);
 
