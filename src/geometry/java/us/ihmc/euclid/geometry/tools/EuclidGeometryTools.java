@@ -10,9 +10,14 @@ import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -928,7 +933,20 @@ public class EuclidGeometryTools
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
       double qs = 1.0 + dotProduct;
       double norm = 1.0 / EuclidCoreTools.norm(axisX, axisY, axisZ, qs);
-      rotationToPack.setQuaternion(axisX * norm, axisY * norm, axisZ * norm, qs * norm);
+
+      try
+      {
+         rotationToPack.setQuaternion(axisX * norm, axisY * norm, axisZ * norm, qs * norm);
+      }
+      catch (NotARotationMatrixException e)
+      {
+         Matrix3D matrix = new Matrix3D();
+         RotationMatrixConversion.convertQuaternionToMatrix(axisX * norm, axisY * norm, axisZ * norm, qs * norm, matrix);
+
+         throw new NotARotationMatrixException("The matrix is not a rotation matrix: \n" + EuclidCoreIOTools.getMatrix3DString(matrix)
+                                               + "\nInvalid rotation matrix resulted from vectors <" + firstVectorX + ", " + firstVectorY + ", " + firstVectorZ + "> "
+                                               + "and <" + secondVectorX + ", " + secondVectorY + ", " + secondVectorZ + ">");
+      }
    }
 
    /**
