@@ -16,6 +16,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
@@ -37,10 +38,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 
 public class EuclidCoreMissingTools
 {
+   public static final String DEGREE_SYMBOL = "\u00B0";
+
    public static void transform(Matrix3DReadOnly matrix, double xOriginal, double yOriginal, double zOriginal, Tuple3DBasics tupleTransformed)
    {
       double x = matrix.getM00() * xOriginal + matrix.getM01() * yOriginal + matrix.getM02() * zOriginal;
@@ -1359,12 +1363,11 @@ public class EuclidCoreMissingTools
     */
    public static String getYawPitchRollStringDegrees(Orientation3DBasics orientation3DBasics)
    {
-      String degreeSymbol = "\u00B0";
       // Degree symbol placed at the end so you don't have to remove it when copy and pasting
       return EuclidCoreIOTools.getYawPitchRollString(EuclidCoreIOTools.DEFAULT_FORMAT,
                                                      Math.toDegrees(orientation3DBasics.getYaw()),
                                                      Math.toDegrees(orientation3DBasics.getPitch()),
-                                                     Math.toDegrees(orientation3DBasics.getRoll())) + degreeSymbol;
+                                                     Math.toDegrees(orientation3DBasics.getRoll())) + DEGREE_SYMBOL;
    }
 
    /**
@@ -1373,13 +1376,12 @@ public class EuclidCoreMissingTools
     */
    public static String getYawPitchRollValuesStringDegrees(Orientation3DBasics orientation3DBasics)
    {
-      String degreeSymbol = "\u00B0";
       // Degree symbol placed at the end so you don't have to remove it when copy and pasting
       return EuclidCoreIOTools.getStringOf("(", ")", ", ",
                                            EuclidCoreIOTools.DEFAULT_FORMAT,
                                            Math.toDegrees(orientation3DBasics.getYaw()),
                                            Math.toDegrees(orientation3DBasics.getPitch()),
-                                           Math.toDegrees(orientation3DBasics.getRoll())) + degreeSymbol;
+                                           Math.toDegrees(orientation3DBasics.getRoll())) + DEGREE_SYMBOL;
    }
 
    /**
@@ -1431,3 +1433,64 @@ public class EuclidCoreMissingTools
       matrix3D.scale(scalarToShrinkMatrixWithinBounds);
       return matrix3D;
    }
+
+   /**
+    * Remove when this issue is fixed:
+    * https://github.com/ihmcrobotics/euclid/issues/57
+    */
+   private static final Field referenceFrameHasBeenRemoved;
+   static
+   {
+      try
+      {
+         referenceFrameHasBeenRemoved = ReferenceFrame.class.getDeclaredField("hasBeenRemoved");
+         referenceFrameHasBeenRemoved.setAccessible(true);
+      }
+      catch (NoSuchFieldException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+
+   public static boolean hasBeenRemoved(ReferenceFrame referenceFrame)
+   {
+      try
+      {
+         return referenceFrameHasBeenRemoved.getBoolean(referenceFrame);
+      }
+      catch (IllegalAccessException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+
+   /**
+    * Remove when this issue is fixed:
+    * https://github.com/ihmcrobotics/euclid/issues/57
+    */
+   private static final Field referenceFrameName;
+   static
+   {
+      try
+      {
+         referenceFrameName = ReferenceFrame.class.getDeclaredField("frameName");
+         referenceFrameName.setAccessible(true);
+      }
+      catch (NoSuchFieldException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+
+   public static String frameName(ReferenceFrame referenceFrame)
+   {
+      try
+      {
+         return referenceFrameName.get(referenceFrame).toString();
+      }
+      catch (IllegalAccessException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+}
