@@ -27,6 +27,7 @@ import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -34,6 +35,7 @@ import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -12563,6 +12565,311 @@ public class EuclidGeometryToolsTest
       }
    }
 
+   @Test
+   public void testIntersectionBetweenSpiricSection2DAndLine2DParallelToXAxis() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      //      //TODO delete this method ??
+      //
+      //      double radius = 5.0;
+      //      double tubeRadius = 1.0;
+      //      double distancePlaneToOriginFrame3D = 0;
+      //      double lineYCoordinate = 2.0;
+      //
+      //      Point2D firstIntersectionToPack = new Point2D();
+      //      Point2D secondIntersectionToPack = new Point2D();
+      //      Point2D thirdIntersectionToPack = new Point2D();
+      //      Point2D fourthIntersectionToPack = new Point2D();
+      //
+      //      int numIntersections = EuclidGeometryTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+      //                                                                                                            tubeRadius,
+      //                                                                                                            lineYCoordinate,
+      //                                                                                                            distancePlaneToOriginFrame3D,
+      //
+      //                                                                                                            firstIntersectionToPack,
+      //                                                                                                            secondIntersectionToPack,
+      //                                                                                                            thirdIntersectionToPack,
+      //                                                                                                            fourthIntersectionToPack);
+      //      
+      //      assertEquals(0,numIntersections);
+      //      System.out.println("number of itersections :" + numIntersections);
+      //      System.out.println("first intersection" + firstIntersectionToPack);
+      //      System.out.println("second intersection" + secondIntersectionToPack);
+      //      System.out.println("third intersection" + thirdIntersectionToPack);
+      //      System.out.println("fourth intersection" + fourthIntersectionToPack);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         //O intersections + spiric in two parts : radius>tubeRadius && distancePlaneToOriginFrame3D<(radius-tubeRadius) && ||lineYCoordinate|| > radius
+
+         for (int lineOffsetDirection = -1; lineOffsetDirection <= 1; lineOffsetDirection += 2)
+         {
+            double radius = EuclidCoreRandomTools.nextDouble(random, 1, 10);
+            double tubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.1, radius - 0.1);
+            double distancePlaneToOriginFrame3D = EuclidCoreRandomTools.nextDouble(random, 0.001, radius - tubeRadius - 0.001);
+            double lineYCoordinate = lineOffsetDirection * EuclidCoreRandomTools.nextDouble(random, tubeRadius + 0.001, tubeRadius + 5);
+
+            Point2D firstIntersectionToPack = new Point2D();
+            Point2D secondIntersectionToPack = new Point2D();
+            Point2D thirdIntersectionToPack = new Point2D();
+            Point2D fourthIntersectionToPack = new Point2D();
+
+            int numIntersections = EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+                                                                                                                  tubeRadius,
+                                                                                                                  lineYCoordinate,
+                                                                                                                  distancePlaneToOriginFrame3D,
+
+                                                                                                                  firstIntersectionToPack,
+                                                                                                                  secondIntersectionToPack,
+                                                                                                                  thirdIntersectionToPack,
+                                                                                                                  fourthIntersectionToPack);
+
+            assertEquals(0, numIntersections);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(firstIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(thirdIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(fourthIntersectionToPack);
+
+         }
+
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         //O intersections + spiric in two parts with one intersection point: (radius=tubeRadius && distancePlaneToOriginFrame3D=0 && ||lineYCoordinate|| > radius)
+
+         for (int lineOffsetDirection = -1; lineOffsetDirection <= 1; lineOffsetDirection += 2)
+         {
+            double radius = EuclidCoreRandomTools.nextDouble(random, 1, 10);
+            double tubeRadius = radius;
+            double distancePlaneToOriginFrame3D = 0;
+            double lineYCoordinate = lineOffsetDirection * EuclidCoreRandomTools.nextDouble(random, tubeRadius + 0.001, tubeRadius + 5);
+
+            Point2D firstIntersectionToPack = new Point2D();
+            Point2D secondIntersectionToPack = new Point2D();
+            Point2D thirdIntersectionToPack = new Point2D();
+            Point2D fourthIntersectionToPack = new Point2D();
+
+            int numIntersections = EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+                                                                                                                  tubeRadius,
+                                                                                                                  lineYCoordinate,
+                                                                                                                  distancePlaneToOriginFrame3D,
+
+                                                                                                                  firstIntersectionToPack,
+                                                                                                                  secondIntersectionToPack,
+                                                                                                                  thirdIntersectionToPack,
+                                                                                                                  fourthIntersectionToPack);
+
+            assertEquals(0, numIntersections);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(firstIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(thirdIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(fourthIntersectionToPack);
+
+         }
+
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         //O intersections + leminscate of Bernoulli: radius>tubeRadius && distancePlaneToOriginFrame3D=radius && ||lineYCoordinate|| > radius
+
+         for (int lineOffsetDirection = -1; lineOffsetDirection <= 1; lineOffsetDirection += 2)
+         {
+            double radius = EuclidCoreRandomTools.nextDouble(random, 1, 10);
+            double tubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.1, radius - 0.1);
+            double distancePlaneToOriginFrame3D = radius;
+            double lineYCoordinate = lineOffsetDirection * EuclidCoreRandomTools.nextDouble(random, tubeRadius + 0.001, tubeRadius + 5);
+
+            Point2D firstIntersectionToPack = new Point2D();
+            Point2D secondIntersectionToPack = new Point2D();
+            Point2D thirdIntersectionToPack = new Point2D();
+            Point2D fourthIntersectionToPack = new Point2D();
+
+            int numIntersections = EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+                                                                                                                  tubeRadius,
+                                                                                                                  lineYCoordinate,
+                                                                                                                  distancePlaneToOriginFrame3D,
+
+                                                                                                                  firstIntersectionToPack,
+                                                                                                                  secondIntersectionToPack,
+                                                                                                                  thirdIntersectionToPack,
+                                                                                                                  fourthIntersectionToPack);
+
+            assertEquals(0, numIntersections);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(firstIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(thirdIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(fourthIntersectionToPack);
+
+         }
+
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         //O intersections + spiric in on part : radius>=tubeRadius && (radius+tubeRadius)>distancePlaneToOriginFrame3D>(radius-tubeRadius) && ||lineYCoordinate|| > radius
+
+         for (int lineOffsetDirection = -1; lineOffsetDirection <= 1; lineOffsetDirection += 2)
+         {
+            double radius = EuclidCoreRandomTools.nextDouble(random, 1, 10);
+            double tubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.1, radius);
+            double distancePlaneToOriginFrame3D = EuclidCoreRandomTools.nextDouble(random, radius - tubeRadius + 0.001, radius + tubeRadius - 0.001);
+            double lineYCoordinate = lineOffsetDirection * EuclidCoreRandomTools.nextDouble(random, tubeRadius + 0.001, tubeRadius + 5);
+
+            Point2D firstIntersectionToPack = new Point2D();
+            Point2D secondIntersectionToPack = new Point2D();
+            Point2D thirdIntersectionToPack = new Point2D();
+            Point2D fourthIntersectionToPack = new Point2D();
+
+            int numIntersections = EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+                                                                                                                  tubeRadius,
+                                                                                                                  lineYCoordinate,
+                                                                                                                  distancePlaneToOriginFrame3D,
+
+                                                                                                                  firstIntersectionToPack,
+                                                                                                                  secondIntersectionToPack,
+                                                                                                                  thirdIntersectionToPack,
+                                                                                                                  fourthIntersectionToPack);
+
+            assertEquals(0, numIntersections);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(firstIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(thirdIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(fourthIntersectionToPack);
+
+         }
+
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         //O intersections + spindle torus : radius<tubeRadius && distancePlaneToOriginFrame3D=0 && ||lineYCoordinate|| > radius
+
+         for (int lineOffsetDirection = -1; lineOffsetDirection <= 1; lineOffsetDirection += 2)
+         {
+            double radius = EuclidCoreRandomTools.nextDouble(random, 1, 10);
+            double tubeRadius = EuclidCoreRandomTools.nextDouble(random, radius + 0.001, radius + 5);
+            double distancePlaneToOriginFrame3D = 0;
+            double lineYCoordinate = lineOffsetDirection * EuclidCoreRandomTools.nextDouble(random, tubeRadius + 0.001, tubeRadius + 5);
+
+            Point2D firstIntersectionToPack = new Point2D();
+            Point2D secondIntersectionToPack = new Point2D();
+            Point2D thirdIntersectionToPack = new Point2D();
+            Point2D fourthIntersectionToPack = new Point2D();
+
+            int numIntersections = EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2DParallelToXAxis(radius,
+                                                                                                                  tubeRadius,
+                                                                                                                  lineYCoordinate,
+                                                                                                                  distancePlaneToOriginFrame3D,
+
+                                                                                                                  firstIntersectionToPack,
+                                                                                                                  secondIntersectionToPack,
+                                                                                                                  thirdIntersectionToPack,
+                                                                                                                  fourthIntersectionToPack);
+
+            assertEquals(0, numIntersections);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(firstIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(secondIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(thirdIntersectionToPack);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(fourthIntersectionToPack);
+
+         }
+
+      }
+
+   }
+
+   @Test
+   public void testIntersectionBetweenSpiricSection2DAndLine2D() throws Exception
+   {
+      //TODO delete this method ?
+      
+      Point2D firstIntersectionToPack = new Point2D();
+      Point2D secondIntersectionToPack = new Point2D();
+      Point2D thirdIntersectionToPack = new Point2D();
+      Point2D fourthIntersectionToPack = new Point2D();
+
+      double radius = 5.0;
+      double tubeRadius = 1.0;
+      double distancePlaneToOriginFrame3D = 0.0;
+    
+//      double a =2*(Math.pow(distancePlaneToOriginFrame3D,2)-Math.pow(radius,2)-Math.pow(tubeRadius,2));
+//      double b =2*(Math.pow(distancePlaneToOriginFrame3D,2)+Math.pow(radius,2)-Math.pow(tubeRadius,2));
+//      double c =Math.pow(Math.pow(distancePlaneToOriginFrame3D,2)+Math.pow(radius,2)-Math.pow(tubeRadius,2),2)-4*Math.pow(distancePlaneToOriginFrame3D,2)*Math.pow(radius,2);
+//
+//      System.out.println("a : "+a+", b : "+b+", c : "+c);
+      
+
+      Point2D startPoint = new Point2D();
+      Point2D endPoint = new Point2D();
+
+      startPoint.set(-8, 1);
+      endPoint.set(8, -1);
+
+      EuclidGeometryTorusTools.intersectionBetweenSpiricSection2DAndLine2D(radius,
+                                                                      tubeRadius,
+                                                                      distancePlaneToOriginFrame3D,
+                                                                      startPoint,
+                                                                      endPoint,
+
+                                                                      firstIntersectionToPack,
+                                                                      secondIntersectionToPack,
+                                                                      thirdIntersectionToPack,
+                                                                      fourthIntersectionToPack);
+   }
+
+   @Test
+   public void testIntersectionBetweenTorusAndLine3D() throws Exception
+   {
+      //TODO test for torus intersection / put here belonging test methods that are in the class EuclidGeometryTorusTools/ edge case 1 point intersection (vertical line)
+      Random random = new Random(564654L);
+
+      Point3D torusCenter = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
+      Quaternion torusOrientation = new Quaternion();
+      
+      double radius = 5.0;
+      double tubeRadius = 1.0;
+      
+      Point3D startPoint = new Point3D();
+      Point3D endPoint = new Point3D();
+      startPoint.set(5,0.5,5);
+      endPoint.set(-5,-0.5,-5);
+      startPoint.add(torusCenter);
+      endPoint.add(torusCenter);
+      
+      // Now we transform everything randomly: 
+//      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+//      Arrays.asList(torusCenter, torusOrientation, startPoint, endPoint)
+//            .forEach(transformable -> transformable.applyTransform(transform));
+      
+      System.out.println("initiaux :"+startPoint+endPoint);
+
+      Point3D firstIntersectionToPack = new Point3D();
+      Point3D secondIntersectionToPack = new Point3D();
+      Point3D thirdIntersectionToPack = new Point3D();
+      Point3D fourthIntersectionToPack = new Point3D();
+
+
+      
+      EuclidGeometryTools.intersectionBetweenTorusAndLine3D( torusCenter,
+                                                             torusOrientation,
+                                                            
+                                                             radius,
+                                                             tubeRadius,
+
+                                                             startPoint,
+                                                             endPoint,
+
+                                                             firstIntersectionToPack,
+                                                             secondIntersectionToPack,
+                                                             thirdIntersectionToPack,
+                                                             fourthIntersectionToPack);
+   }
+   
+   
+   
    @Test
    public void testIsFormingTriangle() throws Exception
    {

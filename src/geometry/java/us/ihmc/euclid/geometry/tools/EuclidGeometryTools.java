@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry.tools;
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,10 +12,13 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -7154,6 +7158,102 @@ public class EuclidGeometryTools
                                             ONE_MILLIONTH,
                                             pointOnIntersectionToPack,
                                             intersectionDirectionToPack);
+   }
+
+  
+   /**
+    * TODO description + add managment of case line parallel to XZ plane
+    */
+
+   public static int intersectionBetweenTorusAndLine3D(Point3D torusCenter,
+                                                       Orientation3DReadOnly torusOrientation,
+
+                                                       double radius,
+                                                       double tubeRadius,
+
+                                                       Point3D startPoint,
+                                                       Point3D endPoint,
+
+                                                       Point3DBasics firstIntersectionToPack,
+                                                       Point3DBasics secondIntersectionToPack,
+                                                       Point3DBasics thirdIntersectionToPack,
+                                                       Point3DBasics fourthIntersectionToPack)
+   {
+      if (radius < tubeRadius)
+         throw new IllegalArgumentException("the torus mustn't be a spindle torus (R<r)");
+
+      if (tubeRadius <= 0)
+         throw new IllegalArgumentException("radius and tubeRadius must be > 0");
+
+      boolean firstIntersectionWasNull = firstIntersectionToPack == null;
+      boolean secondIntersectionWasNull = secondIntersectionToPack == null;
+      boolean thirdIntersectionWasNull = thirdIntersectionToPack == null;
+      boolean fourthIntersectionWasNull = fourthIntersectionToPack == null;
+
+      // if arguments null:
+      if (firstIntersectionWasNull)
+         firstIntersectionToPack = new Point3D();
+
+      if (secondIntersectionWasNull)
+         secondIntersectionToPack = new Point3D();
+
+      if (thirdIntersectionWasNull)
+         thirdIntersectionToPack = new Point3D();
+
+      if (fourthIntersectionWasNull)
+         fourthIntersectionToPack = new Point3D();
+
+      //Put everything in the torus frame for the resolution
+      startPoint.sub(torusCenter);
+      endPoint.sub(torusCenter);
+      torusOrientation.inverseTransform(startPoint);
+      torusOrientation.inverseTransform(endPoint);
+
+      //rotate the frame so that the line is perpendicular to z axis
+      Vector3D newZAxis = new Vector3D();
+      newZAxis.set(1, 0, (startPoint.getX() - endPoint.getX()) / (endPoint.getZ() - startPoint.getZ()));
+
+      double cosTheta = newZAxis.getZ() / newZAxis.norm(); //cosTheta = (a.b)/(|a|.|b|)
+      double sinTheta = 1 / newZAxis.norm(); //sinTheta = (axb)/(|a|.|b|) with cross product in (x,z) plane
+      double theta = EuclidCoreTools.atan2(sinTheta, cosTheta);
+
+      RotationMatrix rotationMatrix = new RotationMatrix();
+      rotationMatrix.setAxisAngle(0, 1, 0, theta);
+
+      rotationMatrix.inverseTransform(startPoint);
+      rotationMatrix.inverseTransform(endPoint);
+
+      int numberOfIntersections = EuclidGeometryTorusTools.intersectionBetweenTorusAndLine3DInTorusFrame(radius,
+                                                                                tubeRadius,
+
+                                                                                startPoint,
+                                                                                endPoint,
+
+                                                                                firstIntersectionToPack,
+                                                                                secondIntersectionToPack,
+                                                                                thirdIntersectionToPack,
+                                                                                fourthIntersectionToPack);
+
+      //TODO Mettre des conditions pour faire moins de calculs
+
+      rotationMatrix.transform(firstIntersectionToPack);
+      torusOrientation.transform(firstIntersectionToPack);
+      firstIntersectionToPack.add(torusCenter);
+
+      rotationMatrix.transform(secondIntersectionToPack);
+      torusOrientation.transform(secondIntersectionToPack);
+      secondIntersectionToPack.add(torusCenter);
+
+      rotationMatrix.transform(thirdIntersectionToPack);
+      torusOrientation.transform(thirdIntersectionToPack);
+      thirdIntersectionToPack.add(torusCenter);
+
+      rotationMatrix.transform(fourthIntersectionToPack);
+      torusOrientation.transform(fourthIntersectionToPack);
+      fourthIntersectionToPack.add(torusCenter);
+
+
+      return numberOfIntersections;
    }
 
    /**
