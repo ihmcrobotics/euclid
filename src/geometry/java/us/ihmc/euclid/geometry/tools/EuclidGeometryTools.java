@@ -4483,9 +4483,14 @@ public class EuclidGeometryTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToNaN();
 
+      //      System.out.println("startX"+startX);
+      //      System.out.println("endX"+endX);
+
       double dx = endX - startX;
       double dy = endY - startY;
       double dz = endZ - startZ;
+
+      //      System.out.println("dx"+dx);
 
       boolean isColinearX = false;
       boolean isColinearY = false;
@@ -4495,6 +4500,7 @@ public class EuclidGeometryTools
       {
          dx = 0.0 * dx;
          isColinearX = true;
+         //         System.out.println(isColinearX);
       }
       if (Math.abs(dy) < ONE_TRILLIONTH)
       {
@@ -4560,6 +4566,14 @@ public class EuclidGeometryTools
          tymax = deltaYmin * invYDir;
       }
 
+      //      System.out.println("dx"+dx);
+      //      System.out.println("deltaXmin"+deltaXmin);
+      //
+      //      System.out.println("txmin"+tmin);
+      //      System.out.println("txmax"+tmax);
+      //      System.out.println("tymin"+tymin);
+      //      System.out.println("tymax"+tymax);
+
       // if regions do not overlap, return false
       if (tmin > tymax + ONE_TRILLIONTH)
       {
@@ -4599,6 +4613,9 @@ public class EuclidGeometryTools
          tzmin = deltaZmax * invZDir;
          tzmax = deltaZmin * invZDir;
       }
+
+      //      System.out.println("tzmin"+tzmin);
+      //      System.out.println("tzmax"+tzmax);
 
       // if regions do not overlap, return false
       if (tmin > tzmax + ONE_TRILLIONTH)
@@ -4641,8 +4658,6 @@ public class EuclidGeometryTools
             if (isIntersectingAtTmin)
             {
                firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
-               //               System.out.println("New value ( if 1 intersection)"+firstIntersectionToPack);
-
             }
             else
             {
@@ -4738,13 +4753,11 @@ public class EuclidGeometryTools
             {
                firstIntersectionToPack.set(startX, startY, startZ);
                tmin = 0.0;
-               //               System.out.println("New value ( if RayOriginOnBox)"+firstIntersectionToPack);
-
             }
             numberOfIntersections = 2;
          }
       }
-      else 
+      else
       {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
        // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
          boolean isLineSegmentStartOnBox = false;
