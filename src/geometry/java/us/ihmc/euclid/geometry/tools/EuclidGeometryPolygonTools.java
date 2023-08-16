@@ -1190,6 +1190,22 @@ public class EuclidGeometryPolygonTools
             return foundIntersections; // No intersection left to find.
       }
 
+      if (isPoint2DInsideConvexPolygon2D(lineSegmentStart.getX(), lineSegmentStart.getY(), convexPolygon2D, convexPolygon2D.size(), true))
+      {
+         foundIntersections++;
+      }
+
+      if (isPoint2DInsideConvexPolygon2D(lineSegmentEnd.getX(), lineSegmentEnd.getY(), convexPolygon2D, convexPolygon2D.size(), true))
+      {
+         foundIntersections++;
+      }
+
+      if (foundIntersections > 2)
+      {
+         foundIntersections--;
+      }
+
+
       return foundIntersections;
    }
 
@@ -2926,6 +2942,6 @@ public class EuclidGeometryPolygonTools
    private static void checkNumberOfVertices(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
       if (numberOfVertices < 0 || numberOfVertices > convexPolygon2D.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon2D.size() + "].");
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in [ 0, " + convexPolygon2D.size() + "].");
    }
 }
