@@ -1125,10 +1125,10 @@ public class EuclidGeometryPolygonTools
                secondIntersectionToPack.set(lineSegmentStart);
 
             foundIntersections++;
-            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
-               foundIntersections--;
-            if (foundIntersections == 2)
-               return foundIntersections; // No intersection left to find.
+//            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
+//               foundIntersections--;
+//            if (foundIntersections == 2)
+//               return foundIntersections; // No intersection left to find.
          }
          if (distanceFromPoint2DToLineSegment2D(lineSegmentEnd, edgeStart, edgeEnd) < ONE_TRILLIONTH)
          {
@@ -1138,10 +1138,10 @@ public class EuclidGeometryPolygonTools
                secondIntersectionToPack.set(lineSegmentEnd);
 
             foundIntersections++;
-            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
-               foundIntersections--;
-            if (foundIntersections == 2)
-               return foundIntersections; // No intersection left to find.
+//            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
+//               foundIntersections--;
+//            if (foundIntersections == 2)
+//               return foundIntersections; // No intersection left to find.
          }
 
          double edgeVectorX = edgeEnd.getX() - edgeStart.getX();
@@ -1186,8 +1186,8 @@ public class EuclidGeometryPolygonTools
          foundIntersections++;
          if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
             foundIntersections--;
-         if (foundIntersections == 2)
-            return foundIntersections; // No intersection left to find.
+//         if (foundIntersections == 2)
+//            return foundIntersections; // No intersection left to find.
       }
 
       if (foundIntersections != 0)
@@ -1197,18 +1197,17 @@ public class EuclidGeometryPolygonTools
             secondIntersectionToPack.set(lineSegmentStart.getX(), lineSegmentStart.getY());
             foundIntersections++;
          }
-
-         if (isPoint2DInsideConvexPolygon2D(lineSegmentEnd.getX(), lineSegmentEnd.getY(), convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered))
+         else if (isPoint2DInsideConvexPolygon2D(lineSegmentEnd.getX(), lineSegmentEnd.getY(), convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered))
          {
             secondIntersectionToPack.set(lineSegmentEnd.getX(), lineSegmentEnd.getY());
             foundIntersections++;
          }
       }
 
-      if (foundIntersections > 2)
-      {
-         foundIntersections--;
-      }
+//      if (foundIntersections > 2)
+//      {
+//         foundIntersections--;
+//      }
 
 
       return foundIntersections;
