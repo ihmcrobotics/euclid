@@ -1190,14 +1190,19 @@ public class EuclidGeometryPolygonTools
             return foundIntersections; // No intersection left to find.
       }
 
-      if (isPoint2DInsideConvexPolygon2D(lineSegmentStart.getX(), lineSegmentStart.getY(), convexPolygon2D, convexPolygon2D.size(), true))
+      if (foundIntersections != 0)
       {
-         foundIntersections++;
-      }
+         if (isPoint2DInsideConvexPolygon2D(lineSegmentStart.getX(), lineSegmentStart.getY(), convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered))
+         {
+            secondIntersectionToPack.set(lineSegmentStart.getX(), lineSegmentStart.getY());
+            foundIntersections++;
+         }
 
-      if (isPoint2DInsideConvexPolygon2D(lineSegmentEnd.getX(), lineSegmentEnd.getY(), convexPolygon2D, convexPolygon2D.size(), true))
-      {
-         foundIntersections++;
+         if (isPoint2DInsideConvexPolygon2D(lineSegmentEnd.getX(), lineSegmentEnd.getY(), convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered))
+         {
+            secondIntersectionToPack.set(lineSegmentEnd.getX(), lineSegmentEnd.getY());
+            foundIntersections++;
+         }
       }
 
       if (foundIntersections > 2)
