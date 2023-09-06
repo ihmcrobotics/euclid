@@ -8,11 +8,11 @@ import org.ejml.data.Matrix;
 
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
@@ -48,382 +48,40 @@ public class EuclidCoreTools
    /**
     * Constant representing the coordinates (0, 0) of the origin in the 2D plane.
     */
-   public static final Point2DReadOnly origin2D = new Point2DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getY()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Tuple2DReadOnly)
-            return Point2DReadOnly.super.equals((Tuple2DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 1;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-   };
+   public static final Point2DReadOnly origin2D = EuclidCoreConstants.origin2D;
 
    /**
     * Constant representing the coordinates (0, 0, 0) of the origin in 3D.
     */
-   public static final Point3DReadOnly origin3D = new Point3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getY()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getZ()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Tuple3DReadOnly)
-            return Point3DReadOnly.super.equals((Tuple3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 1;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-   };
+   public static final Point3DReadOnly origin3D = EuclidCoreConstants.origin3D;
 
    /**
     * Constant representing the zero vector 2D: (0, 0).
     */
-   public static final Vector2DReadOnly zeroVector2D = new Vector2DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getY()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Tuple2DReadOnly)
-            return Vector2DReadOnly.super.equals((Tuple2DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 1;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-   };
+   public static final Vector2DReadOnly zeroVector2D = EuclidCoreConstants.zeroVector2D;
 
    /**
     * Constant representing the zero vector 3D: (0, 0, 0).
     */
-   public static final Vector3DReadOnly zeroVector3D = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getY()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getZ()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Tuple3DReadOnly)
-            return Vector3DReadOnly.super.equals((Tuple3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 1;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-   };
+   public static final Vector3DReadOnly zeroVector3D = EuclidCoreConstants.zeroVector3D;
 
    /**
-    * Constant representing the neutral quaternion: (x=0, y=0, z=0, s=0).
+    * Constant representing the neutral quaternion: (x=0, y=0, z=0, s=1).
     */
-   public static final QuaternionReadOnly neutralQuaternion = new QuaternionReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return 0;
-      }
+   public static final QuaternionReadOnly neutralQuaternion = EuclidCoreConstants.neutralQuaternion;
 
-      @Override
-      public double getY()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getZ()
-      {
-         return 0.0;
-      }
-
-      @Override
-      public double getS()
-      {
-         return 1.0;
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return -1106247679;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof QuaternionReadOnly)
-            return equals((QuaternionReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-   };
+   public static final RotationMatrixReadOnly identityRotationMatrix = EuclidCoreConstants.identityRotationMatrix;
 
    /** Constant representing the zero-matrix 3D, i.e. the 9 elements are zero. */
-   public static final Matrix3DReadOnly zeroMatrix3D = new Matrix3DReadOnly()
-   {
-      @Override
-      public double getM00()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM01()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM02()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM10()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM11()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM12()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM20()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM21()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM22()
-      {
-         return 0;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Matrix3DReadOnly)
-            return Matrix3DReadOnly.super.equals((Matrix3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 1;
-      }
-   };
+   public static final Matrix3DReadOnly zeroMatrix3D = EuclidCoreConstants.zeroMatrix3D;
 
    /**
     * Constant representing the identity matrix 3D, i.e. the 3 diagonal elements are equal to one and
     * the other equal to zero.
     */
-   public static final Matrix3DReadOnly identityMatrix3D = new Matrix3DReadOnly()
-   {
-      @Override
-      public double getM00()
-      {
-         return 1;
-      }
+   public static final Matrix3DReadOnly identityMatrix3D = EuclidCoreConstants.identityMatrix3D;
 
-      @Override
-      public double getM01()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM02()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM10()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM11()
-      {
-         return 1;
-      }
-
-      @Override
-      public double getM12()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM20()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM21()
-      {
-         return 0;
-      }
-
-      @Override
-      public double getM22()
-      {
-         return 1;
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Matrix3DReadOnly)
-            return Matrix3DReadOnly.super.equals((Matrix3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-      }
-
-      @Override
-      public int hashCode()
-      {
-         return 976224257;
-      }
-   };
+   public static final RigidBodyTransformReadOnly identityTransform = EuclidCoreConstants.identityTransform;
 
    private EuclidCoreTools()
    {
@@ -538,9 +196,9 @@ public class EuclidCoreTools
     */
    public static boolean containsNaN(double[] array)
    {
-      for (int i = 0; i < array.length; i++)
+      for (double element : array)
       {
-         if (Double.isNaN(array[i]))
+         if (Double.isNaN(element))
             return true;
       }
       return false;
@@ -1254,7 +912,7 @@ public class EuclidCoreTools
       if (matrixToTest.getNumCols() < minColumns || matrixToTest.getNumRows() < minRows)
       {
          throw new MatrixDimensionException("The matrix is too small, expected: [nRows >= " + minRows + ", nColumns >= " + minColumns + "], was: [nRows = "
-               + matrixToTest.getNumRows() + ", nCols = " + matrixToTest.getNumCols() + "].");
+                                            + matrixToTest.getNumRows() + ", nCols = " + matrixToTest.getNumCols() + "].");
       }
    }
 
@@ -1265,7 +923,7 @@ public class EuclidCoreTools
     * This method is garbage free and is equivalent to
     * {@code Collections.reverse(list.subList(fromIndex, toIndex))}.
     * </p>
-    * 
+    *
     * @param list      the list whose elements are to be reversed. Modified.
     * @param fromIndex low endpoint (inclusive) of the range to be reversed.
     * @param toIndex   high endpoint (exclusive) of the range to be reversed.
@@ -1295,13 +953,11 @@ public class EuclidCoreTools
     * {@code [1, 2, 3, 4, 0]}.
     * <li>{@code list=[0, 1, 2, 3, 4]}, {@code rotate(list, 0, list.size(), +1)} gives:
     * {@code [4, 0, 1, 2, 3]}.
-    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, -1)} gives:
-    * {@code [9, 1, 2, 0, 9]}.
-    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, +1)} gives:
-    * {@code [9, 2, 0, 1, 9]}.
+    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, -1)} gives: {@code [9, 1, 2, 0, 9]}.
+    * <li>{@code list=[9, 0, 1, 2, 9]}, {@code rotate(list, 1, 4, +1)} gives: {@code [9, 2, 0, 1, 9]}.
     * </ul>
     * </p>
-    * 
+    *
     * @param <T>       the element type.
     * @param list      the list whose elements are to be rotated. Modified.
     * @param fromIndex low endpoint (inclusive) of the range to be rotated.
