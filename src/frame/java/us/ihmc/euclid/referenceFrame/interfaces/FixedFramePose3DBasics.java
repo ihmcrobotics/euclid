@@ -117,25 +117,6 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    }
 
    /**
-    * Sets this pose 3D to be the same as the given one expressed in the reference frame of this.
-    * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FramePose3DReadOnly)}.
-    * </p>
-    * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
-    * </p>
-    *
-    * @param other the other frame pose 3D to set this to. Not modified.
-    */
-   default void setMatchingFrame(FramePose3DReadOnly other)
-   {
-      Pose3DBasics.super.set(other);
-      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
-   }
-
-   /**
     * Sets both position and orientation.
     *
     * @param position    the tuple with the new position coordinates. Not modified.
@@ -176,6 +157,88 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    {
       checkReferenceFrameMatch(position, orientation);
       Pose3DBasics.super.set(position, orientation);
+   }
+
+   /**
+    * Sets this pose 3D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 3D to set this to. Not modified.
+    */
+   default void setMatchingFrame(FramePose3DReadOnly other)
+   {
+      setMatchingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this pose 3D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 3D to set this to. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
+   {
+      set(pose3DReadOnly);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets both position and orientation while performing the necessary transformation to be expressed
+    * in the frame of this.
+    * <p>
+    * If the arguments are expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple3DReadOnly, FrameOrientation3DReadOnly)}.
+    * </p>
+    * <p>
+    * If the arguments are expressed in a different frame than {@code this}, then {@code this} is set
+    * to {@code position} and {@code orientation} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param position    the tuple with the new position coordinates. Not modified.
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if the arguments are expressed in different frames.
+    */
+   default void setMatchingFrame(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
+   {
+      position.checkReferenceFrameMatch(orientation);
+      setMatchingFrame(position.getReferenceFrame(), position, orientation);
+   }
+
+   /**
+    * Sets both position and orientation while performing the necessary transformation to be expressed
+    * in the frame of this.
+    * <p>
+    * If the arguments are expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple3DReadOnly, FrameOrientation3DReadOnly)}.
+    * </p>
+    * <p>
+    * If the arguments are expressed in a different frame than {@code this}, then {@code this} is set
+    * to {@code position} and {@code orientation} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param position    the tuple with the new position coordinates. Not modified.
+    * @param orientation the new orientation. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, Orientation3DReadOnly orientation)
+   {
+      set(position, orientation);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**

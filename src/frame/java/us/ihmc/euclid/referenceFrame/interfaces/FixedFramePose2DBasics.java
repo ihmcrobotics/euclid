@@ -89,25 +89,6 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    }
 
    /**
-    * Sets this pose 2D to be the same as the given one expressed in the reference frame of this.
-    * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FramePose2DReadOnly)}.
-    * </p>
-    * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
-    * </p>
-    *
-    * @param other the other frame pose 2D to set this to. Not modified.
-    */
-   default void setMatchingFrame(FramePose2DReadOnly other)
-   {
-      Pose2DBasics.super.set(other);
-      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
-   }
-
-   /**
     * Sets this frame pose 2D to the x, y, and yaw components of the given {@code framePose3DReadOnly}.
     *
     * @param framePose3DReadOnly the other frame pose 3D. Not modified.
@@ -175,6 +156,88 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    {
       checkReferenceFrameMatch(position, orientation);
       Pose2DBasics.super.set(position, orientation);
+   }
+
+   /**
+    * Sets this pose 2D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 2D to set this to. Not modified.
+    */
+   default void setMatchingFrame(FramePose2DReadOnly other)
+   {
+      setMatchingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this pose 2D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 2D to set this to. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
+   {
+      set(pose2DReadOnly);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets both position and orientation while performing the necessary transformation to be expressed
+    * in the frame of this.
+    * <p>
+    * If the arguments are expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly, FrameOrientation2DReadOnly)}.
+    * </p>
+    * <p>
+    * If the arguments are expressed in a different frame than {@code this}, then {@code this} is set
+    * to {@code position} and {@code orientation} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param position    the tuple with the new position coordinates. Not modified.
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if the arguments are expressed in different frames.
+    */
+   default void setMatchingFrame(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
+   {
+      position.checkReferenceFrameMatch(orientation);
+      setMatchingFrame(position.getReferenceFrame(), position, orientation);
+   }
+
+   /**
+    * Sets both position and orientation while performing the necessary transformation to be expressed
+    * in the frame of this.
+    * <p>
+    * If the arguments are expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly, FrameOrientation2DReadOnly)}.
+    * </p>
+    * <p>
+    * If the arguments are expressed in a different frame than {@code this}, then {@code this} is set
+    * to {@code position} and {@code orientation} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param position    the tuple with the new position coordinates. Not modified.
+    * @param orientation the new orientation. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly position, Orientation2DReadOnly orientation)
+   {
+      set(position, orientation);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**
