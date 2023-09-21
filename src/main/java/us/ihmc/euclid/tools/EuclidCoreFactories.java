@@ -1,18 +1,18 @@
 package us.ihmc.euclid.tools;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-import java.util.function.IntConsumer;
-import java.util.function.ObjDoubleConsumer;
-import java.util.function.ToDoubleFunction;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Axis4D;
+import us.ihmc.euclid.Matrix3DElements;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -36,6 +36,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.UnitVector4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * This class provides a varieties of factories to create Euclid types.
@@ -140,41 +142,52 @@ public class EuclidCoreFactories
     */
    public static Point2DReadOnly newLinkedPoint2DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier)
    {
-      return new Point2DReadOnly()
+      return new LinkedPoint2DReadOnly(ySupplier, xSupplier);
+   }
+
+   private static final class LinkedPoint2DReadOnly implements Point2DReadOnly
+   {
+      private final DoubleSupplier ySupplier;
+      private final DoubleSupplier xSupplier;
+
+      private LinkedPoint2DReadOnly(DoubleSupplier ySupplier, DoubleSupplier xSupplier)
       {
-         @Override
-         public double getX()
-         {
-            return xSupplier.getAsDouble();
-         }
+         this.ySupplier = ySupplier;
+         this.xSupplier = xSupplier;
+      }
 
-         @Override
-         public double getY()
-         {
-            return ySupplier.getAsDouble();
-         }
+      @Override
+      public double getX()
+      {
+         return xSupplier.getAsDouble();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
+      @Override
+      public double getY()
+      {
+         return ySupplier.getAsDouble();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Point2DReadOnly)
-               return equals((Point2DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Point2DReadOnly)
+            return equals((Point2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -186,41 +199,52 @@ public class EuclidCoreFactories
     */
    public static Vector2DReadOnly newLinkedVector2DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier)
    {
-      return new Vector2DReadOnly()
+      return new LinkedVector2DReadOnly(xSupplier, ySupplier);
+   }
+
+   private static final class LinkedVector2DReadOnly implements Vector2DReadOnly
+   {
+      private final DoubleSupplier xSupplier;
+      private final DoubleSupplier ySupplier;
+
+      private LinkedVector2DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier)
       {
-         @Override
-         public double getX()
-         {
-            return xSupplier.getAsDouble();
-         }
+         this.xSupplier = xSupplier;
+         this.ySupplier = ySupplier;
+      }
 
-         @Override
-         public double getY()
-         {
-            return ySupplier.getAsDouble();
-         }
+      @Override
+      public double getX()
+      {
+         return xSupplier.getAsDouble();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
+      @Override
+      public double getY()
+      {
+         return ySupplier.getAsDouble();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector2DReadOnly)
-               return equals((Vector2DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector2DReadOnly)
+            return equals((Vector2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -233,47 +257,60 @@ public class EuclidCoreFactories
     */
    public static Point3DReadOnly newLinkedPoint3DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return new Point3DReadOnly()
+      return new LinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier);
+   }
+
+   private static final class LinkedPoint3DReadOnly implements Point3DReadOnly
+   {
+      private final DoubleSupplier xSupplier;
+      private final DoubleSupplier ySupplier;
+      private final DoubleSupplier zSupplier;
+
+      private LinkedPoint3DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier zSupplier)
       {
-         @Override
-         public double getX()
-         {
-            return xSupplier.getAsDouble();
-         }
+         this.xSupplier = xSupplier;
+         this.ySupplier = ySupplier;
+         this.zSupplier = zSupplier;
+      }
 
-         @Override
-         public double getY()
-         {
-            return ySupplier.getAsDouble();
-         }
+      @Override
+      public double getX()
+      {
+         return xSupplier.getAsDouble();
+      }
 
-         @Override
-         public double getZ()
-         {
-            return zSupplier.getAsDouble();
-         }
+      @Override
+      public double getY()
+      {
+         return ySupplier.getAsDouble();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
+      @Override
+      public double getZ()
+      {
+         return zSupplier.getAsDouble();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Point3DReadOnly)
-               return equals((Point3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Point3DReadOnly)
+            return equals((Point3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -286,47 +323,60 @@ public class EuclidCoreFactories
     */
    public static Vector3DReadOnly newLinkedVector3DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return new Vector3DReadOnly()
+      return new LinkedVector3DReadOnly(ySupplier, xSupplier, zSupplier);
+   }
+
+   private static final class LinkedVector3DReadOnly implements Vector3DReadOnly
+   {
+      private final DoubleSupplier ySupplier;
+      private final DoubleSupplier xSupplier;
+      private final DoubleSupplier zSupplier;
+
+      private LinkedVector3DReadOnly(DoubleSupplier ySupplier, DoubleSupplier xSupplier, DoubleSupplier zSupplier)
       {
-         @Override
-         public double getX()
-         {
-            return xSupplier.getAsDouble();
-         }
+         this.ySupplier = ySupplier;
+         this.xSupplier = xSupplier;
+         this.zSupplier = zSupplier;
+      }
 
-         @Override
-         public double getY()
-         {
-            return ySupplier.getAsDouble();
-         }
+      @Override
+      public double getX()
+      {
+         return xSupplier.getAsDouble();
+      }
 
-         @Override
-         public double getZ()
-         {
-            return zSupplier.getAsDouble();
-         }
+      @Override
+      public double getY()
+      {
+         return ySupplier.getAsDouble();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
+      @Override
+      public double getZ()
+      {
+         return zSupplier.getAsDouble();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector3DReadOnly)
-               return equals((Vector3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector3DReadOnly)
+            return equals((Vector3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -392,59 +442,68 @@ public class EuclidCoreFactories
     */
    public static UnitVector2DReadOnly newNegativeLinkedUnitVector2D(UnitVector2DReadOnly originalUnitVector)
    {
-      return new UnitVector2DReadOnly()
+      return new NegativeLinkedUnitVector2DReadOnly(originalUnitVector);
+   }
+
+   private static final class NegativeLinkedUnitVector2DReadOnly implements UnitVector2DReadOnly
+   {
+      private final UnitVector2DReadOnly originalUnitVector;
+
+      private NegativeLinkedUnitVector2DReadOnly(UnitVector2DReadOnly originalUnitVector)
       {
-         @Override
-         public boolean isDirty()
-         {
-            return originalUnitVector.isDirty();
-         }
+         this.originalUnitVector = originalUnitVector;
+      }
 
-         @Override
-         public double getX()
-         {
-            return -originalUnitVector.getX();
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return originalUnitVector.isDirty();
+      }
 
-         @Override
-         public double getY()
-         {
-            return -originalUnitVector.getY();
-         }
+      @Override
+      public double getX()
+      {
+         return -originalUnitVector.getX();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return -originalUnitVector.getRawX();
-         }
+      @Override
+      public double getY()
+      {
+         return -originalUnitVector.getY();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return -originalUnitVector.getRawY();
-         }
+      @Override
+      public double getRawX()
+      {
+         return -originalUnitVector.getRawX();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
+      @Override
+      public double getRawY()
+      {
+         return -originalUnitVector.getRawY();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector2DReadOnly)
-               return equals((Vector2DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector2DReadOnly)
+            return equals((Vector2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -456,71 +515,177 @@ public class EuclidCoreFactories
     */
    public static UnitVector3DReadOnly newNegativeLinkedUnitVector3D(UnitVector3DReadOnly originalUnitVector)
    {
-      return new UnitVector3DReadOnly()
+      return new NegativeLinkedUnitVector3DReadOnly(originalUnitVector);
+   }
+
+   private static final class NegativeLinkedUnitVector3DReadOnly implements UnitVector3DReadOnly
+   {
+      private final UnitVector3DReadOnly originalUnitVector;
+
+      private NegativeLinkedUnitVector3DReadOnly(UnitVector3DReadOnly originalUnitVector)
       {
-         @Override
-         public boolean isDirty()
-         {
-            return originalUnitVector.isDirty();
-         }
+         this.originalUnitVector = originalUnitVector;
+      }
 
-         @Override
-         public double getX()
-         {
-            return -originalUnitVector.getX();
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return originalUnitVector.isDirty();
+      }
 
-         @Override
-         public double getY()
-         {
-            return -originalUnitVector.getY();
-         }
+      @Override
+      public double getX()
+      {
+         return -originalUnitVector.getX();
+      }
 
-         @Override
-         public double getZ()
-         {
-            return -originalUnitVector.getZ();
-         }
+      @Override
+      public double getY()
+      {
+         return -originalUnitVector.getY();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return -originalUnitVector.getRawX();
-         }
+      @Override
+      public double getZ()
+      {
+         return -originalUnitVector.getZ();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return -originalUnitVector.getRawY();
-         }
+      @Override
+      public double getRawX()
+      {
+         return -originalUnitVector.getRawX();
+      }
 
-         @Override
-         public double getRawZ()
-         {
-            return -originalUnitVector.getRawZ();
-         }
+      @Override
+      public double getRawY()
+      {
+         return -originalUnitVector.getRawY();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
+      @Override
+      public double getRawZ()
+      {
+         return -originalUnitVector.getRawZ();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector3DReadOnly)
-               return equals((Vector3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector3DReadOnly)
+            return equals((Vector3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
+   }
+
+   /**
+    * Creates a new unit vector 4D that is a read-only view of the given {@code originalUnitVector}
+    * negated.
+    *
+    * @param originalUnitVector the original vector to create linked negative vector for. Not modified.
+    * @return the negative read-only view of {@code originalUnitVector}.
+    */
+   public static UnitVector4DReadOnly newNegativeLinkedUnitVector4D(UnitVector4DReadOnly originalUnitVector)
+   {
+      return new NegativeLinkedUnitVector4DReadOnly(originalUnitVector);
+   }
+
+   private static final class NegativeLinkedUnitVector4DReadOnly implements UnitVector4DReadOnly
+   {
+      private final UnitVector4DReadOnly originalUnitVector;
+
+      private NegativeLinkedUnitVector4DReadOnly(UnitVector4DReadOnly originalUnitVector)
+      {
+         this.originalUnitVector = originalUnitVector;
+      }
+
+      @Override
+      public boolean isDirty()
+      {
+         return originalUnitVector.isDirty();
+      }
+
+      @Override
+      public double getX()
+      {
+         return -originalUnitVector.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         return -originalUnitVector.getY();
+      }
+
+      @Override
+      public double getZ()
+      {
+         return -originalUnitVector.getZ();
+      }
+
+      @Override
+      public double getS()
+      {
+         return -originalUnitVector.getS();
+      }
+
+      @Override
+      public double getRawX()
+      {
+         return -originalUnitVector.getRawX();
+      }
+
+      @Override
+      public double getRawY()
+      {
+         return -originalUnitVector.getRawY();
+      }
+
+      @Override
+      public double getRawZ()
+      {
+         return -originalUnitVector.getRawZ();
+      }
+
+      @Override
+      public double getRawS()
+      {
+         return -originalUnitVector.getRawS();
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector4DReadOnly)
+            return equals((Vector4DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -532,53 +697,62 @@ public class EuclidCoreFactories
     */
    public static QuaternionReadOnly newConjugateLinkedQuaternion(QuaternionReadOnly originalQuaternion)
    {
-      return new QuaternionReadOnly()
+      return new ConjugateLinkedQuaternionReadOnly(originalQuaternion);
+   }
+
+   private static final class ConjugateLinkedQuaternionReadOnly implements QuaternionReadOnly
+   {
+      private final QuaternionReadOnly originalQuaternion;
+
+      private ConjugateLinkedQuaternionReadOnly(QuaternionReadOnly originalQuaternion)
       {
-         @Override
-         public double getX()
-         {
-            return -originalQuaternion.getX();
-         }
+         this.originalQuaternion = originalQuaternion;
+      }
 
-         @Override
-         public double getY()
-         {
-            return -originalQuaternion.getY();
-         }
+      @Override
+      public double getX()
+      {
+         return -originalQuaternion.getX();
+      }
 
-         @Override
-         public double getZ()
-         {
-            return -originalQuaternion.getZ();
-         }
+      @Override
+      public double getY()
+      {
+         return -originalQuaternion.getY();
+      }
 
-         @Override
-         public double getS()
-         {
-            return originalQuaternion.getS();
-         }
+      @Override
+      public double getZ()
+      {
+         return -originalQuaternion.getZ();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
-         }
+      @Override
+      public double getS()
+      {
+         return originalQuaternion.getS();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof QuaternionReadOnly)
-               return equals((QuaternionReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof QuaternionReadOnly)
+            return equals((QuaternionReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -589,84 +763,92 @@ public class EuclidCoreFactories
     */
    public static Matrix3DReadOnly newTransposeLinkedMatrix3DReadOnly(Matrix3DReadOnly original)
    {
-      return new Matrix3DReadOnly()
+      return new TransposeLinkedMatrix3DReadOnly(original);
+   }
+
+   private static final class TransposeLinkedMatrix3DReadOnly implements Matrix3DReadOnly
+   {
+      private final Matrix3DReadOnly original;
+
+      private TransposeLinkedMatrix3DReadOnly(Matrix3DReadOnly original)
       {
-         @Override
-         public double getM00()
-         {
-            return original.getM00();
-         }
+         this.original = original;
+      }
 
-         @Override
-         public double getM01()
-         {
-            return original.getM10();
-         }
+      @Override
+      public double getM00()
+      {
+         return original.getM00();
+      }
 
-         @Override
-         public double getM02()
-         {
-            return original.getM20();
-         }
+      @Override
+      public double getM01()
+      {
+         return original.getM10();
+      }
 
-         @Override
-         public double getM10()
-         {
-            return original.getM01();
-         }
+      @Override
+      public double getM02()
+      {
+         return original.getM20();
+      }
 
-         @Override
-         public double getM11()
-         {
-            return original.getM11();
-         }
+      @Override
+      public double getM10()
+      {
+         return original.getM01();
+      }
 
-         @Override
-         public double getM12()
-         {
-            return original.getM21();
-         }
+      @Override
+      public double getM11()
+      {
+         return original.getM11();
+      }
 
-         @Override
-         public double getM20()
-         {
-            return original.getM02();
-         }
+      @Override
+      public double getM12()
+      {
+         return original.getM21();
+      }
 
-         @Override
-         public double getM21()
-         {
-            return original.getM12();
-         }
+      @Override
+      public double getM20()
+      {
+         return original.getM02();
+      }
 
-         @Override
-         public double getM22()
-         {
-            return original.getM22();
-         }
+      @Override
+      public double getM21()
+      {
+         return original.getM12();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
+      @Override
+      public double getM22()
+      {
+         return original.getM22();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Matrix3DReadOnly)
+            return equals((Matrix3DReadOnly) object);
+         else
+            return false;
+      }
 
-      };
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -689,83 +871,92 @@ public class EuclidCoreFactories
     */
    public static Matrix3DReadOnly newTildeLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
    {
-      return new Matrix3DReadOnly()
+      return new TildeLinkedMatrix3DReadOnly(originalTuple);
+   }
+
+   private static final class TildeLinkedMatrix3DReadOnly implements Matrix3DReadOnly
+   {
+      private final Tuple3DReadOnly originalTuple;
+
+      private TildeLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
       {
-         @Override
-         public double getM00()
-         {
-            return 0.0;
-         }
+         this.originalTuple = originalTuple;
+      }
 
-         @Override
-         public double getM01()
-         {
-            return -originalTuple.getZ();
-         }
+      @Override
+      public double getM00()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM02()
-         {
-            return originalTuple.getY();
-         }
+      @Override
+      public double getM01()
+      {
+         return -originalTuple.getZ();
+      }
 
-         @Override
-         public double getM10()
-         {
-            return originalTuple.getZ();
-         }
+      @Override
+      public double getM02()
+      {
+         return originalTuple.getY();
+      }
 
-         @Override
-         public double getM11()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM10()
+      {
+         return originalTuple.getZ();
+      }
 
-         @Override
-         public double getM12()
-         {
-            return -originalTuple.getX();
-         }
+      @Override
+      public double getM11()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM20()
-         {
-            return -originalTuple.getY();
-         }
+      @Override
+      public double getM12()
+      {
+         return -originalTuple.getX();
+      }
 
-         @Override
-         public double getM21()
-         {
-            return originalTuple.getX();
-         }
+      @Override
+      public double getM20()
+      {
+         return -originalTuple.getY();
+      }
 
-         @Override
-         public double getM22()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM21()
+      {
+         return originalTuple.getX();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
+      @Override
+      public double getM22()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Matrix3DReadOnly)
+            return equals((Matrix3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
@@ -785,1780 +976,1636 @@ public class EuclidCoreFactories
     */
    public static Matrix3DReadOnly newDiagonalLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
    {
-      return new Matrix3DReadOnly()
+      return new DiagonalLinkedMatrix3DReadOnly(originalTuple);
+   }
+
+   private static final class DiagonalLinkedMatrix3DReadOnly implements Matrix3DReadOnly
+   {
+      private final Tuple3DReadOnly originalTuple;
+
+      private DiagonalLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
       {
-         @Override
-         public double getM00()
-         {
-            return originalTuple.getX();
-         }
+         this.originalTuple = originalTuple;
+      }
 
-         @Override
-         public double getM01()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM00()
+      {
+         return originalTuple.getX();
+      }
 
-         @Override
-         public double getM02()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM01()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM10()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM02()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM11()
-         {
-            return originalTuple.getY();
-         }
+      @Override
+      public double getM10()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM12()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM11()
+      {
+         return originalTuple.getY();
+      }
 
-         @Override
-         public double getM20()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM12()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM21()
-         {
-            return 0.0;
-         }
+      @Override
+      public double getM20()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public double getM22()
-         {
-            return originalTuple.getZ();
-         }
+      @Override
+      public double getM21()
+      {
+         return 0.0;
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
+      @Override
+      public double getM22()
+      {
+         return originalTuple.getZ();
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Matrix3DReadOnly)
+            return equals((Matrix3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+      }
    }
 
    /**
     * Creates a linked point that can be used to observe access to the source point's coordinates.
     *
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    * @param accessListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed.
     * @param source                the original point to link and observe. Not modified.
     * @return the observable point.
     */
-   public static Point2DReadOnly newObservablePoint2DReadOnly(Consumer<Axis2D> valueAccessedListener, Point2DReadOnly source)
+   public static Point2DReadOnly newObservablePoint2DReadOnly(EuclidAccessListener<Axis2D> accessListener, Point2DReadOnly source)
    {
-      ToDoubleFunction<Axis2D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return newLinkedPoint2DReadOnly(() -> notifier.applyAsDouble(Axis2D.X), () -> notifier.applyAsDouble(Axis2D.Y));
+      return new ObservablePoint2DReadOnly(accessListener, source);
+   }
+
+   private static final class ObservablePoint2DReadOnly extends ObservableEuclidGeometry<Axis2D, Point2DReadOnly> implements Point2DReadOnly
+   {
+      private ObservablePoint2DReadOnly(EuclidAccessListener<Axis2D> accessListener, Point2DReadOnly source)
+      {
+         super(accessListener, null, source);
+      }
+
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
    }
 
    /**
     * Creates a linked point that can be used to observe access to the source point's coordinates.
     *
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed.
-    * @param source                the original point to link and observe. Not modified.
+    * @param accessListener the listener to be notified whenever a coordinate of the point is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate being accessed.
+    * @param source         the original point to link and observe. Not modified.
     * @return the observable point.
     */
-   public static Point3DReadOnly newObservablePoint3DReadOnly(Consumer<Axis3D> valueAccessedListener, Point3DReadOnly source)
+   public static Point3DReadOnly newObservablePoint3DReadOnly(EuclidAccessListener<Axis3D> accessListener, Point3DReadOnly source)
    {
-      ToDoubleFunction<Axis3D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return newLinkedPoint3DReadOnly(() -> notifier.applyAsDouble(Axis3D.X), () -> notifier.applyAsDouble(Axis3D.Y), () -> notifier.applyAsDouble(Axis3D.Z));
+      return new ObservablePoint3DReadOnly(accessListener, source);
    }
 
-   /**
-    * Creates a linked vector that can be used to observe access to the source vector's components.
-    *
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component being accessed.
-    * @param source                the original vector to link and observe. Not modified.
-    * @return the observable vector.
-    */
-   public static Vector2DReadOnly newObservableVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, Vector2DReadOnly source)
+   private static final class ObservablePoint3DReadOnly extends ObservableEuclidGeometry<Axis3D, Point3DReadOnly> implements Point3DReadOnly
    {
-      ToDoubleFunction<Axis2D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return newLinkedVector2DReadOnly(() -> notifier.applyAsDouble(Axis2D.X), () -> notifier.applyAsDouble(Axis2D.Y));
-   }
-
-   /**
-    * Creates a linked vector that can be used to observe access to the source vector's components.
-    *
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component being accessed.
-    * @param source                the original vector to link and observe. Not modified.
-    * @return the observable vector.
-    */
-   public static Vector3DReadOnly newObservableVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, Vector3DReadOnly source)
-   {
-      ToDoubleFunction<Axis3D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return newLinkedVector3DReadOnly(() -> notifier.applyAsDouble(Axis3D.X), () -> notifier.applyAsDouble(Axis3D.Y), () -> notifier.applyAsDouble(Axis3D.Z));
-   }
-
-   private static <T> ToDoubleFunction<T> readNotification(Consumer<T> listener, ToDoubleFunction<T> valueReader)
-   {
-      return new ToDoubleFunction<T>()
+      private ObservablePoint3DReadOnly(EuclidAccessListener<Axis3D> accessListener, Point3DReadOnly source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, null, source);
+      }
 
-         @Override
-         public double applyAsDouble(T value)
-         {
-            if (!isNotifying)
-            {
-               isNotifying = true;
-               listener.accept(value);
-               isNotifying = false;
-            }
-            return valueReader.applyAsDouble(value);
-         }
-      };
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
+
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getZ();
+      }
+   }
+
+   /**
+    * Creates a linked vector that can be used to observe access to the source vector's components.
+    *
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component being accessed.
+    * @param source         the original vector to link and observe. Not modified.
+    * @return the observable vector.
+    */
+   public static Vector2DReadOnly newObservableVector2DReadOnly(EuclidAccessListener<Axis2D> accessListener, Vector2DReadOnly source)
+   {
+      return new ObservableVector2DReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableVector2DReadOnly extends ObservableEuclidGeometry<Axis2D, Vector2DReadOnly> implements Vector2DReadOnly
+   {
+      private ObservableVector2DReadOnly(EuclidAccessListener<Axis2D> accessListener, Vector2DReadOnly source)
+      {
+         super(accessListener, null, source);
+      }
+
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
+   }
+
+   /**
+    * Creates a linked vector that can be used to observe access to the source vector's components.
+    *
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component being accessed.
+    * @param source         the original vector to link and observe. Not modified.
+    * @return the observable vector.
+    */
+   public static Vector3DReadOnly newObservableVector3DReadOnly(EuclidAccessListener<Axis3D> accessListener, Vector3DReadOnly source)
+   {
+      return new ObservableVector3DReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableVector3DReadOnly extends ObservableEuclidGeometry<Axis3D, Vector3DReadOnly> implements Vector3DReadOnly
+   {
+      private ObservableVector3DReadOnly(EuclidAccessListener<Axis3D> accessListener, Vector3DReadOnly source)
+      {
+         super(accessListener, null, source);
+      }
+
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
+
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getZ();
+      }
    }
 
    /**
     * Creates a linked unit vector that can be used to observe access to the source unit vector's
     * components.
     *
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component being accessed.
-    * @param source                the original unit vector to link and observe. Not modified.
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component being accessed.
+    * @param source         the original unit vector to link and observe. Not modified.
     * @return the observable unit vector.
     */
-   public static UnitVector2DReadOnly newObservableUnitVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, UnitVector2DReadOnly source)
+   public static UnitVector2DReadOnly newObservableUnitVector2DReadOnly(EuclidAccessListener<Axis2D> accessListener, UnitVector2DReadOnly source)
    {
-      ToDoubleFunction<Axis2D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return new UnitVector2DReadOnly()
+      return new ObservableUnitVector2DReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableUnitVector2DReadOnly extends ObservableEuclidGeometry<Axis2D, UnitVector2DReadOnly> implements UnitVector2DReadOnly
+   {
+      private ObservableUnitVector2DReadOnly(EuclidAccessListener<Axis2D> accessListener, UnitVector2DReadOnly source)
       {
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
+         super(accessListener, null, source);
+      }
 
-         @Override
-         public double getX()
-         {
-            return notifier.applyAsDouble(Axis2D.X);
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
 
-         @Override
-         public double getY()
-         {
-            return notifier.applyAsDouble(Axis2D.Y);
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return source.getRawX();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return source.getRawY();
-         }
+      @Override
+      public double getRawX()
+      {
+         return source.getRawX();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector2DReadOnly)
-               return equals((Vector2DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getRawY()
+      {
+         return source.getRawY();
+      }
    }
 
    /**
     * Creates a linked unit vector that can be used to observe access to the source unit vector's
     * components.
     *
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component being accessed.
-    * @param source                the original unit vector to link and observe. Not modified.
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component being accessed.
+    * @param source         the original unit vector to link and observe. Not modified.
     * @return the observable unit vector.
     */
-   public static UnitVector3DReadOnly newObservableUnitVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, UnitVector3DReadOnly source)
+   public static UnitVector3DReadOnly newObservableUnitVector3DReadOnly(EuclidAccessListener<Axis3D> accessListener, UnitVector3DReadOnly source)
    {
-      ToDoubleFunction<Axis3D> notifier = readNotification(valueAccessedListener, axis -> axis.extract(source));
-      return new UnitVector3DReadOnly()
+      return new ObservableUnitVector3DReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableUnitVector3DReadOnly extends ObservableEuclidGeometry<Axis3D, UnitVector3DReadOnly> implements UnitVector3DReadOnly
+   {
+      private ObservableUnitVector3DReadOnly(EuclidAccessListener<Axis3D> accessListener, UnitVector3DReadOnly source)
       {
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
+         super(accessListener, null, source);
+      }
 
-         @Override
-         public double getX()
-         {
-            return notifier.applyAsDouble(Axis3D.X);
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
 
-         @Override
-         public double getY()
-         {
-            return notifier.applyAsDouble(Axis3D.Y);
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getZ()
-         {
-            return notifier.applyAsDouble(Axis3D.Z);
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return source.getRawX();
-         }
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getY();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return source.getRawY();
-         }
+      @Override
+      public double getRawX()
+      {
+         return source.getRawX();
+      }
 
-         @Override
-         public double getRawZ()
-         {
-            return source.getRawZ();
-         }
+      @Override
+      public double getRawY()
+      {
+         return source.getRawY();
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector3DReadOnly)
-               return equals((Vector3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getRawZ()
+      {
+         return source.getRawZ();
+      }
    }
 
    /**
     * Creates a linked rotation matrix that can be used to observe access to the source rotation
-    * matrix's components.
-    *
-    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
-    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
-    *                              will be passed to indicate the row and column respectively of the
-    *                              coefficient being accessed.
-    * @param source                the original rotation matrix to link and observe. Not modified.
+    * matrix's components. TODO fix the doc
+    * 
+    * @param accessListener the listener to be notified whenever a component of the rotation matrix is
+    *                       being accessed. The corresponding constants {@link Axis3D} will be passed
+    *                       to indicate the row and column respectively of the coefficient being
+    *                       accessed.
+    * @param source         the original rotation matrix to link and observe. Not modified.
     * @return the observable rotation matrix.
     */
-   public static RotationMatrixReadOnly newObservableRotationMatrixReadOnly(BiConsumer<Axis3D, Axis3D> valueAccessedListener, RotationMatrixReadOnly source)
+   public static RotationMatrixReadOnly newObservableRotationMatrixReadOnly(EuclidAccessListener<Matrix3DElements> accessListener,
+                                                                            RotationMatrixReadOnly source)
    {
-      return new RotationMatrixReadOnly()
+      return new ObservableRotationMatrixReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableRotationMatrixReadOnly extends ObservableEuclidGeometry<Matrix3DElements, RotationMatrixReadOnly>
+         implements RotationMatrixReadOnly
+   {
+      private ObservableRotationMatrixReadOnly(EuclidAccessListener<Matrix3DElements> accessListener, RotationMatrixReadOnly source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, null, source);
+      }
 
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
 
-         @Override
-         public double getM00()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.X);
-            return source.getM00();
-         }
+      @Override
+      public double getM00()
+      {
+         notifyAccess(Matrix3DElements.M00);
+         return source.getM00();
+      }
 
-         @Override
-         public double getM01()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Y);
-            return source.getM01();
-         }
+      @Override
+      public double getM01()
+      {
+         notifyAccess(Matrix3DElements.M01);
+         return source.getM01();
+      }
 
-         @Override
-         public double getM02()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Z);
-            return source.getM02();
-         }
+      @Override
+      public double getM02()
+      {
+         notifyAccess(Matrix3DElements.M02);
+         return source.getM02();
+      }
 
-         @Override
-         public double getM10()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.X);
-            return source.getM10();
-         }
+      @Override
+      public double getM10()
+      {
+         notifyAccess(Matrix3DElements.M10);
+         return source.getM10();
+      }
 
-         @Override
-         public double getM11()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Y);
-            return source.getM11();
-         }
+      @Override
+      public double getM11()
+      {
+         notifyAccess(Matrix3DElements.M11);
+         return source.getM11();
+      }
 
-         @Override
-         public double getM12()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Z);
-            return source.getM12();
-         }
+      @Override
+      public double getM12()
+      {
+         notifyAccess(Matrix3DElements.M12);
+         return source.getM12();
+      }
 
-         @Override
-         public double getM20()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.X);
-            return source.getM20();
-         }
+      @Override
+      public double getM20()
+      {
+         notifyAccess(Matrix3DElements.M20);
+         return source.getM20();
+      }
 
-         @Override
-         public double getM21()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Y);
-            return source.getM21();
-         }
+      @Override
+      public double getM21()
+      {
+         notifyAccess(Matrix3DElements.M21);
+         return source.getM21();
+      }
 
-         @Override
-         public double getM22()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Z);
-            return source.getM22();
-         }
-
-         private void notifyAccessListener(Axis3D row, Axis3D column)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(row, column);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getM22()
+      {
+         notifyAccess(Matrix3DElements.M22);
+         return source.getM22();
+      }
    }
 
    /**
     * Creates a linked quaternion that can be used to observe access to the source rotation matrix's
-    * components.
-    *
-    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
-    *                              is being accessed. The index of the component being accessed will be
-    *                              passed.
-    * @param source                the original quaternion to link and observe. Not modified.
+    * components. TODO Update the doc
+    * 
+    * @param accessListener the listener to be notified whenever a component of the quaternion is being
+    *                       accessed. The index of the component being accessed will be passed.
+    * @param source         the original quaternion to link and observe. Not modified.
     * @return the observable quaternion.
     */
-   public static QuaternionReadOnly newObservableQuaternionReadOnly(IntConsumer valueAccessedListener, QuaternionReadOnly source)
+   public static QuaternionReadOnly newObservableQuaternionReadOnly(EuclidAccessListener<Axis4D> accessListener, QuaternionReadOnly source)
    {
-      return new QuaternionReadOnly()
+      return new ObservableQuaternionReadOnly(accessListener, source);
+   }
+
+   private static final class ObservableQuaternionReadOnly extends ObservableEuclidGeometry<Axis4D, QuaternionReadOnly> implements QuaternionReadOnly
+   {
+      private ObservableQuaternionReadOnly(EuclidAccessListener<Axis4D> accessListener, QuaternionReadOnly source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, null, source);
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(0);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis4D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(1);
-            return source.getY();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis4D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getZ()
-         {
-            notifyAccessListener(2);
-            return source.getZ();
-         }
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis4D.Z);
+         return source.getZ();
+      }
 
-         @Override
-         public double getS()
-         {
-            notifyAccessListener(3);
-            return source.getS();
-         }
-
-         private void notifyAccessListener(int index)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(index);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof QuaternionReadOnly)
-               return equals((QuaternionReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getS()
+      {
+         notifyAccess(Axis4D.S);
+         return source.getS();
+      }
    }
 
    /**
     * Creates a new point that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
-    *                              been modified. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the point is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the point has been
+    *                       modified. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable point.
     */
-   public static Point2DBasics newObservablePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener)
+   public static Point2DBasics newObservablePoint2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener)
    {
-      return newObservablePoint2DBasics(valueChangedListener, valueAccessedListener, new Point2D());
+      return newObservablePoint2DBasics(accessListener, changeListener, new Point2D());
    }
 
    /**
     * Creates a linked point that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
+    * 
+    * @param changeListener        the listener to be notified whenever a coordinate of the point has
     *                              been modified. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate that was changed alongside its new
     *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    * @param source                the original point to link and observe. Modifiable via the linked
+    *                              point interface.
+    * @param accessListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the coordinate being accessed. Can be
     *                              {@code null}.
-    * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface.
     * @return the observable point.
     */
-   public static Point2DBasics newObservablePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
-                                                          Consumer<Axis2D> valueAccessedListener,
+   public static Point2DBasics newObservablePoint2DBasics(EuclidAccessListener<Axis2D> accessListener,
+                                                          EuclidChangeListener<Axis2D> changeListener,
                                                           Point2DBasics source)
    {
-      return new Point2DBasics()
+      return new ObservablePoint2DBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservablePoint2DBasics extends ObservableEuclidGeometry<Axis2D, Point2DBasics> implements Point2DBasics
+   {
+      private ObservablePoint2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener, Point2DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         double oldX = source.getX();
+
+         if (x != oldX)
          {
-            if (x != source.getX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis2D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis2D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         double oldY = source.getY();
+
+         if (y != oldY)
          {
-            if (y != source.getY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis2D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis2D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis2D.Y);
-            return source.getY();
-         }
-
-         private void notifyChangeListener(Axis2D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis2D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Point2DReadOnly)
-               return equals((Point2DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
    }
 
    /**
     * Creates a new point that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the point is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the point has been
+    *                       modified. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable point.
     */
-   public static Point3DBasics newObservablePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener)
+   public static Point3DBasics newObservablePoint3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener)
    {
-      return newObservablePoint3DBasics(valueChangedListener, valueAccessedListener, new Point3D());
+      return newObservablePoint3DBasics(accessListener, changeListener, new Point3D());
    }
 
    /**
     * Creates a linked point that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
-    * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface.
+    * 
+    * @param accessListener       the listener to be notified whenever a coordinate of the point is
+    *                             being accessed. The corresponding constant {@link Axis3D} will be
+    *                             passed to indicate the coordinate being accessed. Can be
+    *                             {@code null}.
+    * @param source               the original point to link and observe. Modifiable via the linked
+    *                             point interface.
+    * @param valueChangedListener the listener to be notified whenever a coordinate of the point has
+    *                             been modified. The corresponding constant {@link Axis3D} will be
+    *                             passed to indicate the coordinate that was changed alongside its new
+    *                             value. Can be {@code null}.
     * @return the observable point.
     */
-   public static Point3DBasics newObservablePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                          Consumer<Axis3D> valueAccessedListener,
+   public static Point3DBasics newObservablePoint3DBasics(EuclidAccessListener<Axis3D> accessListener,
+                                                          EuclidChangeListener<Axis3D> changeListener,
                                                           Point3DBasics source)
    {
+      return new ObservablePoint3DBasics(accessListener, changeListener, source);
+   }
 
-      return new Point3DBasics()
+   private static final class ObservablePoint3DBasics extends ObservableEuclidGeometry<Axis3D, Point3DBasics> implements Point3DBasics
+   {
+      private ObservablePoint3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener, Point3DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         double oldX = source.getX();
+
+         if (x != oldX)
          {
-            if (x != source.getX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis3D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis3D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         double oldY = source.getY();
+
+         if (y != oldY)
          {
-            if (y != source.getY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis3D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis3D.Y);
          }
+      }
 
-         @Override
-         public void setZ(double z)
+      @Override
+      public void setZ(double z)
+      {
+         double oldZ = source.getZ();
+
+         if (z != oldZ)
          {
-            if (z != source.getZ())
-            {
-               source.setZ(z);
-               notifyChangeListener(Axis3D.Z, z);
-            }
+            source.setZ(z);
+            notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis3D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis3D.Y);
-            return source.getY();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getZ()
-         {
-            notifyAccessListener(Axis3D.Z);
-            return source.getZ();
-         }
-
-         private void notifyChangeListener(Axis3D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis3D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Point3DReadOnly)
-               return equals((Point3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getZ();
+      }
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a component of the vector has
-    *                              been modified. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a component of the vector has been
+    *                       modified. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable vector.
     */
-   public static Vector2DBasics newObservableVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener)
+   public static Vector2DBasics newObservableVector2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener)
    {
-      return newObservableVector2DBasics(valueChangedListener, valueAccessedListener, new Vector2D());
+      return newObservableVector2DBasics(accessListener, changeListener, new Vector2D());
    }
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
-    *                              been modified. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
-    * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the vector has been
+    *                       modified. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
+    * @param source         the original vector to link and observe. Modifiable via the linked vector
+    *                       interface.
     * @return the observable vector.
     */
-   public static Vector2DBasics newObservableVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
-                                                            Consumer<Axis2D> valueAccessedListener,
+   public static Vector2DBasics newObservableVector2DBasics(EuclidAccessListener<Axis2D> accessListener,
+                                                            EuclidChangeListener<Axis2D> changeListener,
                                                             Vector2DBasics source)
    {
-      return new Vector2DBasics()
+      return new ObservableVector2DBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableVector2DBasics extends ObservableEuclidGeometry<Axis2D, Vector2DBasics> implements Vector2DBasics
+   {
+      private ObservableVector2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener, Vector2DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         double oldX = source.getX();
+
+         if (x != oldX)
          {
-            if (x != source.getX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis2D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis2D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         double oldY = source.getY();
+
+         if (y != oldY)
          {
-            if (y != source.getY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis2D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis2D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis2D.Y);
-            return source.getY();
-         }
-
-         private void notifyChangeListener(Axis2D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis2D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector2DReadOnly)
-               return equals((Vector2DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a component of the vector has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a component of the vector has been
+    *                       modified. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable vector.
     */
-   public static Vector3DBasics newObservableVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener)
+   public static Vector3DBasics newObservableVector3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener)
    {
-      return newObservableVector3DBasics(valueChangedListener, valueAccessedListener, new Vector3D());
+      return newObservableVector3DBasics(accessListener, changeListener, new Vector3D());
    }
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
-    * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the vector has been
+    *                       modified. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
+    * @param source         the original vector to link and observe. Modifiable via the linked vector
+    *                       interface.
     * @return the observable vector.
     */
-   public static Vector3DBasics newObservableVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                            Consumer<Axis3D> valueAccessedListener,
+   public static Vector3DBasics newObservableVector3DBasics(EuclidAccessListener<Axis3D> accessListener,
+                                                            EuclidChangeListener<Axis3D> changeListener,
                                                             Vector3DBasics source)
    {
-      return new Vector3DBasics()
+      return new ObservableVector3DBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableVector3DBasics extends ObservableEuclidGeometry<Axis3D, Vector3DBasics> implements Vector3DBasics
+   {
+      private ObservableVector3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener, Vector3DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         double oldX = source.getX();
+
+         if (x != oldX)
          {
-            if (x != source.getX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis3D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis3D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         double oldY = source.getY();
+
+         if (y != oldY)
          {
-            if (y != source.getY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis3D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis3D.Y);
          }
+      }
 
-         @Override
-         public void setZ(double z)
+      @Override
+      public void setZ(double z)
+      {
+         double oldZ = source.getZ();
+
+         if (z != oldZ)
          {
-            if (z != source.getZ())
-            {
-               source.setZ(z);
-               notifyChangeListener(Axis3D.Z, z);
-            }
+            source.setZ(z);
+            notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis3D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis3D.Y);
-            return source.getY();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getZ()
-         {
-            notifyAccessListener(Axis3D.Z);
-            return source.getZ();
-         }
-
-         private void notifyChangeListener(Axis3D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis3D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector3DReadOnly)
-               return equals((Vector3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getZ();
+      }
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a component of the vector has
-    *                              been modified. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the component being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a component of the vector has been
+    *                       modified. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the component that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable vector.
     */
-   public static UnitVector2DBasics newObservableUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener)
+   public static UnitVector2DBasics newObservableUnitVector2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener)
    {
-      return newObservableUnitVector2DBasics(valueChangedListener, valueAccessedListener, new UnitVector2D());
+      return newObservableUnitVector2DBasics(accessListener, changeListener, new UnitVector2D());
    }
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
-    *                              been modified. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
-    *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
-    * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the vector is being
+    *                       accessed. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the vector has been
+    *                       modified. The corresponding constant {@link Axis2D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
+    * @param source         the original vector to link and observe. Modifiable via the linked vector
+    *                       interface.
     * @return the observable vector.
     */
-   public static UnitVector2DBasics newObservableUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
-                                                                    Consumer<Axis2D> valueAccessedListener,
+   public static UnitVector2DBasics newObservableUnitVector2DBasics(EuclidAccessListener<Axis2D> accessListener,
+                                                                    EuclidChangeListener<Axis2D> changeListener,
                                                                     UnitVector2DBasics source)
    {
-      return new UnitVector2DBasics()
+      return new ObservableUnitVector2DBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableUnitVector2DBasics extends ObservableEuclidGeometry<Axis2D, UnitVector2DBasics> implements UnitVector2DBasics
+   {
+      private ObservableUnitVector2DBasics(EuclidAccessListener<Axis2D> accessListener, EuclidChangeListener<Axis2D> changeListener, UnitVector2DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void absolute()
+      @Override
+      public void absolute()
+      {
+         boolean xChange = getRawX() < 0.0;
+         boolean yChange = getRawY() < 0.0;
+
+         if (xChange || yChange)
          {
-            boolean notifyX = getRawX() < 0.0;
-            boolean notifyY = getRawY() < 0.0;
-
             source.absolute();
 
-            if (notifyX)
-               notifyChangeListener(Axis2D.X, getRawX());
-            if (notifyY)
-               notifyChangeListener(Axis2D.Y, getRawY());
+            if (xChange)
+               notifyChange(Axis2D.X);
+            if (yChange)
+               notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public void negate()
+      @Override
+      public void negate()
+      {
+         source.negate();
+
+         notifyChange(Axis2D.X);
+         notifyChange(Axis2D.Y);
+      }
+
+      @Override
+      public void markAsDirty()
+      {
+         source.markAsDirty();
+      }
+
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
+
+      @Override
+      public void normalize()
+      {
+         if (isDirty())
          {
-            source.negate();
-
-            notifyChangeListener(Axis2D.X, getRawX());
-            notifyChangeListener(Axis2D.Y, getRawY());
-         }
-
-         @Override
-         public void markAsDirty()
-         {
-            source.markAsDirty();
-         }
-
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
-
-         @Override
-         public void normalize()
-         {
-            boolean notify = isDirty();
-
             source.normalize();
 
-            if (notify)
-            {
-               notifyChangeListener(Axis2D.X, getRawX());
-               notifyChangeListener(Axis2D.Y, getRawY());
-            }
+            notifyChange(Axis2D.X);
+            notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public void set(UnitVector2DReadOnly other)
+      @Override
+      public void set(UnitVector2DReadOnly other)
+      {
+         boolean xChange = getRawX() != other.getRawX();
+         boolean yChange = getRawY() != other.getRawY();
+
+         if (xChange || yChange)
          {
-            boolean notifyX = getRawX() != other.getRawX();
-            boolean notifyY = getRawY() != other.getRawY();
-
             source.set(other);
 
-            if (notifyX)
-               notifyChangeListener(Axis2D.X, getRawX());
-            if (notifyY)
-               notifyChangeListener(Axis2D.Y, getRawY());
+            if (xChange)
+               notifyChange(Axis2D.X);
+            if (yChange)
+               notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         if (x != source.getRawX())
          {
-            if (x != source.getRawX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis2D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis2D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         if (y != source.getRawY())
          {
-            if (y != source.getRawY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis2D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis2D.Y);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis2D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis2D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis2D.Y);
-            return source.getY();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis2D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return source.getRawX();
-         }
+      @Override
+      public double getRawX()
+      {
+         return source.getRawX();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return source.getRawY();
-         }
-
-         private void notifyChangeListener(Axis2D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis2D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector2DReadOnly)
-               return equals((Vector2DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getRawY()
+      {
+         return source.getRawY();
+      }
    }
 
    /**
     * Creates a new vector that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a component of the vector has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the component being accessed. Can be
-    *                              {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a component of the vector has been
+    *                       modified. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the component that was changed alongside its new value. Can be
+    *                       {@code null}.
     * @return the observable vector.
     */
-   public static UnitVector3DBasics newObservableUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener)
+   public static UnitVector3DBasics newObservableUnitVector3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener)
    {
-      return newObservableUnitVector3DBasics(valueChangedListener, valueAccessedListener, new UnitVector3D());
+      return newObservableUnitVector3DBasics(accessListener, changeListener, new UnitVector3D());
    }
 
    /**
     * Creates a linked vector that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
-    *                              been modified. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate that was changed alongside its new
-    *                              value. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
-    *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed. Can be
-    *                              {@code null}.
-    * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface.
+    * 
+    * @param accessListener the listener to be notified whenever a coordinate of the vector is being
+    *                       accessed. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate being accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever a coordinate of the vector has been
+    *                       modified. The corresponding constant {@link Axis3D} will be passed to
+    *                       indicate the coordinate that was changed alongside its new value. Can be
+    *                       {@code null}.
+    * @param source         the original vector to link and observe. Modifiable via the linked vector
+    *                       interface.
     * @return the observable vector.
     */
-   public static UnitVector3DBasics newObservableUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                                    Consumer<Axis3D> valueAccessedListener,
+   public static UnitVector3DBasics newObservableUnitVector3DBasics(EuclidAccessListener<Axis3D> accessListener,
+                                                                    EuclidChangeListener<Axis3D> changeListener,
                                                                     UnitVector3DBasics source)
    {
-      return new UnitVector3DBasics()
+      return new ObservableUnitVector3DBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableUnitVector3DBasics extends ObservableEuclidGeometry<Axis3D, UnitVector3DBasics> implements UnitVector3DBasics
+   {
+      private ObservableUnitVector3DBasics(EuclidAccessListener<Axis3D> accessListener, EuclidChangeListener<Axis3D> changeListener, UnitVector3DBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void absolute()
+      @Override
+      public void absolute()
+      {
+         boolean xChange = getRawX() < 0.0;
+         boolean yChange = getRawY() < 0.0;
+         boolean zChange = getRawZ() < 0.0;
+
+         if (xChange || yChange || zChange)
          {
-            boolean notifyX = getRawX() < 0.0;
-            boolean notifyY = getRawY() < 0.0;
-            boolean notifyZ = getRawY() < 0.0;
-
             source.absolute();
 
-            if (notifyX)
-               notifyChangeListener(Axis3D.X, getRawX());
-            if (notifyY)
-               notifyChangeListener(Axis3D.Y, getRawY());
-            if (notifyZ)
-               notifyChangeListener(Axis3D.Z, getRawZ());
+            if (xChange)
+               notifyChange(Axis3D.X);
+            if (yChange)
+               notifyChange(Axis3D.Y);
+            if (zChange)
+               notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public void negate()
+      @Override
+      public void negate()
+      {
+         source.negate();
+
+         notifyChange(Axis3D.X);
+         notifyChange(Axis3D.Y);
+         notifyChange(Axis3D.Z);
+      }
+
+      @Override
+      public void markAsDirty()
+      {
+         source.markAsDirty();
+      }
+
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
+
+      @Override
+      public void normalize()
+      {
+         if (isDirty())
          {
-            source.negate();
-
-            notifyChangeListener(Axis3D.X, getRawX());
-            notifyChangeListener(Axis3D.Y, getRawY());
-            notifyChangeListener(Axis3D.Z, getRawZ());
-         }
-
-         @Override
-         public void markAsDirty()
-         {
-            source.markAsDirty();
-         }
-
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
-
-         @Override
-         public void normalize()
-         {
-            boolean notify = isDirty();
-
             source.normalize();
 
-            if (notify)
-            {
-               notifyChangeListener(Axis3D.X, getRawX());
-               notifyChangeListener(Axis3D.Y, getRawY());
-               notifyChangeListener(Axis3D.Z, getRawZ());
-            }
+            notifyChange(Axis3D.X);
+            notifyChange(Axis3D.Y);
+            notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public void set(UnitVector3DReadOnly other)
+      @Override
+      public void set(UnitVector3DReadOnly other)
+      {
+         boolean xChange = getRawX() != other.getRawX();
+         boolean yChange = getRawY() != other.getRawY();
+         boolean zChange = getRawZ() != other.getRawZ();
+
+         if (xChange || yChange || zChange)
          {
-            boolean notifyX = getRawX() != other.getRawX();
-            boolean notifyY = getRawY() != other.getRawY();
-            boolean notifyZ = getRawZ() != other.getRawZ();
-
             source.set(other);
 
-            if (notifyX)
-               notifyChangeListener(Axis3D.X, getRawX());
-            if (notifyY)
-               notifyChangeListener(Axis3D.Y, getRawY());
-            if (notifyZ)
-               notifyChangeListener(Axis3D.Z, getRawZ());
+            if (xChange)
+               notifyChange(Axis3D.X);
+            if (yChange)
+               notifyChange(Axis3D.Y);
+            if (zChange)
+               notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public void setX(double x)
+      @Override
+      public void setX(double x)
+      {
+         if (x != source.getRawX())
          {
-            if (x != source.getRawX())
-            {
-               source.setX(x);
-               notifyChangeListener(Axis3D.X, x);
-            }
+            source.setX(x);
+            notifyChange(Axis3D.X);
          }
+      }
 
-         @Override
-         public void setY(double y)
+      @Override
+      public void setY(double y)
+      {
+         if (y != source.getRawY())
          {
-            if (y != source.getRawY())
-            {
-               source.setY(y);
-               notifyChangeListener(Axis3D.Y, y);
-            }
+            source.setY(y);
+            notifyChange(Axis3D.Y);
          }
+      }
 
-         @Override
-         public void setZ(double z)
+      @Override
+      public void setZ(double z)
+      {
+         if (z != source.getRawZ())
          {
-            if (z != getRawZ())
-            {
-               source.setZ(z);
-               notifyChangeListener(Axis3D.Z, z);
-            }
+            source.setZ(z);
+            notifyChange(Axis3D.Z);
          }
+      }
 
-         @Override
-         public double getX()
-         {
-            notifyAccessListener(Axis3D.X);
-            return source.getX();
-         }
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis3D.X);
+         return source.getX();
+      }
 
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(Axis3D.Y);
-            return source.getY();
-         }
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis3D.Y);
+         return source.getY();
+      }
 
-         @Override
-         public double getZ()
-         {
-            notifyAccessListener(Axis3D.Z);
-            return source.getZ();
-         }
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis3D.Z);
+         return source.getZ();
+      }
 
-         @Override
-         public double getRawX()
-         {
-            return source.getRawX();
-         }
+      @Override
+      public double getRawX()
+      {
+         return source.getRawX();
+      }
 
-         @Override
-         public double getRawY()
-         {
-            return source.getRawY();
-         }
+      @Override
+      public double getRawY()
+      {
+         return source.getRawY();
+      }
 
-         @Override
-         public double getRawZ()
-         {
-            return source.getRawZ();
-         }
-
-         private void notifyChangeListener(Axis3D axis, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(axis, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis3D axis)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(axis);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Vector3DReadOnly)
-               return equals((Vector3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getRawZ()
+      {
+         return source.getRawY();
+      }
    }
 
    /**
     * Creates a new rotation matrix that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
-    *                              modified. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
-    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
-    *                              will be passed to indicate the row and column respectively of the
-    *                              coefficient being accessed. Can be {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the rotation matrix is
+    *                       being accessed. The corresponding constants {@link Axis3D} will be passed
+    *                       to indicate the row and column respectively of the coefficient being
+    *                       accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever the rotation matrix has been modified.
+    *                       Can be {@code null}.
     * @return the observable rotation matrix.
     */
-   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener, BiConsumer<Axis3D, Axis3D> valueAccessedListener)
+   public static RotationMatrixBasics newObservableRotationMatrixBasics(EuclidAccessListener<Matrix3DElements> accessListener,
+                                                                        EuclidChangeListener<Matrix3DElements> changeListener)
    {
-      return newObservableRotationMatrixBasics(valueChangedListener, valueAccessedListener, new RotationMatrix());
+      return newObservableRotationMatrixBasics(accessListener, changeListener, new RotationMatrix());
    }
 
    /**
     * Creates a linked rotation matrix that can be used to observe read and write operations on the
     * source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
-    *                              modified. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
-    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
-    *                              will be passed to indicate the row and column respectively of the
-    *                              coefficient being accessed. Can be {@code null}.
-    * @param source                the original rotation matrix to link and observe. Modifiable via the
-    *                              linked rotation matrix interface.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the rotation matrix is
+    *                       being accessed. The corresponding constants {@link Axis3D} will be passed
+    *                       to indicate the row and column respectively of the coefficient being
+    *                       accessed. Can be {@code null}.
+    * @param changeListener the listener to be notified whenever the rotation matrix has been modified.
+    *                       Can be {@code null}.
+    * @param source         the original rotation matrix to link and observe. Modifiable via the linked
+    *                       rotation matrix interface.
     * @return the observable rotation matrix.
     */
-   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener,
-                                                                        BiConsumer<Axis3D, Axis3D> valueAccessedListener,
+   public static RotationMatrixBasics newObservableRotationMatrixBasics(EuclidAccessListener<Matrix3DElements> accessListener,
+                                                                        EuclidChangeListener<Matrix3DElements> changeListener,
                                                                         RotationMatrixBasics source)
    {
-      return new RotationMatrixBasics()
+      return new ObservableRotationMatrixBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableRotationMatrixBasics extends ObservableEuclidGeometry<Matrix3DElements, RotationMatrixBasics>
+         implements RotationMatrixBasics
+   {
+      private ObservableRotationMatrixBasics(EuclidAccessListener<Matrix3DElements> accessListener,
+                                             EuclidChangeListener<Matrix3DElements> changeListener,
+                                             RotationMatrixBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setIdentity()
+      @Override
+      public void setIdentity()
+      {
+         source.setIdentity();
+         notifyChange(null);
+      }
+
+      @Override
+      public void setToNaN()
+      {
+         source.setToNaN();
+         notifyChange(null);
+      }
+
+      @Override
+      public void normalize()
+      {
+         source.normalize();
+         notifyChange(null);
+      }
+
+      @Override
+      public void transpose()
+      {
+         source.transpose();
+         notifyChange(null);
+      }
+
+      @Override
+      public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+      {
+         source.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         notifyChange(null);
+      }
+
+      @Override
+      public void set(RotationMatrixReadOnly other)
+      {
+         if (other != source)
          {
-            source.setIdentity();
-            notifyChangeListener();
+            source.set(other);
+            notifyChange(null);
          }
+      }
 
-         @Override
-         public void setToNaN()
-         {
-            source.setToNaN();
-            notifyChangeListener();
-         }
+      @Override
+      public boolean isDirty()
+      {
+         return source.isDirty();
+      }
 
-         @Override
-         public void normalize()
-         {
-            source.normalize();
-            notifyChangeListener();
-         }
+      @Override
+      public double getM00()
+      {
+         notifyAccess(Matrix3DElements.M00);
+         return source.getM00();
+      }
 
-         @Override
-         public void transpose()
-         {
-            source.transpose();
-            notifyChangeListener();
-         }
+      @Override
+      public double getM01()
+      {
+         notifyAccess(Matrix3DElements.M01);
+         return source.getM01();
+      }
 
-         @Override
-         public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-         {
-            source.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-            notifyChangeListener();
-         }
+      @Override
+      public double getM02()
+      {
+         notifyAccess(Matrix3DElements.M02);
+         return source.getM02();
+      }
 
-         @Override
-         public void set(RotationMatrixReadOnly other)
-         {
-            if (other != source)
-            {
-               source.set(other);
-               notifyChangeListener();
-            }
-         }
+      @Override
+      public double getM10()
+      {
+         notifyAccess(Matrix3DElements.M10);
+         return source.getM10();
+      }
 
-         @Override
-         public boolean isDirty()
-         {
-            return source.isDirty();
-         }
+      @Override
+      public double getM11()
+      {
+         notifyAccess(Matrix3DElements.M11);
+         return source.getM11();
+      }
 
-         @Override
-         public double getM00()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.X);
-            return source.getM00();
-         }
+      @Override
+      public double getM12()
+      {
+         notifyAccess(Matrix3DElements.M12);
+         return source.getM12();
+      }
 
-         @Override
-         public double getM01()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Y);
-            return source.getM01();
-         }
+      @Override
+      public double getM20()
+      {
+         notifyAccess(Matrix3DElements.M20);
+         return source.getM20();
+      }
 
-         @Override
-         public double getM02()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Z);
-            return source.getM02();
-         }
+      @Override
+      public double getM21()
+      {
+         notifyAccess(Matrix3DElements.M21);
+         return source.getM21();
+      }
 
-         @Override
-         public double getM10()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.X);
-            return source.getM10();
-         }
-
-         @Override
-         public double getM11()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Y);
-            return source.getM11();
-         }
-
-         @Override
-         public double getM12()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Z);
-            return source.getM12();
-         }
-
-         @Override
-         public double getM20()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.X);
-            return source.getM20();
-         }
-
-         @Override
-         public double getM21()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Y);
-            return source.getM21();
-         }
-
-         @Override
-         public double getM22()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Z);
-            return source.getM22();
-         }
-
-         private void notifyChangeListener()
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.run();
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis3D row, Axis3D column)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(row, column);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public double getM22()
+      {
+         notifyAccess(Matrix3DElements.M22);
+         return source.getM22();
+      }
    }
 
    /**
     * Creates a new quaternion that can be used to observe read and write operations.
-    *
-    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
-    *                              modified. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
-    *                              is being accessed. The index of the component being accessed will be
-    *                              passed. Can be {@code null}.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the quaternion is being
+    *                       accessed. The index of the component being accessed will be passed. Can be
+    *                       {@code null}.
+    * @param changeListener the listener to be notified whenever the quaternion has been modified. Can
+    *                       be {@code null}.
     * @return the observable quaternion.
     */
-   public static QuaternionBasics newObservableQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener)
+   public static QuaternionBasics newObservableQuaternionBasics(EuclidAccessListener<Axis4D> accessListener, EuclidChangeListener<Axis4D> changeListener)
    {
-      return newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, new Quaternion());
+      return newObservableQuaternionBasics(accessListener, changeListener, new Quaternion());
    }
 
    /**
     * Creates a linked quaternion that can be used to observe read and write operations on the source.
-    *
-    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
-    *                              modified. Can be {@code null}.
-    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
-    *                              matrix is being accessed. The index of the component being accessed
-    *                              will be passed. Can be {@code null}.
-    * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface.
+    * 
+    * @param accessListener the listener to be notified whenever a component of the rotation matrix is
+    *                       being accessed. The index of the component being accessed will be passed.
+    *                       Can be {@code null}.
+    * @param changeListener the listener to be notified whenever the quaternion has been modified. Can
+    *                       be {@code null}.
+    * @param source         the original vector to link and observe. Modifiable via the linked vector
+    *                       interface.
     * @return the observable quaternion.
     */
-   public static QuaternionBasics newObservableQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener, QuaternionBasics source)
+   public static QuaternionBasics newObservableQuaternionBasics(EuclidAccessListener<Axis4D> accessListener,
+                                                                EuclidChangeListener<Axis4D> changeListener,
+                                                                QuaternionBasics source)
    {
-      return new QuaternionBasics()
+      return new ObservableQuaternionBasics(accessListener, changeListener, source);
+   }
+
+   private static final class ObservableQuaternionBasics extends ObservableEuclidGeometry<Axis4D, QuaternionBasics> implements QuaternionBasics
+   {
+      private ObservableQuaternionBasics(EuclidAccessListener<Axis4D> accessListener, EuclidChangeListener<Axis4D> changeListener, QuaternionBasics source)
       {
-         private boolean isNotifying = false;
+         super(accessListener, changeListener, source);
+      }
 
-         @Override
-         public void setUnsafe(double qx, double qy, double qz, double qs)
+      @Override
+      public void setUnsafe(double qx, double qy, double qz, double qs)
+      {
+         source.setUnsafe(qx, qy, qz, qs);
+         notifyChange(null);
+      }
+
+      @Override
+      public double getX()
+      {
+         notifyAccess(Axis4D.X);
+         return source.getX();
+      }
+
+      @Override
+      public double getY()
+      {
+         notifyAccess(Axis4D.Y);
+         return source.getY();
+      }
+
+      @Override
+      public double getZ()
+      {
+         notifyAccess(Axis4D.Z);
+         return source.getZ();
+      }
+
+      @Override
+      public double getS()
+      {
+         notifyAccess(Axis4D.S);
+         return source.getS();
+      }
+   }
+
+   public static RigidBodyTransformBasics newObservableRigidBodyTransformBasics(EuclidAccessListener<TransformComponents> accessListener,
+                                                                                EuclidChangeListener<TransformComponents> changeListener,
+                                                                                RigidBodyTransform source)
+   {
+      return new ObservableRigidBodyTransform(accessListener, changeListener, source);
+   }
+
+   public enum TransformComponents
+   {
+      ROTATION, TRANSLATION
+   };
+
+   private static final class ObservableRigidBodyTransform extends ObservableEuclidGeometry<TransformComponents, EuclidGeometry>
+         implements RigidBodyTransformBasics
+   {
+      private final ObservableRotationMatrixBasics observableRotation;
+      private final ObservableVector3DBasics observableTranslation;
+
+      public ObservableRigidBodyTransform(EuclidAccessListener<TransformComponents> accessListener,
+                                          EuclidChangeListener<TransformComponents> changeListener,
+                                          RigidBodyTransform source)
+      {
+         super(accessListener, changeListener, source);
+         EuclidAccessListener<Matrix3DElements> rotationAccessListener = null;
+         if (accessListener != null)
+            rotationAccessListener = a -> accessListener.onAccess(TransformComponents.ROTATION);
+         EuclidChangeListener<Matrix3DElements> rotationChangeListener = null;
+         if (changeListener != null)
+            rotationChangeListener = a -> changeListener.changed(TransformComponents.ROTATION);
+         observableRotation = new ObservableRotationMatrixBasics(rotationAccessListener, rotationChangeListener, source.getRotation());
+
+         EuclidAccessListener<Axis3D> translationAccessListener = null;
+         if (accessListener != null)
+            translationAccessListener = a -> accessListener.onAccess(TransformComponents.TRANSLATION);
+         EuclidChangeListener<Axis3D> translationChangeListener = null;
+         if (changeListener != null)
+            translationChangeListener = a -> changeListener.changed(TransformComponents.TRANSLATION);
+         observableTranslation = new ObservableVector3DBasics(translationAccessListener, translationChangeListener, source.getTranslation());
+      }
+
+      @Override
+      public Vector3DBasics getTranslation()
+      {
+         return observableTranslation;
+      }
+
+      @Override
+      public RotationMatrixBasics getRotation()
+      {
+         return observableRotation;
+      }
+
+      @Override
+      public String toString(String format)
+      {
+         return source.toString(format);
+      }
+   }
+
+   private static abstract class ObservableEuclidGeometry<I, T extends EuclidGeometry> implements EuclidGeometry
+   {
+      protected final T source;
+      private final EuclidAccessListener<I> accessListener;
+      private final EuclidChangeListener<I> changeListener;
+
+      private boolean isNotifying = false;
+
+      public ObservableEuclidGeometry(EuclidAccessListener<I> accessListener, EuclidChangeListener<I> changeListener, T source)
+      {
+         this.source = source;
+         this.accessListener = accessListener;
+         this.changeListener = changeListener;
+      }
+
+      protected void notifyAccess(I valueAccessed)
+      {
+         if (accessListener == null || isNotifying)
+            return;
+
+         isNotifying = true;
+         try
          {
-            source.setUnsafe(qx, qy, qz, qs);
-            notifyChangeListener();
+            accessListener.onAccess(valueAccessed);
          }
-
-         @Override
-         public double getX()
+         finally
          {
-            notifyAccessListener(0);
-            return source.getX();
-         }
-
-         @Override
-         public double getY()
-         {
-            notifyAccessListener(1);
-            return source.getY();
-         }
-
-         @Override
-         public double getZ()
-         {
-            notifyAccessListener(2);
-            return source.getZ();
-         }
-
-         @Override
-         public double getS()
-         {
-            notifyAccessListener(3);
-            return source.getS();
-         }
-
-         private void notifyChangeListener()
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.run();
             isNotifying = false;
          }
+      }
 
-         private void notifyAccessListener(int index)
+      protected void notifyChange(I valueChanged)
+      {
+         if (changeListener == null || isNotifying)
+            return;
+
+         isNotifying = true;
+         try
          {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(index);
+            changeListener.changed(valueChanged);
+         }
+         finally
+         {
             isNotifying = false;
          }
+      }
 
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
-         }
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof EuclidGeometry)
+            return equals((EuclidGeometry) object);
+         else
+            return false;
+      }
 
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof QuaternionReadOnly)
-               return equals((QuaternionReadOnly) object);
-            else
-               return false;
-         }
+      @Override
+      public int hashCode()
+      {
+         return source.hashCode();
+      }
 
-         @Override
-         public String toString()
-         {
-            return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
-         }
-      };
+      @Override
+      public boolean equals(EuclidGeometry geometry)
+      {
+         if (geometry == this)
+            return true;
+         return source.equals(geometry);
+      }
+
+      @Override
+      public boolean epsilonEquals(EuclidGeometry geometry, double epsilon)
+      {
+         if (geometry == this)
+            return true;
+         return source.epsilonEquals(geometry, epsilon);
+      }
+
+      @Override
+      public String toString()
+      {
+         return source.toString();
+      }
+   }
+
+   public static interface EuclidAccessListener<I>
+   {
+      void onAccess(I valueAccessed);
+   }
+
+   public static interface EuclidChangeListener<I>
+   {
+      void changed(I valueChanged);
    }
 }

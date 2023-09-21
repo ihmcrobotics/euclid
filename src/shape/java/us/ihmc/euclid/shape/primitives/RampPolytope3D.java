@@ -143,9 +143,9 @@ class RampPolytope3D implements RampPolytope3DView
 
       private final BoundingBox3DBasics boundingBox = newObservableBoundingBox3DBasics(null, (axis, bound) -> updateBoundingBox());
 
-      private final Point3DBasics centroid = newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
+      private final Point3DBasics centroid = newObservablePoint3DBasics(axis -> updateCentroidAndArea(), null);
       private final Vector3DReadOnly normalLocal;
-      private final Vector3DBasics normal = newObservableVector3DBasics(null, axis -> updateNormal());
+      private final Vector3DBasics normal = newObservableVector3DBasics(axis -> updateNormal(), null);
       private final DoubleSupplier areaSupplier;
 
       private boolean isBoundingBoxDirty = true;

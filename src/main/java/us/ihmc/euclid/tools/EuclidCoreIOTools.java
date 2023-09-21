@@ -10,8 +10,8 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -51,7 +51,7 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(RigidBodyTransform rigidBodyTransform)
+   public static String getRigidBodyTransformString(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       return getRigidBodyTransformString(DEFAULT_FORMAT, rigidBodyTransform);
    }
@@ -74,7 +74,7 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(String format, RigidBodyTransform rigidBodyTransform)
+   public static String getRigidBodyTransformString(String format, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       if (rigidBodyTransform == null)
          return "null";
@@ -122,6 +122,20 @@ public class EuclidCoreIOTools
          return "null";
       else
          return getHomogeneousTransformString(format, affineTransform.getLinearTransform(), affineTransform.getTranslation());
+   }
+
+   private static String getHomogeneousTransformString(String format, Orientation3DReadOnly rotation, Tuple3DReadOnly translation)
+   {
+      if (rotation instanceof Matrix3DReadOnly)
+         return getHomogeneousTransformString(format, (Orientation3DReadOnly) rotation, translation);
+
+      if (rotation instanceof QuaternionReadOnly)
+         return getQuaternionBasedTransformString(format, (QuaternionReadOnly) rotation, translation);
+
+      if (rotation == null)
+         return "null";
+      else
+         return "Rotation:  " + rotation.toString(format) + "\nTranslation: " + translation.toString(format);
    }
 
    private static String getHomogeneousTransformString(String format, Matrix3DReadOnly matrix, Tuple3DReadOnly translation)

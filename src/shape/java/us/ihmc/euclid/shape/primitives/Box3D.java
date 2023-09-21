@@ -39,11 +39,11 @@ public class Box3D implements Box3DBasics, Settable<Box3D>
    /**
     * Represents the sizeX, sizeY, and sizeZ of this box.
     */
-   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) ->
+   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics(null, axis ->
    {
       checkSizePositive(axis);
       notifyChangeListeners();
-   }, null);
+   });
 
    private BoxPolytope3D polytopeView = null;
 
@@ -231,9 +231,9 @@ public class Box3D implements Box3DBasics, Settable<Box3D>
     */
    public void notifyChangeListeners()
    {
-      for (int i = 0; i < changeListeners.size(); i++)
+      for (Shape3DChangeListener changeListener : changeListeners)
       {
-         changeListeners.get(i).changed();
+         changeListener.changed();
       }
    }
 
@@ -244,9 +244,9 @@ public class Box3D implements Box3DBasics, Settable<Box3D>
     */
    public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
-      for (int i = 0; i < listeners.size(); i++)
+      for (Shape3DChangeListener listener : listeners)
       {
-         addChangeListener(listeners.get(i));
+         addChangeListener(listener);
       }
    }
 

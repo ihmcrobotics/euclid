@@ -29,9 +29,9 @@ public class Shape3DPose implements Shape3DPoseBasics, Settable<Shape3DPose>
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The orientation part. */
-   private final RotationMatrixBasics shapeOrientation = EuclidCoreFactories.newObservableRotationMatrixBasics(this::notifyChangeListeners, null);
+   private final RotationMatrixBasics shapeOrientation = EuclidCoreFactories.newObservableRotationMatrixBasics(null, this::notifyChangeListeners);
    /** The position part. */
-   private final Point3DBasics shapePosition = EuclidCoreFactories.newObservablePoint3DBasics((axis, newValue) -> notifyChangeListeners(), null);
+   private final Point3DBasics shapePosition = EuclidCoreFactories.newObservablePoint3DBasics(null, (axis, newValue) -> notifyChangeListeners());
 
    /** Vector linked to the components of the x-axis unit-vector. */
    private final Vector3DReadOnly xAxis = newLinkedVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);

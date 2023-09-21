@@ -973,7 +973,7 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof RigidBodyTransform)
+      if (object instanceof RigidBodyTransformReadOnly)
          return equals((EuclidGeometry) object);
       else
          return false;
@@ -987,9 +987,9 @@ public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<Ri
          return true;
       if (geometry == null)
          return false;
-      if (!(geometry instanceof RigidBodyTransform))
+      if (!(geometry instanceof RigidBodyTransformReadOnly))
          return false;
-      RigidBodyTransform other = (RigidBodyTransform) geometry;
+      RigidBodyTransformReadOnly other = (RigidBodyTransformReadOnly) geometry;
       return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
 

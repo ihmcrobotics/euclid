@@ -5,19 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Axis4D;
+import us.ihmc.euclid.Matrix3DElements;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreFactories.EuclidAccessListener;
+import us.ihmc.euclid.tools.EuclidCoreFactories.EuclidChangeListener;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -413,7 +414,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          Point2D expected = EuclidCoreRandomTools.nextPoint2D(random);
          Point2D source = new Point2D();
-         Consumer<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
          Point2DReadOnly observable = EuclidCoreFactories.newObservablePoint2DReadOnly(valueAccessedListener, source);
 
          EuclidCoreTestTools.assertTuple2DIsSetToZero(source);
@@ -428,7 +429,7 @@ public class EuclidCoreFactoriesTest
          Point2D expected = EuclidCoreRandomTools.nextPoint2D(random);
          Point2D source = new Point2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
          Point2DReadOnly observable = EuclidCoreFactories.newObservablePoint2DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected, false);
@@ -448,7 +449,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D source = new Vector2D();
-         Consumer<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
          Vector2DReadOnly observable = EuclidCoreFactories.newObservableVector2DReadOnly(valueAccessedListener, source);
 
          EuclidCoreTestTools.assertTuple2DIsSetToZero(source);
@@ -463,7 +464,7 @@ public class EuclidCoreFactoriesTest
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D source = new Vector2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
          Vector2DReadOnly observable = EuclidCoreFactories.newObservableVector2DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected, false);
@@ -483,7 +484,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
          Point3D source = new Point3D();
-         Consumer<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
          Point3DReadOnly observable = EuclidCoreFactories.newObservablePoint3DReadOnly(valueAccessedListener, source);
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(source);
@@ -500,7 +501,7 @@ public class EuclidCoreFactoriesTest
          Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
          Point3D source = new Point3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
          Point3DReadOnly observable = EuclidCoreFactories.newObservablePoint3DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected);
@@ -523,7 +524,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          UnitVector2D expected = EuclidCoreRandomTools.nextUnitVector2D(random);
          UnitVector2D source = new UnitVector2D();
-         Consumer<Axis2D> valueAccessedListener = axis -> source.set(expected);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> source.set(expected);
          UnitVector2DReadOnly observable = EuclidCoreFactories.newObservableUnitVector2DReadOnly(valueAccessedListener, source);
 
          assertEquals(expected.getX(), observable.getX());
@@ -537,7 +538,7 @@ public class EuclidCoreFactoriesTest
          UnitVector2D expected = EuclidCoreRandomTools.nextUnitVector2D(random);
          UnitVector2D source = new UnitVector2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
          UnitVector2DReadOnly observable = EuclidCoreFactories.newObservableUnitVector2DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected, false);
@@ -557,7 +558,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D source = new Vector3D();
-         Consumer<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
          Vector3DReadOnly observable = EuclidCoreFactories.newObservableVector3DReadOnly(valueAccessedListener, source);
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(source);
@@ -574,7 +575,7 @@ public class EuclidCoreFactoriesTest
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D source = new Vector3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
          Vector3DReadOnly observable = EuclidCoreFactories.newObservableVector3DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected);
@@ -597,7 +598,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          UnitVector3D expected = EuclidCoreRandomTools.nextUnitVector3D(random);
          UnitVector3D source = new UnitVector3D();
-         Consumer<Axis3D> valueAccessedListener = axis -> source.set(expected);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> source.set(expected);
          UnitVector3DReadOnly observable = EuclidCoreFactories.newObservableUnitVector3DReadOnly(valueAccessedListener, source);
 
          assertEquals(expected.getX(), observable.getX());
@@ -613,7 +614,7 @@ public class EuclidCoreFactoriesTest
          UnitVector3D expected = EuclidCoreRandomTools.nextUnitVector3D(random);
          UnitVector3D source = new UnitVector3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
          UnitVector3DReadOnly observable = EuclidCoreFactories.newObservableUnitVector3DReadOnly(valueAccessedListener, source);
 
          transform.transform(expected);
@@ -636,7 +637,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix source = new RotationMatrix();
-         BiConsumer<Axis3D, Axis3D> valueAccessedListener = (row, col) -> source.set(expected);
+         EuclidAccessListener<Matrix3DElements> valueAccessedListener = (element) -> source.set(expected);
          RotationMatrixReadOnly observable = EuclidCoreFactories.newObservableRotationMatrixReadOnly(valueAccessedListener, source);
 
          assertTrue(source.isIdentity());
@@ -657,7 +658,7 @@ public class EuclidCoreFactoriesTest
          RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix source = new RotationMatrix(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         BiConsumer<Axis3D, Axis3D> valueAccessedListener = (row, col) -> transform.transform(source);
+         EuclidAccessListener<Matrix3DElements> valueAccessedListener = (element) -> transform.transform(source);
          RotationMatrixReadOnly observable = EuclidCoreFactories.newObservableRotationMatrixReadOnly(valueAccessedListener, source);
 
          for (int row = 0; row < 3; row++)
@@ -680,7 +681,7 @@ public class EuclidCoreFactoriesTest
       { // Test simple update operation.
          Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion source = new Quaternion();
-         IntConsumer valueAccessedListener = index -> source.set(expected);
+         EuclidAccessListener<Axis4D> valueAccessedListener = axis -> source.set(expected);
          QuaternionReadOnly observable = EuclidCoreFactories.newObservableQuaternionReadOnly(valueAccessedListener, source);
 
          assertEquals(expected.getX(), observable.getX());
@@ -696,7 +697,7 @@ public class EuclidCoreFactoriesTest
          Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion source = new Quaternion(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         IntConsumer valueAccessedListener = index -> transform.transform(source);
+         EuclidAccessListener<Axis4D> valueAccessedListener = axis -> transform.transform(source);
          QuaternionReadOnly observable = EuclidCoreFactories.newObservableQuaternionReadOnly(valueAccessedListener, source);
 
          transform.transform(expected);
@@ -734,8 +735,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false};
          boolean[] accessTrace = {false, false};
          Point2DBasics source = new Point2D();
-         Point2DBasics observable = EuclidCoreFactories.newObservablePoint2DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                   axis -> accessTrace[axis.ordinal()] = true,
+         Point2DBasics observable = EuclidCoreFactories.newObservablePoint2DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                   (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                    source);
 
          assertAllFalses(changeTrace);
@@ -764,8 +765,8 @@ public class EuclidCoreFactoriesTest
          Point2D expected = EuclidCoreRandomTools.nextPoint2D(random);
          Point2D source = new Point2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
-         Point2DBasics observable = EuclidCoreFactories.newObservablePoint2DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         Point2DBasics observable = EuclidCoreFactories.newObservablePoint2DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected, false);
          assertEquals(expected.getX(), observable.getX());
@@ -799,8 +800,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false};
          boolean[] accessTrace = {false, false};
          Vector2DBasics source = new Vector2D();
-         Vector2DBasics observable = EuclidCoreFactories.newObservableVector2DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                     axis -> accessTrace[axis.ordinal()] = true,
+         Vector2DBasics observable = EuclidCoreFactories.newObservableVector2DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                     (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                      source);
 
          assertAllFalses(changeTrace);
@@ -829,8 +830,8 @@ public class EuclidCoreFactoriesTest
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D source = new Vector2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
-         Vector2DBasics observable = EuclidCoreFactories.newObservableVector2DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         Vector2DBasics observable = EuclidCoreFactories.newObservableVector2DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected, false);
          assertEquals(expected.getX(), observable.getX());
@@ -864,8 +865,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false, false};
          boolean[] accessTrace = {false, false, false};
          Point3DBasics source = new Point3D();
-         Point3DBasics observable = EuclidCoreFactories.newObservablePoint3DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                   axis -> accessTrace[axis.ordinal()] = true,
+         Point3DBasics observable = EuclidCoreFactories.newObservablePoint3DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                   (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                    source);
 
          assertAllFalses(changeTrace);
@@ -894,8 +895,8 @@ public class EuclidCoreFactoriesTest
          Point3D expected = EuclidCoreRandomTools.nextPoint3D(random);
          Point3D source = new Point3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
-         Point3DBasics observable = EuclidCoreFactories.newObservablePoint3DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         Point3DBasics observable = EuclidCoreFactories.newObservablePoint3DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected);
          assertEquals(expected.getX(), observable.getX());
@@ -932,8 +933,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false, false};
          boolean[] accessTrace = {false, false, false};
          Vector3DBasics source = new Vector3D();
-         Vector3DBasics observable = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                     axis -> accessTrace[axis.ordinal()] = true,
+         Vector3DBasics observable = EuclidCoreFactories.newObservableVector3DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                     (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                      source);
 
          assertAllFalses(changeTrace);
@@ -962,8 +963,8 @@ public class EuclidCoreFactoriesTest
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D source = new Vector3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
-         Vector3DBasics observable = EuclidCoreFactories.newObservableVector3DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         Vector3DBasics observable = EuclidCoreFactories.newObservableVector3DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected);
          assertEquals(expected.getX(), observable.getX());
@@ -1000,8 +1001,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false};
          boolean[] accessTrace = {false, false};
          UnitVector2DBasics source = new UnitVector2D();
-         UnitVector2DBasics observable = EuclidCoreFactories.newObservableUnitVector2DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                             axis -> accessTrace[axis.ordinal()] = true,
+         UnitVector2DBasics observable = EuclidCoreFactories.newObservableUnitVector2DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                             (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                              source);
 
          assertAllFalses(changeTrace);
@@ -1030,8 +1031,8 @@ public class EuclidCoreFactoriesTest
          UnitVector2D expected = EuclidCoreRandomTools.nextUnitVector2D(random);
          UnitVector2D source = new UnitVector2D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
-         UnitVector2DBasics observable = EuclidCoreFactories.newObservableUnitVector2DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         UnitVector2DBasics observable = EuclidCoreFactories.newObservableUnitVector2DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected, false);
          assertEquals(expected.getX(), observable.getX());
@@ -1065,8 +1066,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false, false, false};
          boolean[] accessTrace = {false, false, false};
          UnitVector3DBasics source = new UnitVector3D();
-         UnitVector3DBasics observable = EuclidCoreFactories.newObservableUnitVector3DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
-                                                                                             axis -> accessTrace[axis.ordinal()] = true,
+         UnitVector3DBasics observable = EuclidCoreFactories.newObservableUnitVector3DBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                             (axis) -> changeTrace[axis.ordinal()] = true,
                                                                                              source);
 
          assertAllFalses(changeTrace);
@@ -1095,8 +1096,8 @@ public class EuclidCoreFactoriesTest
          UnitVector3D expected = EuclidCoreRandomTools.nextUnitVector3D(random);
          UnitVector3D source = new UnitVector3D(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
-         UnitVector3DBasics observable = EuclidCoreFactories.newObservableUnitVector3DBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         UnitVector3DBasics observable = EuclidCoreFactories.newObservableUnitVector3DBasics(valueAccessedListener, null, source);
 
          transform.transform(expected);
          assertEquals(expected.getX(), observable.getX());
@@ -1115,11 +1116,16 @@ public class EuclidCoreFactoriesTest
    {
       Random random = new Random(4367);
 
+      for (int i = 0; i < ITERATIONS / 10; i++)
       { // Test the link property with the source
          RotationMatrix expected = new RotationMatrix();
-         RotationMatrixBasics actual = EuclidCoreFactories.newObservableRotationMatrixBasics(null, null, expected);
+         boolean[] changeTrace = {false};
+         boolean[][] accessTrace = {{false, false, false}, {false, false, false}, {false, false, false}};
+         EuclidChangeListener<Matrix3DElements> changeListener = random.nextBoolean() ? null : (element) -> changeTrace[0] = true;
+         EuclidAccessListener<Matrix3DElements> accessListener = (element) -> accessTrace[element.row()][element.column()] = true;
+         RotationMatrixBasics actual = EuclidCoreFactories.newObservableRotationMatrixBasics(accessListener, changeListener, expected);
 
-         for (int i = 0; i < ITERATIONS; i++)
+         for (int j = 0; j < ITERATIONS / 10; j++)
          {
             expected.set(EuclidCoreRandomTools.nextRotationMatrix(random));
             thoroughAssertionsMatrix3D(expected, actual);
@@ -1133,8 +1139,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false};
          boolean[][] accessTrace = {{false, false, false}, {false, false, false}, {false, false, false}};
          RotationMatrixBasics source = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrixBasics observable = EuclidCoreFactories.newObservableRotationMatrixBasics(() -> changeTrace[0] = true,
-                                                                                                 (row, col) -> accessTrace[row.ordinal()][col.ordinal()] = true,
+         RotationMatrixBasics observable = EuclidCoreFactories.newObservableRotationMatrixBasics(element -> accessTrace[element.row()][element.column()] = true,
+                                                                                                 (element) -> changeTrace[0] = true,
                                                                                                  source);
 
          assertAllFalses(changeTrace);
@@ -1174,8 +1180,8 @@ public class EuclidCoreFactoriesTest
          RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix source = new RotationMatrix(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         BiConsumer<Axis3D, Axis3D> valueAccessedListener = (row, col) -> transform.transform(source);
-         RotationMatrixBasics observable = EuclidCoreFactories.newObservableRotationMatrixBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Matrix3DElements> valueAccessedListener = element -> transform.transform(source);
+         RotationMatrixBasics observable = EuclidCoreFactories.newObservableRotationMatrixBasics(valueAccessedListener, null, source);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1212,8 +1218,8 @@ public class EuclidCoreFactoriesTest
          boolean[] changeTrace = {false};
          boolean[] accessTrace = {false, false, false, false};
          QuaternionBasics source = new Quaternion();
-         QuaternionBasics observable = EuclidCoreFactories.newObservableQuaternionBasics(() -> changeTrace[0] = true,
-                                                                                         index -> accessTrace[index] = true,
+         QuaternionBasics observable = EuclidCoreFactories.newObservableQuaternionBasics(axis -> accessTrace[axis.ordinal()] = true,
+                                                                                         (axis) -> changeTrace[0] = true,
                                                                                          source);
 
          assertAllFalses(changeTrace);
@@ -1242,8 +1248,8 @@ public class EuclidCoreFactoriesTest
          Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion source = new Quaternion(expected);
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         IntConsumer valueAccessedListener = index -> transform.transform(source);
-         QuaternionBasics observable = EuclidCoreFactories.newObservableQuaternionBasics(null, valueAccessedListener, source);
+         EuclidAccessListener<Axis4D> valueAccessedListener = axis -> transform.transform(source);
+         QuaternionBasics observable = EuclidCoreFactories.newObservableQuaternionBasics(valueAccessedListener, null, source);
 
          transform.transform(expected);
          assertEquals(expected.getX(), observable.getX());

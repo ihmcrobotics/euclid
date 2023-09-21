@@ -262,8 +262,8 @@ public class EuclidGeometryFactories
             ObjDoubleConsumer<Axis2D> maxChangedListener = toPoint2DValueChangedListener(valueChangedListener, Bound.MAX);
             Consumer<Axis2D> maxAccessedListener = toPoint2DValueAccessedListener(valueAccessedListener, Bound.MAX);
 
-            minPoint = EuclidCoreFactories.newObservablePoint2DBasics(minChangedListener, minAccessedListener, source.getMinPoint());
-            maxPoint = EuclidCoreFactories.newObservablePoint2DBasics(maxChangedListener, maxAccessedListener, source.getMaxPoint());
+            minPoint = EuclidCoreFactories.newObservablePoint2DBasics(minAccessedListener, minChangedListener, source.getMinPoint());
+            maxPoint = EuclidCoreFactories.newObservablePoint2DBasics(maxAccessedListener, maxChangedListener, source.getMaxPoint());
          }
 
          private ObjDoubleConsumer<Axis2D> toPoint2DValueChangedListener(BoundingBoxChangedListener<Axis2D> valueChangedListener, Bound bound)
@@ -381,8 +381,8 @@ public class EuclidGeometryFactories
             ObjDoubleConsumer<Axis3D> maxChangedListener = toPoint3DValueChangedListener(valueChangedListener, Bound.MAX);
             Consumer<Axis3D> maxAccessedListener = toPoint3DValueAccessedListener(valueAccessedListener, Bound.MAX);
 
-            minPoint = EuclidCoreFactories.newObservablePoint3DBasics(minChangedListener, minAccessedListener, source.getMinPoint());
-            maxPoint = EuclidCoreFactories.newObservablePoint3DBasics(maxChangedListener, maxAccessedListener, source.getMaxPoint());
+            minPoint = EuclidCoreFactories.newObservablePoint3DBasics(minAccessedListener, minChangedListener, source.getMinPoint());
+            maxPoint = EuclidCoreFactories.newObservablePoint3DBasics(maxAccessedListener, maxChangedListener, source.getMaxPoint());
          }
 
          private ObjDoubleConsumer<Axis3D> toPoint3DValueChangedListener(BoundingBoxChangedListener<Axis3D> valueChangedListener, Bound bound)

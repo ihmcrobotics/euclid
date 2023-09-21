@@ -48,14 +48,14 @@ public class Ramp3D implements Ramp3DBasics, Settable<Ramp3D>
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
-   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) ->
+   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics(null, axis ->
    {
       checkSizePositive(axis);
       notifyChangeListeners();
-   }, null);
+   });
 
    private boolean rampSurfaceNormalDirty = true;
-   private final Vector3DBasics rampSurfaceNormal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateRampSurfaceNormal());
+   private final Vector3DBasics rampSurfaceNormal = EuclidCoreFactories.newObservableVector3DBasics(axis -> updateRampSurfaceNormal(), null);
 
    private boolean rampFeaturesDirty = true;
    /** Length of the slope face of this ramp. */
@@ -68,7 +68,7 @@ public class Ramp3D implements Ramp3DBasics, Settable<Ramp3D>
 
    private boolean centroidDirty = true;
 
-   private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroid());
+   private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(axis -> updateCentroid(), null);
 
    private RampPolytope3D polytopeView = null;
 

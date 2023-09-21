@@ -31,7 +31,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, Settable<Ellipsoid3D>
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** The three radii of this ellipsoid. */
-   private final Vector3DBasics radii = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) -> checkRadiusPositive(axis), null);
+   private final Vector3DBasics radii = EuclidCoreFactories.newObservableVector3DBasics(null, (axis) -> checkRadiusPositive(axis));
 
    /**
     * Creates a new ellipsoid 3D with its 3 radii initialized to {@code 1}.
