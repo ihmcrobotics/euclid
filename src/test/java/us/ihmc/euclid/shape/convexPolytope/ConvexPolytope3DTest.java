@@ -88,6 +88,7 @@ import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeData
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
+import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -1191,6 +1192,49 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D expectedPolytope = new ConvexPolytope3D();
          icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex));
 
+         EuclidCoreTestTools.assertEquals(expectedPolytope, actualPolytope, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+
+         for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
+         {
+            EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
+            EuclidCoreTestTools.assertEquals(expectedPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            assertEquals(expectedPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
+         }
+
+         actualPolytope.applyInverseTransform(transform);
+
+         EuclidCoreTestTools.assertEquals(originalPolytope, actualPolytope, EPSILON);
+         EuclidCoreTestTools.assertEquals(originalPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertEquals(originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+
+         for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
+         {
+            EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(), EPSILON);
+            EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
+            EuclidCoreTestTools.assertEquals(originalPolytope.getFace(faceIndex).getBoundingBox(), actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            assertEquals(originalPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
+         }
+      }
+   }
+   @Test
+   void testApplyTransformWithBoxShape() throws Exception
+   {
+      Random random = new Random(2342);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D box = new Box3D();
+         ConvexPolytope3D originalPolytope = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(box.getVertices()));
+         ConvexPolytope3D actualPolytope = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(box.getVertices()));
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         actualPolytope.applyTransform(transform);
+         box.applyTransform(transform);
+
+         ConvexPolytope3D expectedPolytope = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(box.getVertices()));
          EuclidCoreTestTools.assertEquals(expectedPolytope, actualPolytope, EPSILON);
          EuclidCoreTestTools.assertEquals(expectedPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
          EuclidCoreTestTools.assertEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
