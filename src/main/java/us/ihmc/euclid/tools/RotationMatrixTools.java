@@ -8,10 +8,12 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
+import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -158,9 +160,8 @@ public class RotationMatrixTools
       }
 
       double b00, b01, b02, b10, b11, b12, b20, b21, b22;
-      if (orientation2 instanceof RotationMatrixReadOnly)
+      if (orientation2 instanceof RotationMatrixReadOnly b)
       { // In this case orientation2 might be the same object as matrixToPack, so let's save its components first.
-         RotationMatrixReadOnly b = (RotationMatrixReadOnly) orientation2;
          b00 = b.getM00();
          b01 = b.getM01();
          b02 = b.getM02();
@@ -1033,7 +1034,7 @@ public class RotationMatrixTools
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param quaternion     the quaternion to be used for comparison. Not modified.
     * @return the angle representing the distance between the two orientations. It is contained in [0,
-    *         <i>pi</i>].
+    *       <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
    {
@@ -1046,7 +1047,7 @@ public class RotationMatrixTools
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param axisAngle      the axisAngle to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly axisAngle)
    {
@@ -1059,7 +1060,7 @@ public class RotationMatrixTools
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param yawPitchRoll   the yawPitchRoll to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly yawPitchRoll)
    {
@@ -1108,7 +1109,7 @@ public class RotationMatrixTools
     * @param a the first rotation matrix. Not modified.
     * @param b the second rotation matrix. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly a, RotationMatrixReadOnly b)
    {
@@ -1146,7 +1147,7 @@ public class RotationMatrixTools
     *
     * @param m the rotation matrix to be used for comparison. Not modified
     * @return the angle representing the distance from origin (zero orientation). It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double angle(RotationMatrixReadOnly m)
    {
@@ -1175,7 +1176,7 @@ public class RotationMatrixTools
     * @param m21 element at (2,1)
     * @param m22 element at (2,2)
     * @return the angle representing the distance from origin (zero orientation). It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double angle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
@@ -1204,5 +1205,397 @@ public class RotationMatrixTools
       }
 
       return angle;
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(RotationMatrixReadOnly previousOrientation,
+                                       RotationMatrixReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      finiteDifference(previousOrientation.getM00(),
+                       previousOrientation.getM01(),
+                       previousOrientation.getM02(),
+                       previousOrientation.getM10(),
+                       previousOrientation.getM11(),
+                       previousOrientation.getM12(),
+                       previousOrientation.getM20(),
+                       previousOrientation.getM21(),
+                       previousOrientation.getM22(),
+                       currentOrientation.getM00(),
+                       currentOrientation.getM01(),
+                       currentOrientation.getM02(),
+                       currentOrientation.getM10(),
+                       currentOrientation.getM11(),
+                       currentOrientation.getM12(),
+                       currentOrientation.getM20(),
+                       currentOrientation.getM21(),
+                       currentOrientation.getM22(),
+                       dt,
+                       angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(RotationMatrixReadOnly previousOrientation,
+                                       QuaternionReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      finiteDifferenceImpl(previousOrientation,
+                           currentOrientation.getX(),
+                           currentOrientation.getY(),
+                           currentOrientation.getZ(),
+                           currentOrientation.getS(),
+                           dt,
+                           angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(RotationMatrixReadOnly previousOrientation,
+                                       AxisAngleReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfAngle = 0.5 * currentOrientation.getAngle();
+      double sinHalfAngle = Math.sin(halfAngle);
+      double xCurr = currentOrientation.getX() * sinHalfAngle;
+      double yCurr = currentOrientation.getY() * sinHalfAngle;
+      double zCurr = currentOrientation.getZ() * sinHalfAngle;
+      double sCurr = Math.cos(halfAngle);
+      finiteDifferenceImpl(previousOrientation, xCurr, yCurr, zCurr, sCurr, dt, angularVelocityToPack);
+   }
+
+   private static void finiteDifferenceImpl(RotationMatrixReadOnly previousOrientation,
+                                            double xCurr,
+                                            double yCurr,
+                                            double zCurr,
+                                            double sCurr,
+                                            double dt,
+                                            Vector3DBasics angularVelocityToPack)
+   {
+      double yy2 = 2.0 * yCurr * yCurr;
+      double zz2 = 2.0 * zCurr * zCurr;
+      double xx2 = 2.0 * xCurr * xCurr;
+      double xy2 = 2.0 * xCurr * yCurr;
+      double sz2 = 2.0 * sCurr * zCurr;
+      double xz2 = 2.0 * xCurr * zCurr;
+      double sy2 = 2.0 * sCurr * yCurr;
+      double yz2 = 2.0 * yCurr * zCurr;
+      double sx2 = 2.0 * sCurr * xCurr;
+
+      double c00 = 1.0 - yy2 - zz2;
+      double c01 = xy2 - sz2;
+      double c02 = xz2 + sy2;
+      double c10 = xy2 + sz2;
+      double c11 = 1.0 - xx2 - zz2;
+      double c12 = yz2 - sx2;
+      double c20 = xz2 - sy2;
+      double c21 = yz2 + sx2;
+      double c22 = 1.0 - xx2 - yy2;
+
+      finiteDifference(previousOrientation.getM00(),
+                       previousOrientation.getM01(),
+                       previousOrientation.getM02(),
+                       previousOrientation.getM10(),
+                       previousOrientation.getM11(),
+                       previousOrientation.getM12(),
+                       previousOrientation.getM20(),
+                       previousOrientation.getM21(),
+                       previousOrientation.getM22(),
+                       c00,
+                       c01,
+                       c02,
+                       c10,
+                       c11,
+                       c12,
+                       c20,
+                       c21,
+                       c22,
+                       dt,
+                       angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(QuaternionReadOnly previousOrientation,
+                                       RotationMatrixReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+
+      finiteDifferenceImpl(previousOrientation.getX(),
+                           previousOrientation.getY(),
+                           previousOrientation.getZ(),
+                           previousOrientation.getS(),
+                           currentOrientation,
+                           dt,
+                           angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(AxisAngleReadOnly previousOrientation,
+                                       RotationMatrixReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfAngle = 0.5 * previousOrientation.getAngle();
+      double sinHalfAngle = Math.sin(halfAngle);
+      double xPrev = previousOrientation.getX() * sinHalfAngle;
+      double yPrev = previousOrientation.getY() * sinHalfAngle;
+      double zPrev = previousOrientation.getZ() * sinHalfAngle;
+      double sPrev = Math.cos(halfAngle);
+      finiteDifferenceImpl(xPrev, yPrev, zPrev, sPrev, currentOrientation, dt, angularVelocityToPack);
+   }
+
+   private static void finiteDifferenceImpl(double xPrev,
+                                            double yPrev,
+                                            double zPrev,
+                                            double sPrev,
+                                            RotationMatrixReadOnly currentOrientation,
+                                            double dt,
+                                            Vector3DBasics angularVelocityToPack)
+   {
+      double yy2 = 2.0 * yPrev * yPrev;
+      double zz2 = 2.0 * zPrev * zPrev;
+      double xx2 = 2.0 * xPrev * xPrev;
+      double xy2 = 2.0 * xPrev * yPrev;
+      double sz2 = 2.0 * sPrev * zPrev;
+      double xz2 = 2.0 * xPrev * zPrev;
+      double sy2 = 2.0 * sPrev * yPrev;
+      double yz2 = 2.0 * yPrev * zPrev;
+      double sx2 = 2.0 * sPrev * xPrev;
+
+      double c00 = 1.0 - yy2 - zz2;
+      double c01 = xy2 - sz2;
+      double c02 = xz2 + sy2;
+      double c10 = xy2 + sz2;
+      double c11 = 1.0 - xx2 - zz2;
+      double c12 = yz2 - sx2;
+      double c20 = xz2 - sy2;
+      double c21 = yz2 + sx2;
+      double c22 = 1.0 - xx2 - yy2;
+
+      finiteDifference(c00,
+                       c01,
+                       c02,
+                       c10,
+                       c11,
+                       c12,
+                       c20,
+                       c21,
+                       c22,
+                       currentOrientation.getM00(),
+                       currentOrientation.getM01(),
+                       currentOrientation.getM02(),
+                       currentOrientation.getM10(),
+                       currentOrientation.getM11(),
+                       currentOrientation.getM12(),
+                       currentOrientation.getM20(),
+                       currentOrientation.getM21(),
+                       currentOrientation.getM22(),
+                       dt,
+                       angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(YawPitchRollReadOnly previousOrientation,
+                                       RotationMatrixReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double yawPrev = previousOrientation.getYaw();
+      double pitchPrev = previousOrientation.getPitch();
+      double rollPrev = previousOrientation.getRoll();
+
+      double coscPrev = EuclidCoreTools.cos(yawPrev);
+      double sincPrev = EuclidCoreTools.sin(yawPrev);
+
+      double cosbPrev = EuclidCoreTools.cos(pitchPrev);
+      double sinbPrev = EuclidCoreTools.sin(pitchPrev);
+
+      double cosaPrev = EuclidCoreTools.cos(rollPrev);
+      double sinaPrev = EuclidCoreTools.sin(rollPrev);
+
+      // Introduction to Robotics, 2.64
+      double p00 = coscPrev * cosbPrev;
+      double p01 = coscPrev * sinbPrev * sinaPrev - sincPrev * cosaPrev;
+      double p02 = coscPrev * sinbPrev * cosaPrev + sincPrev * sinaPrev;
+      double p10 = sincPrev * cosbPrev;
+      double p11 = sincPrev * sinbPrev * sinaPrev + coscPrev * cosaPrev;
+      double p12 = sincPrev * sinbPrev * cosaPrev - coscPrev * sinaPrev;
+      double p20 = -sinbPrev;
+      double p21 = cosbPrev * sinaPrev;
+      double p22 = cosbPrev * cosaPrev;
+
+      finiteDifference(p00,
+                       p01,
+                       p02,
+                       p10,
+                       p11,
+                       p12,
+                       p20,
+                       p21,
+                       p22,
+                       currentOrientation.getM00(),
+                       currentOrientation.getM01(),
+                       currentOrientation.getM02(),
+                       currentOrientation.getM10(),
+                       currentOrientation.getM11(),
+                       currentOrientation.getM12(),
+                       currentOrientation.getM20(),
+                       currentOrientation.getM21(),
+                       currentOrientation.getM22(),
+                       dt,
+                       angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(RotationMatrixReadOnly previousOrientation,
+                                       YawPitchRollReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double p00 = previousOrientation.getM00();
+      double p01 = previousOrientation.getM01();
+      double p02 = previousOrientation.getM02();
+      double p10 = previousOrientation.getM10();
+      double p11 = previousOrientation.getM11();
+      double p12 = previousOrientation.getM12();
+      double p20 = previousOrientation.getM20();
+      double p21 = previousOrientation.getM21();
+      double p22 = previousOrientation.getM22();
+
+      finiteDifferenceImpl(p00, p01, p02, p10, p11, p12, p20, p21, p22, currentOrientation, dt, angularVelocityToPack);
+   }
+
+   static void finiteDifferenceImpl(double p00,
+                                    double p01,
+                                    double p02,
+                                    double p10,
+                                    double p11,
+                                    double p12,
+                                    double p20,
+                                    double p21,
+                                    double p22,
+                                    YawPitchRollReadOnly currentOrientation,
+                                    double dt,
+                                    Vector3DBasics angularVelocityToPack)
+   {
+      double yawCurr = currentOrientation.getYaw();
+      double pitchCurr = currentOrientation.getPitch();
+      double rollCurr = currentOrientation.getRoll();
+
+      double coscCurr = EuclidCoreTools.cos(yawCurr);
+      double sincCurr = EuclidCoreTools.sin(yawCurr);
+
+      double cosbCurr = EuclidCoreTools.cos(pitchCurr);
+      double sinbCurr = EuclidCoreTools.sin(pitchCurr);
+
+      double cosaCurr = EuclidCoreTools.cos(rollCurr);
+      double sinaCurr = EuclidCoreTools.sin(rollCurr);
+
+      // Introduction to Robotics, 2.64
+      double c00 = coscCurr * cosbCurr;
+      double c01 = coscCurr * sinbCurr * sinaCurr - sincCurr * cosaCurr;
+      double c02 = coscCurr * sinbCurr * cosaCurr + sincCurr * sinaCurr;
+      double c10 = sincCurr * cosbCurr;
+      double c11 = sincCurr * sinbCurr * sinaCurr + coscCurr * cosaCurr;
+      double c12 = sincCurr * sinbCurr * cosaCurr - coscCurr * sinaCurr;
+      double c20 = -sinbCurr;
+      double c21 = cosbCurr * sinaCurr;
+      double c22 = cosbCurr * cosaCurr;
+
+      finiteDifference(p00, p01, p02, p10, p11, p12, p20, p21, p22, c00, c01, c02, c10, c11, c12, c20, c21, c22, dt, angularVelocityToPack);
+   }
+
+   static void finiteDifference(double p00,
+                                double p01,
+                                double p02,
+                                double p10,
+                                double p11,
+                                double p12,
+                                double p20,
+                                double p21,
+                                double p22,
+                                double c00,
+                                double c01,
+                                double c02,
+                                double c10,
+                                double c11,
+                                double c12,
+                                double c20,
+                                double c21,
+                                double c22,
+                                double dt,
+                                Vector3DBasics angularVelocityToPack)
+   {
+      // Multiply the transpose of the previous orientation by the current orientation.
+      double m00 = p00 * c00 + p10 * c10 + p20 * c20;
+      double m01 = p00 * c01 + p10 * c11 + p20 * c21;
+      double m02 = p00 * c02 + p10 * c12 + p20 * c22;
+      double m10 = p01 * c00 + p11 * c10 + p21 * c20;
+      double m11 = p01 * c01 + p11 * c11 + p21 * c21;
+      double m12 = p01 * c02 + p11 * c12 + p21 * c22;
+      double m20 = p02 * c00 + p12 * c10 + p22 * c20;
+      double m21 = p02 * c01 + p12 * c11 + p22 * c21;
+      double m22 = p02 * c02 + p12 * c12 + p22 * c22;
+
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, angularVelocityToPack);
+      angularVelocityToPack.scale(1.0 / dt);
    }
 }

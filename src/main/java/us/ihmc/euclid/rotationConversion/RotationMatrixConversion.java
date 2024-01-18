@@ -39,7 +39,7 @@ public class RotationMatrixConversion
    }
 
    /**
-    * Sets the given rotation matrix to represent a counter clockwise rotation around the z-axis of an
+    * Sets the given rotation matrix to represent a counter-clockwise rotation around the z-axis of an
     * angle {@code yaw}.
     *
     * <pre>
@@ -429,7 +429,6 @@ public class RotationMatrixConversion
          ((RotationMatrixBasics) matrixToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       else
          matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-
    }
 
    /**

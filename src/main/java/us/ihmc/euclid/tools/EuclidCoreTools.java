@@ -1,20 +1,25 @@
 package us.ihmc.euclid.tools;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.Matrix;
-
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * This class provides a variety of generic tools such as fast square-root algorithm
@@ -467,7 +472,7 @@ public class EuclidCoreTools
     * @param a the first element.
     * @param b the second element.
     * @return {@code true} if at least one element is equal to {@link Double#NaN}, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean containsNaN(double a, double b)
    {
@@ -481,7 +486,7 @@ public class EuclidCoreTools
     * @param b the second element.
     * @param c the third element.
     * @return {@code true} if at least one element is equal to {@link Double#NaN}, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean containsNaN(double a, double b, double c)
    {
@@ -496,7 +501,7 @@ public class EuclidCoreTools
     * @param c the third element.
     * @param d the fourth element.
     * @return {@code true} if at least one element is equal to {@link Double#NaN}, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean containsNaN(double a, double b, double c, double d)
    {
@@ -516,7 +521,7 @@ public class EuclidCoreTools
     * @param a7 the eighth element.
     * @param a8 the ninth element.
     * @return {@code true} if at least one element is equal to {@link Double#NaN}, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean containsNaN(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8)
    {
@@ -524,9 +529,7 @@ public class EuclidCoreTools
          return true;
       if (Double.isNaN(a3) || Double.isNaN(a4) || Double.isNaN(a5))
          return true;
-      if (Double.isNaN(a6) || Double.isNaN(a7) || Double.isNaN(a8))
-         return true;
-      return false;
+      return Double.isNaN(a6) || Double.isNaN(a7) || Double.isNaN(a8);
    }
 
    /**
@@ -534,7 +537,7 @@ public class EuclidCoreTools
     *
     * @param array the array containing the elements to test for {@link Double#NaN}. Not modified.
     * @return {@code true} if at least one element is equal to {@link Double#NaN}, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean containsNaN(double[] array)
    {
@@ -806,7 +809,7 @@ public class EuclidCoreTools
     * @param d the fourth argument to compare.
     * @return the maximum value of the four arguments.
     */
-   public static final double max(double a, double b, double c, double d)
+   public static double max(double a, double b, double c, double d)
    {
       if (a > b)
       {
@@ -849,7 +852,7 @@ public class EuclidCoreTools
     * @param d the fourth argument to compare.
     * @return the minimum value of the four arguments.
     */
-   public static final double min(double a, double b, double c, double d)
+   public static double min(double a, double b, double c, double d)
    {
       if (a < b)
       {
@@ -942,7 +945,7 @@ public class EuclidCoreTools
     */
    public static boolean equals(EuclidGeometry a, EuclidGeometry b)
    {
-      return (a == b) || (a != null && a.equals(b));
+      return Objects.equals(a, b);
    }
 
    /**
@@ -1051,7 +1054,7 @@ public class EuclidCoreTools
     * @param actualAngle   the second angle in the comparison.
     * @param epsilon       the tolerance to use for the test.
     * @return {@code true} if the two angles are considered to be geometrically equal, {@code false}
-    *         otherwise.
+    *       otherwise.
     */
    public static boolean angleGeometricallyEquals(double expectedAngle, double actualAngle, double epsilon)
    {
@@ -1081,11 +1084,10 @@ public class EuclidCoreTools
     *
     * @param value  value
     * @param minMax inclusive absolute boundary
-    * @return
-    *         <li>{@code -minMax} if {@code value} is less than {@code -minMax}</li>
-    *         <li>{@code minMax} if {@code value} is greater than {@code minMax}</li>
-    *         <li>{@code value} if {@code value} is between or equal to {@code -minMax} and
-    *         {@code minMax}</li>
+    * @return <li>{@code -minMax} if {@code value} is less than {@code -minMax}</li>
+    *       <li>{@code minMax} if {@code value} is greater than {@code minMax}</li>
+    *       <li>{@code value} if {@code value} is between or equal to {@code -minMax} and
+    *       {@code minMax}</li>
     */
    public static double clamp(double value, double minMax)
    {
@@ -1098,11 +1100,10 @@ public class EuclidCoreTools
     * @param value value
     * @param min   inclusive boundary start
     * @param max   inclusive boundary end
-    * @return
-    *         <li>{@code min} if {@code value} is less than {@code min}</li>
-    *         <li>{@code max} if {@code value} is greater than {@code max}</li>
-    *         <li>{@code value} if {@code value} is between or equal to {@code min} and
-    *         {@code max}</li>
+    * @return <li>{@code min} if {@code value} is less than {@code min}</li>
+    *       <li>{@code max} if {@code value} is greater than {@code max}</li>
+    *       <li>{@code value} if {@code value} is between or equal to {@code min} and
+    *       {@code max}</li>
     */
    public static double clamp(double value, double min, double max)
    {
@@ -1163,8 +1164,8 @@ public class EuclidCoreTools
     * @param y the ordinate coordinate
     * @param x the abscissa coordinate
     * @return the <i>theta</i> component of the point (<i>r</i>,&nbsp;<i>theta</i>) in polar
-    *         coordinates that corresponds to the point (<i>x</i>,&nbsp;<i>y</i>) in Cartesian
-    *         coordinates.
+    *       coordinates that corresponds to the point (<i>x</i>,&nbsp;<i>y</i>) in Cartesian
+    *       coordinates.
     * @see Math#atan2(double, double)
     */
    public static double atan2(double y, double x)
@@ -1253,8 +1254,9 @@ public class EuclidCoreTools
    {
       if (matrixToTest.getNumCols() < minColumns || matrixToTest.getNumRows() < minRows)
       {
-         throw new MatrixDimensionException("The matrix is too small, expected: [nRows >= " + minRows + ", nColumns >= " + minColumns + "], was: [nRows = "
-               + matrixToTest.getNumRows() + ", nCols = " + matrixToTest.getNumCols() + "].");
+         throw new MatrixDimensionException(
+               "The matrix is too small, expected: [nRows >= " + minRows + ", nColumns >= " + minColumns + "], was: [nRows = " + matrixToTest.getNumRows()
+               + ", nCols = " + matrixToTest.getNumCols() + "].");
       }
    }
 
@@ -1265,7 +1267,7 @@ public class EuclidCoreTools
     * This method is garbage free and is equivalent to
     * {@code Collections.reverse(list.subList(fromIndex, toIndex))}.
     * </p>
-    * 
+    *
     * @param list      the list whose elements are to be reversed. Modified.
     * @param fromIndex low endpoint (inclusive) of the range to be reversed.
     * @param toIndex   high endpoint (exclusive) of the range to be reversed.
@@ -1301,7 +1303,7 @@ public class EuclidCoreTools
     * {@code [9, 2, 0, 1, 9]}.
     * </ul>
     * </p>
-    * 
+    *
     * @param <T>       the element type.
     * @param list      the list whose elements are to be rotated. Modified.
     * @param fromIndex low endpoint (inclusive) of the range to be rotated.
@@ -1365,7 +1367,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Increments then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
+    * Increments the given {@code index} such that it is &in; [0, {@code listSize}[.
     * Examples:
     * <ul>
     * <li>{@code next(-1, 10)} returns 0.
@@ -1385,7 +1387,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Decrements then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
+    * Decrements the given {@code index} such that it is &in; [0, {@code listSize}[.
     * Examples:
     * <ul>
     * <li>{@code next(-1, 10)} returns 10.
@@ -1402,5 +1404,91 @@ public class EuclidCoreTools
    public static int previous(int index, int listSize)
    {
       return wrap(index - 1, listSize);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of the two given orientations.
+    * <p>
+    * The resulting angular velocity is expressed in the local coordinates of the orientation. Note that the angular velocity can be considered to be expressed
+    * the local frame described by either the previous or current orientation, i.e. <tt>&omega; = R<sub>current</sub><sup>previous</sup> &omega;</tt>.
+    * </p>
+    * <p>
+    * The method identifies the type of orientation used to perform the finite difference and calls the appropriate method. Note though that to get best
+    * performance, it is recommended to compute the finite difference using two quaternions.
+    * </p>
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    */
+   public static void finiteDifference(Orientation3DReadOnly previousOrientation,
+                                       Orientation3DReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      if (previousOrientation instanceof QuaternionReadOnly qPrev)
+      {
+         if (currentOrientation instanceof QuaternionReadOnly qCurr)
+            QuaternionTools.finiteDifference(qPrev, qCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof RotationMatrixReadOnly rCurr)
+            RotationMatrixTools.finiteDifference(qPrev, rCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof AxisAngleReadOnly aaCurr)
+            QuaternionTools.finiteDifference(qPrev, aaCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
+            QuaternionTools.finiteDifference(qPrev, yprCurr, dt, angularVelocityToPack);
+         else
+            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+      }
+      else if (previousOrientation instanceof RotationMatrixReadOnly rPrev)
+      {
+         if (currentOrientation instanceof RotationMatrixReadOnly rCurr)
+            RotationMatrixTools.finiteDifference(rPrev, rCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof QuaternionReadOnly qCurr)
+            RotationMatrixTools.finiteDifference(rPrev, qCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof AxisAngleReadOnly aaCurr)
+            RotationMatrixTools.finiteDifference(rPrev, aaCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
+            RotationMatrixTools.finiteDifference(rPrev, yprCurr, dt, angularVelocityToPack);
+         else
+            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+      }
+      else if (previousOrientation instanceof AxisAngleReadOnly aaPrev)
+      {
+         if (currentOrientation instanceof AxisAngleReadOnly aaCurr)
+            AxisAngleTools.finiteDifference(aaPrev, aaCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof QuaternionReadOnly qCurr)
+            QuaternionTools.finiteDifference(aaPrev, qCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof RotationMatrixReadOnly rCurr)
+            RotationMatrixTools.finiteDifference(aaPrev, rCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
+            YawPitchRollTools.finiteDifference(aaPrev, yprCurr, dt, angularVelocityToPack);
+         else
+            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+      }
+      else if (previousOrientation instanceof YawPitchRollReadOnly yprPrev)
+      {
+         if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
+            YawPitchRollTools.finiteDifference(yprPrev, yprCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof RotationMatrixReadOnly rCurr)
+            RotationMatrixTools.finiteDifference(yprPrev, rCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof QuaternionReadOnly qCurr)
+            QuaternionTools.finiteDifference(yprPrev, qCurr, dt, angularVelocityToPack);
+         else if (currentOrientation instanceof AxisAngleReadOnly aaCurr)
+            YawPitchRollTools.finiteDifference(yprPrev, aaCurr, dt, angularVelocityToPack);
+         else
+            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+      }
+      else
+         throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+   }
+
+   private static UnsupportedOperationException newUnsupportedFiniteDifferenceException(Orientation3DReadOnly previousOrientation,
+                                                                                        Orientation3DReadOnly currentOrientation)
+   {
+      return new UnsupportedOperationException("Unsupported orientation type: [currentOrientation = %s, previousOrientation = %s].".formatted(currentOrientation.getClass()
+                                                                                                                                                                .getSimpleName(),
+                                                                                                                                              previousOrientation.getClass()
+                                                                                                                                                                 .getSimpleName()));
    }
 }

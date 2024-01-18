@@ -13,6 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
@@ -156,7 +157,7 @@ public class AxisAngleTools
     * @param checkIfTransformInXYPlane whether this method should assert that the axis-angle represents
     *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the axis-angle
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void transform(AxisAngleReadOnly axisAngle, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -181,7 +182,7 @@ public class AxisAngleTools
     * @param checkIfTransformInXYPlane whether this method should assert that the axis-angle represents
     *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the axis-angle
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(AxisAngleReadOnly axisAngle,
                                        Tuple2DReadOnly tupleOriginal,
@@ -548,9 +549,8 @@ public class AxisAngleTools
       }
 
       double beta, u2x, u2y, u2z;
-      if (orientation2 instanceof AxisAngleReadOnly)
+      if (orientation2 instanceof AxisAngleReadOnly aa2)
       { // In this case orientation2 might be the same object as axisAngleToPack, so let's save its components first.
-         AxisAngleReadOnly aa2 = (AxisAngleReadOnly) orientation2;
          beta = aa2.getAngle();
          u2x = aa2.getX();
          u2y = aa2.getY();
@@ -1118,7 +1118,7 @@ public class AxisAngleTools
     * @param orientation3D the orientation3D to be used for comparison. Not modified
     * @param limitToPi     limits the result to [0 , <i>pi</i>].
     * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
-    *         false.
+    *       false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
@@ -1151,7 +1151,7 @@ public class AxisAngleTools
     * @param quaternion the quaternion to be used for comparison. Not modified
     * @param limitToPi  limits the result to [0 , <i>pi</i>] if set true.
     * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
-    *         false.
+    *       false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
    {
@@ -1242,7 +1242,7 @@ public class AxisAngleTools
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
     * @param limitToPi    Limits the result to [0, <i>pi</i>].
     * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
-    *         false.
+    *       false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
@@ -1305,7 +1305,7 @@ public class AxisAngleTools
     * @param aa2       the second axis-angle to measure the distance. Not modified.
     * @param limitToPi Limits the result to [0, <i>pi</i>].
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
-    *         2<i>pi</i>] when limitToPi = false.
+    *       2<i>pi</i>] when limitToPi = false.
     */
    public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2, boolean limitToPi)
    {
@@ -1351,5 +1351,36 @@ public class AxisAngleTools
          gamma = EuclidCoreTools.trimAngleMinusPiToPi(gamma);
       }
       return Math.abs(gamma);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(AxisAngleReadOnly previousOrientation,
+                                       AxisAngleReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfAnglePrev = 0.5 * previousOrientation.getAngle();
+      double sinHalfAnglePrev = Math.sin(halfAnglePrev);
+      double xPrev = previousOrientation.getX() * sinHalfAnglePrev;
+      double yPrev = previousOrientation.getY() * sinHalfAnglePrev;
+      double zPrev = previousOrientation.getZ() * sinHalfAnglePrev;
+      double sPrev = Math.cos(halfAnglePrev);
+
+      double halfAngleCurr = 0.5 * currentOrientation.getAngle();
+      double sinHalfAngleCurr = Math.sin(halfAngleCurr);
+      double xCurr = currentOrientation.getX() * sinHalfAngleCurr;
+      double yCurr = currentOrientation.getY() * sinHalfAngleCurr;
+      double zCurr = currentOrientation.getZ() * sinHalfAngleCurr;
+      double sCurr = Math.cos(halfAngleCurr);
+
+      QuaternionTools.finiteDifference(xPrev, yPrev, zPrev, sPrev, xCurr, yCurr, zCurr, sCurr, dt, angularVelocityToPack);
    }
 }
