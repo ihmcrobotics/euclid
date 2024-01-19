@@ -759,6 +759,63 @@ public class RotationMatrixTools
    }
 
    /**
+    * Append a rotation vector to {@code original} and stores the result in {@code output}.
+    *
+    * @param original the orientation to append the rotation vector to. Not modified.
+    * @param rx       the x-component of the rotation vector.
+    * @param ry       the y-component of the rotation vector.
+    * @param rz       the z-component of the rotation vector.
+    * @param output   the rotation matrix in which the result is stored. Modified.
+    */
+   public static void appendRotationVector(Orientation3DReadOnly original, double rx, double ry, double rz, RotationMatrixBasics output)
+   {
+      double a00, a01, a02, a10, a11, a12, a20, a21, a22;
+      if (original instanceof RotationMatrixReadOnly originalMatrix)
+      {
+         a00 = originalMatrix.getM00();
+         a01 = originalMatrix.getM01();
+         a02 = originalMatrix.getM02();
+         a10 = originalMatrix.getM10();
+         a11 = originalMatrix.getM11();
+         a12 = originalMatrix.getM12();
+         a20 = originalMatrix.getM20();
+         a21 = originalMatrix.getM21();
+         a22 = originalMatrix.getM22();
+      }
+      else
+      {
+         output.set(original);
+         a00 = output.getM00();
+         a01 = output.getM01();
+         a02 = output.getM02();
+         a10 = output.getM10();
+         a11 = output.getM11();
+         a12 = output.getM12();
+         a20 = output.getM20();
+         a21 = output.getM21();
+         a22 = output.getM22();
+      }
+
+      double b00, b01, b02, b10, b11, b12, b20, b21, b22;
+      output.setRotationVector(rx, ry, rz);
+      if (output.isIdentity())
+      {
+         output.set(a00, a01, a02, a10, a11, a12, a20, a21, a22);
+         return;
+      }
+      b00 = output.getM00();
+      b01 = output.getM01();
+      b02 = output.getM02();
+      b10 = output.getM10();
+      b11 = output.getM11();
+      b12 = output.getM12();
+      b20 = output.getM20();
+      b21 = output.getM21();
+      b22 = output.getM22();
+      multiplyImpl(a00, a01, a02, a10, a11, a12, a20, a21, a22, false, b00, b01, b02, b10, b11, b12, b20, b21, b22, false, output);
+   }
+
+   /**
     * Rotates the given {@code tupleOriginal} by a rotation about the z-axis and stores the result in
     * {@code tupleTransformed}.
     * <p>

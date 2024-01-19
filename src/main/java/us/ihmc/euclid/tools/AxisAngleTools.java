@@ -9,6 +9,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -1108,6 +1109,41 @@ public class AxisAngleTools
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
+   }
+
+   /**
+    * Append a rotation vector to {@code original} and stores the result in {@code output}.
+    *
+    * @param original the orientation to append the rotation vector to. Not modified.
+    * @param rx       the x-component of the rotation vector.
+    * @param ry       the y-component of the rotation vector.
+    * @param rz       the z-component of the rotation vector.
+    * @param output   the axis-angle in which the result is stored. Modified.
+    */
+   public static void appendRotationVector(Orientation3DReadOnly original, double rx, double ry, double rz, AxisAngleBasics output)
+   {
+      double norm = EuclidCoreTools.norm(rx, ry, rz);
+
+      if (norm <= AxisAngleConversion.EPS)
+      {
+         output.set(original);
+         return;
+      }
+
+      double angle = norm;
+      norm = 1.0 / norm;
+      double ux = rx * norm;
+      double uy = ry * norm;
+      double uz = rz * norm;
+      if (original instanceof AxisAngleReadOnly aaOriginal)
+      {
+         multiplyImpl(aaOriginal.getAngle(), aaOriginal.getX(), aaOriginal.getY(), aaOriginal.getZ(), false, angle, ux, uy, uz, false, output);
+      }
+      else
+      {
+         output.set(original);
+         multiplyImpl(output.getAngle(), output.getX(), output.getY(), output.getZ(), false, angle, ux, uy, uz, false, output);
+      }
    }
 
    /**

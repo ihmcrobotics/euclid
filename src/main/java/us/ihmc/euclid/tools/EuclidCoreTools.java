@@ -2,24 +2,35 @@ package us.ihmc.euclid.tools;
 
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.Matrix;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 import java.util.Collections;
@@ -1527,7 +1538,7 @@ public class EuclidCoreTools
          else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
             QuaternionTools.finiteDifference(qPrev, yprCurr, dt, angularVelocityToPack);
          else
-            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+            throw newUnsupportedOrientationException(previousOrientation, currentOrientation);
       }
       else if (previousOrientation instanceof RotationMatrixReadOnly rPrev)
       {
@@ -1540,7 +1551,7 @@ public class EuclidCoreTools
          else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
             RotationMatrixTools.finiteDifference(rPrev, yprCurr, dt, angularVelocityToPack);
          else
-            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+            throw newUnsupportedOrientationException(previousOrientation, currentOrientation);
       }
       else if (previousOrientation instanceof AxisAngleReadOnly aaPrev)
       {
@@ -1553,7 +1564,7 @@ public class EuclidCoreTools
          else if (currentOrientation instanceof YawPitchRollReadOnly yprCurr)
             YawPitchRollTools.finiteDifference(aaPrev, yprCurr, dt, angularVelocityToPack);
          else
-            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+            throw newUnsupportedOrientationException(previousOrientation, currentOrientation);
       }
       else if (previousOrientation instanceof YawPitchRollReadOnly yprPrev)
       {
@@ -1566,10 +1577,10 @@ public class EuclidCoreTools
          else if (currentOrientation instanceof AxisAngleReadOnly aaCurr)
             YawPitchRollTools.finiteDifference(yprPrev, aaCurr, dt, angularVelocityToPack);
          else
-            throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+            throw newUnsupportedOrientationException(previousOrientation, currentOrientation);
       }
       else
-         throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+         throw newUnsupportedOrientationException(previousOrientation, currentOrientation);
    }
 
    /**
@@ -1581,6 +1592,7 @@ public class EuclidCoreTools
     *    <li>the angular velocity is expressed in the local coordinates of the transform.
     * </ul>
     * </p>
+    *
     *  @param previousTransform     the transform at the previous time step. Not modified.
     *
     * @param currentTransform      the transform at the current time step. Not modified.
@@ -1598,8 +1610,158 @@ public class EuclidCoreTools
       finiteDifference(previousTransform.getTranslation(), currentTransform.getTranslation(), dt, linearVelocityToPack);
    }
 
-   private static UnsupportedOperationException newUnsupportedFiniteDifferenceException(Orientation3DReadOnly previousOrientation,
-                                                                                        Orientation3DReadOnly currentOrientation)
+   /**
+    * First order integration of the given derivative to compute the current value.
+    *
+    * @param previousValue the value at the previous time step.
+    * @param derivative    the time derivative.
+    * @param dt            the time step.
+    * @return the current value.
+    */
+   public static double integrate(double previousValue, double derivative, double dt)
+   {
+      return previousValue + dt * derivative;
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current angle.
+    *
+    * @param previousAngle   the angle (in radians) at the previous time step.
+    * @param angularVelocity the angular velocity (in radians per second).
+    * @param dt              the time step.
+    * @return the current angle (in radians).
+    */
+   public static double integrateAngle(double previousAngle, double angularVelocity, double dt)
+   {
+      return trimAngleMinusPiToPi(previousAngle + dt * angularVelocity);
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current value.
+    *
+    * @param previousValue      the value at the previous time step.
+    * @param derivative         the time derivative. Not modified.
+    * @param dt                 the time step.
+    * @param currentValueToPack the vector used to store the current value. Modified.
+    */
+   public static void integrate(Tuple2DReadOnly previousValue, Vector2DReadOnly derivative, double dt, Tuple2DBasics currentValueToPack)
+   {
+      currentValueToPack.scaleAdd(dt, derivative, previousValue);
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current value.
+    *
+    * @param previousValue      the value at the previous time step.
+    * @param derivative         the time derivative. Not modified.
+    * @param dt                 the time step.
+    * @param currentValueToPack the vector used to store the current value. Modified.
+    */
+   public static void integrate(Tuple3DReadOnly previousValue, Vector3DReadOnly derivative, double dt, Tuple3DBasics currentValueToPack)
+   {
+      currentValueToPack.scaleAdd(dt, derivative, previousValue);
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current value.
+    *
+    * @param previousValue      the value at the previous time step.
+    * @param derivative         the time derivative. Not modified.
+    * @param dt                 the time step.
+    * @param currentValueToPack the vector used to store the current value. Modified.
+    */
+   public static void integrate(Tuple4DReadOnly previousValue, Vector4DReadOnly derivative, double dt, Tuple4DBasics currentValueToPack)
+   {
+      currentValueToPack.set(previousValue.getX() + dt * derivative.getX(),
+                             previousValue.getY() + dt * derivative.getY(),
+                             previousValue.getZ() + dt * derivative.getZ(),
+                             previousValue.getS() + dt * derivative.getS());
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current orientation.
+    *
+    * @param previousOrientation      the orientation at the previous time step. Not modified.
+    * @param angularVelocity          the angular velocity (in radians per second). Not modified.
+    * @param dt                       the time step.
+    * @param currentOrientationToPack the orientation used to store the current orientation. Modified.
+    */
+   public static void integrate(Orientation2DReadOnly previousOrientation, double angularVelocity, double dt, Orientation2DBasics currentOrientationToPack)
+   {
+      currentOrientationToPack.setYaw(integrateAngle(previousOrientation.getYaw(), angularVelocity, dt));
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current orientation.
+    * <p>
+    * Note that the angular velocity is expected to be expressed in the local coordinates of the orientation. If not, perform the following operation before
+    * calling this method: {@code previousOrientation.inverseTransform(angularVelocity)}.
+    * </p>
+    *
+    * @param previousOrientation      the orientation at the previous time step. Not modified.
+    * @param angularVelocity          the angular velocity (in radians per second) expressed in the local coordinates of the orientation. Not modified.
+    * @param dt                       the time step.
+    * @param currentOrientationToPack the orientation used to store the current orientation. Modified.
+    */
+   public static void integrate(Orientation3DReadOnly previousOrientation,
+                                Vector3DReadOnly angularVelocity,
+                                double dt,
+                                Orientation3DBasics currentOrientationToPack)
+   {
+      double rx = angularVelocity.getX() * dt;
+      double ry = angularVelocity.getY() * dt;
+      double rz = angularVelocity.getZ() * dt;
+
+      if (currentOrientationToPack instanceof QuaternionBasics qCurr)
+      {
+         QuaternionTools.appendRotationVector(previousOrientation, rx, ry, rz, qCurr);
+      }
+      else if (currentOrientationToPack instanceof RotationMatrixBasics rCurr)
+      {
+         RotationMatrixTools.appendRotationVector(previousOrientation, rx, ry, rz, rCurr);
+      }
+      else if (currentOrientationToPack instanceof AxisAngleBasics aaCurr)
+      {
+         AxisAngleTools.appendRotationVector(previousOrientation, rx, ry, rz, aaCurr);
+      }
+      else if (currentOrientationToPack instanceof YawPitchRollBasics yprCurr)
+      {
+         YawPitchRollTools.appendRotationVector(previousOrientation, rx, ry, rz, yprCurr);
+      }
+      else
+      {
+         throw newUnsupportedOrientationException(previousOrientation, currentOrientationToPack);
+      }
+   }
+
+   /**
+    * First order integration of the given derivative to compute the current transform.
+    * <p>
+    * Note that:
+    * <ul>
+    *    <li>the linear velocity is expressed in the base coordinates (world frame).
+    *    <li>the angular velocity is expressed in the local coordinates of the transform.
+    * </ul>
+    * </p>
+    *
+    * @param previousTransform      the transform at the previous time step. Not modified.
+    * @param angularVelocity        the angular velocity. Not modified.
+    * @param linearVelocity         the linear velocity. Not modified.
+    * @param dt                     the time step.
+    * @param currentTransformToPack the transform used to store the current transform. Modified.
+    */
+   public static void integrate(RigidBodyTransformReadOnly previousTransform,
+                                Vector3DReadOnly angularVelocity,
+                                Vector3DReadOnly linearVelocity,
+                                double dt,
+                                RigidBodyTransformBasics currentTransformToPack)
+   {
+      integrate(previousTransform.getRotation(), angularVelocity, dt, currentTransformToPack.getRotation());
+      integrate(previousTransform.getTranslation(), linearVelocity, dt, currentTransformToPack.getTranslation());
+   }
+
+   private static UnsupportedOperationException newUnsupportedOrientationException(Orientation3DReadOnly previousOrientation,
+                                                                                   Orientation3DReadOnly currentOrientation)
    {
       return new UnsupportedOperationException("Unsupported orientation type: [currentOrientation = %s, previousOrientation = %s].".formatted(currentOrientation.getClass()
                                                                                                                                                                 .getSimpleName(),

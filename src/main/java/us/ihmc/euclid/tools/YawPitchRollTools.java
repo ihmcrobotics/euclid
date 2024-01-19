@@ -1246,44 +1246,6 @@ public class YawPitchRollTools
                                boolean inverse2,
                                YawPitchRollBasics yawPitchRollToPack)
    {
-      double q1s, q1x, q1y, q1z;
-
-      if (orientation1 instanceof QuaternionReadOnly quaternion1)
-      {
-         q1s = quaternion1.getS();
-         q1x = quaternion1.getX();
-         q1y = quaternion1.getY();
-         q1z = quaternion1.getZ();
-      }
-      else if (orientation1 instanceof AxisAngleReadOnly axisAngle1)
-      {
-         double halfTheta = 0.5 * axisAngle1.getAngle();
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle1.axisNorm();
-         q1x = axisAngle1.getX() * sinHalfTheta;
-         q1y = axisAngle1.getY() * sinHalfTheta;
-         q1z = axisAngle1.getZ() * sinHalfTheta;
-         q1s = EuclidCoreTools.cos(halfTheta);
-      }
-      else
-      {
-         double halfYaw = 0.5 * orientation1.getYaw();
-         double cYaw = EuclidCoreTools.cos(halfYaw);
-         double sYaw = EuclidCoreTools.sin(halfYaw);
-
-         double halfPitch = 0.5 * orientation1.getPitch();
-         double cPitch = EuclidCoreTools.cos(halfPitch);
-         double sPitch = EuclidCoreTools.sin(halfPitch);
-
-         double halfRoll = 0.5 * orientation1.getRoll();
-         double cRoll = EuclidCoreTools.cos(halfRoll);
-         double sRoll = EuclidCoreTools.sin(halfRoll);
-
-         q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
-         q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
-         q1y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
-         q1z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
-      }
-
       double q2s, q2x, q2y, q2z;
 
       if (orientation2 instanceof QuaternionReadOnly quaternion2)
@@ -1320,6 +1282,56 @@ public class YawPitchRollTools
          q2x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
          q2y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
          q2z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+      }
+
+      multiplyImpl(orientation1, inverse1, q2x, q2y, q2z, q2s, inverse2, yawPitchRollToPack);
+   }
+
+   private static void multiplyImpl(Orientation3DReadOnly orientation1,
+                                    boolean inverse1,
+                                    double q2x,
+                                    double q2y,
+                                    double q2z,
+                                    double q2s,
+                                    boolean inverse2,
+                                    YawPitchRollBasics yawPitchRollToPack)
+   {
+      double q1s, q1x, q1y, q1z;
+
+      if (orientation1 instanceof QuaternionReadOnly quaternion1)
+      {
+         q1s = quaternion1.getS();
+         q1x = quaternion1.getX();
+         q1y = quaternion1.getY();
+         q1z = quaternion1.getZ();
+      }
+      else if (orientation1 instanceof AxisAngleReadOnly axisAngle1)
+      {
+         double halfTheta = 0.5 * axisAngle1.getAngle();
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle1.axisNorm();
+         q1x = axisAngle1.getX() * sinHalfTheta;
+         q1y = axisAngle1.getY() * sinHalfTheta;
+         q1z = axisAngle1.getZ() * sinHalfTheta;
+         q1s = EuclidCoreTools.cos(halfTheta);
+      }
+      else
+      {
+         double halfYaw = 0.5 * orientation1.getYaw();
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
+
+         double halfPitch = 0.5 * orientation1.getPitch();
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
+
+         double halfRoll = 0.5 * orientation1.getRoll();
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
+
+         q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+         q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+         q1y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+         q1z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
       }
 
       QuaternionTools.multiplyImpl(q1x, q1y, q1z, q1s, inverse1, q2x, q2y, q2z, q2s, inverse2, yawPitchRollToPack);
@@ -1567,6 +1579,23 @@ public class YawPitchRollTools
       double pitch = yawPitchRollOriginal.getPitch();
       roll = EuclidCoreTools.trimAngleMinusPiToPi(roll + yawPitchRollOriginal.getRoll());
       yawPitchRollToPack.set(yaw, pitch, roll);
+   }
+
+   public static void appendRotationVector(Orientation3DReadOnly original, double rx, double ry, double rz, YawPitchRollBasics output)
+   {
+      double angle = EuclidCoreTools.norm(rx, ry, rz);
+      if (angle < QuaternionTools.EPS)
+      {
+         output.set(original);
+         return;
+      }
+
+      double sinHalfAngle = EuclidCoreTools.sin(0.5 * angle);
+      double qx = rx * sinHalfAngle / angle;
+      double qy = ry * sinHalfAngle / angle;
+      double qz = rz * sinHalfAngle / angle;
+      double qs = EuclidCoreTools.cos(0.5 * angle);
+      multiplyImpl(original, false, qx, qy, qz, qs, false, output);
    }
 
    /**

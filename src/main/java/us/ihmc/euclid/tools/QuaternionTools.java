@@ -1501,6 +1501,41 @@ public class QuaternionTools
    }
 
    /**
+    * Append a rotation vector to {@code original} and stores the result in {@code output}.
+    *
+    * @param original the orientation to append the rotation vector to. Not modified.
+    * @param rx       the x-component of the rotation vector.
+    * @param ry       the y-component of the rotation vector.
+    * @param rz       the z-component of the rotation vector.
+    * @param output   the quaternion in which the result is stored. Modified.
+    */
+   public static void appendRotationVector(Orientation3DReadOnly original, double rx, double ry, double rz, QuaternionBasics output)
+   {
+      double angle = EuclidCoreTools.norm(rx, ry, rz);
+      if (angle < EPS)
+      {
+         output.set(original);
+         return;
+      }
+
+      double sinHalfAngle = EuclidCoreTools.sin(0.5 * angle);
+      double qx = rx * sinHalfAngle / angle;
+      double qy = ry * sinHalfAngle / angle;
+      double qz = rz * sinHalfAngle / angle;
+      double qs = EuclidCoreTools.cos(0.5 * angle);
+
+      if (original instanceof QuaternionReadOnly qOriginal)
+      {
+         multiplyImpl(qOriginal.getX(), qOriginal.getY(), qOriginal.getZ(), qOriginal.getS(), false, qx, qy, qz, qs, false, output);
+      }
+      else
+      {
+         output.set(original);
+         multiplyImpl(output.getX(), output.getY(), output.getZ(), output.getS(), false, qx, qy, qz, qs, false, output);
+      }
+   }
+
+   /**
     * Performs a Cross platform Angular Distance Calculation between Quaternion and other 3D
     * orientation representations.
     *

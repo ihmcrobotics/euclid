@@ -3,7 +3,9 @@ package us.ihmc.euclid.tools;
 import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -78,7 +80,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testFastSquareRoot() throws Exception
+   public void testFastSquareRoot()
    {
       Random random = new Random(2342L);
 
@@ -114,7 +116,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testContainsNaNWith2Elements() throws Exception
+   public void testContainsNaNWith2Elements()
    {
       assertFalse(EuclidCoreTools.containsNaN(0.0, 0.0));
       assertTrue(EuclidCoreTools.containsNaN(Double.NaN, 0.0));
@@ -122,7 +124,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testContainsNaNWith3Elements() throws Exception
+   public void testContainsNaNWith3Elements()
    {
       assertFalse(EuclidCoreTools.containsNaN(0.0, 0.0, 0.0));
       assertTrue(EuclidCoreTools.containsNaN(Double.NaN, 0.0, 0.0));
@@ -131,7 +133,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testContainsNaNWith4Elements() throws Exception
+   public void testContainsNaNWith4Elements()
    {
       assertFalse(EuclidCoreTools.containsNaN(0.0, 0.0, 0.0, 0.0));
       assertTrue(EuclidCoreTools.containsNaN(Double.NaN, 0.0, 0.0, 0.0));
@@ -141,7 +143,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testContainsNaNWith9Elements() throws Exception
+   public void testContainsNaNWith9Elements()
    {
       assertFalse(EuclidCoreTools.containsNaN(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
       assertTrue(EuclidCoreTools.containsNaN(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
@@ -156,7 +158,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testContainsNaNWithArray() throws Exception
+   public void testContainsNaNWithArray()
    {
       assertFalse(EuclidCoreTools.containsNaN(new double[0]));
       assertFalse(EuclidCoreTools.containsNaN(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
@@ -172,7 +174,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormSquaredWith2Elements() throws Exception
+   public void testNormSquaredWith2Elements()
    {
       assertEquals(1.0, EuclidCoreTools.normSquared(1.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.normSquared(0.0, 1.0));
@@ -189,7 +191,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormSquaredWith3Elements() throws Exception
+   public void testNormSquaredWith3Elements()
    {
       assertEquals(1.0, EuclidCoreTools.normSquared(1.0, 0.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.normSquared(0.0, 1.0, 0.0));
@@ -210,7 +212,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormSquaredWith4Elements() throws Exception
+   public void testNormSquaredWith4Elements()
    {
       assertEquals(1.0, EuclidCoreTools.normSquared(1.0, 0.0, 0.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.normSquared(0.0, 1.0, 0.0, 0.0));
@@ -235,7 +237,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormWith2Elements() throws Exception
+   public void testNormWith2Elements()
    {
       assertEquals(1.0, EuclidCoreTools.norm(1.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.norm(0.0, 1.0));
@@ -259,7 +261,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormWith3Elements() throws Exception
+   public void testNormWith3Elements()
    {
       assertEquals(1.0, EuclidCoreTools.norm(1.0, 0.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.norm(0.0, 1.0, 0.0));
@@ -291,7 +293,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testNormWith4Elements() throws Exception
+   public void testNormWith4Elements()
    {
       assertEquals(1.0, EuclidCoreTools.norm(1.0, 0.0, 0.0, 0.0));
       assertEquals(1.0, EuclidCoreTools.norm(0.0, 1.0, 0.0, 0.0));
@@ -331,7 +333,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testTrimAngleMinusPiToPi() throws Exception
+   public void testTrimAngleMinusPiToPi()
    {
       Random random = new Random(2323L);
 
@@ -357,7 +359,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testAngleDifferenceMinusPiToPi() throws Exception
+   public void testAngleDifferenceMinusPiToPi()
    {
       Random random = new Random(2323L);
 
@@ -375,7 +377,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testShiftAngleInRange() throws Exception
+   public void testShiftAngleInRange()
    {
       Random random = new Random(23423L);
 
@@ -401,7 +403,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testAngleGeometricallyEquals() throws Exception
+   public void testAngleGeometricallyEquals()
    {
       Random random = new Random(35635);
 
@@ -432,7 +434,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testIsAngleZero() throws Exception
+   public void testIsAngleZero()
    {
       Random random = new Random(35635);
 
@@ -454,7 +456,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testMax() throws Exception
+   public void testMax()
    {
       Random random = new Random(45645L);
 
@@ -481,7 +483,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testMin() throws Exception
+   public void testMin()
    {
       Random random = new Random(45645L);
 
@@ -508,7 +510,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testMed() throws Exception
+   public void testMed()
    {
       Random random = new Random(45645L);
 
@@ -528,7 +530,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testEpsilonEquals() throws Exception
+   public void testEpsilonEquals()
    {
       Random random = new Random(34235);
 
@@ -575,7 +577,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testInterpolate() throws Exception
+   public void testInterpolate()
    {
       Random random = new Random(3665L);
 
@@ -608,7 +610,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testClamp() throws Exception
+   public void testClamp()
    {
       Random random = new Random(3453);
 
@@ -992,5 +994,131 @@ public class EuclidCoreToolsTest
                                        expectedAngularVelocity,
                                        actualAngularVelocity,
                                        epsilon * toleranceScale);
+   }
+
+   @Test
+   public void testIntegrate()
+   {
+      Random random = new Random(234234);
+
+      // double:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double prevValue = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double expectedCurrValue = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double derivative = EuclidCoreTools.finiteDifference(prevValue, expectedCurrValue, dt);
+
+         double actualCurrValue = EuclidCoreTools.integrate(prevValue, derivative, dt);
+         assertEquals(expectedCurrValue, actualCurrValue, 1.0e-12);
+      }
+
+      // angles:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double prevAngle = EuclidCoreRandomTools.nextDouble(random, -Math.PI, Math.PI);
+         double expectedCurrAngle = EuclidCoreRandomTools.nextDouble(random, -Math.PI, Math.PI);
+         double derivative = EuclidCoreTools.finiteDifferenceAngle(prevAngle, expectedCurrAngle, dt);
+
+         double actualCurrAngle = EuclidCoreTools.integrateAngle(prevAngle, derivative, dt);
+         assertEquals(expectedCurrAngle, actualCurrAngle, 1.0e-12);
+      }
+
+      // Tuple2D:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple2DReadOnly prevTuple = EuclidCoreRandomTools.nextPoint2D(random);
+         Tuple2DReadOnly expectedCurrTuple = EuclidCoreRandomTools.nextPoint2D(random);
+         Vector2D derivative = new Vector2D();
+         EuclidCoreTools.finiteDifference(prevTuple, expectedCurrTuple, dt, derivative);
+
+         Point2D actualCurrTuple = new Point2D();
+         EuclidCoreTools.integrate(prevTuple, derivative, dt, actualCurrTuple);
+         EuclidCoreTestTools.assertEquals(expectedCurrTuple, actualCurrTuple, 1.0e-12);
+      }
+
+      // Tuple3D:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple3DReadOnly prevTuple = EuclidCoreRandomTools.nextPoint3D(random);
+         Tuple3DReadOnly expectedCurrTuple = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D derivative = new Vector3D();
+         EuclidCoreTools.finiteDifference(prevTuple, expectedCurrTuple, dt, derivative);
+
+         Point3D actualCurrTuple = new Point3D();
+         EuclidCoreTools.integrate(prevTuple, derivative, dt, actualCurrTuple);
+         EuclidCoreTestTools.assertEquals(expectedCurrTuple, actualCurrTuple, 1.0e-12);
+      }
+
+      // Tuple4D:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple4DReadOnly prevTuple = EuclidCoreRandomTools.nextVector4D(random);
+         Tuple4DReadOnly expectedCurrTuple = EuclidCoreRandomTools.nextVector4D(random);
+         Vector4D derivative = new Vector4D();
+         EuclidCoreTools.finiteDifference(prevTuple, expectedCurrTuple, dt, derivative);
+
+         Vector4D actualCurrTuple = new Vector4D();
+         EuclidCoreTools.integrate(prevTuple, derivative, dt, actualCurrTuple);
+         EuclidCoreTestTools.assertEquals(expectedCurrTuple, actualCurrTuple, 1.0e-12);
+      }
+
+      // Orientation2D:
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Let's first verify that the AxisAngle finite difference is correct.
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Orientation2DReadOnly prevOrientation = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2DReadOnly expectedCurrOrientation = EuclidCoreRandomTools.nextOrientation2D(random);
+         double derivative = EuclidCoreTools.finiteDifference(prevOrientation.getYaw(), expectedCurrOrientation.getYaw(), dt);
+
+         Orientation2D actualCurrOrientation = new Orientation2D();
+         EuclidCoreTools.integrate(prevOrientation, derivative, dt, actualCurrOrientation);
+
+         EuclidCoreTestTools.assertEquals(expectedCurrOrientation, actualCurrOrientation, 1.0e-12);
+      }
+
+      // Orientation3D:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Orientation3DReadOnly prevOrientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         Orientation3DReadOnly expectedCurrOrientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         Vector3D derivative = new Vector3D();
+         EuclidCoreTools.finiteDifference(prevOrientation, expectedCurrOrientation, dt, derivative);
+
+         Orientation3DBasics actualCurrOrientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         EuclidCoreTools.integrate(prevOrientation, derivative, dt, actualCurrOrientation);
+
+         EuclidCoreTestTools.assertGeometricallyEquals(expectedCurrOrientation, actualCurrOrientation, 1.0e-12);
+      }
+
+      // RigidBodyTransform:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.1, 1.0);
+         RigidBodyTransform prevTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform diff = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform expectedCurrTransform = new RigidBodyTransform();
+         expectedCurrTransform.set(prevTransform);
+         expectedCurrTransform.multiply(diff);
+
+         Vector3D expectedLinearVelocity = new Vector3D();
+         expectedLinearVelocity.set(diff.getTranslation());
+         expectedLinearVelocity.scale(1.0 / dt);
+         prevTransform.transform(expectedLinearVelocity);
+
+         Vector3D expectedAngularVelocity = new Vector3D();
+         diff.getRotation().getRotationVector(expectedAngularVelocity);
+         expectedAngularVelocity.scale(1.0 / dt);
+
+         RigidBodyTransform actualCurrTransform = new RigidBodyTransform();
+         EuclidCoreTools.integrate(prevTransform, expectedAngularVelocity, expectedLinearVelocity, dt, actualCurrTransform);
+
+         EuclidCoreTestTools.assertEquals(expectedCurrTransform, actualCurrTransform, 1.0e-12);
+      }
    }
 }
