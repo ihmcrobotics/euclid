@@ -6,15 +6,20 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 import java.util.Collections;
@@ -1407,6 +1412,90 @@ public class EuclidCoreTools
    }
 
    /**
+    * Computes the finite difference of the two given values.
+    *
+    * @param previousValue the value at the previous time step.
+    * @param currentValue  the value at the current time step.
+    * @param dt            the time step.
+    * @return the derivative.
+    */
+   public static double finiteDifference(double previousValue, double currentValue, double dt)
+   {
+      return (currentValue - previousValue) / dt;
+   }
+
+   /**
+    * Computes the finite difference of the two given angles.
+    * <p>
+    * This method handles <tt>2&pi;</tt> wrap around.
+    * </p>
+    *
+    * @param previousAngle the angle (in radians) at the previous time step.
+    * @param currentAngle  the angle (in radians) at the current time step.
+    * @param dt            the time step.
+    * @return the angular velocity in radians per second.
+    */
+   public static double finiteDifferenceAngle(double previousAngle, double currentAngle, double dt)
+   {
+      return angleDifferenceMinusPiToPi(currentAngle, previousAngle) / dt;
+   }
+
+   /**
+    * Computes the finite difference of the two given values.
+    *
+    * @param previousValue    the value at the previous time step.
+    * @param currentValue     the value at the current time step.
+    * @param dt               the time step.
+    * @param derivativeToPack the vector used to store the derivative. Modified.
+    */
+   public static void finiteDifference(Tuple2DReadOnly previousValue, Tuple2DReadOnly currentValue, double dt, Vector2DBasics derivativeToPack)
+   {
+      derivativeToPack.sub(currentValue, previousValue);
+      derivativeToPack.scale(1.0 / dt);
+   }
+
+   /**
+    * Computes the finite difference of the two given values.
+    *
+    * @param previousValue    the value at the previous time step.
+    * @param currentValue     the value at the current time step.
+    * @param dt               the time step.
+    * @param derivativeToPack the vector used to store the derivative. Modified.
+    */
+   public static void finiteDifference(Tuple3DReadOnly previousValue, Tuple3DReadOnly currentValue, double dt, Vector3DBasics derivativeToPack)
+   {
+      derivativeToPack.sub(currentValue, previousValue);
+      derivativeToPack.scale(1.0 / dt);
+   }
+
+   /**
+    * Computes the finite difference of the two given values.
+    *
+    * @param previousValue    the value at the previous time step.
+    * @param currentValue     the value at the current time step.
+    * @param dt               the time step.
+    * @param derivativeToPack the vector used to store the derivative. Modified.
+    */
+   public static void finiteDifference(Tuple4DReadOnly previousValue, Tuple4DReadOnly currentValue, double dt, Vector4DBasics derivativeToPack)
+   {
+      derivativeToPack.sub(currentValue, previousValue);
+      derivativeToPack.scale(1.0 / dt);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of the two given orientations.
+    *
+    * @param previousOrientation the orientation at the previous time step. Not modified.
+    * @param currentOrientation  the orientation at the current time step. Not modified.
+    * @param dt                  the time step.
+    * @return the angular velocity in radians per second.
+    */
+   public static double finiteDifference(Orientation2DReadOnly previousOrientation, Orientation2DReadOnly currentOrientation, double dt)
+   {
+      return finiteDifferenceAngle(previousOrientation.getYaw(), currentOrientation.getYaw(), dt);
+   }
+
+   /**
     * Computes the angular velocity from the finite difference of the two given orientations.
     * <p>
     * The resulting angular velocity is expressed in the local coordinates of the orientation. Note that the angular velocity can be considered to be expressed
@@ -1481,6 +1570,32 @@ public class EuclidCoreTools
       }
       else
          throw newUnsupportedFiniteDifferenceException(previousOrientation, currentOrientation);
+   }
+
+   /**
+    * Computes the linear and angular velocities from the finite difference of the two given transforms.
+    * <p>
+    * Note that:
+    * <ul>
+    *    <li>the linear velocity is expressed in the base coordinates (world frame).
+    *    <li>the angular velocity is expressed in the local coordinates of the transform.
+    * </ul>
+    * </p>
+    *  @param previousTransform     the transform at the previous time step. Not modified.
+    *
+    * @param currentTransform      the transform at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity. Modified.
+    * @param linearVelocityToPack  the vector used to store the linear velocity. Modified.
+    */
+   public static void finiteDifference(RigidBodyTransformReadOnly previousTransform,
+                                       RigidBodyTransformReadOnly currentTransform,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack,
+                                       Vector3DBasics linearVelocityToPack)
+   {
+      finiteDifference(previousTransform.getRotation(), currentTransform.getRotation(), dt, angularVelocityToPack);
+      finiteDifference(previousTransform.getTranslation(), currentTransform.getTranslation(), dt, linearVelocityToPack);
    }
 
    private static UnsupportedOperationException newUnsupportedFiniteDifferenceException(Orientation3DReadOnly previousOrientation,

@@ -3,15 +3,24 @@ package us.ihmc.euclid.tools;
 import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -781,6 +790,86 @@ public class EuclidCoreToolsTest
    {
       Random random = new Random(234234);
 
+      // double:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double prevDouble = random.nextDouble();
+         double expectedVelocity = EuclidCoreRandomTools.nextDouble(random);
+         double nextDouble = prevDouble + dt * expectedVelocity;
+
+         double actualVelocity = EuclidCoreTools.finiteDifference(prevDouble, nextDouble, dt);
+         assertEquals(expectedVelocity, actualVelocity, 1.0e-12);
+      }
+
+      // angles:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double prevAngle = EuclidCoreRandomTools.nextDouble(random, -Math.PI, Math.PI);
+         double expectedVelocity = EuclidCoreRandomTools.nextDouble(random, -Math.PI, Math.PI);
+         double nextAngle = prevAngle + dt * expectedVelocity;
+
+         double actualVelocity = EuclidCoreTools.finiteDifference(prevAngle, nextAngle, dt);
+         assertEquals(expectedVelocity, actualVelocity, 1.0e-12);
+      }
+
+      // Tuple2DReadOnly:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple2DReadOnly prevTuple = EuclidCoreRandomTools.nextPoint2D(random);
+         Tuple2DReadOnly expectedVelocity = EuclidCoreRandomTools.nextVector2D(random);
+         Tuple2DBasics nextTuple = new Point2D();
+         nextTuple.scaleAdd(dt, expectedVelocity, prevTuple);
+
+         Vector2DBasics actualVelocity = new Vector2D();
+         EuclidCoreTools.finiteDifference(prevTuple, nextTuple, dt, actualVelocity);
+         EuclidCoreTestTools.assertEquals(expectedVelocity, actualVelocity, 1.0e-12);
+      }
+
+      // Tuple3DReadOnly:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple3DReadOnly prevTuple = EuclidCoreRandomTools.nextPoint3D(random);
+         Tuple3DReadOnly expectedVelocity = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics nextTuple = new Point3D();
+         nextTuple.scaleAdd(dt, expectedVelocity, prevTuple);
+
+         Vector3DBasics actualVelocity = new Vector3D();
+         EuclidCoreTools.finiteDifference(prevTuple, nextTuple, dt, actualVelocity);
+         EuclidCoreTestTools.assertEquals(expectedVelocity, actualVelocity, 1.0e-12);
+      }
+
+      // Tuple4DReadOnly:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Tuple4DReadOnly prevTuple = EuclidCoreRandomTools.nextVector4D(random);
+         Tuple4DReadOnly expectedVelocity = EuclidCoreRandomTools.nextVector4D(random);
+         Vector4D nextTuple = new Vector4D();
+         nextTuple.scaleAdd(dt, expectedVelocity, prevTuple);
+
+         Vector4DBasics actualVelocity = new Vector4D();
+         EuclidCoreTools.finiteDifference(prevTuple, nextTuple, dt, actualVelocity);
+         EuclidCoreTestTools.assertEquals(expectedVelocity, actualVelocity, 1.0e-12);
+      }
+
+      // Orientation2DReadOnly:
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Let's first verify that the AxisAngle finite difference is correct.
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Orientation2DReadOnly previousOrientation = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2DReadOnly currentOrientation = EuclidCoreRandomTools.nextOrientation2D(random);
+
+         double expectedAngularVelocity = EuclidCoreTools.finiteDifferenceAngle(previousOrientation.getYaw(), currentOrientation.getYaw(), dt);
+         double actualAngularVelocity = EuclidCoreTools.finiteDifference(previousOrientation, currentOrientation, dt);
+
+         assertEquals(expectedAngularVelocity, actualAngularVelocity, 1.0e-12);
+      }
+
+      // Orientation3DReadOnly:
       for (int i = 0; i < ITERATIONS; i++)
       { // Let's first verify that the Quaternion finite difference is correct.
          double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
@@ -844,6 +933,32 @@ public class EuclidCoreToolsTest
 
          // To make sure we're not missing anything:
          compareFiniteDifference(EuclidCoreRandomTools.nextOrientation3D(random), EuclidCoreRandomTools.nextOrientation3D(random), dt, 1.0e-12, i);
+      }
+
+      // RigidityTransform:
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double dt = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         RigidBodyTransform prevTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform diff = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform currTransform = new RigidBodyTransform();
+         currTransform.set(prevTransform);
+         currTransform.multiply(diff);
+
+         Vector3DBasics expectedLinearVelocity = new Vector3D();
+         expectedLinearVelocity.set(diff.getTranslation());
+         expectedLinearVelocity.scale(1.0 / dt);
+         prevTransform.transform(expectedLinearVelocity);
+
+         Vector3DBasics expectedAngularVelocity = new Vector3D();
+         diff.getRotation().getRotationVector(expectedAngularVelocity);
+         expectedAngularVelocity.scale(1.0 / dt);
+
+         Vector3DBasics actualLinearVelocity = new Vector3D();
+         Vector3DBasics actualAngularVelocity = new Vector3D();
+         EuclidCoreTools.finiteDifference(prevTransform, currTransform, dt, actualAngularVelocity, actualLinearVelocity);
+
+         EuclidCoreTestTools.assertEquals(expectedLinearVelocity, actualLinearVelocity, 1.0e-12);
       }
    }
 
