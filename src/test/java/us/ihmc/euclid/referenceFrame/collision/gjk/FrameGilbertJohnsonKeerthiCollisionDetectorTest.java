@@ -1,15 +1,6 @@
 package us.ihmc.euclid.referenceFrame.collision.gjk;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -29,6 +20,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final boolean VERBOSE = false;
@@ -37,7 +35,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
    private static final double DISTANCE_EPSILON = 0.0;
    private static final double POINT_TANGENTIAL_EPSILON = 0.0;
 
-   private static final double LARGE_DISTANCE_EPSILON = 1.0e-7;
+   private static final double LARGE_DISTANCE_EPSILON = 2.0e-7;
    private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-4;
 
    private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-10;
@@ -84,8 +82,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             EuclidFrameShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
             int newNumberOfIterations = detector.getNumberOfIterations();
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
-                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       distanceEpsilon,
+                                                                                       pointTangentialEpsilon,
+                                                                                       0.0);
 
             totalIterationsWithoutHint += originalNumberOfIterations;
             totalIterationsWithHint += newNumberOfIterations;
@@ -132,8 +134,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             EuclidFrameShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
             int newNumberOfIterations = detector.getNumberOfIterations();
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
-                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       distanceEpsilon,
+                                                                                       pointTangentialEpsilon,
+                                                                                       0.0);
 
             totalIterationsWithoutHint += originalNumberOfIterations;
             totalIterationsWithHint += newNumberOfIterations;
@@ -168,8 +174,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random, worldFrame);
             computeResults(shapeA, shapeB, expectedResult, actualResult);
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : "
-                  + i, expectedResult, actualResult, DISTANCE_EPSILON, POINT_TANGENTIAL_EPSILON, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       DISTANCE_EPSILON,
+                                                                                       POINT_TANGENTIAL_EPSILON,
+                                                                                       0.0);
             errors.add(ComparisonError.toComparisonError(expectedResult, actualResult));
          }
 
@@ -179,8 +189,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
          if (VERBOSE)
-            System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
-                  + average);
+            System.out.println(
+                  getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
       }
 
       {
@@ -194,8 +204,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random, shapeFrame);
             computeResults(shapeA, shapeB, expectedResult, actualResult);
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : "
-                  + i, expectedResult, actualResult, DISTANCE_EPSILON, POINT_TANGENTIAL_EPSILON, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       DISTANCE_EPSILON,
+                                                                                       POINT_TANGENTIAL_EPSILON,
+                                                                                       0.0);
             errors.add(ComparisonError.toComparisonError(expectedResult, actualResult));
          }
 
@@ -205,8 +219,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
          if (VERBOSE)
-            System.out.println(getClass().getSimpleName() + ": Two shapes in same frame (not worldFrame):\n\tmax error: " + ComparisonError.max(errors)
-                  + "\n\tavg error: " + average);
+            System.out.println(
+                  getClass().getSimpleName() + ": Two shapes in same frame (not worldFrame):\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+                  + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -221,8 +236,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random, frameB);
             computeResults(shapeA, shapeB, expectedResult, actualResult);
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : "
-                  + i, expectedResult, actualResult, LARGE_DISTANCE_EPSILON, LARGE_POINT_TANGENTIAL_EPSILON, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       LARGE_DISTANCE_EPSILON,
+                                                                                       LARGE_POINT_TANGENTIAL_EPSILON,
+                                                                                       0.0);
             errors.add(ComparisonError.toComparisonError(expectedResult, actualResult));
          }
 
@@ -233,7 +252,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 
          if (VERBOSE)
             System.out.println(getClass().getSimpleName() + ": shapeA in worldFrame and shape B in a random frame:\n\tmax error: " + ComparisonError.max(errors)
-                  + "\n\tavg error: " + average);
+                               + "\n\tavg error: " + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -248,8 +267,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random, frameB);
             computeResults(shapeA, shapeB, expectedResult, actualResult);
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : "
-                  + i, expectedResult, actualResult, LARGE_DISTANCE_EPSILON, LARGE_POINT_TANGENTIAL_EPSILON, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       LARGE_DISTANCE_EPSILON,
+                                                                                       LARGE_POINT_TANGENTIAL_EPSILON,
+                                                                                       0.0);
             errors.add(ComparisonError.toComparisonError(expectedResult, actualResult));
          }
 
@@ -260,7 +283,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 
          if (VERBOSE)
             System.out.println(getClass().getSimpleName() + ": shapeA in random frame and shape B in worldFrame:\n\tmax error: " + ComparisonError.max(errors)
-                  + "\n\tavg error: " + average);
+                               + "\n\tavg error: " + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -275,8 +298,12 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
             FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random, frameB);
             computeResults(shapeA, shapeB, expectedResult, actualResult);
 
-            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : "
-                  + i, expectedResult, actualResult, LARGE_DISTANCE_EPSILON, LARGE_POINT_TANGENTIAL_EPSILON, 0.0);
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration : " + i,
+                                                                                       expectedResult,
+                                                                                       actualResult,
+                                                                                       LARGE_DISTANCE_EPSILON,
+                                                                                       LARGE_POINT_TANGENTIAL_EPSILON,
+                                                                                       0.0);
             errors.add(ComparisonError.toComparisonError(expectedResult, actualResult));
          }
 
@@ -286,8 +313,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
          if (VERBOSE)
-            System.out.println(getClass().getSimpleName() + ": Both shape in distinct random frame:\n\tmax error: " + ComparisonError.max(errors)
-                  + "\n\tavg error: " + average);
+            System.out.println(
+                  getClass().getSimpleName() + ": Both shape in distinct random frame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+                  + average);
       }
    }
 

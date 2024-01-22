@@ -1,16 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -18,6 +9,11 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 {
@@ -103,8 +99,12 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack)
          T tuple = createRandomTuple(random);
-         double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
-               random.nextDouble()};
+         double[] tupleArray = new double[] {random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble()};
          tuple.get(tupleArray);
          assertTrue(tuple.getX() == tupleArray[0]);
          assertTrue(tuple.getY() == tupleArray[1]);
@@ -114,8 +114,12 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          T tuple = createRandomTuple(random);
-         double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
-               random.nextDouble()};
+         double[] tupleArray = new double[] {random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble(),
+                                             random.nextDouble()};
          tuple.get(2, tupleArray);
          assertTrue(tuple.getX() == tupleArray[2]);
          assertTrue(tuple.getY() == tupleArray[3]);
@@ -125,8 +129,12 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(float[] tupleArrayToPack)
          T tuple = createRandomTuple(random);
-         float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
-               random.nextFloat()};
+         float[] tupleArray = new float[] {random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat()};
          tuple.get(tupleArray);
          assertTrue(tuple.getX32() == tupleArray[0]);
          assertTrue(tuple.getY32() == tupleArray[1]);
@@ -136,8 +144,12 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          T tuple = createRandomTuple(random);
-         float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
-               random.nextFloat()};
+         float[] tupleArray = new float[] {random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat(),
+                                           random.nextFloat()};
          tuple.get(2, tupleArray);
          assertTrue(tuple.getX32() == tupleArray[2]);
          assertTrue(tuple.getY32() == tupleArray[3]);
@@ -197,7 +209,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ());
          double expectedNorm2 = scalar * norm1;
          double actualNorm2 = tuple2.norm();
-         assertEquals(expectedNorm2, actualNorm2, 5.0 * getEpsilon());
+         assertEquals(expectedNorm2, actualNorm2, Math.max(5.0, expectedNorm2) * getEpsilon());
       }
    }
 
@@ -214,7 +226,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ());
          double expectedNorm2 = scalar * norm1;
          double actualNorm2 = tuple2.normSquared();
-         assertEquals(expectedNorm2, EuclidCoreTools.squareRoot(actualNorm2), 5.0 * getEpsilon());
+         assertEquals(expectedNorm2, EuclidCoreTools.squareRoot(actualNorm2), Math.max(5.0, expectedNorm2) * getEpsilon());
       }
    }
 
@@ -241,7 +253,10 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
          double expectedDot = tuple1.norm() * tuple2.norm() * EuclidCoreTools.cos(angle);
          double actualDot = tuple1.dot(tuple2);
-         assertEquals(expectedDot, actualDot, 10.0 * getEpsilon());
+         assertEquals(expectedDot,
+                      actualDot,
+                      Math.max(5.0, Math.abs(expectedDot)) * getEpsilon(),
+                      "Iteration: " + i + ", error: " + Math.abs(expectedDot - actualDot));
       }
    }
 

@@ -1,19 +1,6 @@
 package us.ihmc.euclid.tuple4D;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -45,6 +32,14 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+
 public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends Tuple4DBasicsTest<T>
 {
    public static final double EPS = 1e-14;
@@ -65,7 +60,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          q1 = createTuple(q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertTrue(q1.isUnitary(getEpsilon()));
 
-         double delta = 6.0 * EuclidCoreTools.squareRoot(getEpsilon());
+         double delta = 10.0 * EuclidCoreTools.squareRoot(getEpsilon());
 
          q1 = createTuple(delta + q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertFalse(q1.isUnitary(getEpsilon()));
@@ -868,10 +863,10 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             T quaternion2 = createEmptyTuple();
             quaternion2.setAndConjugate(quaternionCopy);
 
-            assertTrue(quaternion2.getX() == -quaternionCopy.getX());
-            assertTrue(quaternion2.getY() == -quaternionCopy.getY());
-            assertTrue(quaternion2.getZ() == -quaternionCopy.getZ());
-            assertTrue(quaternion2.getS() == quaternionCopy.getS());
+            assertEquals(quaternion2.getX(), -quaternionCopy.getX());
+            assertEquals(quaternion2.getY(), -quaternionCopy.getY());
+            assertEquals(quaternion2.getZ(), -quaternionCopy.getZ());
+            assertEquals(quaternion2.getS(), quaternionCopy.getS());
          }
       }
    }

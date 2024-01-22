@@ -1,16 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -31,6 +21,11 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class Ellipsoid3DTest
 {
@@ -838,7 +833,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Show that if two of the radii are equal, the rotation around the third axis is negligible.
-        // Radii X and Y are equal, rotations around Z and 180 degree flip around any axis orthogonal to Z do not affect the method.
+         // Radii X and Y are equal, rotations around Z and 180 degree flip around any axis orthogonal to Z do not affect the method.
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
@@ -865,7 +860,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Show that if two of the radii are equal, the rotation around the third axis is negligible.
-        // Radii X and Z are equal, rotations around Y and 180 degree flip around any axis orthogonal to Y do not affect the method.
+         // Radii X and Z are equal, rotations around Y and 180 degree flip around any axis orthogonal to Y do not affect the method.
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
@@ -893,7 +888,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Show that if two of the radii are equal, the rotation around the third axis is negligible.
-        // Radii Y and Z are equal, rotations around X and 180 degree flip around any axis orthogonal to X do not affect the method.
+         // Radii Y and Z are equal, rotations around X and 180 degree flip around any axis orthogonal to X do not affect the method.
          double radiusX = random.nextDouble();
          double radiusYZ = random.nextDouble();
 
@@ -967,7 +962,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
-        // Swapping X <-> Y and adding a 90-degree rotation around Z
+         // Swapping X <-> Y and adding a 90-degree rotation around Z
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendYawRotation(Math.PI / 2.0);
@@ -983,7 +978,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
-        // Swapping X <-> Z and adding a 90-degree rotation around Y
+         // Swapping X <-> Z and adding a 90-degree rotation around Y
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendPitchRotation(Math.PI / 2.0);
@@ -999,7 +994,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
-        // Swapping Y <-> Z and adding a 90-degree rotation around X
+         // Swapping Y <-> Z and adding a 90-degree rotation around X
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendRollRotation(Math.PI / 2.0);
@@ -1047,8 +1042,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii X and Y are equal.
-        // 2- Swap X <-> Z
+         // 1- Radii X and Y are equal.
+         // 2- Swap X <-> Z
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
@@ -1076,8 +1071,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii X and Y are equal.
-        // 2- Swap Y <-> Z
+         // 1- Radii X and Y are equal.
+         // 2- Swap Y <-> Z
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
@@ -1105,8 +1100,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii X and Z are equal.
-        // 2- Swap X <-> Y
+         // 1- Radii X and Z are equal.
+         // 2- Swap X <-> Y
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
@@ -1134,8 +1129,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii X and Z are equal.
-        // 2- Swap Y <-> Z
+         // 1- Radii X and Z are equal.
+         // 2- Swap Y <-> Z
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
@@ -1163,8 +1158,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii Y and Z are equal.
-        // 2- Swap X <-> Y
+         // 1- Radii Y and Z are equal.
+         // 2- Swap X <-> Y
          double radiusYZ = random.nextDouble();
          double radiusX = random.nextDouble();
 
@@ -1192,8 +1187,8 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Combining scenarios: two radii equal and swapping radii components.
-        // 1- Radii Y and Z are equal.
-        // 2- Swap X <-> Z
+         // 1- Radii Y and Z are equal.
+         // 2- Swap X <-> Z
          double radiusYZ = random.nextDouble();
          double radiusX = random.nextDouble();
 
@@ -1223,7 +1218,7 @@ public class Ellipsoid3DTest
    @Test
    void testGetSupportingVertex() throws Exception
    {
-      Random random = new Random(546161);
+      Random random = new Random(546166);
 
       for (int i = 0; i < ITERATIONS; i++)
       {

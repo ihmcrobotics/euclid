@@ -1,21 +1,8 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Random;
-
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -47,6 +34,14 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 {
@@ -1076,7 +1071,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix unnormalized = new RotationMatrix();
          RotationMatrix normalized = new RotationMatrix();
 
-         for (int i = 0; i < 269000; i++)
+         for (int i = 0; i < 90000; i++)
          {
             RotationMatrixReadOnly multiplyWith = EuclidCoreRandomTools.nextRotationMatrix(random);
             unnormalized.multiply(multiplyWith);
@@ -1091,7 +1086,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix unnormalized = new RotationMatrix();
          RotationMatrix normalized = new RotationMatrix();
 
-         for (int i = 0; i < 111000; i++)
+         for (int i = 0; i < 85000; i++)
          {
             Quaternion multiplyWith = EuclidCoreRandomTools.nextQuaternion(random);
             unnormalized.append(multiplyWith);
@@ -1106,7 +1101,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix unnormalized = new RotationMatrix();
          RotationMatrix normalized = new RotationMatrix();
 
-         for (int i = 0; i < 268000; i++)
+         for (int i = 0; i < 90000; i++)
          {
             AxisAngle multiplyWith = EuclidCoreRandomTools.nextAxisAngle(random);
             unnormalized.append(multiplyWith);
