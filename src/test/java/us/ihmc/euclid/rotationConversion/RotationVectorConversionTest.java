@@ -1,15 +1,6 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-import static us.ihmc.euclid.tools.EuclidCoreTools.cos;
-import static us.ihmc.euclid.tools.EuclidCoreTools.sin;
-
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -18,6 +9,13 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreTools.cos;
+import static us.ihmc.euclid.tools.EuclidCoreTools.sin;
 
 public class RotationVectorConversionTest
 {
@@ -202,7 +200,7 @@ public class RotationVectorConversionTest
          m12 = uy * uz * (1.0 - cos(angle)) - ux * sin(angle);
          m21 = uy * uz * (1.0 - cos(angle)) + ux * sin(angle);
 
-         RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+         RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
 
          if (actualRotationVector.getX() * expectedRotationVector.getX() < 0.0)
          {
@@ -237,7 +235,7 @@ public class RotationVectorConversionTest
          m12 = uy * uz * (1.0 - cos(angle)) - ux * sin(angle);
          m21 = uy * uz * (1.0 - cos(angle)) + ux * sin(angle);
 
-         RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+         RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
          EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
       }
 
@@ -246,7 +244,7 @@ public class RotationVectorConversionTest
       m00 = m11 = m22 = 1.0;
       m01 = m02 = m12 = 0.0;
       m10 = m20 = m21 = 0.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DIsSetToZero(actualRotationVector);
 
       // Pi/2 around x
@@ -259,7 +257,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 1.0;
       m22 = 0.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(Math.PI / 2.0, actualRotationVector.getX(), EPSILON);
       assertEquals(0.0, actualRotationVector.getY(), EPSILON);
       assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
@@ -274,7 +272,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 0.0;
       m22 = -1.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(Math.PI, actualRotationVector.getX(), EPSILON);
       assertEquals(0.0, actualRotationVector.getY(), EPSILON);
       assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
@@ -289,7 +287,7 @@ public class RotationVectorConversionTest
       m20 = -1.0;
       m21 = 0.0;
       m22 = 0.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(0.0, actualRotationVector.getX(), EPSILON);
       assertEquals(Math.PI / 2.0, actualRotationVector.getY(), EPSILON);
       assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
@@ -304,7 +302,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 0.0;
       m22 = -1.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(0.0, actualRotationVector.getX(), EPSILON);
       assertEquals(Math.PI, actualRotationVector.getY(), EPSILON);
       assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
@@ -319,7 +317,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 0.0;
       m22 = 1.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(0.0, actualRotationVector.getX(), EPSILON);
       assertEquals(0.0, actualRotationVector.getY(), EPSILON);
       assertEquals(Math.PI / 2.0, actualRotationVector.getZ(), EPSILON);
@@ -334,7 +332,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 0.0;
       m22 = 1.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(0.0, actualRotationVector.getX(), EPSILON);
       assertEquals(0.0, actualRotationVector.getY(), EPSILON);
       assertEquals(Math.PI, actualRotationVector.getZ(), EPSILON);
@@ -350,7 +348,7 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 0.0;
       m22 = -1.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
       assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
@@ -365,7 +363,7 @@ public class RotationVectorConversionTest
       m20 = 1.0;
       m21 = 0.0;
       m22 = 0.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
       assertEquals(0.0, actualRotationVector.getY(), EPSILON);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
@@ -380,36 +378,36 @@ public class RotationVectorConversionTest
       m20 = 0.0;
       m21 = 1.0;
       m22 = 0.0;
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
       assertEquals(0.0, actualRotationVector.getX(), EPSILON);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
       assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
-      RotationVectorConversion.convertMatrixToRotationVectorImpl(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, actualRotationVector);
+      RotationVectorConversion.convertMatrixToRotationVector(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);
 
       // Test with an actual matrix
@@ -427,7 +425,7 @@ public class RotationVectorConversionTest
          m21 = rotationMatrix.getM21();
          m22 = rotationMatrix.getM22();
          RotationVectorConversion.convertMatrixToRotationVector(rotationMatrix, actualRotationVector);
-         RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, expectedRotationVector);
+         RotationVectorConversion.convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, expectedRotationVector);
          EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
          // Assert the parameter that does get modified
          assertTrue(rotationMatrix.equals(rotationMatrixCopy));
@@ -458,9 +456,9 @@ public class RotationVectorConversionTest
                YawPitchRoll yawPitchRoll = new YawPitchRoll(yaw, pitch, roll);
                RotationVectorConversion.convertYawPitchRollToRotationVector(yawPitchRoll, actualRotationVector);
                EuclidCoreTestTools.assertEquals(expectedRotationVector, actualRotationVector, EPSILON);
-               assertTrue(yawPitchRoll.getYaw() == yaw);
-               assertTrue(yawPitchRoll.getPitch() == pitch);
-               assertTrue(yawPitchRoll.getRoll() == roll);
+               assertEquals(yawPitchRoll.getYaw(), yaw);
+               assertEquals(yawPitchRoll.getPitch(), pitch);
+               assertEquals(yawPitchRoll.getRoll(), roll);
             }
          }
       }

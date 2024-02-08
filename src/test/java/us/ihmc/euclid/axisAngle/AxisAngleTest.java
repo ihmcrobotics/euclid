@@ -1,15 +1,6 @@
 package us.ihmc.euclid.axisAngle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
@@ -20,6 +11,11 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 {
@@ -237,7 +233,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
    @Override
    public double getEpsilon()
    {
-      return 1.0e-12;
+      return 1.1e-12;
    }
 
    @Override

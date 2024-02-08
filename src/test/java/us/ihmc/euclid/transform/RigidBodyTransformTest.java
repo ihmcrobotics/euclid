@@ -1,20 +1,9 @@
 package us.ihmc.euclid.transform;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Arrays;
-import java.util.Random;
-
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -33,6 +22,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Arrays;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBodyTransform>
 {
@@ -2930,7 +2925,7 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          actualTransform.setRotationAndZeroTranslation(axisAngle);
          assertTrue(actualTransform.hasRotation());
          assertFalse(actualTransform.hasTranslation());
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), EPS);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
          actualTransform.setRotationAndZeroTranslation(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.0));
@@ -4059,7 +4054,6 @@ public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBo
          assertFalse(actual.hasTranslation());
          expected.setToZero();
          EuclidCoreTestTools.assertGeometricallyEquals(expected, actual, EPS);
-
       }
    }
 

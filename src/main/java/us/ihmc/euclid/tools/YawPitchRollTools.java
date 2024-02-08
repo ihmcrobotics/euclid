@@ -13,6 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
@@ -138,7 +139,7 @@ public class YawPitchRollTools
     * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
     *                      true.
     * @return The angle representing the distance between the yawPitchRoll and the other orientation,
-    *         contained in [0, 2<i>pi</i>].
+    *       contained in [0, 2<i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
@@ -171,7 +172,7 @@ public class YawPitchRollTools
     * @param quaternion   the quaternion to be used for comparison. Not modified.
     * @param limitToPi    limits the result to [0,<i>pi</i>] if set True.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, 2<i>pi</i>].
+    *       [0, 2<i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion, boolean limitToPi)
    {
@@ -184,7 +185,7 @@ public class YawPitchRollTools
     * @param yawPitchRoll   the yawPitchRoll to be used for comparison. Not modified.
     * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
+    *       [0, <i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrix)
    {
@@ -198,7 +199,7 @@ public class YawPitchRollTools
     * @param axisAngle    the axisAngleto be used for comparison. Not modified.
     * @param limitToPi    Limits the result to [0,<i>pi</i>] if set True.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, 2<i>pi</i>].
+    *       [0, 2<i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle, boolean limitToPi)
    {
@@ -211,7 +212,7 @@ public class YawPitchRollTools
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
     * @param axisAngle    the axisAngleto be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, 2<i>pi</i>].
+    *       [0, 2<i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
    {
@@ -226,7 +227,7 @@ public class YawPitchRollTools
     * @param yawPitchRoll2 the second yaw-pitch-roll to measure the distance. Not modified
     * @param limitToPi     limits the result to [0,<i>pi</i>]
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
-    *         [0, 2<i>pi</i>]
+    *       [0, 2<i>pi</i>]
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2, boolean limitToPi)
    {
@@ -246,7 +247,7 @@ public class YawPitchRollTools
     * @param yawPitchRoll1 the first yaw-pitch-roll to measure the distance. Not modified.
     * @param yawPitchRoll2 the second yaw-pitch-roll to measure the distance. Not modified
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
-    *         [0, 2<i>pi</i>]
+    *       [0, 2<i>pi</i>]
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2)
    {
@@ -271,7 +272,7 @@ public class YawPitchRollTools
     *                  x-axis.
     * @param limitToPi Limits the result to [0, <i>pi</i>].
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
-    *         [0, 2<i>pi</i>]
+    *       [0, 2<i>pi</i>]
     */
    public static double distance(double yaw1, double pitch1, double roll1, double yaw2, double pitch2, double roll2, boolean limitToPi)
    {
@@ -352,7 +353,7 @@ public class YawPitchRollTools
     * @param roll2  the third angle of the second orientation representing the rotation around the
     *               x-axis.
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
-    *         [0, 2<i>pi</i>]
+    *       [0, 2<i>pi</i>]
     */
    public static double distance(double yaw1, double pitch1, double roll1, double yaw2, double pitch2, double roll2)
    {
@@ -576,7 +577,7 @@ public class YawPitchRollTools
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
     *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void transform(double yaw,
                                 double pitch,
@@ -601,7 +602,7 @@ public class YawPitchRollTools
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
     *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll,
                                 Tuple2DReadOnly tupleOriginal,
@@ -631,7 +632,7 @@ public class YawPitchRollTools
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
     *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(double yaw,
                                        double pitch,
@@ -661,7 +662,7 @@ public class YawPitchRollTools
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
     *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *                               does not represent a transformation in the XY plane.
+    *       does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll,
                                        Tuple2DReadOnly tupleOriginal,
@@ -1245,59 +1246,17 @@ public class YawPitchRollTools
                                boolean inverse2,
                                YawPitchRollBasics yawPitchRollToPack)
    {
-      double q1s, q1x, q1y, q1z;
-
-      if (orientation1 instanceof QuaternionReadOnly)
-      {
-         QuaternionReadOnly quaternion1 = (QuaternionReadOnly) orientation1;
-         q1s = quaternion1.getS();
-         q1x = quaternion1.getX();
-         q1y = quaternion1.getY();
-         q1z = quaternion1.getZ();
-      }
-      else if (orientation1 instanceof AxisAngleReadOnly)
-      {
-         AxisAngleReadOnly axisAngle1 = (AxisAngleReadOnly) orientation1;
-         double halfTheta = 0.5 * axisAngle1.getAngle();
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle1.axisNorm();
-         q1x = axisAngle1.getX() * sinHalfTheta;
-         q1y = axisAngle1.getY() * sinHalfTheta;
-         q1z = axisAngle1.getZ() * sinHalfTheta;
-         q1s = EuclidCoreTools.cos(halfTheta);
-      }
-      else
-      {
-         double halfYaw = 0.5 * orientation1.getYaw();
-         double cYaw = EuclidCoreTools.cos(halfYaw);
-         double sYaw = EuclidCoreTools.sin(halfYaw);
-
-         double halfPitch = 0.5 * orientation1.getPitch();
-         double cPitch = EuclidCoreTools.cos(halfPitch);
-         double sPitch = EuclidCoreTools.sin(halfPitch);
-
-         double halfRoll = 0.5 * orientation1.getRoll();
-         double cRoll = EuclidCoreTools.cos(halfRoll);
-         double sRoll = EuclidCoreTools.sin(halfRoll);
-
-         q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
-         q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
-         q1y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
-         q1z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
-      }
-
       double q2s, q2x, q2y, q2z;
 
-      if (orientation2 instanceof QuaternionReadOnly)
+      if (orientation2 instanceof QuaternionReadOnly quaternion2)
       {
-         QuaternionReadOnly quaternion2 = (QuaternionReadOnly) orientation2;
          q2s = quaternion2.getS();
          q2x = quaternion2.getX();
          q2y = quaternion2.getY();
          q2z = quaternion2.getZ();
       }
-      else if (orientation2 instanceof AxisAngleReadOnly)
+      else if (orientation2 instanceof AxisAngleReadOnly axisAngle2)
       {
-         AxisAngleReadOnly axisAngle2 = (AxisAngleReadOnly) orientation2;
          double halfTheta = 0.5 * axisAngle2.getAngle();
          double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle2.axisNorm();
          q2x = axisAngle2.getX() * sinHalfTheta;
@@ -1323,6 +1282,56 @@ public class YawPitchRollTools
          q2x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
          q2y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
          q2z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+      }
+
+      multiplyImpl(orientation1, inverse1, q2x, q2y, q2z, q2s, inverse2, yawPitchRollToPack);
+   }
+
+   private static void multiplyImpl(Orientation3DReadOnly orientation1,
+                                    boolean inverse1,
+                                    double q2x,
+                                    double q2y,
+                                    double q2z,
+                                    double q2s,
+                                    boolean inverse2,
+                                    YawPitchRollBasics yawPitchRollToPack)
+   {
+      double q1s, q1x, q1y, q1z;
+
+      if (orientation1 instanceof QuaternionReadOnly quaternion1)
+      {
+         q1s = quaternion1.getS();
+         q1x = quaternion1.getX();
+         q1y = quaternion1.getY();
+         q1z = quaternion1.getZ();
+      }
+      else if (orientation1 instanceof AxisAngleReadOnly axisAngle1)
+      {
+         double halfTheta = 0.5 * axisAngle1.getAngle();
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle1.axisNorm();
+         q1x = axisAngle1.getX() * sinHalfTheta;
+         q1y = axisAngle1.getY() * sinHalfTheta;
+         q1z = axisAngle1.getZ() * sinHalfTheta;
+         q1s = EuclidCoreTools.cos(halfTheta);
+      }
+      else
+      {
+         double halfYaw = 0.5 * orientation1.getYaw();
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
+
+         double halfPitch = 0.5 * orientation1.getPitch();
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
+
+         double halfRoll = 0.5 * orientation1.getRoll();
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
+
+         q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+         q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+         q1y = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+         q1z = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
       }
 
       QuaternionTools.multiplyImpl(q1x, q1y, q1z, q1s, inverse1, q2x, q2y, q2z, q2s, inverse2, yawPitchRollToPack);
@@ -1570,5 +1579,101 @@ public class YawPitchRollTools
       double pitch = yawPitchRollOriginal.getPitch();
       roll = EuclidCoreTools.trimAngleMinusPiToPi(roll + yawPitchRollOriginal.getRoll());
       yawPitchRollToPack.set(yaw, pitch, roll);
+   }
+
+   public static void appendRotationVector(Orientation3DReadOnly original, double rx, double ry, double rz, YawPitchRollBasics output)
+   {
+      double angle = EuclidCoreTools.norm(rx, ry, rz);
+      if (angle < QuaternionTools.EPS)
+      {
+         output.set(original);
+         return;
+      }
+
+      double sinHalfAngle = EuclidCoreTools.sin(0.5 * angle);
+      double qx = rx * sinHalfAngle / angle;
+      double qy = ry * sinHalfAngle / angle;
+      double qz = rz * sinHalfAngle / angle;
+      double qs = EuclidCoreTools.cos(0.5 * angle);
+      multiplyImpl(original, false, qx, qy, qz, qs, false, output);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(YawPitchRollReadOnly previousOrientation,
+                                       YawPitchRollReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfYawCurr = 0.5 * currentOrientation.getYaw();
+      double cYawCurr = EuclidCoreTools.cos(halfYawCurr);
+      double sYawCurr = EuclidCoreTools.sin(halfYawCurr);
+
+      double halfPitchCurr = 0.5 * currentOrientation.getPitch();
+      double cPitchCurr = EuclidCoreTools.cos(halfPitchCurr);
+      double sPitchCurr = EuclidCoreTools.sin(halfPitchCurr);
+
+      double halfRollCurr = 0.5 * currentOrientation.getRoll();
+      double cRollCurr = EuclidCoreTools.cos(halfRollCurr);
+      double sRollCurr = EuclidCoreTools.sin(halfRollCurr);
+
+      double xCurr = cYawCurr * cPitchCurr * sRollCurr - sYawCurr * sPitchCurr * cRollCurr;
+      double yCurr = sYawCurr * cPitchCurr * sRollCurr + cYawCurr * sPitchCurr * cRollCurr;
+      double zCurr = sYawCurr * cPitchCurr * cRollCurr - cYawCurr * sPitchCurr * sRollCurr;
+      double sCurr = cYawCurr * cPitchCurr * cRollCurr + sYawCurr * sPitchCurr * sRollCurr;
+      QuaternionTools.finiteDifferenceImpl(previousOrientation, xCurr, yCurr, zCurr, sCurr, dt, angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(YawPitchRollReadOnly previousOrientation,
+                                       AxisAngleReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfAngleCurr = 0.5 * currentOrientation.getAngle();
+      double sinHalfAngleCurr = Math.sin(halfAngleCurr);
+      double xCurr = currentOrientation.getX() * sinHalfAngleCurr;
+      double yCurr = currentOrientation.getY() * sinHalfAngleCurr;
+      double zCurr = currentOrientation.getZ() * sinHalfAngleCurr;
+      double sCurr = Math.cos(halfAngleCurr);
+      QuaternionTools.finiteDifferenceImpl(previousOrientation, xCurr, yCurr, zCurr, sCurr, dt, angularVelocityToPack);
+   }
+
+   /**
+    * Computes the angular velocity from the finite difference of two orientations.
+    *
+    * @param previousOrientation   the orientation at the previous time step. Not modified.
+    * @param currentOrientation    the orientation at the current time step. Not modified.
+    * @param dt                    the time step.
+    * @param angularVelocityToPack the vector used to store the angular velocity expressed in the orientation's local coordinates. Modified.
+    * @see EuclidCoreTools#finiteDifference(Orientation3DReadOnly, Orientation3DReadOnly, double, Vector3DBasics)
+    */
+   public static void finiteDifference(AxisAngleReadOnly previousOrientation,
+                                       YawPitchRollReadOnly currentOrientation,
+                                       double dt,
+                                       Vector3DBasics angularVelocityToPack)
+   {
+      double halfAnglePrev = 0.5 * previousOrientation.getAngle();
+      double sinHalfAnglePrev = Math.sin(halfAnglePrev);
+      double xPrev = previousOrientation.getX() * sinHalfAnglePrev;
+      double yPrev = previousOrientation.getY() * sinHalfAnglePrev;
+      double zPrev = previousOrientation.getZ() * sinHalfAnglePrev;
+      double sPrev = Math.cos(halfAnglePrev);
+      QuaternionTools.finiteDifferenceImpl(xPrev, yPrev, zPrev, sPrev, currentOrientation, dt, angularVelocityToPack);
    }
 }

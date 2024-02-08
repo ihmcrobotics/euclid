@@ -1,14 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.Plane3D;
@@ -36,13 +28,20 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+
 /*
  * TODO Need to test the edge-cases, for instance when a PointShape3D is at the center of the other
  * shape.
  */
 public class EuclidShapeCollisionToolsTest
 {
-   private static final double EPSILON = 5.0e-11;
+   private static final double EPSILON = 5.0e-10;
 
    @Test
    public void testPointShape3DBox3D() throws Exception

@@ -1,15 +1,6 @@
 package us.ihmc.euclid.axisAngle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -35,6 +26,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 {
@@ -322,7 +318,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 
             axisAngle.get(startIndex, axisAngleArray);
 
-            assertTrue(axisAngle.getX() == axisAngleArray[startIndex + 0]);
+            assertTrue(axisAngle.getX() == axisAngleArray[startIndex]);
             assertTrue(axisAngle.getY() == axisAngleArray[startIndex + 1]);
             assertTrue(axisAngle.getZ() == axisAngleArray[startIndex + 2]);
             assertTrue(axisAngle.getAngle() == axisAngleArray[startIndex + 3]);
@@ -356,7 +352,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 
          axisAngle.get(startIndex, axisAngleArray);
 
-         assertTrue(axisAngle.getX32() == axisAngleArray[startIndex + 0]);
+         assertTrue(axisAngle.getX32() == axisAngleArray[startIndex]);
          assertTrue(axisAngle.getY32() == axisAngleArray[startIndex + 1]);
          assertTrue(axisAngle.getZ32() == axisAngleArray[startIndex + 2]);
          assertTrue(axisAngle.getAngle32() == axisAngleArray[startIndex + 3]);
@@ -921,7 +917,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       double z = axisAngle.getZ();
       double angle = axisAngle.getAngle();
 
-      assertTrue(axisAngle.equals(createAxisAngle(x, y, z, angle)));
+      assertTrue(axisAngle.equals(createAxisAngle(axisAngle.getAxis(), angle)));
 
       assertFalse(axisAngle.equals(createAxisAngle(x + getSmallestEpsilon(), y, z, angle)));
       assertFalse(axisAngle.equals(createAxisAngle(x - getSmallestEpsilon(), y, z, angle)));

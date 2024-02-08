@@ -1,16 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -24,9 +15,17 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class QuaternionToolsTest
 {
@@ -1324,4 +1323,135 @@ public class QuaternionToolsTest
       }
    }
 
+   @Test
+   @Disabled
+   public void testQuaternionFiniteDifferenceApprox()
+   { // The goal here is to evaluate the approximation vs the accurate finite difference.
+      Random random = new Random(2342314);
+      double maxUDiffNormSquared = 1.0e-11; // We'll use this threshold to trigger the approximation in the actual method.
+      int benchmarkIterations = 1000000;
+
+      int samples = 0;
+      double maxErrorNormPrecise = 0.0;
+      double maxErrorNormApprox = 0.0;
+
+      for (int i = 0; i < benchmarkIterations; i++)
+      {
+         double dt = 1.0e-5;//EuclidCoreRandomTools.nextDouble(random, 0.0, 0.1);
+         Quaternion prevQ = EuclidCoreRandomTools.nextQuaternion(random);
+
+         Quaternion diffQ = new Quaternion();
+         Quaternion currQ = new Quaternion();
+
+         AxisAngle diffAA = new AxisAngle();
+         diffAA.getAxis().set(EuclidCoreRandomTools.nextVector3D(random));
+
+         double diffAngleUB = 0.30;
+         double diffAngleLB = 0.00;
+
+         // Doing binary search to find the angle that will trigger the approximation exactly.
+         while (diffAngleUB - diffAngleLB > 1.0e-12)
+         {
+            double diffAngle = 0.5 * (diffAngleUB + diffAngleLB);
+            diffAA.setAngle(diffAngle);
+            diffQ.set(diffAA);
+            currQ.set(prevQ);
+            currQ.append(diffQ);
+
+            if (computeUDiffNormSquared(prevQ, currQ) >= maxUDiffNormSquared)
+               diffAngleUB = diffAngle;
+            else
+               diffAngleLB = diffAngle;
+         }
+
+         // We only want to test the approximation when it is triggered.
+         diffAA.setAngle(diffAngleLB);
+         diffQ.set(diffAA);
+         currQ.set(prevQ);
+         currQ.append(diffQ);
+
+         assertTrue(computeUDiffNormSquared(prevQ, currQ) < maxUDiffNormSquared, "Iteration: " + i + ", diffAngle: " + diffAA.getAngle());
+
+         Vector3DBasics angularVelocityGroundTruth = new Vector3D();
+         diffQ.getRotationVector(angularVelocityGroundTruth);
+         angularVelocityGroundTruth.scale(1.0 / dt);
+
+         samples++;
+
+         Vector3D angularVelocityPrecise = finiteDifferencePrecise(prevQ, currQ, dt);
+         Vector3D angularVelocityApprox = finiteDifferenceApprox(prevQ, currQ, dt);
+
+         double errorNormPrecise = angularVelocityPrecise.differenceNorm(angularVelocityGroundTruth);
+         maxErrorNormPrecise = Math.max(maxErrorNormPrecise, errorNormPrecise / angularVelocityGroundTruth.norm());
+         double errorNormApprox = angularVelocityApprox.differenceNorm(angularVelocityGroundTruth);
+         maxErrorNormApprox = Math.max(maxErrorNormApprox, errorNormApprox / angularVelocityGroundTruth.norm());
+      }
+
+      System.out.println("Number of samples: " + samples + "/" + benchmarkIterations + " (" + 100.0 * samples / benchmarkIterations + "%)");
+      System.out.println("Max error norm precise: " + maxErrorNormPrecise);
+      System.out.println("Max error norm  approx: " + maxErrorNormApprox);
+   }
+
+   private static double computeUDiffNormSquared(QuaternionReadOnly prev, Quaternion curr)
+   {
+      double sPrev = prev.getS();
+      double xPrev = prev.getX();
+      double yPrev = prev.getY();
+      double zPrev = prev.getZ();
+
+      double sCurr = curr.getS();
+      double xCurr = curr.getX();
+      double yCurr = curr.getY();
+      double zCurr = curr.getZ();
+
+      double xDiff = sPrev * xCurr - xPrev * sCurr - yPrev * zCurr + zPrev * yCurr;
+      double yDiff = sPrev * yCurr + xPrev * zCurr - yPrev * sCurr - zPrev * xCurr;
+      double zDiff = sPrev * zCurr - xPrev * yCurr + yPrev * xCurr - zPrev * sCurr;
+      return EuclidCoreTools.normSquared(xDiff, yDiff, zDiff);
+   }
+
+   private static Vector3D finiteDifferenceApprox(QuaternionReadOnly prev, Quaternion curr, double dt)
+   {
+      double sPrev = prev.getS();
+      double xPrev = prev.getX();
+      double yPrev = prev.getY();
+      double zPrev = prev.getZ();
+
+      double sCurr = curr.getS();
+      double xCurr = curr.getX();
+      double yCurr = curr.getY();
+      double zCurr = curr.getZ();
+
+      double xDiff = sPrev * xCurr - xPrev * sCurr - yPrev * zCurr + zPrev * yCurr;
+      double yDiff = sPrev * yCurr + xPrev * zCurr - yPrev * sCurr - zPrev * xCurr;
+      double zDiff = sPrev * zCurr - xPrev * yCurr + yPrev * xCurr - zPrev * sCurr;
+      double sDiff = sPrev * sCurr + xPrev * xCurr + yPrev * yCurr + zPrev * zCurr;
+
+      double wx = 2.0 / dt * xDiff * Math.signum(sDiff);
+      double wy = 2.0 / dt * yDiff * Math.signum(sDiff);
+      double wz = 2.0 / dt * zDiff * Math.signum(sDiff);
+      return new Vector3D(wx, wy, wz);
+   }
+
+   private static Vector3D finiteDifferencePrecise(QuaternionReadOnly prev, Quaternion curr, double dt)
+   {
+      double sPrev = prev.getS();
+      double xPrev = prev.getX();
+      double yPrev = prev.getY();
+      double zPrev = prev.getZ();
+
+      double sCurr = curr.getS();
+      double xCurr = curr.getX();
+      double yCurr = curr.getY();
+      double zCurr = curr.getZ();
+
+      double xDiff = sPrev * xCurr - xPrev * sCurr - yPrev * zCurr + zPrev * yCurr;
+      double yDiff = sPrev * yCurr + xPrev * zCurr - yPrev * sCurr - zPrev * xCurr;
+      double zDiff = sPrev * zCurr - xPrev * yCurr + yPrev * xCurr - zPrev * sCurr;
+      double sDiff = sPrev * sCurr + xPrev * xCurr + yPrev * yCurr + zPrev * zCurr;
+
+      double uDiffNorm = EuclidCoreTools.norm(xDiff, yDiff, zDiff);
+      double w = 2.0 / dt * EuclidCoreTools.atan2(uDiffNorm, sDiff) / uDiffNorm;
+      return new Vector3D(xDiff * w, yDiff * w, zDiff * w);
+   }
 }

@@ -1,21 +1,11 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.ejml.dense.row.SingularOps_DDRM;
 import org.ejml.dense.row.decomposition.svd.SvdImplicitQrDecompose_DDRM;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -28,6 +18,13 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SingularValueDecomposition3DTest
 {
@@ -103,7 +100,7 @@ public class SingularValueDecomposition3DTest
                performGeneralAssertions(messagePrefix, A, svd.getOutput(), true, EPSILON);
                assertArrayEquals(singularValuesEJML, singularValuesEuclid, varEpsilon, messagePrefix);
                if (!EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[1], EPSILON)
-                     && !EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[2], EPSILON))
+                   && !EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[2], EPSILON))
                { // Can't really compare when singular values are equal, since that pretty much implies an infinite number of solutions.
                   EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, Uejml, Ueuclid, varEpsilon);
                   EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, Vejml, Veuclid, varEpsilon);
@@ -160,7 +157,7 @@ public class SingularValueDecomposition3DTest
    @Test
    public void testUnsorted()
    {
-      Random random = new Random(36456);
+      Random random = new Random(36457);
       SingularValueDecomposition3D svd = new SingularValueDecomposition3D();
       svd.setSortDescendingOrder(false);
 

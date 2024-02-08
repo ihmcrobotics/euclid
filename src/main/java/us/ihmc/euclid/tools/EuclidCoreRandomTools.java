@@ -1,9 +1,6 @@
 package us.ihmc.euclid.tools;
 
-import java.util.Random;
-
 import org.ejml.data.DMatrixRMaj;
-
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -39,6 +36,8 @@ import us.ihmc.euclid.tuple4D.Quaternion32;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.Vector4D32;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Random;
 
 /**
  * This class provides random generators to generate random geometry objects.
@@ -1556,11 +1555,9 @@ public class EuclidCoreRandomTools
     */
    public static void randomizeAxisAngle(Random random, double minMaxAngle, AxisAngleBasics axisAngleToRandomize)
    {
-      // Generate uniformly random point on unit sphere (based on http://mathworld.wolfram.com/SpherePointPicking.html )
-      double height = 2.0 * random.nextDouble() - 1.0;
+      // Generate uniformly random point on the unit-sphere (based on http://mathworld.wolfram.com/SpherePointPicking.html )
       double angle = nextDouble(random, minMaxAngle);
-      double radius = EuclidCoreTools.squareRoot(1.0 - height * height);
-      axisAngleToRandomize.set(radius * EuclidCoreTools.cos(angle), radius * EuclidCoreTools.sin(angle), height, angle);
+      axisAngleToRandomize.set(EuclidCoreRandomTools.nextVector3D(random), angle);
    }
 
    /**

@@ -179,7 +179,7 @@ public class RotationVectorConversion
       double m21 = rotationMatrix.getM21();
       double m22 = rotationMatrix.getM22();
 
-      convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, rotationVectorToPack);
+      convertMatrixToRotationVector(m00, m01, m02, m10, m11, m12, m20, m21, m22, rotationVectorToPack);
    }
 
    /**
@@ -220,16 +220,16 @@ public class RotationVectorConversion
     *                             conversion.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
-   static void convertMatrixToRotationVectorImpl(double m00,
-                                                 double m01,
-                                                 double m02,
-                                                 double m10,
-                                                 double m11,
-                                                 double m12,
-                                                 double m20,
-                                                 double m21,
-                                                 double m22,
-                                                 Vector3DBasics rotationVectorToPack)
+   public static void convertMatrixToRotationVector(double m00,
+                                                    double m01,
+                                                    double m02,
+                                                    double m10,
+                                                    double m11,
+                                                    double m12,
+                                                    double m20,
+                                                    double m21,
+                                                    double m22,
+                                                    Vector3DBasics rotationVectorToPack)
    {
       if (EuclidCoreTools.containsNaN(m00, m01, m02, m10, m11, m12, m20, m21, m22))
       {

@@ -1,17 +1,8 @@
 package us.ihmc.euclid.transform;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Random;
-
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -27,6 +18,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedTransform>
 {
@@ -342,7 +338,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
    @Test
    public void testSetRotation() throws Exception
    {
-      Random random = new Random(3453L);
+      Random random = new Random(3454L);
       QuaternionBasedTransform actualTransform = new QuaternionBasedTransform();
       Vector3D expectedTranslation = new Vector3D();
       expectedTranslation.set(actualTransform.getTranslation());
