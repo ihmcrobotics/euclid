@@ -550,8 +550,8 @@ public class EuclidCoreIOTools
       int padLength = desiredLength - in.length();
       if (padLength < 0)
          return in;
-      int padLeft = padLength / 2;
-      int padRight = padLength - padLeft;
+      int padRight = padLength / 2;
+      int padLeft = padLength - padRight;
       return " ".repeat(padLeft) + in + " ".repeat(padRight);
    }
 
