@@ -40,7 +40,7 @@ public class SingularMatrixException extends RuntimeException
     */
    public SingularMatrixException(Matrix3DReadOnly matrix)
    {
-      super("The matrix is singular:\n" + matrix);
+      super("The matrix is singular:\n" + matrix.toString(null));
    }
 
    /**

@@ -40,7 +40,7 @@ public class NotAMatrix2DException extends RuntimeException
     */
    public NotAMatrix2DException(Matrix3DReadOnly matrix)
    {
-      super("The matrix is not in XY plane: \n" + matrix);
+      super("The matrix is not in XY plane: \n" + matrix.toString(null));
    }
 
    /**

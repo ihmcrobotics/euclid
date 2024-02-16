@@ -38,7 +38,7 @@ public class NotARotationMatrixException extends RuntimeException
     */
    public NotARotationMatrixException(Matrix3DReadOnly matrix)
    {
-      super("The matrix is not a rotation matrix: \n" + matrix);
+      super("The matrix is not a rotation matrix: \n" + matrix.toString(null));
    }
 
    /**

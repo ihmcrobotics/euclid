@@ -38,7 +38,7 @@ public class NotAPositiveDefiniteMatrixException extends RuntimeException
     */
    public NotAPositiveDefiniteMatrixException(Matrix3DReadOnly matrix)
    {
-      super("The matrix is not a positive definite matrix: \n" + matrix);
+      super("The matrix is not a positive definite matrix: \n" + matrix.toString(null));
    }
 
    /**
