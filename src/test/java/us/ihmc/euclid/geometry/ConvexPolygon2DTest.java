@@ -131,4 +131,49 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
       assertEquals(4.0, polygonPolygon.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
       assertTrue(polygonPolygon.isUpToDate());
    }
+
+   @Test
+   
+   
+   /* If two polygons built in different ways (vertices in different order), they are still equivalent
+              
+                                      */
+   public void geometricallyEquals() 
+   {
+
+      int numberOfVertices = 4;
+      ArrayList<Point2D> verticesList = new ArrayList<>();
+      verticesList.add(new Point2D(0.0, 0.0));
+      verticesList.add(new Point2D(0.0, 1.0));
+      verticesList.add(new Point2D(1.0, 0.0));
+      verticesList.add(new Point2D(1.0, 1.0));
+
+      int numberOfVertices2 = 4;
+      ArrayList<Point2D> verticesList2 = new ArrayList<>();
+
+      verticesList2.add(new Point2D(1.0, 0.0));
+      verticesList2.add(new Point2D(1.0, 1.0));
+      verticesList2.add(new Point2D(0.0, 1.0));
+      verticesList2.add(new Point2D(0.0, 0.0));
+
+      ConvexPolygon2D polygonA = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList, numberOfVertices));
+      ConvexPolygon2D polygonB = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList2, numberOfVertices2));
+
+      assertEquals(polygonA.getNumberOfVertices(), polygonB.getNumberOfVertices());
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         boolean foundMatchingVertex = false;
+         for (int j = 0; j < numberOfVertices2; j++)
+         {
+            if (polygonA.getVertex(i).equals(polygonB.getVertex(j)))
+            {
+               assertEquals(polygonA.getVertex(i), polygonB.getVertex(j));
+               foundMatchingVertex = true;
+               break;
+            } // Once we find the corresponding vertex, we stop
+         }
+         assertTrue(foundMatchingVertex, "No matching vertex found in polygonB for vertex" + polygonA.getVertex(i));
+      }
+   }
 }
