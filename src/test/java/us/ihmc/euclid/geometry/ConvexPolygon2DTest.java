@@ -133,9 +133,12 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
    }
 
    @Test
-   public void geometricallyEquals() /* If two polygons built in differents ways (vertices in different order), they are still equivalent
+   
+   
+   /* If two polygons built in different ways (vertices in different order), they are still equivalent
               
                                       */
+   public void geometricallyEquals() 
    {
 
       int numberOfVertices = 4;
