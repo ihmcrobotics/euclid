@@ -3,8 +3,6 @@
 ![euclid](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg?style=plastic)
 ![buildstatus](https://github.com/ihmcrobotics/euclid/actions/workflows/gradle.yml/badge.svg)
 
-BONSOIR
-
 ## Minutiae
 
 ### Licensing
