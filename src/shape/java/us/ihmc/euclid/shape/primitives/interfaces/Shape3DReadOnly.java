@@ -3,12 +3,14 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Read-only interface for representing a 3D shape.
@@ -50,6 +52,16 @@ public interface Shape3DReadOnly extends SupportingVertexHolder, EuclidGeometry
     *         otherwise.
     */
    boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
+
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   int intersectionWith(Point3DReadOnly pointOnLine,
+                        Vector3DReadOnly lineDirection,
+                        Point3DBasics firstIntersectionToPack,
+                        Point3DBasics secondIntersectionToPack);
 
    /**
     * Calculates the minimum distance between a point and this shape.

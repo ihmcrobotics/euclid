@@ -334,6 +334,8 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       checkReferenceFrameMatch(query);
       return (FrameHalfEdge3DReadOnly) Face3DReadOnly.super.getClosestEdge(query);
    }
+   
+   
 
    /** {@inheritDoc} */
    @Override
@@ -507,4 +509,6 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
    {
       return EuclidFrameShapeIOTools.getFrameFace3DString(format, this);
    }
+   
+   
 }

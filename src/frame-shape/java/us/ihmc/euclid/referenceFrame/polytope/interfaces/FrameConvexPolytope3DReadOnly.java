@@ -16,6 +16,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -91,6 +92,15 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    default FrameVertex3DReadOnly getVertex(int index)
    {
       return getVertices().get(index);
+   }
+   
+   @Override
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      throw new UnsupportedOperationException("Intersection line capsule isn't supported.");
    }
 
    /** {@inheritDoc} */

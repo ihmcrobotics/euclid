@@ -154,6 +154,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    double getConstructionEpsilon();
 
    /** {@inheritDoc} */
+   
+   @Override
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      throw new UnsupportedOperationException("Intersection line capsule isn't supported.");
+   }
+   
+   
    @Override
    default boolean containsNaN()
    {
