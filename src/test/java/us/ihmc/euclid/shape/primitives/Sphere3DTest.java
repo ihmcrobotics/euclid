@@ -246,7 +246,7 @@ public class Sphere3DTest
    void testIntersectionWith() throws Exception
    {
       Random random = new Random(2309819);
-      /*for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Random sphere
 
@@ -307,7 +307,7 @@ public class Sphere3DTest
 
          }
       }
-      */
+      
 
       for (int i = 0; i < ITERATIONS; i++)
       { // No intersection
