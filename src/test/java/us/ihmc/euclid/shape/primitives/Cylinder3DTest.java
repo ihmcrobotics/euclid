@@ -26,7 +26,6 @@ import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -485,78 +484,6 @@ public class Cylinder3DTest
       }
    }
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   @Test
-   void testIntersectionWith() throws Exception
-   { 
-      
-     Random random = new Random(865);
-     
-     for (int i=0; i < ITERATIONS; i++) {
-        
-        Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
-        boolean intersecting = random.nextBoolean();
-        
-        //Cylinder parameters
-        
-        double cylinderRadius = cylinder3D.getRadius();
-        double cylinderLength = cylinder3D.getLength();
-        double cylinderX = cylinder3D.getPosition().getX();
-        double cylinderY = cylinder3D.getPosition().getY();
-        double cylinderZ = cylinder3D.getPosition().getZ();
-        double axisX = cylinder3D.getAxis().getX();
-        double axisY = cylinder3D.getAxis().getY();
-        double axisZ = cylinder3D.getAxis().getZ();
-        
-        Point3D firstIntersectionToPack = new Point3D();
-        Point3D secondIntersectionToPack = new Point3D();
-        
-        Vector3D cylinderAxis = new Vector3D(axisX,axisY,axisZ);
-        
-
-        
-        if (intersecting) {
-           
-           //Generate a point on the cylinder's surface
-           double angle = random.nextDouble()*2.0*Math.PI;
-           double x = cylinderX + cylinderRadius * Math.cos(angle);
-           double y = cylinderY + cylinderRadius * Math.sin(angle);
-           double z = cylinderZ + random.nextDouble()*cylinderLength;
-           
-           // Generate a direction for the line
-           
-           double directionX = random.nextDouble() - 0.5;
-           double directionY = random.nextDouble() - 0.5;
-           double directionZ = random.nextDouble() - 0.5;
-        
-           Point3D pointOnLine = new Point3D(x, y, z);
-           Vector3D lineDirection = new Vector3D(directionX, directionY, directionZ);
-           
-           System.out.println(cylinder3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack));
-           assertTrue(cylinder3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack )>=0);
-        }
-        
-        else {
-           double distance = cylinderRadius +1.0;
-           double x = cylinderX + distance * (random.nextDouble() - 0.5);
-           double y = cylinderY + distance * (random.nextDouble() - 0.5);
-           double z = cylinderZ + distance *(random.nextDouble() - 0.5);
-           
-          
-           Point3D pointOnLine = new Point3D(x, y, z);
-           Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
-           //System.out.println(cylinder3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack));
-           //assertTrue(cylinder3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack)>=0);
-        }
-                                   
-     }
-         
-      
-   }
-   
-   
-   
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
    @Test
    void testApplyTransform()
    {

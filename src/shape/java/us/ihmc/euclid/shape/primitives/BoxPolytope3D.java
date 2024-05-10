@@ -143,16 +143,6 @@ class BoxPolytope3D implements BoxPolytope3DView
       return vertices;
    }
 
-   @Override
-   public int intersectionWith(Point3DReadOnly pointOnLine,
-                               Vector3DReadOnly lineDirection,
-                               Point3DBasics firstIntersectionToPack,
-                               Point3DBasics secondIntersectionToPack)
-   {
-      // TODO Auto-generated method stub
-      return getOwner().intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-   }
-   
    private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements Shape3DChangeListener
    {
       private final String name;

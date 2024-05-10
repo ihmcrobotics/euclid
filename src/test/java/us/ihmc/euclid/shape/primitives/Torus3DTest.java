@@ -330,42 +330,7 @@ public class Torus3DTest
          EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
-   
-   
-   
-   @Test
-   
-   void testIntersectionWith()
-   {
-      
-      Random random = new Random(2309819);
-      for (int i = 0; i < ITERATIONS; i++) {
-         
-         // Random torus
-         
-         Torus3D torus3D = EuclidShapeRandomTools.nextTorus3D(random);
-         
-         double radius = torus3D.getRadius();
-         double tubeRadius = torus3D.getTubeRadius();
-         double spherePositionX = torus3D.getPosition().getX();
-         double spherePositionY = torus3D.getPosition().getY();
-         double spherePositionZ = torus3D.getPosition().getZ();
-         
-         Point3D firstIntersectionToPack = new Point3D();
-         Point3D secondIntersectionToPack = new Point3D();
-         
 
-         // Intersecting or not 
-         boolean intersecting = random.nextBoolean();
-         System.out.println(intersecting);
-         
-         
-      }
-   }
-    
-   
-   
-   
    @Test
    void testApplyTransform()
    {

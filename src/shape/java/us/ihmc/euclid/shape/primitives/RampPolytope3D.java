@@ -280,7 +280,6 @@ class RampPolytope3D implements RampPolytope3DView
             ramp3D.getPose().transform(positionLocal, this);
          }
       }
-      
 
       @Override
       public double getX()

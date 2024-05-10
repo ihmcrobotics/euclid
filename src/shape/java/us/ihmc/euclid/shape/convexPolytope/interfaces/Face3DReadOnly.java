@@ -688,14 +688,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, EuclidGeometry
          return closestVisibleEdge.orthogonalProjection(pointToProject, projectionToPack);
    }
 
-   // TODO Assume that intersectionToPack is not null
-   default boolean intersectionBetweenLine3DAndPlane3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics intersectionToPack)
-   {
-      // intersection line - plane
-      // check intersection is inside with isPointInside(Point3DReadOnly query, double epsilon)
-      return false;
-   }
-
    /** {@inheritDoc} */
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)

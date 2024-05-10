@@ -2,8 +2,6 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -125,81 +123,15 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
-   /**
-    * Computes the coordinates of the possible intersections between a line and this ramp.
-    * <p>
-    * In the case the line and this ramp do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
-    * </p>
-    *
-    * @param line                     the line expressed in world coordinates that may intersect this
-    *                                 ramp. Not modified.
-    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
-    *                                 {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *                                 {@code null}. Modified.
-    * @return the number of intersections between the line and this ramp. It is either equal to 0, 1, or
-    *         2.
-    */
-   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
-   {
-      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersections between a line and this ramp.
-    * <p>
-    * In the case the line and this ramp do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
-    * {@link Double#NaN}.
-    * </p>
-    *
-    * @param pointOnLine              a point expressed in world located on the infinitely long line.
-    *                                 Not modified.
-    * @param lineDirection            the direction expressed in world of the line. Not modified.
-    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
-    *                                 {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *                                 {@code null}. Modified.
-    * @return the number of intersections between the line and this ramp. It is either equal to 0, 1, or
-    *         2.
-    */
+   @Override
    default int intersectionWith(Point3DReadOnly pointOnLine,
                                 Vector3DReadOnly lineDirection,
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-     
-      double rampPositionX = getPose().getShapePosition().getX();
-      double rampPositionY = getPose().getShapePosition().getY(); 
-      double rampPositionZ = getPose().getShapePosition().getZ(); 
-      double rampLength = getSizeX();
-      double rampWidth = getSizeY();
-      double rampHeight = getSizeZ();
-      
-
-
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndRamp3DImpl(rampPositionX,
-                                                                                         rampPositionY,
-                                                                                         rampPositionZ,
-                                                                                         rampLength,
-                                                                                         rampWidth,
-                                                                                         rampHeight,
-                                                                                         pointOnLine,
-                                                                                         lineDirection,
-                                                                                         firstIntersectionToPack,
-                                                                                         secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         transformToWorld(firstIntersectionToPack);
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         transformToWorld(secondIntersectionToPack);
-      return numberOfIntersections;
+      throw new UnsupportedOperationException("Intersection line capsule isn't supported.");
    }
-
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
    
    /** {@inheritDoc} */
    @Override
