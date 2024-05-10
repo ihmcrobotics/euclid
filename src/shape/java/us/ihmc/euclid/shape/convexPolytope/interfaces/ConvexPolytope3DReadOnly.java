@@ -155,16 +155,85 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    
+   
+   
    @Override
+
    default int intersectionWith(Point3DReadOnly pointOnLine,
                                 Vector3DReadOnly lineDirection,
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-      throw new UnsupportedOperationException("Intersection line capsule isn't supported.");
+
+      
+      
+      int sizeFaces = getNumberOfFaces();
+      int sizeVertices = getNumberOfVertices();
+      double[][] allVertices = new double[sizeVertices][3];
+      double[][][] faceVertices = new double[sizeFaces][3][3];
+      
+      // double with all the vertices
+      
+      for (int i = 0; i<sizeVertices; i++) {
+         
+         Vertex3DReadOnly vector = getVertex(i);
+         allVertices[i][0] = vector.getX();
+         allVertices[i][1] = vector.getY();
+         allVertices[i][2] = vector.getZ();
+      }
+      
+      
+      
+      double epsilon = 1.0e-6;
+      int numberOfIntersections = 0 ;
+      
+      
+      
+    for (int i = 0; i<sizeFaces; i++) {
+
+       double pointOnPlaneX = getFaces().get(i).getCentroid().getX();
+       double pointOnPlaneY = getFaces().get(i).getCentroid().getY();
+       double pointOnPlaneZ = getFaces().get(i).getCentroid().getZ();
+       
+       double planeNormalX = getFaces().get(i).getNormal().getX();
+       double planeNormalY = getFaces().get(i).getNormal().getY();
+       double planeNormalZ = getFaces().get(i).getNormal().getZ();
+       
+       
+       for (int j = 0; j<sizeVertices; j++) {
+         
+          double distance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(allVertices[j][0],
+                                                               allVertices[j][1],
+                                                               allVertices[j][2],
+                                                               pointOnPlaneX,
+                                                               pointOnPlaneY,
+                                                               pointOnPlaneZ,
+                                                               planeNormalX,
+                                                               planeNormalY,
+                                                               planeNormalZ);
+             
+          if ( distance   <   epsilon) {
+             faceVertices[i][j] = (allVertices[j]);
+            
+          }
+       }
+       
+      numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndFace3D(faceVertices[i],
+                                                              pointOnLine,
+                                                              lineDirection,
+                                                              firstIntersectionToPack,
+                                                              secondIntersectionToPack);
+      
+      if (numberOfIntersections > 0) {
+         return numberOfIntersections;
+      }
+      
+    }
+    
+    return numberOfIntersections;
+      
    }
-   
-   
+
    @Override
    default boolean containsNaN()
    {
@@ -545,6 +614,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 
       return true;
    }
+   
 
    /** {@inheritDoc} */
    @Override

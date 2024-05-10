@@ -859,6 +859,85 @@ public class Ramp3DTest
       }
    }
 
+   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
+   
+   @Test
+   void testIntersectionWithRamp() throws Exception {
+       Random random = new Random(865000);
+
+       for (int i = 0; i < ITERATIONS; i++) {
+           Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+           boolean intersecting = random.nextBoolean();
+           System.out.println(intersecting);
+           
+           
+           //System.out.println("Ramp parameters:");
+           //System.out.println("Position:" + ramp3D.getPosition());
+           //System.out.println("Orientation" + ramp3D.getOrientation());
+           
+           // Ramp parameters
+           double rampPositionX = ramp3D.getPosition().getX();
+           double rampPositionY = ramp3D.getPosition().getY();
+           double rampPositionZ = ramp3D.getPosition().getZ();
+           double rampLength = ramp3D.getSizeX();
+           double rampWidth = ramp3D.getSizeY();
+           double rampHeight = ramp3D.getSizeZ();
+           double rampOrientationX = ramp3D.getPose().getTranslationX();
+           double rampOrientationY = ramp3D.getPose().getTranslationY();
+           double rampOrientationZ = ramp3D.getPose().getTranslationZ();
+
+           Point3D firstIntersectionToPack = new Point3D();
+           Point3D secondIntersectionToPack = new Point3D();
+
+           if (intersecting) {
+               // Generate a point on the ramp's surface
+               double x = rampPositionX; 
+               double y = rampPositionY;
+               double z = rampPositionZ; 
+
+               // Generate a direction for the line
+               double directionX = random.nextDouble() - 0.5;
+               double directionY = random.nextDouble() - 0.5;
+               double directionZ = random.nextDouble() - 0.5;
+
+               Point3D pointOnLine = new Point3D(x, y, z);
+               Vector3D lineDirection = new Vector3D(directionX, directionY, directionZ);
+               
+               
+               //System.out.println(ramp3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack));
+               
+               
+               
+               //assertTrue(ramp3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack) >= 0);
+           } else {
+               // Generate a point outside the ramp
+               double x1 = rampPositionX ;
+               double y1 = rampPositionY ;
+               double z1 = rampPositionZ + 10*rampHeight;
+               
+               //Creation of a line outside the ramp and parallel to one of its faces
+               
+               double x2 = rampPositionX  - rampLength ;
+               double y2 = rampPositionY ;
+               double z2 = rampPositionZ + 20*rampHeight;
+               
+               
+               Point3D pointOnLine = new Point3D(x1, y1, z1);
+               Vector3D lineDirection = new Vector3D(x2-x1,y2-y1,z2-z1);
+               
+               
+               System.out.println(ramp3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack));
+               //assertFalse(ramp3D.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack) != 0);
+           }
+       }
+   }
+   
+   
+   
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    @Test
    void testGetVertices() throws Exception
    {
