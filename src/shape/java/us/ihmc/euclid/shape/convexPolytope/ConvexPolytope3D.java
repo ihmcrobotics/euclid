@@ -148,4 +148,7 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
       else
          return false;
    }
+   
+
+
 }

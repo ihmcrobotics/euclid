@@ -119,9 +119,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
     *         or 2.
     */
-   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack,Point3DBasics secondIntersectionToPack)
    {
-      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack,secondIntersectionToPack);
    }
 
    /**
@@ -137,10 +137,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * @param lineDirection            the direction expressed in world of the line. Not modified.s
     * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
     *                                 {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *                                 {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
-    *         or 2.
+    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1.
     */
    default int intersectionWith(Point3DReadOnly pointOnLine,
                                 Vector3DReadOnly lineDirection,
@@ -148,28 +145,31 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                 Point3DBasics secondIntersectionToPack)
    {
 
+      double spherePositionX = getPosition().getX();
+      double spherePositionY = getPosition().getY();
+      double spherePositionZ = getPosition().getZ();
       double pointOnLineX = pointOnLine.getX() - getPosition().getX();
       double pointOnLineY = pointOnLine.getY() - getPosition().getY();
       double pointOnLineZ = pointOnLine.getZ() - getPosition().getZ();
       double lineDirectionX = lineDirection.getX();
       double lineDirectionY = lineDirection.getY();
       double lineDirectionZ = lineDirection.getZ();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(),
-                                                                                              getRadius(),
-                                                                                              getRadius(),
-                                                                                              pointOnLineX,
-                                                                                              pointOnLineY,
-                                                                                              pointOnLineZ,
-                                                                                              lineDirectionX,
-                                                                                              lineDirectionY,
-                                                                                              lineDirectionZ,
-                                                                                              firstIntersectionToPack,
-                                                                                              secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndSphere3DImpl(getRadius(),
+                                                                                               spherePositionX,
+                                                                                               spherePositionY,
+                                                                                               spherePositionZ,
+                                                                                               pointOnLineX,
+                                                                                               pointOnLineY,
+                                                                                               pointOnLineZ,
+                                                                                               lineDirectionX,
+                                                                                               lineDirectionY,
+                                                                                               lineDirectionZ,
+                                                                                               firstIntersectionToPack,
+                                                                                               secondIntersectionToPack);
 
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         firstIntersectionToPack.add(getPosition());
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         secondIntersectionToPack.add(getPosition());
+      //if (firstIntersectionToPack != null && numberOfIntersections >= 1)
+         //firstIntersectionToPack.add(getPosition());
+
       return numberOfIntersections;
    }
 
