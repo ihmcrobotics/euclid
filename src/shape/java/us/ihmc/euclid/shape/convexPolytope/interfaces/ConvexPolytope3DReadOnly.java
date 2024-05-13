@@ -13,6 +13,8 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -163,76 +165,42 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
                                 Vector3DReadOnly lineDirection,
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
+   
    {
-
       
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToNaN();
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToNaN();
       
-      int sizeFaces = getNumberOfFaces();
-      int sizeVertices = getNumberOfVertices();
-      double[][] allVertices = new double[sizeVertices][3];
-      double[][][] faceVertices = new double[sizeFaces][3][3];
+      int numberOfIntersections = 0;
       
-      // double with all the vertices
-      
-      for (int i = 0; i<sizeVertices; i++) {
+      //For each face, we check the possibility of intersection with the line
+      for (int i=0; i< getNumberOfFaces(); i++) {
+         //If there isn't already a intersection found
+         if (firstIntersectionToPack == null) {
+            boolean intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine,lineDirection, firstIntersectionToPack);
+            if (intersectionWithFace) {
+               numberOfIntersections++;   
+            }
+         }
+         //If there is one intersection found
+         if (firstIntersectionToPack != null && secondIntersectionToPack == null) {
+            boolean intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine,lineDirection, firstIntersectionToPack);
+            if (intersectionWithFace) {
+               numberOfIntersections++;   
+            }
+         }
          
-         Vertex3DReadOnly vector = getVertex(i);
-         allVertices[i][0] = vector.getX();
-         allVertices[i][1] = vector.getY();
-         allVertices[i][2] = vector.getZ();
+         if (firstIntersectionToPack != null && secondIntersectionToPack != null)
+            break;
       }
       
-      
-      
-      double epsilon = 1.0e-6;
-      int numberOfIntersections = 0 ;
-      
-      
-      
-    for (int i = 0; i<sizeFaces; i++) {
-
-       double pointOnPlaneX = getFaces().get(i).getCentroid().getX();
-       double pointOnPlaneY = getFaces().get(i).getCentroid().getY();
-       double pointOnPlaneZ = getFaces().get(i).getCentroid().getZ();
-       
-       double planeNormalX = getFaces().get(i).getNormal().getX();
-       double planeNormalY = getFaces().get(i).getNormal().getY();
-       double planeNormalZ = getFaces().get(i).getNormal().getZ();
-       
-       
-       for (int j = 0; j<sizeVertices; j++) {
+      return numberOfIntersections;
          
-          double distance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(allVertices[j][0],
-                                                               allVertices[j][1],
-                                                               allVertices[j][2],
-                                                               pointOnPlaneX,
-                                                               pointOnPlaneY,
-                                                               pointOnPlaneZ,
-                                                               planeNormalX,
-                                                               planeNormalY,
-                                                               planeNormalZ);
-             
-          if ( distance   <   epsilon) {
-             faceVertices[i][j] = (allVertices[j]);
-            
-          }
-       }
-       
-      numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndFace3D(faceVertices[i],
-                                                              pointOnLine,
-                                                              lineDirection,
-                                                              firstIntersectionToPack,
-                                                              secondIntersectionToPack);
-      
-      if (numberOfIntersections > 0) {
-         return numberOfIntersections;
-      }
-      
-    }
-    
-    return numberOfIntersections;
-      
    }
+
+
 
    @Override
    default boolean containsNaN()
