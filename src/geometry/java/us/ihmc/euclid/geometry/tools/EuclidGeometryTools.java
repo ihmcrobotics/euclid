@@ -4915,68 +4915,202 @@ public class EuclidGeometryTools
    }
 
 
-   private static int intersectionBetweenLine3DAndRampImpl(double rampMinX,
-                                                           double rampMinY,
-                                                           double rampMinZ,
-                                                           double rampMaxX,
-                                                           double rampMaxY,
-                                                           double rampMaxZ,
-                                                           double startX,
-                                                           double startY,
-                                                           double startZ,
-                                                           boolean canIntersectionOccurBeforeStart,
-                                                           double endX,
-                                                           double endY,
-                                                           double endZ,
-                                                           boolean canIntersectionOccurAfterEnd,
+   public static int intersectionBetweenLine3DAndRampImpl(double positionX,
+                                                           double positionY,
+                                                           double positionZ,
+                                                           double sizeX,
+                                                           double sizeY,
+                                                           double sizeZ,
+                                                           double angle,
+                                                           double pointOnLineX,
+                                                           double pointOnLineY,
+                                                           double pointOnLineZ,
+                                                           double lineDirectionX,
+                                                           double lineDirectionY,
+                                                           double lineDirectionZ,
                                                            Point3DBasics firstIntersectionToPack,
                                                            Point3DBasics secondIntersectionToPack)
    
    
    {
+      int numberOfIntersections = 0;
+      
       if (firstIntersectionToPack != null)
          firstIntersectionToPack.setToNaN();
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToNaN();
-
-      double dx = endX - startX;
-      double dy = endY - startY;
-      double dz = endZ - startZ;
       
-      return 1;
+      double minX = positionX;
+      double maxX = positionX + sizeX;
+      double minY = positionY -(1/2)*sizeY;
+      double maxY = positionY +(1/2)*sizeY;
+      double minZ = positionZ ;
+      double maxZ = positionZ + sizeZ;
+      
+      double intersection1X = 0;
+      double intersection2X = 0;
+      double intersection1Y = 0;
+      double intersection2Y = 0;
+      double intersection1Z = 0;
+      double intersection2Z = 0;
+
+      
+      // Intersection with the plane (x = maxX)
+      
+      if (pointOnLineX < maxX && pointOnLineX + lineDirectionX >= maxX) {
+         double t = (maxX - pointOnLineX) / lineDirectionX;
+         double y = pointOnLineY + t*lineDirectionY;
+         double z = pointOnLineZ + t*lineDirectionZ;
+         if (y >= minY && y <= maxY && z >= minZ && z<= maxZ) {
+            numberOfIntersections++;
+            intersection1X = minX;
+            intersection1Y = y;
+            intersection1Z = z;    
+            
+         }
+      }
+      
+      
+      
+      
+      // Intersection with the plane (y = minY)
+      
+      if (pointOnLineY > minY && pointOnLineY + lineDirectionY <= minY) {
+         double t = (minY - pointOnLineY) / lineDirectionY;
+         double x = pointOnLineX + t*lineDirectionX;
+         double z = pointOnLineZ + t*lineDirectionZ;
+         if (x >= minX && x <= maxX && z >= minZ && z<= maxZ) {
+            numberOfIntersections++;
+            if (numberOfIntersections == 0)
+               intersection1X = x;
+               intersection1Y = minY;
+               intersection1Z = z; 
+  
+            if (numberOfIntersections == 1)
+               intersection2X = x;
+               intersection2Y = minY;
+               intersection2Z = z; 
+
+         }
+      }      
+      
+      
+      
+      // Intersection with the plane (y = maxY)
+      
+      if (pointOnLineY < maxY && pointOnLineY + lineDirectionY >= maxY) {
+         double t = (maxY - pointOnLineY) / lineDirectionY;
+         double x = pointOnLineX + t*lineDirectionX;
+         double z = pointOnLineZ + t*lineDirectionZ;
+         if (x >= minX && x <= maxX && z >= minZ && z<= maxZ) {
+            numberOfIntersections++;
+            if (numberOfIntersections == 0)
+               intersection1X = x;
+               intersection1Y = maxY;
+               intersection1Z = z; 
+  
+            if (numberOfIntersections == 1)
+               intersection2X = x;
+               intersection2Y = maxY;
+               intersection2Z = z; 
+
+           
+         }
+      } 
+      
+      
+      // Intersection with the plane (z = minZ)
+      
+      if (pointOnLineZ > minZ && pointOnLineZ + lineDirectionZ <= minZ) {
+         double t = (minZ - pointOnLineZ) / lineDirectionZ;
+         double x = pointOnLineX + t*lineDirectionX;
+         double y = pointOnLineY + t*lineDirectionY;
+         if (x >= minX && x <= maxX && y >= minY && y<= maxY) {
+            numberOfIntersections++;
+            if (numberOfIntersections == 0)
+               intersection1X = x;
+               intersection1Y = y;
+               intersection1Z = minZ; 
+  
+            if (numberOfIntersections == 1)
+               intersection2X = x;
+               intersection2Y = y;
+               intersection2Z = minZ; 
+
+         }
+      }
+
+      
+      // Equation of the inclined plane
+      
+      double a = Math.cos(angle);
+      double b = Math.sin(angle);
+      double d = -(a * positionX + b * positionY);
+      
+      // Intersection with the inclined plane
+      
+      if (Math.abs(a * lineDirectionX + b * lineDirectionY) > ONE_TRILLIONTH) {
+         double t = -(a * pointOnLineX + b * pointOnLineY + d) / (a * lineDirectionX + b * lineDirectionY);
+         double x = pointOnLineX + t * lineDirectionX;
+         double y = pointOnLineY + t * lineDirectionY;
+         double z = pointOnLineZ + t * lineDirectionZ;
+         
+         if (x >= minX && x <= maxX && y >= minY && y<= maxY && z >= minZ && z<= maxZ) {
+            numberOfIntersections++;
+            if (numberOfIntersections == 0)
+               intersection1X = x;
+               intersection1Y = y;
+               intersection1Z = z; 
+  
+            if (numberOfIntersections == 1)
+               intersection2X = x;
+               intersection2Y = y;
+               intersection2Z = z; 
+         }
+      }
+      
+      if (numberOfIntersections == 0)
+         return 0;
+      
+      if (firstIntersectionToPack == null)
+         return 0;
+      
+      if (numberOfIntersections == 2 && secondIntersectionToPack == null)
+         return 1;
+      
+      //One intersection
+      if (numberOfIntersections == 1)
+      {
+         if (firstIntersectionToPack != null)
+            firstIntersectionToPack.set(intersection1X, intersection1Y, intersection1Z);
+
+         if (secondIntersectionToPack != null)
+            secondIntersectionToPack.setToNaN();
+         
+       }  
+         
+      // Two intersections
+      if (numberOfIntersections == 2)
+      {
+         if (firstIntersectionToPack != null)
+         {
+            firstIntersectionToPack.set(intersection1X, intersection1Y, intersection1Z);
+         }
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.set(intersection2X, intersection2Y, intersection2Z);
+         }
+      }
+
+         return numberOfIntersections;
       
    }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+  
+
+
+
+
       
       
    

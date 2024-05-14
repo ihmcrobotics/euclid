@@ -124,9 +124,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return distance <= 0.0;
    }
 
-   
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
+
    /**
     * Computes the coordinates of the possible intersections between a line and this ramp.
     * <p>
@@ -171,6 +169,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
+      
      
       double rampPositionX = getPose().getShapePosition().getX();
       double rampPositionY = getPose().getShapePosition().getY(); 
@@ -179,18 +178,32 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       double rampWidth = getSizeY();
       double rampHeight = getSizeZ();
       
+      double angle = getRampIncline();
+      
+      double pointOnLineX = pointOnLine.getX();
+      double pointOnLineY = pointOnLine.getY();
+      double pointOnLineZ = pointOnLine.getZ();
+      
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+      double lineDirectionZ = lineDirection.getZ();
 
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndRamp3DImpl(rampPositionX,
-                                                                                         rampPositionY,
-                                                                                         rampPositionZ,
-                                                                                         rampLength,
-                                                                                         rampWidth,
-                                                                                         rampHeight,
-                                                                                         pointOnLine,
-                                                                                         lineDirection,
-                                                                                         firstIntersectionToPack,
-                                                                                         secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndRampImpl(rampPositionX,
+                                                                                             rampPositionY,
+                                                                                             rampPositionZ,
+                                                                                             rampLength,
+                                                                                             rampWidth,
+                                                                                             rampHeight,
+                                                                                             angle,
+                                                                                            pointOnLineX,
+                                                                                            pointOnLineY,
+                                                                                            pointOnLineZ,
+                                                                                            lineDirectionX,
+                                                                                            lineDirectionY,
+                                                                                            lineDirectionZ,
+                                                                                            firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
 
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
@@ -199,7 +212,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return numberOfIntersections;
    }
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
    
    /** {@inheritDoc} */
    @Override
