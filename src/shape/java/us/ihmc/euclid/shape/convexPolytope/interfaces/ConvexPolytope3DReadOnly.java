@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import java.util.ArrayDeque;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -173,27 +175,49 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToNaN();
       
+      //add potential garbage but gets the code running
+      if (firstIntersectionToPack == null)
+        firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+      
       int numberOfIntersections = 0;
+      
+      Point3DBasics intersect1 = null;
+      Point3DBasics intersect2 = null;
       
       //For each face, we check the possibility of intersection with the line
       for (int i=0; i< getNumberOfFaces(); i++) {
-         //If there isn't already a intersection found
-         if (firstIntersectionToPack == null) {
-            boolean intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine,lineDirection, firstIntersectionToPack);
-            if (intersectionWithFace) {
-               numberOfIntersections++;   
-            }
+         
+         boolean intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine,lineDirection, firstIntersectionToPack);
+         
+         if (intersectionWithFace) {
+            numberOfIntersections++;   
+            
          }
-         //If there is one intersection found
-         if (firstIntersectionToPack != null && secondIntersectionToPack == null) {
-            boolean intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine,lineDirection, firstIntersectionToPack);
-            if (intersectionWithFace) {
-               numberOfIntersections++;   
-            }
+         if (numberOfIntersections == 1) {
+            intersect1 = firstIntersectionToPack;
+         }
+         if (numberOfIntersections == 2) {
+            intersect2 = firstIntersectionToPack;
+            break;
+         }
+
+         firstIntersectionToPack.setToNaN();
+      }
+      
+      if (numberOfIntersections == 1) {
+         firstIntersectionToPack.set(intersect1);
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setToNaN();
          }
          
-         if (firstIntersectionToPack != null && secondIntersectionToPack != null)
-            break;
+      }
+      
+      if (numberOfIntersections == 2) {
+         firstIntersectionToPack.set(intersect1);
+         secondIntersectionToPack.set(intersect2);
       }
       
       return numberOfIntersections;
