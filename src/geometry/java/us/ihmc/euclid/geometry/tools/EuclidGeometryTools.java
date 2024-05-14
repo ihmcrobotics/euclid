@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,9 +23,11 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -4911,230 +4914,71 @@ public class EuclidGeometryTools
 
    }
 
-  ///////////////////////////////////////////////////////////////// 
 
+   private static int intersectionBetweenLine3DAndRampImpl(double rampMinX,
+                                                           double rampMinY,
+                                                           double rampMinZ,
+                                                           double rampMaxX,
+                                                           double rampMaxY,
+                                                           double rampMaxZ,
+                                                           double startX,
+                                                           double startY,
+                                                           double startZ,
+                                                           boolean canIntersectionOccurBeforeStart,
+                                                           double endX,
+                                                           double endY,
+                                                           double endZ,
+                                                           boolean canIntersectionOccurAfterEnd,
+                                                           Point3DBasics firstIntersectionToPack,
+                                                           Point3DBasics secondIntersectionToPack)
    
-   /**
-    * Flexible implementation for computing the intersection between a polytope(of any kind) and either a line,
-    * a line segment, or a ray.
-    * <p>
-
-    * </ul>
-    * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the polytope
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the polytope, the points where the line
-    * first/last intersects with the polytope are returned as
-    * intersection points.
-    * </ul>
-    * </p>
-    *
-    * @param boundingBoxMinX                 the minimum x-coordinate of the bounding box.
-    * @param boundingBoxMinY                 the minimum y-coordinate of the bounding box.
-    * @param boundingBoxMinZ                 the minimum z-coordinate of the bounding box.
-    * @param boundingBoxMaxX                 the maximum x-coordinate of the bounding box.
-    * @param boundingBoxMaxY                 the maximum y-coordinate of the bounding box.
-    * @param boundingBoxMaxZ                 the maximum z-coordinate of the bounding box.
-    * @param startX                          the x-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param startY                          the y-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param startZ                          the z-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
-    *                                        {@code start}.
-    * @param endX                            the x-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param endY                            the y-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param endZ                            the z-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param canIntersectionOccurAfterEnd    specifies whether an intersection can exist after
-    *                                        {@code end}.
-    * @param firstIntersectionToPack         the coordinate of the first intersection. Can be
-    *                                        {@code null}. Modified.
-    * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
-    *                                        {@code null}. Modified.
-    * @return the number of intersections between the line/line-segment/ray and the bounding box. It is
-    *         either equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
-    */
    
-   public static int intersectionBetweenLine3DAndPolytopeImpl(double NumberOfFaces,
-                                                              double minX, 
-                                                              double maxX,
-                                                              double minY, 
-                                                              double maxY,
-                                                              double minZ, 
-                                                              double maxZ,
-                                                              List<double[]> polytopeFaces,
-                                                              List<double[]> polytopesSupportingVertex,
-                                                              double lineStartX,
-                                                              double lineStartY, 
-                                                              double lineStartZ,
-                                                              double lineDirectionX,
-                                                              double lineDirectionY, 
-                                                              double lineDirectionZ,
-                                                              Point3DBasics firstIntersectionToPack,
-                                                              Point3DBasics secondIntersectionToPack) {
+   {
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToNaN();
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToNaN();
 
-       int numIntersections = 0;
-
-       // Test each face of the polytope
-       for (int i=0; i<NumberOfFaces;i++) {
-           double[] face = polytopeFaces.get(i);
-           double[] normal = polytopesSupportingVertex.get(i);
-           Point3DBasics intersectionPoint = new Point3D();
-           if (intersectionBetweenLine3DAndPlane3D(new Point3D(lineStartX,lineStartY,lineStartZ),
-                                                  new Vector3D(lineDirectionX, lineDirectionY, lineDirectionZ),
-                                                  new Point3D(face[0], face[1], face[2]),
-                                                  new Vector3D(normal[0], normal[1], normal[2]),
-                                                  intersectionPoint)) {
-
-               double intersectionX = intersectionPoint.getX();
-               double intersectionY = intersectionPoint.getY();
-               double intersectionZ = intersectionPoint.getZ();
-
-               // Check if the intersection point is inside the polytope's bounding box
-               if (intersectionX >= minX && intersectionX <= maxX &&
-                   intersectionY >= minY && intersectionY <= maxY &&
-                   intersectionZ >= minZ && intersectionZ <= maxZ) {
-                   if (numIntersections == 0 && firstIntersectionToPack != null) {
-                       firstIntersectionToPack.set(intersectionX, intersectionY, intersectionZ);
-                   } else if (numIntersections == 1 && secondIntersectionToPack != null) {
-                       secondIntersectionToPack.set(intersectionX, intersectionY, intersectionZ);
-                   }
-                   numIntersections++;
-               }
-           }
-       }
-
-       return numIntersections;
+      double dx = endX - startX;
+      double dy = endY - startY;
+      double dz = endZ - startZ;
+      
+      return 1;
+      
    }
-
-   
-   
- ////////////////////////////////////////////////////////////////////  
-   /**
-    * Flexible implementation for computing the intersection between a ramp and either a line,
-    * a line segment, or a ray.
-    * <p>
-    * Switching between line/line-segment/ray can be done using the two arguments
-    * {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd}:
-    * <ul>
-    * <li>{@code canIntersectionOccurBeforeStart == true} and
-    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate line/ramp
-    * intersection.
-    * <li>{@code canIntersectionOccurBeforeStart == false} and
-    * {@code canIntersectionOccurAfterEnd == false} changes the algorithm to calculate
-    * line-segment/bounding-box intersection.
-    * <li>{@code canIntersectionOccurBeforeStart == false} and
-    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate ray/ramp
-    * intersection.
-    * </ul>
-    * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the ray origin or start/end point of a line segment lie on the surface of the ramp
-    * they are considered as intersection points.
-    * <li>if a line is colinear with a surface of the ramp, the points where the line
-    * first/last intersects with the ramp (on the ramp boundary) are returned as
-    * intersection points.
-    * </ul>
-    * </p>
-    *
-    * @param rampPositionX                 the x-coordinate of the ramp.
-    * @param rampPositionY                 the y-coordinate of the ramp.
-    * @param rampPositionZ                 the z-coordinate of the ramp.
-    * 
-    * @param rampLength                    the maximum x-coordinate of the ramp.
-    * @param rampWidth                     the maximum y-coordinate of the bounding box.
-    * @param rampHeight                    the maximum z-coordinate of the bounding box.
-    * 
-    * @param rampOrientationX              the x-coordinate of the orientation vector.
-    * @param rampOrientationY              the y-coordinate of the orientation vector.
-    * @param rampOrientationZ              the z-coordinate of the orientation vector.
-    * 
-    * @param startX                          the x-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param startY                          the y-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    * @param startZ                          the z-coordinate of a point located on the
-    *                                        line/line-segment/ray.
-    *                                        
-    * @param lineDirectionX           the x-component of the direction of the line.
-    * @param lineDirectionY           the y-component of the direction of the line.
-    * @param lineDirectionZ           the z-component of the direction of the line.
-    * 
-    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
-    *                                        {@code start}.
-
-    * @param canIntersectionOccurAfterEnd    specifies whether an intersection can exist after
-    *                                        {@code end}.
-    * @param firstIntersectionToPack         the coordinate of the first intersection. Can be
-    *                                        {@code null}. Modified.
-    * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
-    *                                        {@code null}. Modified.
-    * @return the number of intersections between the line/line-segment/ray and the bounding box. It is
-    *         either equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
-    */
-   public static int intersectionBetweenLine3DAndRamp3DImpl(double rampPositionX,
-                                                            double rampPositionY,
-                                                            double rampPositionZ,
-                                                            double rampLength,
-                                                            double rampWidth,
-                                                            double rampHeight,
-                                                            Point3DReadOnly pointOnLine,
-                                                            Vector3DReadOnly lineDirection,
-                                                            Point3DBasics firstIntersectionToPack,
-                                                            Point3DBasics secondIntersectionToPack)
-    {
-      int numberOfIntersections = 0;
-      //Vertices
-      
-      double[] s1 = {rampPositionX - rampLength, rampPositionY - 1/2 * rampWidth, rampPositionZ+rampHeight};
-      double[] s2 = {rampPositionX - rampLength, rampPositionY + 1/2 * rampWidth, rampPositionZ+rampHeight};
-      double[] s3 = {rampPositionX, rampPositionY + 1/2 * rampWidth, rampPositionZ};
-      double[] s4 = {rampPositionX, rampPositionY - 1/2 * rampWidth, rampPositionZ};
-      double[] s5 = {rampPositionX - rampLength, rampPositionY - 1/2 * rampWidth, rampPositionZ};
-      double[] s6 = {rampPositionX - rampLength, rampPositionY + 1/2 * rampWidth, rampPositionZ};
-      
-      //Vertices of each face
-      
-      double[][][] verticesFace = {{s1,s2,s3,s4},{s2,s3,s6},{s5,s6,s3,s4}, {s1,s2,s5,s6},{s1,s5,s4}};
-      
-      for (int i = 0; i<verticesFace.length; i++) {
-         
-         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndFace3D(verticesFace[i],
-                                                                                        pointOnLine,
-                                                                                        lineDirection,
-                                                                                        firstIntersectionToPack,
-                                                                                        secondIntersectionToPack);
-         System.out.println(numberOfIntersections);
-         System.out.println(i);
-         //if (numberOfIntersections!=0) {
-            //break;
-         //}
-         
-      }
-      
-      
-      return numberOfIntersections;
       
       
       
-    }
       
-   
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
    
    public static double[] calculateNormal(double[] point1, double[] point2, double[] point3) {
     
@@ -5900,7 +5744,6 @@ public class EuclidGeometryTools
          secondIntersectionToPack.setToNaN();
       
       if (sphereRadius == 0.0) {
-         //System.out.println(0);
          return 0;}
       
       double dx = pointOnLineX - spherePositionX;
@@ -5945,7 +5788,7 @@ public class EuclidGeometryTools
          return 0;}
       
       if (firstIntersectionToPack == null) {
-         //System.out.println(0);
+         System.out.println(0);
          return 0;}
 
       
@@ -5965,6 +5808,7 @@ public class EuclidGeometryTools
       if (Double.isNaN(t2)) {
          //System.out.println(1);
          return 1;}
+
       
       if (secondIntersectionToPack == null) {
          //System.out.println(1);
@@ -6021,6 +5865,9 @@ public class EuclidGeometryTools
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
                                                              double radiusZ,
+                                                             double positionX,
+                                                             double positionY,
+                                                             double positionZ,
                                                              double pointOnLineX,
                                                              double pointOnLineY,
                                                              double pointOnLineZ,
@@ -6039,6 +5886,9 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX,
                                                          radiusY,
                                                          radiusZ,
+                                                         positionX,
+                                                         positionY,
+                                                         positionZ,
                                                          startX,
                                                          startY,
                                                          startZ,
@@ -6086,6 +5936,9 @@ public class EuclidGeometryTools
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
                                                              double radiusZ,
+                                                             double positionX,
+                                                             double positionY,
+                                                             double positionZ,
                                                              Point3DReadOnly firstPointOnLine,
                                                              Point3DReadOnly secondPointOnLine,
                                                              Point3DBasics firstIntersectionToPack,
@@ -6100,6 +5953,9 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX,
                                                          radiusY,
                                                          radiusZ,
+                                                         positionX,
+                                                         positionY,
+                                                         positionZ,
                                                          startX,
                                                          startY,
                                                          startZ,
@@ -6147,8 +6003,12 @@ public class EuclidGeometryTools
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
                                                              double radiusZ,
+                                                             double positionX,
+                                                             double positionY,
+                                                             double positionZ,
                                                              Point3DReadOnly pointOnLine,
                                                              Vector3DReadOnly lineDirection,
+                                                             
                                                              Point3DBasics firstIntersectionToPack,
                                                              Point3DBasics secondIntersectionToPack)
    {
@@ -6161,6 +6021,9 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX,
                                                          radiusY,
                                                          radiusZ,
+                                                         positionX,
+                                                         positionY,
+                                                         positionZ,
                                                          startX,
                                                          startY,
                                                          startZ,
@@ -6233,6 +6096,9 @@ public class EuclidGeometryTools
    private static int intersectionBetweenLine3DAndEllipsoid3DImpl(double radiusX,
                                                                   double radiusY,
                                                                   double radiusZ,
+                                                                  double positionX,
+                                                                  double positionY,
+                                                                  double positionZ,
                                                                   double startX,
                                                                   double startY,
                                                                   double startZ,
@@ -6259,12 +6125,26 @@ public class EuclidGeometryTools
       if (radiusX == 0.0 || radiusY == 0.0 || radiusZ == 0.0)
          return 0;
 
-      // TODO: redirect to the sphere intersection algorithm when radii are equal
       
       double dx = endX - startX;
       double dy = endY - startY;
       double dz = endZ - startZ;
 
+      
+      if (radiusX == radiusY && radiusY == radiusZ)
+         return intersectionBetweenLine3DAndSphere3DImpl(radiusX,
+                                                         positionX,
+                                                         positionY,
+                                                         positionY,
+                                                         startX,
+                                                         startY,
+                                                         startZ,
+                                                         dx,
+                                                         dy,
+                                                         dz,
+                                                         firstIntersectionToPack,
+                                                         secondIntersectionToPack);
+      
       // The equation for an ellipsoid is: x^2/rx^2 + y^2/ry^2 + z^2/rz^2 = 1
       // Plugging in the equation of the point p that belongs to a line: p = (x, y, z) = x0 + v t
       // We can write a quadratic equation in t: A t^2 + B t + C = 0
@@ -6437,123 +6317,6 @@ public class EuclidGeometryTools
    }
 
 
-   
-
-   
-   /**
-    * Computes the coordinates of the intersection between a face and an infinitely long line.
-    * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the line is parallel to the face, this methods fails and returns {@code false}.
-    * </ul>
-    * </p>
-    
-    * @param faceVertices             list of the vertices of the face
-    * @param startX                   the x-coordinate of a point located on the
-    *                                 line/line-segment/ray.
-    * @param startY                   the y-coordinate of a point located on the
-    *                                 line/line-segment/ray.
-    * @param startZ                   the z-coordinate of a point located on the
-    *                                 line/line-segment/ray.
-    *                                        
-    * @param lineDirectionX           the x-component of the direction of the line.
-    * @param lineDirectionY           the y-component of the direction of the line.
-    * @param lineDirectionZ           the z-component of the direction of the line.
-    
-    * @param firstIntersectionToPack point in which the coordinates of the intersection are stored.
-    * @param secondIntersectionToPack point in which the coordinates of the intersection are stored.
-    * @return {@code true} if the method succeeds, {@code false} otherwise.
-    */
-   public static int intersectionBetweenLine3DAndFace3D( double[][] faceVertices,
-                                                             Point3DReadOnly pointOnLine,
-                                                             Vector3DReadOnly lineDirection,
-                                                             Point3DBasics firstIntersectionToPack,
-                                                             Point3DBasics secondIntersectionToPack)
-   {
-      //The face has to have at least 3 vertices
-      if (faceVertices.length < 3) {
-         return 0;
-      }
-      
-      
-      double[] distanceBetweenVertices = new double[3];
-      for (int i = 0; i < 2; i++) {
-         double distX = faceVertices[i][0] - faceVertices[i+1][0];
-         double distY = faceVertices[i][1] - faceVertices[i+1][1];
-         double distZ = faceVertices[i][2] - faceVertices[i+1][2];
-         
-         distanceBetweenVertices[i] = Math.sqrt(distX*distX + distY*distY + distZ*distZ);
-      }
-      double distX3 = faceVertices[0][0] - faceVertices[2][0];
-      double distY3 = faceVertices[0][1] - faceVertices[2][1];      
-      double distZ3 = faceVertices[0][2] - faceVertices[2][2];
-      distanceBetweenVertices[2] = Math.sqrt(distX3*distX3 + distY3*distY3 + distZ3*distZ3);
-      
-      double[] normal = calculateNormal(faceVertices[0], faceVertices[1], faceVertices[2]);
-
-      double denominator = normal[0]*lineDirection.getX() + normal[1]*lineDirection.getY() + normal[2]*lineDirection.getZ();
-      
-    
-      //Line equation
-      double a = lineDirection.getX();
-      double b = lineDirection.getY();
-      double c = lineDirection.getZ();
-      double d = -(a*pointOnLine.getX() + b*pointOnLine.getY() + c*pointOnLine.getZ());
-      
-      
-   
-      if (Math.abs(denominator)<ONE_TRILLIONTH) {
-         
-         
-         double distanceToPlane = Math.abs(a * pointOnLine.getX() + b * pointOnLine.getY() + c * pointOnLine.getZ() + d) / Math.sqrt(a * a + b * b + c * c);
-         
-         
-         if (Math.abs(distanceToPlane) <= Math.max(distanceBetweenVertices[0], Math.max(distanceBetweenVertices[1], distanceBetweenVertices[2]))) {
-            
-             double intersection1X = pointOnLine.getX() + lineDirection.getX() * ONE_TRILLIONTH;
-             double intersection1Y = pointOnLine.getY() + lineDirection.getY() * ONE_TRILLIONTH;
-             double intersection1Z = pointOnLine.getZ() + lineDirection.getZ() * ONE_TRILLIONTH;
-
-             double intersection2X = pointOnLine.getX() - lineDirection.getX() * ONE_TRILLIONTH;
-             double intersection2Y = pointOnLine.getY() - lineDirection.getY() * ONE_TRILLIONTH;
-             double intersection2Z = pointOnLine.getZ() - lineDirection.getZ() * ONE_TRILLIONTH;
-
-          // Coordinates to firstIntersectionToPack and secondIntersectionToPack
-             firstIntersectionToPack.set(intersection1X, intersection1Y, intersection1Z);
-             secondIntersectionToPack.set(intersection2X, intersection2Y, intersection2Z);
-
-             return 2; // Two intersections
-         }
-         return 0; // No intersection
-     }
-      
-      double dX = faceVertices[0][0] - pointOnLine.getX();
-      double dY = faceVertices[0][1] - pointOnLine.getY();
-      double dZ = faceVertices[0][2] - pointOnLine.getZ();
-
-     // Parameter of intersection
-     double t = (normal[0]*dX + normal[1]*dY + normal[2]*dZ) / denominator;
-
-     // Check if intersection is on the line (0 <= t <= 1)
-     if (t < 0 || t > 1) {
-         return 0; 
-     }
-
-     
-     double intersectionX = pointOnLine.getX() + t * lineDirection.getX();
-     double intersectionY = pointOnLine.getY() + t * lineDirection.getY();
-     double intersectionZ = pointOnLine.getZ() + t * lineDirection.getZ();
-
-     // Coordinates to intersection1ToPack
-     firstIntersectionToPack.set(intersectionX, intersectionY, intersectionZ);
-
-     return 1;
- }
-
-   
-   
 
    
    
@@ -6752,6 +6515,9 @@ public class EuclidGeometryTools
    public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX,
                                                                     double radiusY,
                                                                     double radiusZ,
+                                                                    double positionX,
+                                                                    double positionY,
+                                                                    double positionZ,
                                                                     Point3DReadOnly lineSegmentStart,
                                                                     Point3DReadOnly lineSegmentEnd,
                                                                     Point3DBasics firstIntersectionToPack,
@@ -6766,6 +6532,9 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX,
                                                          radiusY,
                                                          radiusZ,
+                                                         positionX,
+                                                         positionY,
+                                                         positionZ,
                                                          startX,
                                                          startY,
                                                          startZ,
@@ -7302,6 +7071,9 @@ public class EuclidGeometryTools
    public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX,
                                                             double radiusY,
                                                             double radiusZ,
+                                                            double positionX,
+                                                            double positionY,
+                                                            double positionZ,
                                                             Point3DReadOnly rayOrigin,
                                                             Vector3DReadOnly rayDirection,
                                                             Point3DBasics firstIntersectionToPack,
@@ -7316,6 +7088,9 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX,
                                                          radiusY,
                                                          radiusZ,
+                                                         positionX,
+                                                         positionY,
+                                                         positionZ,
                                                          startX,
                                                          startY,
                                                          startZ,
@@ -9920,7 +9695,10 @@ public class EuclidGeometryTools
       return true;
    }
 
-   /**
+
+
+   
+    /**
     * Computes the intersection between two infinitely long 2D lines each defined by a 2D point and a
     * 2D direction and returns a percentage {@code alpha} along the first line such that the
     * intersection coordinates can be computed as follows: <br>
@@ -9944,7 +9722,12 @@ public class EuclidGeometryTools
     * @param lineDirection2y y-component of the second line direction.
     * @return {@code alpha} the percentage along the first line of the intersection location. This
     *         method returns {@link Double#NaN} if the lines do not intersect.
-    */
+    */  
+   
+   
+   
+   
+   
    public static double percentageOfIntersectionBetweenTwoLine2Ds(double pointOnLine1x,
                                                                   double pointOnLine1y,
                                                                   double lineDirection1x,
