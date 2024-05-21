@@ -246,31 +246,30 @@ public class Sphere3DTest
    void testIntersectionWith() throws Exception
    {
       Random random = new Random(3509819);
-      
 
       // No intersection
-      
-      for (int i = 0; i < ITERATIONS; i++){
-         
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+
          // Generate a random sphere and a random vector
-         
+
          Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
          Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
 
          // Generate a point outside on the line and an orthogonal vector
-         
+
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0, 10.0) * sphere3D.getRadius(), direction, sphere3D.getPosition());
 
          Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, false);
-         
-         
+
          Point3D actualFirstInstersection = new Point3D();
          Point3D actualSecondInstersection = new Point3D();
 
          // The line (pointOutside, lineDirection) is guaranteed to be outside by construction
-         
-         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, null, null)); 
+
+         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, null, null));
          assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, null));
          assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, null, actualSecondInstersection));
          actualFirstInstersection.setToZero();
@@ -278,9 +277,8 @@ public class Sphere3DTest
          assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, actualSecondInstersection));
       }
 
-      
       // Ellipsoid tests applied to the sphere
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Intersecting, generate the line from the two intersections
          Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
@@ -316,10 +314,8 @@ public class Sphere3DTest
 
          assertEquals(0, sphere3D.intersectionWith(line, null, null));
       }
-  
+
    }
-   
-   
 
    @Test
    void testApplyTransform()

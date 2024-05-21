@@ -182,48 +182,47 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       for (int i = 0; i < getNumberOfFaces(); i++)
       {
          boolean intersectionWithFace;
-        
+
          if (numberOfIntersections == 0)
             intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, firstIntersectionToPack);
          else if (numberOfIntersections == 1)
             intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, secondIntersectionToPack);
          else
             break;
-         if (intersectionWithFace){
-         
+         if (intersectionWithFace)
+         {
+
             numberOfIntersections++;
             if (numberOfIntersections == 2)
                break;
          }
       }
-      
-      
+
       if (numberOfIntersections == 0)
          return numberOfIntersections;
 
       if (numberOfIntersections == 1)
          return numberOfIntersections;
-      
+
       if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(firstIntersectionToPack, secondIntersectionToPack, 1.0e-7))
          return 1;
-      
-      
+
       double firstDot = lineDirection.dot(firstIntersectionToPack);
       double secondDot = lineDirection.dot(secondIntersectionToPack);
 
-      if (secondDot < firstDot){
-         
-        // Swap intersections
+      if (secondDot < firstDot)
+      {
+
+         // Swap intersections
          Point3DBasics temp = firstIntersectionToPack;
          firstIntersectionToPack = secondIntersectionToPack;
          secondIntersectionToPack = temp;
       }
-      
+
       return 2;
 
    }
 
-   
    @Override
    default boolean containsNaN()
    {

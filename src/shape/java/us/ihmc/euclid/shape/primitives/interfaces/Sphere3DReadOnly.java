@@ -73,7 +73,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                                                getPosition(),
                                                                getRadius(),
                                                                closestPointOnSurfaceToPack,
-                                                               normalAtClosestPointToPack) <= 0.0;
+                                                               normalAtClosestPointToPack)
+             <= 0.0;
    }
 
    /** {@inheritDoc} */
@@ -121,9 +122,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
     *         or 2.
     */
-   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack,Point3DBasics secondIntersectionToPack)
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
-      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack,secondIntersectionToPack);
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -134,11 +135,11 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine              a point expressed in world located on the infinitely long line.
-    *                                 Not modified.
-    * @param lineDirection            the direction expressed in world of the line. Not modified.s
-    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
-    *                                 {@code null}. Modified.
+    * @param pointOnLine             a point expressed in world located on the infinitely long line.
+    *                                Not modified.
+    * @param lineDirection           the direction expressed in world of the line. Not modified.s
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *                                {@code null}. Modified.
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1.
     */
    default int intersectionWith(Point3DReadOnly pointOnLine,
@@ -146,13 +147,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-  
+
       // Sphere is a specific case of the ellipsoid
-      
+
       double spherePositionX = getPosition().getX();
       double spherePositionY = getPosition().getY();
       double spherePositionZ = getPosition().getZ();
-      
+
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(),
                                                                                               getRadius(),
                                                                                               getRadius(),
@@ -163,10 +164,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                                                                               lineDirection,
                                                                                               firstIntersectionToPack,
                                                                                               secondIntersectionToPack);
-      
 
-      return numberOfIntersections; 
-      
+      return numberOfIntersections;
+
    }
 
    /** {@inheritDoc} */
