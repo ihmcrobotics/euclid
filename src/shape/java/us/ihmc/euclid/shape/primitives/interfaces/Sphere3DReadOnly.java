@@ -8,6 +8,8 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -144,33 +146,27 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                 Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-
+  
+      // Sphere is a specific case of the ellipsoid
+      
       double spherePositionX = getPosition().getX();
       double spherePositionY = getPosition().getY();
       double spherePositionZ = getPosition().getZ();
-      double pointOnLineX = pointOnLine.getX() - getPosition().getX();
-      double pointOnLineY = pointOnLine.getY() - getPosition().getY();
-      double pointOnLineZ = pointOnLine.getZ() - getPosition().getZ();
-      double lineDirectionX = lineDirection.getX();
-      double lineDirectionY = lineDirection.getY();
-      double lineDirectionZ = lineDirection.getZ();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndSphere3DImpl(getRadius(),
-                                                                                               spherePositionX,
-                                                                                               spherePositionY,
-                                                                                               spherePositionZ,
-                                                                                               pointOnLineX,
-                                                                                               pointOnLineY,
-                                                                                               pointOnLineZ,
-                                                                                               lineDirectionX,
-                                                                                               lineDirectionY,
-                                                                                               lineDirectionZ,
-                                                                                               firstIntersectionToPack,
-                                                                                               secondIntersectionToPack);
+      
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(),
+                                                                                              getRadius(),
+                                                                                              getRadius(),
+                                                                                              spherePositionX,
+                                                                                              spherePositionY,
+                                                                                              spherePositionZ,
+                                                                                              pointOnLine,
+                                                                                              lineDirection,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
+      
 
-      //if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         //firstIntersectionToPack.add(getPosition());
-
-      return numberOfIntersections;
+      return numberOfIntersections; 
+      
    }
 
    /** {@inheritDoc} */
