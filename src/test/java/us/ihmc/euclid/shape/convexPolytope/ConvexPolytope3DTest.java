@@ -1905,6 +1905,212 @@ public class ConvexPolytope3DTest
          }
       }
    }
+   
+   
+   
+   @Test
+   void testIntersectionWith() throws Exception {
+      
+      Random random = new Random(264000);
+      
+      //2 intersections
+      for (int i = 0; i < ITERATIONS; i++){
+         
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);  
+         
+         //Generate a point at a random place on a random face 
+         
+         int index = random.nextInt(convexPolytope3D.getNumberOfFaces());
+         
+         Face3D face = convexPolytope3D.getFaces().get(index);
+         
+         List<Vertex3D[]> triangles = new ArrayList<>();
+
+         if (convexPolytope3D.getNumberOfVertices() == 3) {
+               Vertex3D[] triangle = {face.getVertex(0), face.getVertex(1), face.getVertex(2)};
+               triangles.add(triangle);
+               }
+         else {
+         for (int j = 0; j < face.getVertices().size()-2; j++) {
+           
+            Vertex3D[] triangle = {face.getVertex(j), face.getVertex(j+1), face.getVertex(j+2)};
+            triangles.add(triangle);
+            }
+         }
+            
+         int randomTriangleIndex = random.nextInt(face.getVertices().size()-2);
+         
+         Vertex3D A = face.getVertex(randomTriangleIndex);
+         Vertex3D B = face.getVertex(randomTriangleIndex + 1);
+         Vertex3D C = face.getVertex(randomTriangleIndex + 2);
+         
+         double alpha = random.nextDouble();
+         double beta = random.nextDouble() * (1 - alpha);
+         double gamma = 1 - alpha - beta;
+         
+         double x = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+         double y = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+         double z = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();    
+         
+         Point3D pointOnFace = new Point3D(x,y,z);
+         
+         //Generate a random vector 
+         
+         Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         
+         pointOnFace.scaleAdd(EuclidCoreRandomTools.nextDouble(random), direction, pointOnFace);
+         
+         Point3D actualFirstInstersection = new Point3D();
+         Point3D actualSecondInstersection = new Point3D();
+         
+         assertEquals(2, convexPolytope3D.intersectionWith(pointOnFace, direction, null, null));
+         assertEquals(2, convexPolytope3D.intersectionWith(pointOnFace, direction, actualFirstInstersection, null));
+         assertEquals(2, convexPolytope3D.intersectionWith(pointOnFace, direction, null, actualSecondInstersection));
+         actualFirstInstersection.setToZero();
+         actualSecondInstersection.setToZero();
+         assertEquals(2, convexPolytope3D.intersectionWith(pointOnFace, direction, actualFirstInstersection, actualSecondInstersection));
+    
+      }
+      
+      //0 intersection
+      for (int i = 0; i < ITERATIONS; i++){
+   
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         
+         //Generate a point at a random place on a random face
+         
+         int index = random.nextInt(convexPolytope3D.getNumberOfFaces());
+         
+         Face3D face = convexPolytope3D.getFaces().get(index);
+         
+         List<Vertex3D[]> triangles = new ArrayList<>();
+         
+         
+         if (convexPolytope3D.getNumberOfVertices() == 3) {
+               Vertex3D[] triangle = {face.getVertex(0), face.getVertex(1), face.getVertex(2)};
+               triangles.add(triangle);
+               }
+         else {
+         for (int j = 0; j < face.getVertices().size()-2; j++) {
+           
+            Vertex3D[] triangle = {face.getVertex(j), face.getVertex(j+1), face.getVertex(j+2)};
+            triangles.add(triangle);
+            }
+         }
+            
+         int randomTriangleIndex = random.nextInt(face.getVertices().size()-2);
+         
+         Vertex3D A = face.getVertex(randomTriangleIndex);
+         Vertex3D B = face.getVertex(randomTriangleIndex + 1);
+         Vertex3D C = face.getVertex(randomTriangleIndex + 2);
+         
+         double alpha = random.nextDouble();
+         double beta = random.nextDouble() * (1 - alpha);
+         double gamma = 1 - alpha - beta;
+         
+         double x = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+         double y = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+         double z = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();    
+         
+         Point3D pointOnFace = new Point3D(x,y,z);
+         
+         //Get the point outside of the face 
+         
+         Vector3D direction = face.getNormal();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0), direction, pointOnFace);
+         
+         //Generate an orthogonal vector
+         
+         Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, false);
+         
+         Point3D actualFirstInstersection = new Point3D();
+         Point3D actualSecondInstersection = new Point3D();
+
+         
+         assertEquals(0, convexPolytope3D.intersectionWith(pointOutside, lineDirection, null, null));
+         assertEquals(0, convexPolytope3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, null));
+         assertEquals(0, convexPolytope3D.intersectionWith(pointOutside, lineDirection, null, actualSecondInstersection));
+         actualFirstInstersection.setToZero();
+         actualSecondInstersection.setToZero();
+         assertEquals(0, convexPolytope3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, actualSecondInstersection));
+
+      }  
+      
+      
+      //2 intersections with point inside
+      for (int i = 0; i < ITERATIONS; i++){
+
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);  
+         
+         //Generate a point at a random place on a random face, 
+         int index = random.nextInt(convexPolytope3D.getNumberOfFaces());
+         
+         Face3D face = convexPolytope3D.getFaces().get(index);
+         
+         List<Vertex3D[]> triangles = new ArrayList<>();
+         
+         
+         if (convexPolytope3D.getNumberOfVertices() == 3) {
+               Vertex3D[] triangle = {face.getVertex(0), face.getVertex(1), face.getVertex(2)};
+               triangles.add(triangle);
+               }
+         else {
+         for (int j = 0; j < face.getVertices().size()-2; j++) {
+           
+            Vertex3D[] triangle = {face.getVertex(j), face.getVertex(j+1), face.getVertex(j+2)};
+            triangles.add(triangle);
+            }
+         }
+            
+         int randomTriangleIndex = random.nextInt(face.getVertices().size()-2);
+         
+         Vertex3D A = face.getVertex(randomTriangleIndex);
+         Vertex3D B = face.getVertex(randomTriangleIndex + 1);
+         Vertex3D C = face.getVertex(randomTriangleIndex + 2);
+         
+         double alpha = random.nextDouble();
+         double beta = random.nextDouble() * (1 - alpha);
+         double gamma = 1 - alpha - beta;
+         
+         double x = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+         double y = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+         double z = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();    
+         
+         // Interpolation between the point on the face and a random vertex to get a point inside
+         
+         int indexVertex = random.nextInt(convexPolytope3D.getNumberOfVertices());
+         Vertex3D randomVertex = convexPolytope3D.getVertex(indexVertex);
+        
+         double t = random.nextDouble(0, 1);
+         
+         double x1 = (1-t) * randomVertex.getX() + t * x;
+         double y1 = (1-t) * randomVertex.getY() + t * y;
+         double z1 = (1-t) * randomVertex.getZ() + t * z;
+         
+         Point3D pointInside = new Point3D(x1,y1,z1);
+         
+         //Generate a random vector 
+         
+         Vector3D lineDirection = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+ 
+         Point3D actualFirstInstersection = new Point3D();
+         Point3D actualSecondInstersection = new Point3D();
+         
+         
+
+         assertEquals(2, convexPolytope3D.intersectionWith(pointInside, lineDirection, null, null));
+         assertEquals(2, convexPolytope3D.intersectionWith(pointInside, lineDirection, actualFirstInstersection, null));
+         assertEquals(2, convexPolytope3D.intersectionWith(pointInside, lineDirection, null, actualSecondInstersection));
+         actualFirstInstersection.setToZero();
+         actualSecondInstersection.setToZero();
+         assertEquals(2, convexPolytope3D.intersectionWith(pointInside, lineDirection, actualFirstInstersection, actualSecondInstersection));
+
+      } 
+    
+   }
+   
+    
 
    @Test
    void testFaceNormalAndVertexOrdering() throws Exception
