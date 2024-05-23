@@ -1,14 +1,17 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import java.util.ArrayDeque;
-
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
+import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
@@ -204,8 +207,11 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       if (numberOfIntersections == 1)
          return numberOfIntersections;
 
-      if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(firstIntersectionToPack, secondIntersectionToPack, 1.0e-7))
+      if (EuclidCoreTools.epsilonEquals(firstIntersectionToPack, secondIntersectionToPack, 1.0e-7))
+      {  //System.out.println("The two solutions are equals.");
+         secondIntersectionToPack.setToNaN();
          return 1;
+      }
 
       double firstDot = lineDirection.dot(firstIntersectionToPack);
       double secondDot = lineDirection.dot(secondIntersectionToPack);
@@ -214,14 +220,63 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       {
 
          // Swap intersections
-         Point3DBasics temp = firstIntersectionToPack;
-         firstIntersectionToPack = secondIntersectionToPack;
-         secondIntersectionToPack = temp;
+         double tempX = firstIntersectionToPack.getX();
+         double tempY = firstIntersectionToPack.getY();
+         double tempZ = firstIntersectionToPack.getZ();
+         firstIntersectionToPack.set(secondIntersectionToPack);
+         secondIntersectionToPack.set(tempX, tempY, tempZ);
+         
       }
 
       return 2;
 
    }
+
+   
+   /** {@inheritDoc} */
+
+
+   
+   default Point3DBasics randomPointOnRandomFace(Random random, Face3DReadOnly face, ConvexPolytope3DReadOnly convexPolytope, List<Vertex3DReadOnly[]> triangles, Point3DBasics pointOnFace)
+   {
+    
+      
+   
+      if (getNumberOfVertices() == 3)
+      {
+         Vertex3DReadOnly[] triangle = {face.getVertex(0), face.getVertex(1), face.getVertex(2)};
+         triangles.add(triangle);
+      }
+      else
+      {
+         for (int j = 0; j < face.getVertices().size() - 2; j++)
+         {
+   
+            Vertex3DReadOnly[] triangle = {face.getVertex(j), face.getVertex(j + 1), face.getVertex(j + 2)};
+            triangles.add(triangle);
+         }
+      }
+   
+      int randomTriangleIndex = random.nextInt(face.getVertices().size() - 2);
+   
+      Vertex3DReadOnly A = face.getVertex(randomTriangleIndex);
+      Vertex3DReadOnly B = face.getVertex(randomTriangleIndex + 1);
+      Vertex3DReadOnly C = face.getVertex(randomTriangleIndex + 2);
+   
+      double alpha = random.nextDouble();
+      double beta = random.nextDouble() * (1 - alpha);
+      double gamma = 1 - alpha - beta;
+   
+      double x = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+      double y = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+      double z = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();
+      
+      pointOnFace.set(x,y,z);
+      
+      return pointOnFace;
+      
+   }
+   
 
    @Override
    default boolean containsNaN()

@@ -116,29 +116,33 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       double pointX = getX();
       double pointY = getY();
       double pointZ = getZ();
-      double lineStartX = pointOnLine.getX() - getX();
-      double lineStartY = pointOnLine.getY() - getY();
-      double lineStartZ = pointOnLine.getZ() - getZ();
+      
+      double pointOnLineX = pointOnLine.getX();
+      double pointOnLineY = pointOnLine.getY();
+      double pointOnLineZ = pointOnLine.getZ();
+      
       double lineDirectionX = lineDirection.getX();
       double lineDirectionY = lineDirection.getY();
       double lineDirectionZ = lineDirection.getZ();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndPointShape3DImpl(pointX,
-                                                                                               pointY,
-                                                                                               pointZ,
-                                                                                               lineStartX,
-                                                                                               lineStartY,
-                                                                                               lineStartZ,
-                                                                                               lineDirectionX,
-                                                                                               lineDirectionY,
-                                                                                               lineDirectionZ,
-                                                                                               firstIntersectionToPack);
+      
+      double directionX = pointX - pointOnLineX;
+      double directionY = pointY - pointOnLineY;
+      double directionZ = pointZ - pointOnLineZ;
+      
+      double epsilon = EuclidGeometryTools.ONE_TEN_MILLIONTH;
 
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         firstIntersectionToPack.add(pointX, pointY, pointZ);
 
-      return numberOfIntersections;
-   }
-   
+      double determinant = directionX * lineDirectionX + directionY * lineDirectionY + directionZ * lineDirectionZ;
+
+      if (Math.abs(determinant) < epsilon)
+      {
+         if (firstIntersectionToPack != null) {
+               firstIntersectionToPack.set(pointX, pointY, pointZ);
+               return 1;}
+      }
+      return 0;
+     }
+
    /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
