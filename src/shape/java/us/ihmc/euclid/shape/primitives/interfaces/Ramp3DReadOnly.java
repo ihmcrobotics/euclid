@@ -178,6 +178,10 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       double rampWidth = getSizeY();
       double rampHeight = getSizeZ();
       
+      Vector3DReadOnly axisX = getPose().getXAxis();
+      Vector3DReadOnly axisY = getPose().getYAxis();
+      Vector3DReadOnly axisZ = getPose().getZAxis();
+      
       double angle = getRampIncline();
       
       double pointOnLineX = pointOnLine.getX();
@@ -187,23 +191,35 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       double lineDirectionX = lineDirection.getX();
       double lineDirectionY = lineDirection.getY();
       double lineDirectionZ = lineDirection.getZ();
+      
+      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      
+      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
+      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
 
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndRampImpl(rampPositionX,
-                                                                                             rampPositionY,
-                                                                                             rampPositionZ,
-                                                                                             rampLength,
-                                                                                             rampWidth,
-                                                                                             rampHeight,
-                                                                                             angle,
-                                                                                            pointOnLineX,
-                                                                                            pointOnLineY,
-                                                                                            pointOnLineZ,
-                                                                                            lineDirectionX,
-                                                                                            lineDirectionY,
-                                                                                            lineDirectionZ,
-                                                                                            firstIntersectionToPack,
-                                                                                            secondIntersectionToPack);
+                                                                                           rampPositionY,
+                                                                                           rampPositionZ,
+                                                                                           rampLength,
+                                                                                           rampWidth,
+                                                                                           rampHeight,
+                                                                                           axisX,
+                                                                                           axisY,
+                                                                                           axisZ,
+                                                                                           angle,
+                                                                                           pointOnLineX,
+                                                                                           pointOnLineY,
+                                                                                           pointOnLineZ,
+                                                                                           lineDirectionX,
+                                                                                           lineDirectionY,
+                                                                                           lineDirectionZ,
+                                                                                           firstIntersectionToPack,
+                                                                                           secondIntersectionToPack);
+      
+      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
+      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
 
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
