@@ -63,10 +63,10 @@ public class EuclidGeometryTools
     * Redirection to {@link TupleTools#angle(double, double, double, double)}.
     * </p>
     *
-    * @param firstVectorX  x-component of the first vector. Not modified.
+    * @param firstVectorX  x-component of the first vector.Not modified.
+    * @param secondVectorY y-component of the second vector.  Not modified.
     * @param firstVectorY  y-component of the first vector. Not modified.
     * @param secondVectorX x-component of the second vector. Not modified.
-    * @param secondVectorY y-component of the second vector. Not modified.
     * @return the angle in radians from the first vector to the second vector.
     */
    public static double angleFromFirstToSecondVector2D(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY)
@@ -4045,69 +4045,6 @@ public class EuclidGeometryTools
    }
    
    
-   /**
-    * Flexible implementation for computing the intersection between a ray/line/line-segment and
-    * point shape 3D.
-    * <p>
-    * <ul>
-    *
-    *
-    * @param pointX                           the x-coordinate of the point
-    * @param pointY                           the y-coordinate of the point
-    * @param pointZ                           the z-coordinate of the point
-    * 
-    * 
-    * @param lineStartX                       the x-coordinate of a point located on the
-    *                                         line/line-segment/ray.                                        
-    * @param lineStartY                       the y-coordinate of a point located on the
-    *                                         line/line-segment/ray.
-    * @param lineStartZ                       the z-coordinate of a point located on the
-    *                                         line/line-segment/ray.                                                                                
-    
-
-    * @param lineDirectionX                         the x-coordinate of a point located on the
-    *                                         line/line-segment/ray                                        
-    * @param lineDirectionY                         the y-coordinate of a point located on the
-    *                                         line/line-segment/ray
-    * @param lineDirectionZ                         the z-coordinate of a point located on the
-    *                                         line/line-segment/ray    
-    *                                       
-    * @param firstIntersectionToPack               the coordinate of the intersection. Can be {@code null}.
-    *                                         Modified.
-    
-    */
-   public static int intersectionBetweenLine3DAndPointShape3DImpl(double pointX,
-                                                                 double pointY,
-                                                                 double pointZ,
-                                                                 double lineStartX,
-                                                                 double lineStartY,
-                                                                 double lineStartZ,
-                                                                 double lineDirectionX,
-                                                                 double lineDirectionY,
-                                                                 double lineDirectionZ,
-                                                                 Point3DBasics firstIntersectionToPack)
-   {
-      double epsilon = ONE_TEN_MILLIONTH;
-
-      double directionX = pointX - lineStartX;
-      double directionY = pointY - lineStartY;
-      double directionZ = pointZ - lineStartZ;
-
-      double determinant = directionX * lineDirectionX + directionY * lineDirectionY + directionZ * lineDirectionZ;
-
-      if (Math.abs(determinant) < epsilon)
-      {
-
-         if (firstIntersectionToPack != null)
-               firstIntersectionToPack.set(pointX, pointY, pointZ);
-         return 1;
-       } else {
-          
-          return 0;
-       }
-
-
-     }
 
 
 
@@ -4921,6 +4858,9 @@ public class EuclidGeometryTools
                                                            double sizeX,
                                                            double sizeY,
                                                            double sizeZ,
+                                                           Vector3DReadOnly axisX,
+                                                           Vector3DReadOnly axisY,
+                                                           Vector3DReadOnly axisZ,
                                                            double angle,
                                                            double pointOnLineX,
                                                            double pointOnLineY,
@@ -4932,20 +4872,27 @@ public class EuclidGeometryTools
                                                            Point3DBasics secondIntersectionToPack)
    
    
+
    {
       int numberOfIntersections = 0;
       
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setToNaN();
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setToNaN();
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+
+      firstIntersectionToPack.setToNaN();
+      secondIntersectionToPack.setToNaN();
       
       double minX = positionX;
       double maxX = positionX + sizeX;
-      double minY = positionY -(1/2)*sizeY;
-      double maxY = positionY +(1/2)*sizeY;
-      double minZ = positionZ ;
+      double minY = positionY - 0.5*sizeY;
+      double maxY = positionY + 0.5*sizeY;
+      double minZ = positionZ;
       double maxZ = positionZ + sizeZ;
+      
+   
+      
       
       double intersection1X = 0;
       double intersection2X = 0;
@@ -4953,16 +4900,21 @@ public class EuclidGeometryTools
       double intersection2Y = 0;
       double intersection1Z = 0;
       double intersection2Z = 0;
-
+      
       
       // Intersection with the plane (x = maxX)
+
       
-      if (pointOnLineX < maxX && pointOnLineX + lineDirectionX >= maxX) {
+      if (Math.abs(lineDirectionX) > 0) {
+         //System.out.println("Je croise X");
          double t = (maxX - pointOnLineX) / lineDirectionX;
          double y = pointOnLineY + t*lineDirectionY;
          double z = pointOnLineZ + t*lineDirectionZ;
+         
          if (y >= minY && y <= maxY && z >= minZ && z<= maxZ) {
+            //System.out.println("int 1");
             numberOfIntersections++;
+            //System.out.println(numberOfIntersections);
             intersection1X = minX;
             intersection1Y = y;
             intersection1Z = z;    
@@ -4974,109 +4926,126 @@ public class EuclidGeometryTools
       
       
       // Intersection with the plane (y = minY)
+         
+
       
-      if (pointOnLineY > minY && pointOnLineY + lineDirectionY <= minY) {
+      if (Math.abs(lineDirectionY) > 0) {
+         //System.out.println("Je croise Y");
+         //System.out.println(2);
          double t = (minY - pointOnLineY) / lineDirectionY;
          double x = pointOnLineX + t*lineDirectionX;
          double z = pointOnLineZ + t*lineDirectionZ;
+         
          if (x >= minX && x <= maxX && z >= minZ && z<= maxZ) {
+            //System.out.println("int 2");
             numberOfIntersections++;
-            if (numberOfIntersections == 0)
+            if (numberOfIntersections == 0) {
                intersection1X = x;
                intersection1Y = minY;
-               intersection1Z = z; 
+               intersection1Z = z; }
   
-            if (numberOfIntersections == 1)
+            if (numberOfIntersections == 1) {
                intersection2X = x;
                intersection2Y = minY;
-               intersection2Z = z; 
+               intersection2Z = z; }
 
          }
       }      
-      
-      
+
       
       // Intersection with the plane (y = maxY)
-      
-      if (pointOnLineY < maxY && pointOnLineY + lineDirectionY >= maxY) {
+
+     
+      if (Math.abs(lineDirectionY) > 0) {
+         //System.out.println("Je croise Y");
+         //System.out.println(3);
          double t = (maxY - pointOnLineY) / lineDirectionY;
          double x = pointOnLineX + t*lineDirectionX;
          double z = pointOnLineZ + t*lineDirectionZ;
+         
          if (x >= minX && x <= maxX && z >= minZ && z<= maxZ) {
+            //System.out.println("int 3");
             numberOfIntersections++;
-            if (numberOfIntersections == 0)
+            if (numberOfIntersections == 0) {
                intersection1X = x;
                intersection1Y = maxY;
-               intersection1Z = z; 
+               intersection1Z = z; }
   
-            if (numberOfIntersections == 1)
+            if (numberOfIntersections == 1) {
                intersection2X = x;
                intersection2Y = maxY;
-               intersection2Z = z; 
+               intersection2Z = z; }
 
            
          }
       } 
+
       
       
       // Intersection with the plane (z = minZ)
-      
-      if (pointOnLineZ > minZ && pointOnLineZ + lineDirectionZ <= minZ) {
+
+      if (Math.abs(lineDirectionZ) > 0) {
+         //System.out.println("Je croise Z");
+         //System.out.println(4);
          double t = (minZ - pointOnLineZ) / lineDirectionZ;
          double x = pointOnLineX + t*lineDirectionX;
          double y = pointOnLineY + t*lineDirectionY;
+         
          if (x >= minX && x <= maxX && y >= minY && y<= maxY) {
+            //System.out.println("int 4");
             numberOfIntersections++;
-            if (numberOfIntersections == 0)
+            if (numberOfIntersections == 0) {
                intersection1X = x;
                intersection1Y = y;
-               intersection1Z = minZ; 
+               intersection1Z = minZ; }
   
-            if (numberOfIntersections == 1)
+            if (numberOfIntersections == 1) {
                intersection2X = x;
                intersection2Y = y;
-               intersection2Z = minZ; 
+               intersection2Z = minZ; }
 
          }
       }
+
 
       
       // Equation of the inclined plane
       
-      double a = Math.cos(angle);
-      double b = Math.sin(angle);
-      double d = -(a * positionX + b * positionY);
+      double a = +Math.cos(angle);
+      double c = Math.sin(angle);
+      
       
       // Intersection with the inclined plane
       
-      if (Math.abs(a * lineDirectionX + b * lineDirectionY) > ONE_TRILLIONTH) {
-         double t = -(a * pointOnLineX + b * pointOnLineY + d) / (a * lineDirectionX + b * lineDirectionY);
+      if (Math.abs(a * lineDirectionX + c * lineDirectionZ) > 0) {
+         //System.out.println("Je croise le plan incline");
+         //System.out.println(5);
+         double t = -(a * pointOnLineX + c * pointOnLineZ ) / (a * lineDirectionX + c * lineDirectionZ);
          double x = pointOnLineX + t * lineDirectionX;
          double y = pointOnLineY + t * lineDirectionY;
          double z = pointOnLineZ + t * lineDirectionZ;
-         
+
          if (x >= minX && x <= maxX && y >= minY && y<= maxY && z >= minZ && z<= maxZ) {
+            //System.out.println("int 5");
             numberOfIntersections++;
-            if (numberOfIntersections == 0)
+            if (numberOfIntersections == 0) {
                intersection1X = x;
                intersection1Y = y;
-               intersection1Z = z; 
+               intersection1Z = z; }
   
-            if (numberOfIntersections == 1)
+            if (numberOfIntersections == 1) {
                intersection2X = x;
                intersection2Y = y;
-               intersection2Z = z; 
+               intersection2Z = z; }
          }
       }
+      //System.out.println("nombre d'intersections :" + numberOfIntersections);
       
-      if (numberOfIntersections == 0)
+      if (numberOfIntersections == 0) {
          return 0;
+      }
       
-      if (firstIntersectionToPack == null)
-         return 0;
-      
-      if (numberOfIntersections == 2 && secondIntersectionToPack == null)
-         return 1;
+   
       
       //One intersection
       if (numberOfIntersections == 1)
@@ -5087,10 +5056,12 @@ public class EuclidGeometryTools
          if (secondIntersectionToPack != null)
             secondIntersectionToPack.setToNaN();
          
+         return 1;
+         
        }  
          
       // Two intersections
-      if (numberOfIntersections == 2)
+      if (numberOfIntersections >= 2)
       {
          if (firstIntersectionToPack != null)
          {
@@ -5101,9 +5072,10 @@ public class EuclidGeometryTools
          {
             secondIntersectionToPack.set(intersection2X, intersection2Y, intersection2Z);
          }
+         
       }
-
-         return numberOfIntersections;
+      return 2;
+         
       
    }
   
@@ -5884,6 +5856,10 @@ public class EuclidGeometryTools
       double dy = pointOnLineY - spherePositionY;
       double dz = pointOnLineZ - spherePositionZ;
       
+      double directionNorm = EuclidCoreTools.norm(lineDirectionX, lineDirectionY, lineDirectionZ);
+      lineDirectionX /= directionNorm;
+      lineDirectionY /= directionNorm;
+      lineDirectionZ /= directionNorm;
       
 
       double a = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY + lineDirectionZ * lineDirectionZ;
@@ -6251,11 +6227,14 @@ public class EuclidGeometryTools
       if (radiusZ < 0.0)
          throw new IllegalArgumentException("The ellipsoid z-radius has to be positive.");
 
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setToNaN();
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setToNaN();
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
 
+      firstIntersectionToPack.setToNaN();
+      secondIntersectionToPack.setToNaN();
+      
       if (radiusX == 0.0 || radiusY == 0.0 || radiusZ == 0.0)
          return 0;
 
@@ -6264,7 +6243,7 @@ public class EuclidGeometryTools
       double dy = endY - startY;
       double dz = endZ - startZ;
 
-      
+/*      
       if (radiusX == radiusY && radiusY == radiusZ)
          return intersectionBetweenLine3DAndSphere3DImpl(radiusX,
                                                          positionX,
@@ -6278,6 +6257,8 @@ public class EuclidGeometryTools
                                                          dz,
                                                          firstIntersectionToPack,
                                                          secondIntersectionToPack);
+                                                         
+*/
       
       // The equation for an ellipsoid is: x^2/rx^2 + y^2/ry^2 + z^2/rz^2 = 1
       // Plugging in the equation of the point p that belongs to a line: p = (x, y, z) = x0 + v t
@@ -6300,13 +6281,14 @@ public class EuclidGeometryTools
       double C = EuclidCoreTools.normSquared(x, y, z) - 1.0;
 
       double delta = B * B - 4.0 * A * C;
-
+      //System.out.println(delta);
+      //System.out.println(delta < 0.0);
       if (delta < 0.0)
          return 0;
 
       double oneOverTwoA = 1.0 / (2.0 * A);
       delta = EuclidCoreTools.squareRoot(delta);
-
+                                       
       double t1, t2;
 
       if (delta < ONE_TRILLIONTH)

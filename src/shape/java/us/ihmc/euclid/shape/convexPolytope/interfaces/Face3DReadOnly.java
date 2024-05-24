@@ -702,7 +702,11 @@ public interface Face3DReadOnly extends SupportingVertexHolder, EuclidGeometry
    
 
    default boolean intersectionBetweenLine3DAndFace3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics intersectionToPack)
+   
    {
+      if (intersectionToPack != null)
+         intersectionToPack.setToNaN();
+      
       boolean intersectionWithPlane = EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(getVertices().get(0), getNormal(), pointOnLine, lineDirection, intersectionToPack);
       
       if (intersectionWithPlane) {
@@ -710,6 +714,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, EuclidGeometry
          boolean insideTheFace = isPointInside(intersectionToPack, EuclidGeometryTools.ONE_MILLIONTH);
          
          if (insideTheFace)
+            
             return true;
    
       }
