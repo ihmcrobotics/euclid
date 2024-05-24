@@ -23,6 +23,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -2110,6 +2111,43 @@ public class ConvexPolytope3DTest
          Point3D actualSecondInstersection = new Point3D();
          
          System.out.println(convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
+         
+         //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
+         //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, null));
+         //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, actualSecondInstersection));
+         //actualFirstInstersection.setToZero();
+         //actualSecondInstersection.setToZero();
+         //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, actualSecondInstersection));
+
+      }
+      
+      
+    // 1 intersection
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         
+         //Case of a vertex
+         int indexVertex = random.nextInt(convexPolytope3D.getNumberOfVertices());
+         Vertex3D randomVertex = convexPolytope3D.getVertex(indexVertex);
+         
+         //Case of an edge
+         int indexEdge = random.nextInt(convexPolytope3D.getNumberOfHalfEdges());
+         HalfEdge3D edge = convexPolytope3D.getHalfEdge(indexEdge);
+         LineSegment3D line = new LineSegment3D(edge.getFirstEndpoint(),edge.getSecondEndpoint());
+         
+         double randomPercentage = EuclidCoreRandomTools.nextDouble(random, 0, 100);
+         Point3DBasics pointOnLine = line.pointBetweenEndpointsGivenPercentage(randomPercentage);
+         
+         
+         //direction of the line
+
+
+         Point3D actualFirstInstersection = new Point3D();
+         Point3D actualSecondInstersection = new Point3D();
+         
+         
          
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, null));
