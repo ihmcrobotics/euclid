@@ -1,24 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageAlongLineSegment3D;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -27,64 +10,8 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190302_160115;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_111711;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_120656;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_122006;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_142536;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_154201;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_165341;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_172836;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_180109;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190317_143836;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190317_161948;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190321_222438;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_122756;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_124929;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_150735;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_190624;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_193234;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_195449;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_213507;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_224417;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190324_182459;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190324_185429;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190325_205801;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190327_205357;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190327_211921;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190327_213133;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190327_214757;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8SimplifiedV2;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug9Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug9Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug10Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug10Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug11Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug11Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug13Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug13Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrity_20190228_220911;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug12Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug12Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug1Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug1Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2OriginalV2;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2OriginalV3;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3OriginalV2;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug4Original;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug4Simplified;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug5;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6V2;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6V3;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6V4;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug7Original;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.*;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
@@ -102,6 +29,17 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageAlongLineSegment3D;
 
 public class ConvexPolytope3DTest
 {
@@ -437,8 +375,7 @@ public class ConvexPolytope3DTest
                        xPlusSideCenter,
                        xMinusSideCenter,
                        yPlusSideCenter,
-                       yMinusSideCenter)
-               .forEach(o -> o.applyTransform(transform));
+                       yMinusSideCenter).forEach(o -> o.applyTransform(transform));
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
          convexPolytope3D.addVertex(bottomP0);
@@ -1002,9 +939,8 @@ public class ConvexPolytope3DTest
 
             Face3D expectedClosestFace = convexPolytope3D.getFaces()
                                                          .stream()
-                                                         .sorted((f1,
-                                                                  f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
-                                                                                         f2.signedDistanceFromSupportPlane(point)))
+                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
+                                                                                             f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst()
                                                          .get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
@@ -1030,9 +966,8 @@ public class ConvexPolytope3DTest
 
             Face3D expectedClosestFace = convexPolytope3D.getFaces()
                                                          .stream()
-                                                         .sorted((f1,
-                                                                  f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
-                                                                                         f2.signedDistanceFromSupportPlane(point)))
+                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
+                                                                                             f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst()
                                                          .get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
@@ -1957,15 +1892,14 @@ public class ConvexPolytope3DTest
       //2 intersections
       for (int i = 0; i < ITERATIONS; i++)
       {
-
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
-         Point3DBasics pointOnFace = new Point3D();
+         Point3DBasics pointOnFace;
          List<Vertex3DReadOnly[]> triangles = new ArrayList<>();
          int index = random.nextInt(convexPolytope3D.getNumberOfFaces());
 
          Face3D face = convexPolytope3D.getFaces().get(index);
 
-         pointOnFace = convexPolytope3D.randomPointOnRandomFace(random, face, convexPolytope3D, triangles, pointOnFace);
+         pointOnFace = randomPointOnRandomFace(random, face, triangles);
 
          //Generate a random vector 
 
@@ -1982,7 +1916,6 @@ public class ConvexPolytope3DTest
          actualFirstInstersection.setToZero();
          actualSecondInstersection.setToZero();
          assertEquals(2, convexPolytope3D.intersectionWith(pointOnFace, direction, actualFirstInstersection, actualSecondInstersection));
-
       }
 
       //0 intersection
@@ -1996,7 +1929,7 @@ public class ConvexPolytope3DTest
 
          Face3D face = convexPolytope3D.getFaces().get(index);
 
-         pointOnFace = convexPolytope3D.randomPointOnRandomFace(random, face, convexPolytope3D, triangles, pointOnFace);
+         pointOnFace = randomPointOnRandomFace(random, face, triangles);
 
          //Get the point outside of the face 
 
@@ -2007,9 +1940,9 @@ public class ConvexPolytope3DTest
          //Generate an orthogonal vector
 
          Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, false);
-         
+
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0), lineDirection, pointOutside);
-         
+
          Point3D actualFirstInstersection = new Point3D();
          Point3D actualSecondInstersection = new Point3D();
 
@@ -2019,21 +1952,20 @@ public class ConvexPolytope3DTest
          actualFirstInstersection.setToZero();
          actualSecondInstersection.setToZero();
          assertEquals(0, convexPolytope3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, actualSecondInstersection));
-
       }
-      
+
       //2 intersections with point inside
       for (int i = 0; i < ITERATIONS; i++)
       {
          //System.out.println("Iteration " + i);
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
-         Point3DBasics pointOnFace = new Point3D();
+         Point3DBasics pointOnFace;
          List<Vertex3DReadOnly[]> triangles = new ArrayList<>();
          int index = random.nextInt(convexPolytope3D.getNumberOfFaces());
 
          Face3D face = convexPolytope3D.getFaces().get(index);
 
-         pointOnFace = convexPolytope3D.randomPointOnRandomFace(random, face, convexPolytope3D, triangles, pointOnFace);
+         pointOnFace = randomPointOnRandomFace(random, face, triangles);
 
          // Interpolation between the point on the face and a random vertex to get a point inside
 
@@ -2047,8 +1979,6 @@ public class ConvexPolytope3DTest
          double z1 = (1 - t) * randomVertex.getZ() + t * pointOnFace.getZ();
 
          Point3D pointInside = new Point3D(x1, y1, z1);
-         
-         
 
          //Generate a random vector 
 
@@ -2088,9 +2018,8 @@ public class ConvexPolytope3DTest
          //assertEquals(2, convexPolytope3D.intersectionWith(pointInside, lineDirection, actualFirstInstersection, actualSecondInstersection));
 
       }
-      
-      
-    //2 intersections annoying case
+
+      //2 intersections annoying case
       for (int i = 0; i < ITERATIONS; i++)
       {
          //System.out.println("Iteration " + i);
@@ -2101,17 +2030,16 @@ public class ConvexPolytope3DTest
 
          Face3D face = convexPolytope3D.getFaces().get(index);
 
-         pointOnFace = convexPolytope3D.randomPointOnRandomFace(random, face, convexPolytope3D, triangles, pointOnFace);
+         pointOnFace = randomPointOnRandomFace(random, face, triangles);
 
          Vector3D direction = face.getNormal();
          Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, false);
 
-
          Point3D actualFirstInstersection = new Point3D();
          Point3D actualSecondInstersection = new Point3D();
-         
+
          System.out.println(convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
-         
+
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, null));
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, actualSecondInstersection));
@@ -2120,35 +2048,30 @@ public class ConvexPolytope3DTest
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, actualSecondInstersection));
 
       }
-      
-      
-    // 1 intersection
+
+      // 1 intersection
       for (int i = 0; i < ITERATIONS; i++)
       {
-         
+
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
-         
+
          //Case of a vertex
          int indexVertex = random.nextInt(convexPolytope3D.getNumberOfVertices());
          Vertex3D randomVertex = convexPolytope3D.getVertex(indexVertex);
-         
+
          //Case of an edge
          int indexEdge = random.nextInt(convexPolytope3D.getNumberOfHalfEdges());
          HalfEdge3D edge = convexPolytope3D.getHalfEdge(indexEdge);
-         LineSegment3D line = new LineSegment3D(edge.getFirstEndpoint(),edge.getSecondEndpoint());
-         
+         LineSegment3D line = new LineSegment3D(edge.getFirstEndpoint(), edge.getSecondEndpoint());
+
          double randomPercentage = EuclidCoreRandomTools.nextDouble(random, 0, 100);
          Point3DBasics pointOnLine = line.pointBetweenEndpointsGivenPercentage(randomPercentage);
-         
-         
-         //direction of the line
 
+         //direction of the line
 
          Point3D actualFirstInstersection = new Point3D();
          Point3D actualSecondInstersection = new Point3D();
-         
-         
-         
+
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, null));
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, null));
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, null, actualSecondInstersection));
@@ -2157,7 +2080,27 @@ public class ConvexPolytope3DTest
          //assertEquals(1, convexPolytope3D.intersectionWith(pointOnFace, lineDirection, actualFirstInstersection, actualSecondInstersection));
 
       }
+   }
 
+   public static Point3D randomPointOnRandomFace(Random random, Face3DReadOnly face)
+   {
+      return randomPointOnRandomFace(random, face, new ArrayList<>());
+   }
+
+   public static Point3D randomPointOnRandomFace(Random random, Face3DReadOnly face, List<Vertex3DReadOnly[]> triangles)
+   {
+      for (int j = 0; j < face.getVertices().size() - 2; j++)
+      {
+
+         Vertex3DReadOnly[] triangle = {face.getVertex(j), face.getVertex(j + 1), face.getVertex(j + 2)};
+         triangles.add(triangle);
+      }
+
+      int randomTriangleIndex = random.nextInt(face.getVertices().size() - 2);
+      Vertex3DReadOnly a = face.getVertex(randomTriangleIndex);
+      Vertex3DReadOnly b = face.getVertex(randomTriangleIndex + 1);
+      Vertex3DReadOnly c = face.getVertex(randomTriangleIndex + 2);
+      return EuclidGeometryRandomTools.nextPoint3DInTriangle(random, a, b, c);
    }
 
    @Test
