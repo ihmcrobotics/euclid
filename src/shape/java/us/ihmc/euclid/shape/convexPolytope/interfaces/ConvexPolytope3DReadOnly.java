@@ -173,26 +173,36 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       firstIntersectionToPack.setToNaN();
       secondIntersectionToPack.setToNaN();
 
+      boolean intersectionWithFace = false;
+
       int numberOfIntersections = 0;
 
       //For each face, we check the possibility of intersection with the line
       for (int i = 0; i < getNumberOfFaces(); i++)
       {
-         boolean intersectionWithFace;
-
          if (numberOfIntersections == 0)
             intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, firstIntersectionToPack);
-         else if (numberOfIntersections == 1)
+         if (intersectionWithFace)
+            numberOfIntersections++;
+         else
+            firstIntersectionToPack.setToNaN();
+
+         if (numberOfIntersections == 1)
+         {
             intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, secondIntersectionToPack);
+            if (intersectionWithFace)
+            {
+               numberOfIntersections++;
+            }
+            else
+            {
+               firstIntersectionToPack.setToNaN();
+               break;
+            }
+         }
          else
             break;
-         if (intersectionWithFace)
-         {
 
-            numberOfIntersections++;
-            if (numberOfIntersections == 2)
-               break;
-         }
       }
 
       if (numberOfIntersections == 0)
@@ -202,7 +212,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
          return numberOfIntersections;
 
       if (EuclidCoreTools.epsilonEquals(firstIntersectionToPack, secondIntersectionToPack, 1.0e-7))
-      {  //System.out.println("The two solutions are equals.");
+      {
          secondIntersectionToPack.setToNaN();
          return 1;
       }
@@ -492,8 +502,8 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     *                               modified.
     * @param supportingVertexToPack point used to store the supporting vertex coordinates. Modified.
     * @return {@code true} when the method succeeded and packed the supporting vertex coordinates,
-    *       {@code false} when the method failed in which case {@code supportingVertexToPack} remains
-    *       unchanged.
+    *         {@code false} when the method failed in which case {@code supportingVertexToPack} remains
+    *         unchanged.
     */
    default Vertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, Vector3DReadOnly supportDirection)
    {

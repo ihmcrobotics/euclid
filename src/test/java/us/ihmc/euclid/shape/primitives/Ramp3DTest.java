@@ -944,7 +944,7 @@ public class Ramp3DTest
             }
          }
       }
-
+      
       for (int i = 0; i < ITERATIONS; i++)
       { // 1 intersection through edge
 
@@ -983,113 +983,8 @@ public class Ramp3DTest
          }
       }
 
-      //      for (int i = 0; i < ITERATIONS; i++)
-      //      { // No intersection
-      //
-      //         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
-      //
-      //         Vector3D direction = new Vector3D(Axis3D.X);
-      //         //Vector3DReadOnly orthogonal = Axis3D.Y;
-      //
-      //         //double rotationAngle = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampIncline());
-      //         //AxisAngle rotation = new AxisAngle(orthogonal, rotationAngle);
-      //         //rotation.transform(direction);
-      //
-      //         //System.out.println(ramp3D.getRampIncline());
-      //         //System.out.println(direction);
-      //
-      //         // Point outside on the line
-      //
-      //         Point3D pointOutside = new Point3D();
-      //         //pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0, 10.0) * rampWidth, direction, rampPosition);
-      //         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 1.1, 10.0) * ramp3D.getSizeX(), direction, ramp3D.getPosition());
-      //
-      //         Vector3D lineDirection = new Vector3D(Axis3D.Z);
-      //         double rotationAngle2 = EuclidCoreRandomTools.nextDouble(random, 0.0, 4.6);
-      //         AxisAngle rotation2 = new AxisAngle(direction, rotationAngle2);
-      //         rotation2.transform(lineDirection);
-      //
-      //         Vector3D Z = new Vector3D(Axis3D.Z);
-      //
-      //         Point3D actualFirstInstersection = new Point3D();
-      //         Point3D actualSecondInstersection = new Point3D();
-      //
-      //         //System.out.println(ramp3D.isPointInside(pointOutside));
-      //         //System.out.println("Nb d'intersections :" + ramp3D.intersectionWith(pointOutside, Z, null, null));
-      //         // The line (pointOutside, lineDirection) is guaranteed to be outside by construction
-      //         assertEquals(0, ramp3D.intersectionWith(pointOutside, lineDirection, null, null));
-      //
-      //         assertEquals(0, ramp3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, null));
-      //         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstInstersection);
-      //
-      //         assertEquals(0, ramp3D.intersectionWith(pointOutside, lineDirection, null, actualSecondInstersection));
-      //         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondInstersection);
-      //         actualFirstInstersection.setToZero();
-      //         actualSecondInstersection.setToZero();
-      //         assertEquals(0, ramp3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, actualSecondInstersection));
-      //         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstInstersection);
-      //         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondInstersection);
-      //      }
-      //
-      //      for (int i = 0; i < ITERATIONS; i++)
-      //      { // intersecting
-      //         System.out.println("Essai " + i);
-      //         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
-      //
-      //         // Vector3D direction = new Vector3D(ramp3D.getPose().getXAxis());
-      //
-      //         //Vector3DReadOnly orthogonal = ramp3D.getPose().getYAxis() ;
-      //
-      //         //ouble rotationAngle = EuclidCoreRandomTools.nextDouble(random,-ramp3D.getRampIncline()+0.0001,-0.0001);
-      //         //AxisAngle rotation = new AxisAngle(orthogonal, rotationAngle);
-      //         //rotation.transform(direction);
-      //
-      //         // Point inside
-      //         ramp3D.transformToWorld(ramp3D.getPose());
-      //
-      //         Point3D pointOnLine = new Point3D();
-      //
-      //         pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.01, 0.99) * ramp3D.getSizeX(), Axis3D.X, ramp3D.getPosition());
-      //         System.out.println(ramp3D.isPointInside(pointOnLine));
-      //
-      //         //Point3D  pointAuBout = new Point3D();
-      //         //System.out.println(ramp3D.isPointInside(pointInside));
-      //         //pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random,0.1,0.9) * (ramp3D.getSizeZ()*(pointOnLine.getX()/(ramp3D.getPosition().getX()+ramp3D.getSizeX()))), ramp3D.getPose().getZAxis() , pointOnLine);
-      //         //System.out.println(ramp3D.isPointInside(pointInside));
-      //         //pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random,-0.4,0.4) * ramp3D.getSizeY(), ramp3D.getPose().getYAxis() , pointOnLine);
-      //         //System.out.println(ramp3D.isPointInside(pointInside));
-      //         //
-      //         Vector3D lineDirection = EuclidCoreRandomTools.nextVector3D(random);
-      //
-      //         Point3DBasics pointOnLineInLocal = ramp3D.getIntermediateVariableSupplier().requestPoint3D();
-      //         Vector3DBasics lineDirectionInLocal = ramp3D.getIntermediateVariableSupplier().requestVector3D();
-      //
-      //         ramp3D.getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
-      //         ramp3D.getPose().inverseTransform(lineDirection, lineDirectionInLocal);
-      //
-      //         ramp3D.getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
-      //         ramp3D.getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
-      //
-      //         Point3D actualFirstInstersection = new Point3D();
-      //         Point3D actualSecondInstersection = new Point3D();
-      //
-      //         // The line (pointInside, lineDirection) is guaranteed to be inside by construction
-      //
-      //         //System.out.println(ramp3D.intersectionWith(pointInside, lineDirection, null, null));
-      //         //System.out.println(ramp3D.isPointInside(rampPosition));
-      //         //assertTrue(ramp3D.intersectionWith(ramp3D.getPosition(), lineDirection, null, null)>0);
-      //
-      //         //assertTrue(ramp3D.intersectionWith(ramp3D.getPosition(), lineDirection, actualFirstInstersection, null)>0);
-      //         //EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstInstersection);
-      //
-      //         //assertTrue(ramp3D.intersectionWith(ramp3D.getPosition(), lineDirection, null, actualSecondInstersection)>0);
-      //         //EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondInstersection);
-      //         //actualFirstInstersection.setToZero();
-      //         //actualSecondInstersection.setToZero();
-      //         //assertTrue(ramp3D.intersectionWith(ramp3D.getPosition(), lineDirection, actualFirstInstersection, actualSecondInstersection)>0);
-      //         //EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstInstersection);
-      //         //EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondInstersection);
-      //      }
+
+
    }
 
    @Test
