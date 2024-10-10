@@ -1,7 +1,7 @@
 # ![Euclid](logo/Euclid.png)
 
 ![euclid](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg?style=plastic)
-![buildstatus](https://github.com/ihmcrobotics/euclid/actions/workflows/gradle.yml/badge.svg)
+![buildstatus](https://github.com/ihmcrobotics/euclid/actions/workflows/gradle-test.yml/badge.svg)
 
 ## Minutiae
 
