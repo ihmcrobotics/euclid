@@ -2870,6 +2870,7 @@ public class EuclidGeometryPolygonTools
     * @return the wrapped index.
     * @deprecated Use {@link EuclidCoreTools#wrap(int,int)} instead
     */
+   @Deprecated
    public static int wrap(int index, int listSize)
    {
       return EuclidCoreTools.wrap(index, listSize);
@@ -2891,6 +2892,7 @@ public class EuclidGeometryPolygonTools
     * @return the wrapped incremented index.
     * @deprecated Use {@link EuclidCoreTools#next(int,int)} instead
     */
+   @Deprecated
    public static int next(int index, int listSize)
    {
       return EuclidCoreTools.next(index, listSize);
@@ -2912,6 +2914,7 @@ public class EuclidGeometryPolygonTools
     * @return the wrapped decremented index.
     * @deprecated Use {@link EuclidCoreTools#previous(int,int)} instead
     */
+   @Deprecated
    public static int previous(int index, int listSize)
    {
       return EuclidCoreTools.previous(index, listSize);

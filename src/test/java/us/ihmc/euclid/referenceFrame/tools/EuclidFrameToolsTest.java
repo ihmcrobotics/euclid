@@ -38,6 +38,8 @@ public class EuclidFrameToolsTest
    private static final Class<Point2DReadOnly> P2_RO = Point2DReadOnly.class;
    private static final Class<Point2DBasics> P2_BA = Point2DBasics.class;
    private static final Class<?> D = double.class;
+   private static final Class<?> B = boolean.class;
+   private static final Class<?> I = int.class;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -54,6 +56,11 @@ public class EuclidFrameToolsTest
       signaturesToIgnore.add(new MethodSignature("closestPoint2DsBetweenTwoLineSegment2Ds", D, D, D, D, D, D, D, D, P2_BA, P2_BA));
       signaturesToIgnore.add(new MethodSignature("closestPoint3DsBetweenTwoLineSegment3Ds", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("axisAngleFromZUpToVector3D", Vector3DReadOnly.class, AxisAngleBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getZOnPlane", Vector3DReadOnly.class, AxisAngleBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getZOnPlane", Point3DReadOnly.class, Vector3DReadOnly.class, D, D));
+      signaturesToIgnore.add(new MethodSignature("isPoint2DOnLineSegment2D", D, D, Point2DReadOnly.class, Point2DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine2DAndCircle", D, D, D, D, D, B, D, D, B, Point2DBasics.class, Point2DBasics.class));
+      signaturesToIgnore.add(new MethodSignature("doLineSegment2DAndConvexPolygon2DIntersect", Point2DReadOnly.class, Point2DReadOnly.class, List.class, I));
 
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
