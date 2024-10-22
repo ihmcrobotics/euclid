@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -66,6 +68,80 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       normalAtClosestPointToPack.normalize();
       return false;
    }
+   
+   
+   
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this point.
+    * <p>
+    * In the case the line and this point do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    *
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 point. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *                                 {@code null}. Modified.
+    * @return the number of intersections between the line and this point. It is either equal to 0, 1.
+    */
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack,Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack,secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this point.
+    * <p>
+    * In the case the line and this point do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param pointOnLine              a point expressed in world located on the infinitely long line.
+    *                                 Not modified.
+    * @param lineDirection            the direction expressed in world of the line. Not modified.s
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
+    * @return the number of intersections between the line and this point. It is either equal to 0, 1.
+    */
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+
+      double pointX = getX();
+      double pointY = getY();
+      double pointZ = getZ();
+      
+      double pointOnLineX = pointOnLine.getX();
+      double pointOnLineY = pointOnLine.getY();
+      double pointOnLineZ = pointOnLine.getZ();
+      
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+      double lineDirectionZ = lineDirection.getZ();
+      
+      double directionX = pointX - pointOnLineX;
+      double directionY = pointY - pointOnLineY;
+      double directionZ = pointZ - pointOnLineZ;
+      
+      double epsilon = EuclidGeometryTools.ONE_TEN_MILLIONTH;
+
+
+      double determinant = directionX * lineDirectionX + directionY * lineDirectionY + directionZ * lineDirectionZ;
+
+      if (Math.abs(determinant) < epsilon)
+      {
+         if (firstIntersectionToPack != null) {
+               firstIntersectionToPack.set(pointX, pointY, pointZ);
+               return 1;}
+      }
+      return 0;
+     }
 
    /** {@inheritDoc} */
    @Override

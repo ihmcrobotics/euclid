@@ -4,7 +4,9 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Provides a {@link ConvexPolytope3DReadOnly} view backed by a {@link Box3DReadOnly}.
@@ -125,6 +127,7 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
    {
       return getOwner().copy();
    }
+   
 
    /** {@inheritDoc} */
    @Override

@@ -127,6 +127,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
       return distance <= 0.0;
    }
+   
+   
+   
 
    /** {@inheritDoc} */
    @Override

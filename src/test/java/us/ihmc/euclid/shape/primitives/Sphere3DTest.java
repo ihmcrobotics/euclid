@@ -16,6 +16,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -24,7 +25,9 @@ import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Sphere3DTest
 {
@@ -240,6 +243,81 @@ public class Sphere3DTest
    }
 
    @Test
+   void testIntersectionWith() throws Exception
+   {
+      Random random = new Random(3509819);
+
+      // No intersection
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+
+         // Generate a random sphere and a random vector
+
+         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
+         Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         // Generate a point outside on the line and an orthogonal vector
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0, 10.0) * sphere3D.getRadius(), direction, sphere3D.getPosition());
+
+         Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, false);
+
+         Point3D actualFirstInstersection = new Point3D();
+         Point3D actualSecondInstersection = new Point3D();
+
+         // The line (pointOutside, lineDirection) is guaranteed to be outside by construction
+
+         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, null, null));
+         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, null));
+         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, null, actualSecondInstersection));
+         actualFirstInstersection.setToZero();
+         actualSecondInstersection.setToZero();
+         assertEquals(0, sphere3D.intersectionWith(pointOutside, lineDirection, actualFirstInstersection, actualSecondInstersection));
+      }
+
+      // Ellipsoid tests applied to the sphere
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Intersecting, generate the line from the two intersections
+         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
+
+         Point3D expectedIntersection1 = new Point3D(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
+         expectedIntersection1.scale(sphere3D.getRadius(), sphere3D.getRadius(), sphere3D.getRadius());
+         Point3D expectedIntersection2 = new Point3D(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
+         expectedIntersection2.scale(sphere3D.getRadius(), sphere3D.getRadius(), sphere3D.getRadius());
+
+         Line3D line = new Line3D(expectedIntersection1, expectedIntersection2);
+         line.getPoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random), line.getDirection(), line.getPoint());
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+         assertEquals(2, sphere3D.intersectionWith(line, actualIntersection1, actualIntersection2));
+         EuclidCoreTestTools.assertEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertEquals(expectedIntersection2, actualIntersection2, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Not intersecting, generate the line using a point and normal on the sphere                                                          
+         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
+
+         Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D pointOnSphere = new Point3D(direction);
+         Vector3D normal = new Vector3D(direction);
+
+         Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true);
+         Point3D pointOnLine = new Point3D();
+         pointOnLine.scaleAdd(random.nextDouble(), normal, pointOnSphere);
+         pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), lineDirection, pointOnLine);
+         Line3D line = new Line3D(pointOnLine, lineDirection);
+
+         assertEquals(0, sphere3D.intersectionWith(line, null, null));
+      }
+
+   }
+
+   @Test
    void testApplyTransform()
    {
       Random random = new Random(346);
@@ -394,48 +472,33 @@ public class Sphere3DTest
       }
    }
 
-   @Test
-   void testIntersectionWith() throws Exception
-   {
-      Random random = new Random(10688467);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Intersecting, generate the line from the two intersections
-         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
-
-         Point3D expectedIntersection1 = new Point3D();
-         Point3D expectedIntersection2 = new Point3D();
-         expectedIntersection1.add(sphere3D.getPosition(), EuclidCoreRandomTools.nextVector3DWithFixedLength(random, sphere3D.getRadius()));
-         expectedIntersection2.add(sphere3D.getPosition(), EuclidCoreRandomTools.nextVector3DWithFixedLength(random, sphere3D.getRadius()));
-
-         Line3D line = new Line3D(expectedIntersection1, expectedIntersection2);
-         line.getPoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random), line.getDirection(), line.getPoint());
-         Point3D actualIntersection1 = new Point3D();
-         Point3D actualIntersection2 = new Point3D();
-         assertEquals(2, sphere3D.intersectionWith(line, actualIntersection1, actualIntersection2));
-         EuclidCoreTestTools.assertEquals(expectedIntersection1, actualIntersection1, EPSILON);
-         EuclidCoreTestTools.assertEquals(expectedIntersection2, actualIntersection2, EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Not intersecting, generate the line using a point and normal on the sphere
-         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
-
-         Vector3D normal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Point3D pointOnSphere = new Point3D();
-         pointOnSphere.setAndScale(sphere3D.getRadius(), normal);
-         pointOnSphere.add(sphere3D.getPosition());
-
-         Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true);
-         Point3D pointOnLine = new Point3D();
-         pointOnLine.scaleAdd(random.nextDouble(), normal, pointOnSphere);
-         pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), lineDirection, pointOnLine);
-         Line3D line = new Line3D(pointOnLine, lineDirection);
-
-         assertEquals(0, sphere3D.intersectionWith(line, null, null));
-      }
-   }
-
+   /*
+    * @Test void testIntersectionWith() throws Exception { Random random = new Random(10688467); for
+    * (int i = 0; i < ITERATIONS; i++) { // Intersecting, generate the line from the two intersections
+    * Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random); Point3D expectedIntersection1 =
+    * new Point3D(); Point3D expectedIntersection2 = new Point3D();
+    * expectedIntersection1.add(sphere3D.getPosition(),
+    * EuclidCoreRandomTools.nextVector3DWithFixedLength(random, sphere3D.getRadius()));
+    * expectedIntersection2.add(sphere3D.getPosition(),
+    * EuclidCoreRandomTools.nextVector3DWithFixedLength(random, sphere3D.getRadius())); Line3D line =
+    * new Line3D(expectedIntersection1, expectedIntersection2);
+    * line.getPoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random), line.getDirection(),
+    * line.getPoint()); Point3D actualIntersection1 = new Point3D(); Point3D actualIntersection2 = new
+    * Point3D(); assertEquals(2, sphere3D.intersectionWith(line, actualIntersection1,
+    * actualIntersection2)); EuclidCoreTestTools.assertEquals(expectedIntersection1,
+    * actualIntersection1, EPSILON); EuclidCoreTestTools.assertEquals(expectedIntersection2,
+    * actualIntersection2, EPSILON); } for (int i = 0; i < ITERATIONS; i++) { // Not intersecting,
+    * generate the line using a point and normal on the sphere Sphere3D sphere3D =
+    * EuclidShapeRandomTools.nextSphere3D(random); Vector3D normal =
+    * EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0); Point3D pointOnSphere = new
+    * Point3D(); pointOnSphere.setAndScale(sphere3D.getRadius(), normal);
+    * pointOnSphere.add(sphere3D.getPosition()); Vector3D lineDirection =
+    * EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true); Point3D pointOnLine = new
+    * Point3D(); pointOnLine.scaleAdd(random.nextDouble(), normal, pointOnSphere);
+    * pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), lineDirection, pointOnLine);
+    * Line3D line = new Line3D(pointOnLine, lineDirection); assertEquals(0,
+    * sphere3D.intersectionWith(line, null, null)); } }
+    */
    @Test
    public void testGeometricallyEquals()
    {

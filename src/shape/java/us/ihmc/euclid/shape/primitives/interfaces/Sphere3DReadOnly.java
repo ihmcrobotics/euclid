@@ -8,6 +8,8 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -71,7 +73,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                                                getPosition(),
                                                                getRadius(),
                                                                closestPointOnSurfaceToPack,
-                                                               normalAtClosestPointToPack) <= 0.0;
+                                                               normalAtClosestPointToPack)
+             <= 0.0;
    }
 
    /** {@inheritDoc} */
@@ -132,15 +135,12 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine              a point expressed in world located on the infinitely long line.
-    *                                 Not modified.
-    * @param lineDirection            the direction expressed in world of the line. Not modified.s
-    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
-    *                                 {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *                                 {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
-    *         or 2.
+    * @param pointOnLine             a point expressed in world located on the infinitely long line.
+    *                                Not modified.
+    * @param lineDirection           the direction expressed in world of the line. Not modified.s
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *                                {@code null}. Modified.
+    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1.
     */
    default int intersectionWith(Point3DReadOnly pointOnLine,
                                 Vector3DReadOnly lineDirection,
@@ -148,29 +148,25 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                 Point3DBasics secondIntersectionToPack)
    {
 
-      double pointOnLineX = pointOnLine.getX() - getPosition().getX();
-      double pointOnLineY = pointOnLine.getY() - getPosition().getY();
-      double pointOnLineZ = pointOnLine.getZ() - getPosition().getZ();
-      double lineDirectionX = lineDirection.getX();
-      double lineDirectionY = lineDirection.getY();
-      double lineDirectionZ = lineDirection.getZ();
+      // Sphere is a specific case of the ellipsoid
+
+      double spherePositionX = getPosition().getX();
+      double spherePositionY = getPosition().getY();
+      double spherePositionZ = getPosition().getZ();
+
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(),
                                                                                               getRadius(),
                                                                                               getRadius(),
-                                                                                              pointOnLineX,
-                                                                                              pointOnLineY,
-                                                                                              pointOnLineZ,
-                                                                                              lineDirectionX,
-                                                                                              lineDirectionY,
-                                                                                              lineDirectionZ,
+                                                                                              spherePositionX,
+                                                                                              spherePositionY,
+                                                                                              spherePositionZ,
+                                                                                              pointOnLine,
+                                                                                              lineDirection,
                                                                                               firstIntersectionToPack,
                                                                                               secondIntersectionToPack);
 
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         firstIntersectionToPack.add(getPosition());
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         secondIntersectionToPack.add(getPosition());
       return numberOfIntersections;
+
    }
 
    /** {@inheritDoc} */

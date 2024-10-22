@@ -1,17 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-
-import java.util.Arrays;
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -20,7 +9,10 @@ import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTest;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -34,6 +26,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 public class Ramp3DTest
 {
@@ -857,6 +856,135 @@ public class Ramp3DTest
          EuclidCoreTestTools.assertEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertEquals(expectedNormal, actualNormal, EPSILON);
       }
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   @Test
+   void testIntersectionWithRamp() throws Exception
+   {
+      Random random = new Random(356000);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 2 intersections - general case
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         RampPolytope3DView ramp3DConvexPolytope = ramp3D.asConvexPolytope();
+
+         Face3DReadOnly faceA = ramp3DConvexPolytope.getFace(random.nextInt(5));
+         Face3DReadOnly faceB = ramp3DConvexPolytope.getFace(random.nextInt(5));
+         while (faceB == faceA)
+            faceB = ramp3DConvexPolytope.getFace(random.nextInt(5));
+
+         Point3D expectedFirstIntersection = ConvexPolytope3DTest.randomPointOnRandomFace(random, faceA);
+         Point3D expectedSecondIntersection = ConvexPolytope3DTest.randomPointOnRandomFace(random, faceB);
+
+         Point3D pointOnLine = new Point3D();
+         Vector3D lineDirection = new Vector3D();
+
+         pointOnLine.interpolate(expectedFirstIntersection, expectedSecondIntersection, EuclidCoreRandomTools.nextDouble(random, 10.0));
+         lineDirection.sub(expectedSecondIntersection, expectedFirstIntersection);
+         lineDirection.normalize();
+         lineDirection.scale(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0));
+
+         double epsilon = 1.0e-10;
+         Point3D actualFirstIntersection = new Point3D();
+         Point3D actualSecondIntersection = new Point3D();
+         assertEquals(2, ramp3D.intersectionWith(pointOnLine, lineDirection, null, null));
+         assertEquals(2, ramp3D.intersectionWith(pointOnLine, lineDirection, actualFirstIntersection, null));
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedFirstIntersection, actualFirstIntersection, epsilon);
+         actualFirstIntersection.setToZero();
+         assertEquals(2, ramp3D.intersectionWith(pointOnLine, lineDirection, null, actualSecondIntersection));
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedSecondIntersection, actualSecondIntersection, epsilon);
+         actualSecondIntersection.setToZero();
+         assertEquals(2, ramp3D.intersectionWith(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection), "Iteration: " + i);
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedFirstIntersection, actualFirstIntersection, epsilon);
+         EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedSecondIntersection, actualSecondIntersection, epsilon);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 0 intersections
+
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         RampPolytope3DView ramp3DConvexPolytope = ramp3D.asConvexPolytope();
+
+         for (Face3DReadOnly face : ramp3DConvexPolytope.getFaces())
+         {
+            for (int neighborIndex = 0; neighborIndex < face.getNumberOfEdges(); neighborIndex++)
+            {
+               Face3DReadOnly neighbor = face.getNeighbor(neighborIndex);
+
+               Vector3D safeNormal = new Vector3D();
+               safeNormal.interpolate(face.getNormal(), neighbor.getNormal(), random.nextDouble());
+               safeNormal.normalize();
+
+               Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, safeNormal, true);
+               Point3D pointOnLine = new Point3D();
+               pointOnLine.interpolate(face.getEdge(neighborIndex).getOrigin(), face.getEdge(neighborIndex).getDestination(), random.nextDouble());
+               pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, pointOnLine);
+               pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.00001, 10.0), safeNormal, pointOnLine);
+
+               Vector3D orthogonal = new Vector3D();
+               orthogonal.cross(safeNormal, lineDirection);
+               pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOnLine);
+
+               Point3D actualFirstIntersection = new Point3D();
+               Point3D actualSecondIntersection = new Point3D();
+               assertEquals(0, ramp3D.intersectionWith(pointOnLine, lineDirection, null, null));
+               assertEquals(0, ramp3D.intersectionWith(pointOnLine, lineDirection, actualFirstIntersection, null));
+               EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+               assertEquals(0, ramp3D.intersectionWith(pointOnLine, lineDirection, null, actualSecondIntersection));
+               EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+               actualFirstIntersection.setToZero();
+               actualSecondIntersection.setToZero();
+               assertEquals(0, ramp3D.intersectionWith(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection));
+               EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+               EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+            }
+         }
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 1 intersection through edge
+
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         RampPolytope3DView ramp3DConvexPolytope = ramp3D.asConvexPolytope();
+
+         List<? extends Face3DReadOnly> faces = ramp3DConvexPolytope.getFaces();
+         for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
+         {
+            Face3DReadOnly face = faces.get(faceIndex);
+            for (int neighborIndex = 0; neighborIndex < face.getNumberOfEdges(); neighborIndex++)
+            {
+               Face3DReadOnly neighbor = face.getNeighbor(neighborIndex);
+
+               Vector3D safeNormal = new Vector3D();
+               safeNormal.interpolate(face.getNormal(), neighbor.getNormal(), random.nextDouble());
+               safeNormal.normalize();
+
+               Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, safeNormal, true);
+               Point3D expectedFirstIntersection = new Point3D();
+               expectedFirstIntersection.interpolate(face.getEdge(neighborIndex).getOrigin(),
+                                                     face.getEdge(neighborIndex).getDestination(),
+                                                     random.nextDouble());
+               Point3D pointOnLine = new Point3D(expectedFirstIntersection);
+               pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, pointOnLine);
+
+               Point3D actualFirstIntersection = new Point3D();
+               Point3D actualSecondIntersection = new Point3D();
+               assertEquals(1,
+                            ramp3D.intersectionWith(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection),
+                            "Iteration: " + i + ", Face: " + faceIndex + ", Neighbor: " + neighborIndex);
+               EuclidCoreTestTools.assertEquals("Iteration: " + i, expectedFirstIntersection, actualFirstIntersection, EPSILON);
+               EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+            }
+         }
+      }
+
+
+
    }
 
    @Test

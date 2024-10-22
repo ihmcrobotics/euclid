@@ -2,6 +2,8 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -120,6 +122,87 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       getIntermediateVariableSupplier().releasePoint3D(pointToCheckInLocal);
 
       return distance <= 0.0;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this ramp.
+    * <p>
+    * In the case the line and this ramp do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    *
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 ramp. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *                                 {@code null}. Modified.
+    * @return the number of intersections between the line and this ramp. It is either equal to 0, 1, or
+    *       2.
+    */
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this ramp.
+    * <p>
+    * In the case the line and this ramp do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param pointOnLine              a point expressed in world located on the infinitely long line.
+    *                                 Not modified.
+    * @param lineDirection            the direction expressed in world of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *                                 {@code null}. Modified.
+    * @return the number of intersections between the line and this ramp. It is either equal to 0, 1, or
+    *       2.
+    */
+   @Override
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+
+      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
+      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
+
+      double pointOnLineX = pointOnLineInLocal.getX();
+      double pointOnLineY = pointOnLineInLocal.getY();
+      double pointOnLineZ = pointOnLineInLocal.getZ();
+
+      double lineDirectionX = lineDirectionInLocal.getX();
+      double lineDirectionY = lineDirectionInLocal.getY();
+      double lineDirectionZ = lineDirectionInLocal.getZ();
+
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndRampImpl(getSizeX(),
+                                                                                           getSizeY(),
+                                                                                           getSizeZ(),
+                                                                                           pointOnLineX,
+                                                                                           pointOnLineY,
+                                                                                           pointOnLineZ,
+                                                                                           lineDirectionX,
+                                                                                           lineDirectionY,
+                                                                                           lineDirectionZ,
+                                                                                           firstIntersectionToPack,
+                                                                                           secondIntersectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
+      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
+
+      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
+         transformToWorld(firstIntersectionToPack);
+      if (secondIntersectionToPack != null && numberOfIntersections == 2)
+         transformToWorld(secondIntersectionToPack);
+      return numberOfIntersections;
    }
 
    /** {@inheritDoc} */
@@ -294,8 +377,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @param verticesToPack the array in which the coordinates are stored. Modified.
     * @throws IllegalArgumentException if the length of the given array is different than 6.
-    * @throws NullPointerException     if any of the 6 first elements of the given array is
-    *                                  {@code null}.
+    * @throws NullPointerException if any of the 6 first elements of the given array is
+    *       {@code null}.
     */
    default void getVertices(Point3DBasics[] verticesToPack)
    {

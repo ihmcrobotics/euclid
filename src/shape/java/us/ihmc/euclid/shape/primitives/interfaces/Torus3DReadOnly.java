@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -89,6 +90,70 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
                                                               getTubeRadius(),
                                                               closestPointOnSurfaceToPack,
                                                               normalAtClosestPointToPack) <= 0.0;
+   }
+   
+   @Override
+   /**
+    * Computes the coordinates of the possible intersections between a line and this torus.
+    * <p>
+    * In the case the line and this torus do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    *
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 box. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *                                 {@code null}. Modified.
+    * @return the number of intersections between the line and this box. It is either equal to 0, 1, or
+    *         2.
+    */
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      double torusCenterX = getPosition().getX();
+      double torusCenterY = getPosition().getY();
+      double torusCenterZ = getPosition().getZ();
+      
+      double radius = getRadius();
+      double tubeRadius = getTubeRadius();
+      
+      double lineStartX = pointOnLine.getX() - getPosition().getX();
+      double lineStartY = pointOnLine.getY() - getPosition().getY();
+      double lineStartZ = pointOnLine.getZ() - getPosition().getZ();
+      
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+      double lineDirectionZ = lineDirection.getZ();
+      
+     
+
+
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndTorusImpl(torusCenterX,
+                                                                                            torusCenterY,
+                                                                                            torusCenterZ,
+                                                                                            radius,
+                                                                                            tubeRadius,
+                                                                                            lineStartX,
+                                                                                            lineStartY,
+                                                                                            lineStartZ,
+                                                                                            lineDirectionX,
+                                                                                            lineDirectionY,
+                                                                                            lineDirectionZ,
+                                                                                            firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
+
+      return numberOfIntersections;
+      
    }
 
    /** {@inheritDoc} */

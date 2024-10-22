@@ -133,6 +133,15 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
                                                                 normalAtClosestPointToPack) <= 0.0;
    }
 
+   @Override
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      throw new UnsupportedOperationException("Intersection line capsule isn't supported.");
+   }
+
    /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)

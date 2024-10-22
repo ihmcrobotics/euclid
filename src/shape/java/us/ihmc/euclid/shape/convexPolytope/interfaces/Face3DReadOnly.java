@@ -12,7 +12,9 @@ import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -687,6 +689,40 @@ public interface Face3DReadOnly extends SupportingVertexHolder, EuclidGeometry
       else
          return closestVisibleEdge.orthogonalProjection(pointToProject, projectionToPack);
    }
+
+   
+   /**
+    * Calculates the intersection between line and face3D
+    *
+    * @param pointOnLine   a random point on the line.
+    * @param lineDirection direction of the line.
+    * 
+    * @return whether the intersection exists or not.
+    */
+   
+
+   default boolean intersectionBetweenLine3DAndFace3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics intersectionToPack)
+   
+   {
+      if (intersectionToPack != null)
+         intersectionToPack.setToNaN();
+      
+      boolean intersectionWithPlane = EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(getVertices().get(0), getNormal(), pointOnLine, lineDirection, intersectionToPack);
+      
+      if (intersectionWithPlane) {
+         
+         boolean insideTheFace = isPointInside(intersectionToPack, EuclidGeometryTools.ONE_MILLIONTH);
+         
+         if (insideTheFace)
+            
+            return true;
+   
+      }
+      
+      return false;
+
+   }
+   
 
    /** {@inheritDoc} */
    @Override

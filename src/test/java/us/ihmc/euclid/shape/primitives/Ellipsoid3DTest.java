@@ -641,7 +641,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Not intersecting, generate the line using a point and normal on the ellipsoid
-         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);   
 
          Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
 

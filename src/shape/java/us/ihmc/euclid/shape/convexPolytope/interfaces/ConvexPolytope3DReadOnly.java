@@ -1,9 +1,5 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
-import java.util.ArrayDeque;
-import java.util.Iterator;
-import java.util.List;
-
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -13,10 +9,16 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Read-only interface for a convex polytope 3D.
@@ -154,6 +156,84 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    double getConstructionEpsilon();
 
    /** {@inheritDoc} */
+
+   @Override
+
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+
+   {
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+
+      firstIntersectionToPack.setToNaN();
+      secondIntersectionToPack.setToNaN();
+
+      boolean intersectionWithFace = false;
+
+      int numberOfIntersections = 0;
+
+      //For each face, we check the possibility of intersection with the line
+      for (int i = 0; i < getNumberOfFaces(); i++)
+      {
+         if (numberOfIntersections == 0)
+            intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, firstIntersectionToPack);
+         if (intersectionWithFace)
+            numberOfIntersections++;
+         else
+            firstIntersectionToPack.setToNaN();
+
+         if (numberOfIntersections == 1)
+         {
+            intersectionWithFace = getFace(i).intersectionBetweenLine3DAndFace3D(pointOnLine, lineDirection, secondIntersectionToPack);
+            if (intersectionWithFace)
+            {
+               numberOfIntersections++;
+            }
+            else
+            {
+               firstIntersectionToPack.setToNaN();
+               break;
+            }
+         }
+         else
+            break;
+
+      }
+
+      if (numberOfIntersections == 0)
+         return numberOfIntersections;
+
+      if (numberOfIntersections == 1)
+         return numberOfIntersections;
+
+      if (EuclidCoreTools.epsilonEquals(firstIntersectionToPack, secondIntersectionToPack, 1.0e-7))
+      {
+         secondIntersectionToPack.setToNaN();
+         return 1;
+      }
+
+      double firstDot = lineDirection.dot(firstIntersectionToPack);
+      double secondDot = lineDirection.dot(secondIntersectionToPack);
+
+      if (secondDot < firstDot)
+      {
+
+         // Swap intersections
+         double tempX = firstIntersectionToPack.getX();
+         double tempY = firstIntersectionToPack.getY();
+         double tempZ = firstIntersectionToPack.getZ();
+         firstIntersectionToPack.set(secondIntersectionToPack);
+         secondIntersectionToPack.set(tempX, tempY, tempZ);
+      }
+
+      return 2;
+   }
+
    @Override
    default boolean containsNaN()
    {

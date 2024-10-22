@@ -5774,6 +5774,13 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
+         
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid.getX() / radiusX,
@@ -5798,6 +5805,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                                  radiusY,
                                                                                                  radiusZ,
+                                                                                                 positionX,
+                                                                                                 positionY,
+                                                                                                 positionZ,
                                                                                                  firstPointOnLine,
                                                                                                  secondPointOnLine,
                                                                                                  intersection1,
@@ -5809,6 +5819,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              firstPointOnLine,
                                                                                              lineDirection,
                                                                                              intersection1,
@@ -5820,6 +5833,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              firstPointOnLine,
                                                                                              secondPointOnLine,
                                                                                              null,
@@ -5829,6 +5845,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              firstPointOnLine,
                                                                                              lineDirection,
                                                                                              null,
@@ -5841,6 +5860,12 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid1.getX() / radiusX,
@@ -5868,6 +5893,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                                  radiusY,
                                                                                                  radiusZ,
+                                                                                                 positionX,
+                                                                                                 positionY,
+                                                                                                 positionZ,
                                                                                                  firstPointOnLine,
                                                                                                  secondPointOnLine,
                                                                                                  intersection1,
@@ -5881,6 +5909,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              secondPointOnLine,
                                                                                              firstPointOnLine,
                                                                                              intersection1,
@@ -5894,6 +5925,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              firstPointOnLine,
                                                                                              lineDirection,
                                                                                              intersection1,
@@ -5908,6 +5942,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
                                                                                              radiusY,
                                                                                              radiusZ,
+                                                                                             positionX,
+                                                                                             positionY,
+                                                                                             positionZ,
                                                                                              secondPointOnLine,
                                                                                              lineDirection,
                                                                                              intersection1,
@@ -7889,6 +7926,12 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid.getX() / radiusX,
@@ -7913,6 +7956,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                         radiusY,
                                                                                                         radiusZ,
+                                                                                                        positionX,
+                                                                                                        positionY,
+                                                                                                        positionZ,
                                                                                                         lineSegmentStart,
                                                                                                         lineSegmentEnd,
                                                                                                         intersection1,
@@ -7924,6 +7970,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     null,
@@ -7936,6 +7985,12 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid1.getX() / radiusX,
@@ -7959,6 +8014,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                         radiusY,
                                                                                                         radiusZ,
+                                                                                                        positionX,
+                                                                                                        positionY,
+                                                                                                        positionZ,
                                                                                                         lineSegmentStart,
                                                                                                         lineSegmentEnd,
                                                                                                         intersection1,
@@ -7972,6 +8030,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -7989,6 +8050,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     intersection1,
@@ -8002,6 +8066,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -8019,6 +8086,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     intersection1,
@@ -8032,6 +8102,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -8049,6 +8122,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     intersection1,
@@ -8062,6 +8138,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -8079,6 +8158,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     intersection1,
@@ -8092,6 +8174,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -8109,6 +8194,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentStart,
                                                                                                     lineSegmentEnd,
                                                                                                     intersection1,
@@ -8122,6 +8210,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
                                                                                                     radiusY,
                                                                                                     radiusZ,
+                                                                                                    positionX,
+                                                                                                    positionY,
+                                                                                                    positionZ,
                                                                                                     lineSegmentEnd,
                                                                                                     lineSegmentStart,
                                                                                                     intersection1,
@@ -8191,6 +8282,11 @@ public class EuclidGeometryToolsTest
          assertNull(actualIntersection);
       }
    }
+
+   
+
+
+
 
    @Test
    public void testIntersectionBetweenRay2DAndBoundingBox2D() throws Exception
@@ -11883,6 +11979,12 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid.getX() / radiusX,
@@ -11905,6 +12007,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
                                                                                                 radiusY,
                                                                                                 radiusZ,
+                                                                                                positionX,
+                                                                                                positionY,
+                                                                                                positionZ,
                                                                                                 rayOrigin,
                                                                                                 rayDirection,
                                                                                                 intersection1,
@@ -11913,7 +12018,7 @@ public class EuclidGeometryToolsTest
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
 
-         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection, null, null);
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, positionX,positionY,positionZ,rayOrigin, rayDirection, null, null);
          assertEquals(0, numberOfIntersections);
       }
 
@@ -11922,6 +12027,12 @@ public class EuclidGeometryToolsTest
          double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         
+         Point3D centroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         
+         double positionX = centroid.getX();
+         double positionY = centroid.getY();
+         double positionZ = centroid.getZ();
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
          double sqrtSumOfSquares = EuclidCoreTools.norm(pointOnEllipsoid1.getX() / radiusX,
@@ -11947,6 +12058,9 @@ public class EuclidGeometryToolsTest
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
                                                                                                 radiusY,
                                                                                                 radiusZ,
+                                                                                                positionX,
+                                                                                                positionY,
+                                                                                                positionZ,
                                                                                                 rayOrigin,
                                                                                                 rayDirection,
                                                                                                 intersection1,
@@ -11963,6 +12077,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
                                                                                             radiusY,
                                                                                             radiusZ,
+                                                                                            positionX,
+                                                                                            positionY,
+                                                                                            positionZ,
                                                                                             rayOrigin,
                                                                                             rayDirection,
                                                                                             intersection1,
@@ -11979,6 +12096,9 @@ public class EuclidGeometryToolsTest
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
                                                                                             radiusY,
                                                                                             radiusZ,
+                                                                                            positionX,
+                                                                                            positionY,
+                                                                                            positionZ,
                                                                                             rayOrigin,
                                                                                             rayDirection,
                                                                                             intersection1,

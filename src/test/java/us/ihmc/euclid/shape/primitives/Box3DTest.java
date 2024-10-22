@@ -1569,4 +1569,7 @@ public class Box3DTest
          EuclidCoreTestTools.assertEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
+   
+   
+
 }
