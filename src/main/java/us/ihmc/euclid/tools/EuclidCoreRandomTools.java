@@ -1,9 +1,6 @@
 package us.ihmc.euclid.tools;
 
-import java.util.Random;
-
 import org.ejml.data.DMatrixRMaj;
-
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -39,6 +36,8 @@ import us.ihmc.euclid.tuple4D.Quaternion32;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.Vector4D32;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+
+import java.util.Random;
 
 /**
  * This class provides random generators to generate random geometry objects.
@@ -124,7 +123,7 @@ public class EuclidCoreRandomTools
     * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
     * @return the random yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *                          {@code minMaxRoll < 0}.
+    *       {@code minMaxRoll < 0}.
     */
    public static YawPitchRoll nextYawPitchRoll(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
@@ -424,6 +423,56 @@ public class EuclidCoreRandomTools
             matrix3D.setElement(col, row, value);
          }
       }
+      return matrix3D;
+   }
+
+   /**
+    * Generates a random positive definite matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
+    * </p>
+    * <p>
+    * The approach used here generates a random 3D matrix with values in [-1.0, 1.0], and then performs A * A<sup>T</sup> which is guaranteed to result in a
+    * symmetric positive semi-definite matrix. We then add diagonal terms to make the matrix positive definite, and finally scale the matrix by a random double
+    * that upper bounds the absolute values of the positive definite matrix elements to 1.0.
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random positive definite matrix.
+    */
+   public static Matrix3D nextPositiveDefiniteMatrix3D(Random random)
+   {
+      return nextPositiveDefiniteMatrix3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random positive definite matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-minMaxValue, minMaxValue]
+    * </p>
+    * <p>
+    * The approach used here generates a random 3D matrix with values in [{@code -minMaxValue}, {@code minMaxValue}], and then performs A * A<sup>T</sup>,
+    * which is guaranteed to result in a symmetric positive semi-definite matrix. We then add diagonal terms to make the matrix positive definite, and finally
+    * scale the matrix by a random double that upper bounds the absolute values of the positive definite matrix elements to {@code minMaxValue}.
+    * </p>
+    *
+    * @param random      the random generator to use.
+    * @param minMaxValue the maximum value for each element.
+    * @return the random positive definite matrix.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    */
+   public static Matrix3D nextPositiveDefiniteMatrix3D(Random random, double minMaxValue)
+   {
+      Matrix3D matrix3D = nextMatrix3D(random, minMaxValue);
+      matrix3D.multiplyTransposeOther(matrix3D);
+
+      double diagonalDominanceScalar = Math.abs(minMaxValue);
+      matrix3D.addM00(diagonalDominanceScalar);
+      matrix3D.addM11(diagonalDominanceScalar);
+      matrix3D.addM22(diagonalDominanceScalar);
+
+      double scalarToShrinkMatrixWithinBounds = nextDouble(random, 0.0, minMaxValue / matrix3D.maxAbsElement());
+      matrix3D.scale(scalarToShrinkMatrixWithinBounds);
       return matrix3D;
    }
 
@@ -921,7 +970,7 @@ public class EuclidCoreRandomTools
     * @param maxAbsoluteZ the maximum absolute value for the z-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
-    *                          {@code maxAbsoluteZ < 0}.
+    *       {@code maxAbsoluteZ < 0}.
     */
    public static Point3D nextPoint3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
@@ -1506,11 +1555,9 @@ public class EuclidCoreRandomTools
     */
    public static void randomizeAxisAngle(Random random, double minMaxAngle, AxisAngleBasics axisAngleToRandomize)
    {
-      // Generate uniformly random point on unit sphere (based on http://mathworld.wolfram.com/SpherePointPicking.html )
-      double height = 2.0 * random.nextDouble() - 1.0;
+      // Generate uniformly random point on the unit-sphere (based on http://mathworld.wolfram.com/SpherePointPicking.html )
       double angle = nextDouble(random, minMaxAngle);
-      double radius = EuclidCoreTools.squareRoot(1.0 - height * height);
-      axisAngleToRandomize.set(radius * EuclidCoreTools.cos(angle), radius * EuclidCoreTools.sin(angle), height, angle);
+      axisAngleToRandomize.set(EuclidCoreRandomTools.nextVector3D(random), angle);
    }
 
    /**

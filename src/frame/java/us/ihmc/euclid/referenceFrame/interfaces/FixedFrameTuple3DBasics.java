@@ -224,6 +224,30 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
+    * Sets this frame tuple components to {@code x}, {@code y} and {@code z}.
+    * <p>
+    * If the frame of {@code this} is {@code referenceFrame}, then this method is equivalent to
+    * {@link #set(ReferenceFrame, double, double, double)}.
+    * </p>
+    * <p>
+    * If {@referenceFrame} is different from the frame of {@code this}, then {@code this} components
+    * are set to {@code x}, {@code y} and {@code z} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the coordinate system in which the given {@code x}, {@code y} and {@code z}
+    *                       is expressed.
+    * @param x              the new x-coordinate for this tuple.
+    * @param y              the new y-coordinate for this tuple.
+    * @param z              the new z-coordinate for this tuple.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
+   {
+      Tuple3DBasics.super.set(x, y, z);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame tuple to {@code tuple3DReadOnly} and then calls {@link #absolute()}.
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is

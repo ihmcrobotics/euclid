@@ -455,9 +455,7 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
       getBoundingBox(destinationFrame, (BoundingBox3DBasics) boundingBoxToPack);
    }
 
-   /**
-    * Returns {@code null} as this shape is not defined by a pose.
-    */
+   /** {@inheritDoc} */
    @Override
    FrameShape3DPoseReadOnly getPose();
 

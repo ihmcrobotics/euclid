@@ -184,7 +184,7 @@ public class ReferenceFrameTools
     * </p>
     * <p>
     * Note: <strong>{@code ReferenceFrame.update()} has to be called every time the given
-    * {@code transformFromParent} is modified to reflect the new transform value.</strong>
+    * {@code transformToParent} is modified to reflect the new transform value.</strong>
     * </p>
     *
     * @param frameName         the name of the new frame.

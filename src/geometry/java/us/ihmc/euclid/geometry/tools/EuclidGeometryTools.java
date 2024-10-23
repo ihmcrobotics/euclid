@@ -1,33 +1,35 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.Location;
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.*;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import us.ihmc.euclid.Axis2D;
-import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.Location;
-import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TupleTools;
-import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 /**
  * This class provides a large variety of basics geometry operations.
@@ -36,15 +38,25 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidGeometryTools
 {
-   /** Tolerance used to identify edge cases. */
+   /**
+    * Tolerance used to identify edge cases.
+    */
    public static final double ONE_MILLIONTH = 1.0e-6;
-   /** Tolerance used to identify edge cases. */
+   /**
+    * Tolerance used to identify edge cases.
+    */
    public static final double ONE_TEN_MILLIONTH = 1.0e-7;
-   /** Tolerance used to identify edge cases. */
+   /**
+    * Tolerance used to identify edge cases.
+    */
    public static final double ONE_TRILLIONTH = 1.0e-12;
-   /** Tolerance used to identify edge cases. */
+   /**
+    * Tolerance used to identify edge cases.
+    */
    public static final double IS_POINT_ON_LINE_EPS = 1.0e-8;
-   /** Constant used to save some computation. */
+   /**
+    * Constant used to save some computation.
+    */
    public static final double HALF_PI = 0.5 * Math.PI;
 
    private EuclidGeometryTools()
@@ -1588,7 +1600,7 @@ public class EuclidGeometryTools
     * s = 0.5(a + b + c)
     * A = &radic;{s(s - a)(s - b)(s - c)}
     * </pre>
-    *
+    * <p>
     * No specific ordering of the arguments is required.
     * <p>
     * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
@@ -1613,7 +1625,7 @@ public class EuclidGeometryTools
     * <pre>
     * A = 0.25 * &radic;{4(a<sup>2</sup>b<sup>2</sup> + a<sup>2</sup>c<sup>2</sup> + b<sup>2</sup>c<sup>2</sup>) - (a<sup>2</sup> + b<sup>2</sup> + c<sup>2</sup>)<sup>2</sup>}
     * </pre>
-    *
+    * <p>
     * No specific ordering of the arguments is required.
     * <p>
     * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
@@ -2612,7 +2624,6 @@ public class EuclidGeometryTools
       double planeNormalY = planeFirstTangentZ * planeSecondTangentX - planeFirstTangentX * planeSecondTangentZ;
       double planeNormalZ = planeFirstTangentX * planeSecondTangentY - planeFirstTangentY * planeSecondTangentX;
       return signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeNormalX, planeNormalY, planeNormalZ);
-
    }
 
    /**
@@ -3243,6 +3254,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box boundary, the points where the line first/last
+    * intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3253,10 +3271,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0 or 2.
+    *       0 or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin,
                                                                Point2DReadOnly boundingBoxMax,
@@ -3290,6 +3308,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box boundary, the points where the line first/last
+    * intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3300,10 +3325,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin,
                                                                Point2DReadOnly boundingBoxMax,
@@ -3346,6 +3371,15 @@ public class EuclidGeometryTools
     * intersection.
     * </ul>
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the boundary of the bounding
+    * box they are considered as intersection points.
+    * <li>if a line is colinear with a boundary of the bounding box, the points where the line
+    * first/last intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin                  the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax                  the maximum coordinate of the bounding box. Not modified.
@@ -3366,10 +3400,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
     *                                        {@code null}. Modified.
     * @return the number of intersections between the line/line-segment/ray and the bounding box. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    private static int intersectionBetweenLine2DAndBoundingBox2DImpl(Point2DReadOnly boundingBoxMin,
                                                                     Point2DReadOnly boundingBoxMax,
@@ -3393,52 +3427,95 @@ public class EuclidGeometryTools
       double dx = endX - startX;
       double dy = endY - startY;
 
+      boolean isColinearX = false;
+      boolean isColinearY = false;
+
+      if (Math.abs(dx) < ONE_TRILLIONTH)
+      {
+         dx = 0.0 * dx;
+         isColinearX = true;
+      }
+      if (Math.abs(dy) < ONE_TRILLIONTH)
+      {
+         dy = 0.0 * dy;
+         isColinearY = true;
+      }
+
       double invXDir = 1.0 / dx;
       double invYDir = 1.0 / dy;
 
       double tmin, tmax, tymin, tymax;
 
+      double deltaXmin = boundingBoxMin.getX() - startX;
+      double deltaXmax = boundingBoxMax.getX() - startX;
+
+      if (Math.abs(deltaXmin) < ONE_TRILLIONTH)
+      {
+         deltaXmin = 0.0 * deltaXmin;
+      }
+      if (Math.abs(deltaXmax) < ONE_TRILLIONTH)
+      {
+         deltaXmax = 0.0 * deltaXmax;
+      }
+
       if (invXDir > 0.0)
       {
-         tmin = (boundingBoxMin.getX() - startX) * invXDir;
-         tmax = (boundingBoxMax.getX() - startX) * invXDir;
+         tmin = deltaXmin * invXDir;
+         tmax = deltaXmax * invXDir;
       }
       else
       {
-         tmin = (boundingBoxMax.getX() - startX) * invXDir;
-         tmax = (boundingBoxMin.getX() - startX) * invXDir;
+         tmin = deltaXmax * invXDir;
+         tmax = deltaXmin * invXDir;
+      }
+
+      double deltaYmin = boundingBoxMin.getY() - startY;
+      double deltaYmax = boundingBoxMax.getY() - startY;
+
+      if (Math.abs(deltaYmin) < ONE_TRILLIONTH)
+      {
+         deltaYmin = 0.0 * deltaYmin;
+      }
+      if (Math.abs(deltaYmax) < ONE_TRILLIONTH)
+      {
+         deltaYmax = 0.0 * deltaYmax;
       }
 
       if (invYDir > 0.0)
       {
-         tymin = (boundingBoxMin.getY() - startY) * invYDir;
-         tymax = (boundingBoxMax.getY() - startY) * invYDir;
+         tymin = deltaYmin * invYDir;
+         tymax = deltaYmax * invYDir;
       }
       else
       {
-         tymin = (boundingBoxMax.getY() - startY) * invYDir;
-         tymax = (boundingBoxMin.getY() - startY) * invYDir;
+         tymin = deltaYmax * invYDir;
+         tymax = deltaYmin * invYDir;
       }
 
       // if regions do not overlap, return false
-      if (tmin > tymax || tmax < tymin)
+      if (tmin > tymax + ONE_TRILLIONTH)
+      {
+         return 0;
+      }
+      if (tmax < tymin - ONE_TRILLIONTH)
       {
          return 0;
       }
 
-      // update tmin
-      if (tymin > tmin)
+      // update tmin - make sure its not NaN
+      if (tymin > tmin || Double.isNaN(tmin))
          tmin = tymin;
 
-      if (tymax < tmax)
+      if (tymax < tmax || Double.isNaN(tmax))
          tmax = tymax;
+
+      // From here, we know that the support line is intersecting with the bounding-box.
+      int numberOfIntersections = 0;
 
       if (!canIntersectionOccurAfterEnd && tmin > 1.0)
          return 0;
       if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
-
-      int numberOfIntersections = 0;
 
       boolean isIntersectingAtTmin = canIntersectionOccurBeforeStart || tmin >= 0.0;
       boolean isIntersectingAtTmax = canIntersectionOccurAfterEnd || tmax <= 1.0;
@@ -3448,39 +3525,186 @@ public class EuclidGeometryTools
       if (isIntersectingAtTmax)
          numberOfIntersections++;
 
-      switch (numberOfIntersections)
+      // 1 intersection
+      if (numberOfIntersections == 1)
       {
-         case 0:
-            return 0;
-         case 1:
-            if (firstIntersectionToPack != null)
-            {
-               if (isIntersectingAtTmin)
-               {
-                  firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY);
-               }
-               else
-               {
-                  firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
-               }
-            }
-            if (secondIntersectionToPack != null)
-               secondIntersectionToPack.setToNaN();
-            return 1;
-         case 2:
-            if (firstIntersectionToPack != null)
+         if (firstIntersectionToPack != null)
+         {
+            if (isIntersectingAtTmin)
             {
                firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY);
             }
+            else
+            {
+               firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
+            }
+         }
 
+         if (secondIntersectionToPack != null)
+            secondIntersectionToPack.setToNaN();
+      }
+
+      // 2 intersections
+      if (numberOfIntersections == 2)
+      {
+         if (firstIntersectionToPack != null)
+         {
+            firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY);
+         }
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
+         }
+      }
+
+      // check if the two intersection points are (almost) identical
+      if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
+      {
+         numberOfIntersections = 1;
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setToNaN();
+         }
+         return numberOfIntersections;
+      }
+
+      if (canIntersectionOccurAfterEnd && canIntersectionOccurBeforeStart)
+      {// we have a infinite line and we are done here
+         return numberOfIntersections;
+      }
+
+      if (!isColinearX && !isColinearY)
+      { // No edge case, we good
+         return numberOfIntersections;
+      }
+
+      // if we get here we have a line-segment or a ray colinear with one of the box surfaces and we need to check for edge cases
+      if (canIntersectionOccurAfterEnd)
+      {// we have a ray and need to test for the edge-case that can only occur with ray at this point
+         // check if ray origin lies on bounding box surface and ray or line are colinear  with that bounding box surface
+         boolean isRayOriginOnBox = false;
+
+         if (isColinearX)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaXmin == 0.0 || deltaXmax == 0.0)
+            {
+               if (deltaYmin <= 0.0 && deltaYmax >= 0.0)
+               { // ray origin lies on x surface of box
+                  isRayOriginOnBox = true;
+               }
+            }
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaYmin == 0.0 || deltaYmax == 0.0)
+            {
+               if (deltaXmin <= 0.0 && deltaXmax >= 0.0)
+               { // ray origin lies on y surface of box
+                  isRayOriginOnBox = true;
+               }
+            }
+         }
+
+         if (isRayOriginOnBox)
+         {// the ray origin lies on the bounding box surface, we consider the ray origin the first intersection
             if (secondIntersectionToPack != null)
             {
-               secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
+               secondIntersectionToPack.set(firstIntersectionToPack);
             }
-            return 2;
-         default:
-            throw new IllegalStateException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
       }
+      else
+      {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
+         // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
+         boolean isLineSegmentStartOnBox = false;
+         boolean isLineSegmentEndOnBox = false;
+         double deltaXEndmin = boundingBoxMin.getX() - endX;
+         double deltaXEndmax = boundingBoxMax.getX() - endX;
+         double deltaYEndmin = boundingBoxMin.getY() - endY;
+         double deltaYEndmax = boundingBoxMax.getY() - endY;
+
+         if (isColinearX)
+         {// check if start point of line-segment lies on bounding box surface   
+
+            if (deltaYmin <= 0.0 && deltaYmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+            }
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+
+            if (deltaXmin <= 0.0 && deltaXmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+            }
+         }
+
+         if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         { // start and end are on the box, we consider them intersections
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY);
+               tmin = 0.0;
+            }
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+         else if (isLineSegmentStartOnBox)
+         { // only the  start is on the box, we consider the segment start as the first intersection
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(firstIntersectionToPack);
+            }
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
+         else
+         { // only the  end is on the box, we consider the segment end as the first intersection
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+      }
+
+      // check if the two intersection points are (almost) identical
+      if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
+      {
+         numberOfIntersections = 1;
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setToNaN();
+         }
+      }
+      return numberOfIntersections;
    }
 
    /**
@@ -3618,7 +3842,7 @@ public class EuclidGeometryTools
 
       if (Math.abs(determinant) < epsilon)
       { // The lines are parallel
-        // Check if they are collinear
+         // Check if they are collinear
          double dx = start2x - start1x;
          double dy = start2y - start1y;
          double cross = dx * direction1y - dy * direction1x;
@@ -3841,6 +4065,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box surface, the points where the line first/last
+    * intersects with the bounding box are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3851,10 +4082,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin,
                                                                Point3DReadOnly boundingBoxMax,
@@ -3890,6 +4121,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box surface, the points where the line first/last
+    * intersects with the bounding box are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -3900,10 +4138,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin,
                                                                Point3DReadOnly boundingBoxMax,
@@ -3937,6 +4175,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box surface, the points where the line first/last
+    * intersects with the bounding box are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
@@ -3951,10 +4196,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX,
                                                                double boundingBoxMinY,
@@ -4004,6 +4249,13 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line is colinear with the bounding box surface, the points where the line first/last
+    * intersects with the bounding box are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
@@ -4022,10 +4274,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX,
                                                                double boundingBoxMinY,
@@ -4084,6 +4336,16 @@ public class EuclidGeometryTools
     * intersection.
     * </ul>
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin                  the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax                  the maximum coordinate of the bounding box. Not modified.
@@ -4108,10 +4370,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
     *                                        {@code null}. Modified.
     * @return the number of intersections between the line/line-segment/ray and the bounding box. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    private static int intersectionBetweenLine3DAndBoundingBox3DImpl(Point3DReadOnly boundingBoxMin,
                                                                     Point3DReadOnly boundingBoxMax,
@@ -4162,6 +4424,16 @@ public class EuclidGeometryTools
     * intersection.
     * </ul>
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin or start/end point of a line segment lie on the surface of the bounding box
+    * they are considered as intersection points.
+    * <li>if a line is colinear with a surface of the bounding box, the points where the line
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMinX                 the minimum x-coordinate of the bounding box.
     * @param boundingBoxMinY                 the minimum y-coordinate of the bounding box.
@@ -4190,10 +4462,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
     *                                        {@code null}. Modified.
     * @return the number of intersections between the line/line-segment/ray and the bounding box. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    private static int intersectionBetweenLine3DAndBoundingBox3DImpl(double boundingBoxMinX,
                                                                     double boundingBoxMinY,
@@ -4224,77 +4496,143 @@ public class EuclidGeometryTools
       double dy = endY - startY;
       double dz = endZ - startZ;
 
+      boolean isColinearX = false;
+      boolean isColinearY = false;
+      boolean isColinearZ = false;
+
+      if (Math.abs(dx) < ONE_TRILLIONTH)
+      {
+         dx = 0.0 * dx;
+         isColinearX = true;
+      }
+      if (Math.abs(dy) < ONE_TRILLIONTH)
+      {
+         dy = 0.0 * dy;
+         isColinearY = true;
+      }
+
+      if (Math.abs(dz) < ONE_TRILLIONTH)
+      {
+         dz = 0.0 * dz;
+         isColinearZ = true;
+      }
+
       double invXDir = 1.0 / dx;
       double invYDir = 1.0 / dy;
       double invZDir = 1.0 / dz;
 
       double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
+      double deltaXmin = boundingBoxMinX - startX;
+      double deltaXmax = boundingBoxMaxX - startX;
+
+      if (Math.abs(deltaXmin) < ONE_TRILLIONTH)
+      {
+         deltaXmin = 0.0 * deltaXmin;
+      }
+      if (Math.abs(deltaXmax) < ONE_TRILLIONTH)
+      {
+         deltaXmax = 0.0 * deltaXmax;
+      }
+
       if (invXDir > 0.0)
       {
-         tmin = (boundingBoxMinX - startX) * invXDir;
-         tmax = (boundingBoxMaxX - startX) * invXDir;
+         tmin = deltaXmin * invXDir;
+         tmax = deltaXmax * invXDir;
       }
       else
       {
-         tmin = (boundingBoxMaxX - startX) * invXDir;
-         tmax = (boundingBoxMinX - startX) * invXDir;
+         tmin = deltaXmax * invXDir;
+         tmax = deltaXmin * invXDir;
+      }
+
+      double deltaYmin = boundingBoxMinY - startY;
+      double deltaYmax = boundingBoxMaxY - startY;
+
+      if (Math.abs(deltaYmin) < ONE_TRILLIONTH)
+      {
+         deltaYmin = 0.0 * deltaYmin;
+      }
+      if (Math.abs(deltaYmax) < ONE_TRILLIONTH)
+      {
+         deltaYmax = 0.0 * deltaYmax;
       }
 
       if (invYDir > 0.0)
       {
-         tymin = (boundingBoxMinY - startY) * invYDir;
-         tymax = (boundingBoxMaxY - startY) * invYDir;
+         tymin = deltaYmin * invYDir;
+         tymax = deltaYmax * invYDir;
       }
       else
       {
-         tymin = (boundingBoxMaxY - startY) * invYDir;
-         tymax = (boundingBoxMinY - startY) * invYDir;
+         tymin = deltaYmax * invYDir;
+         tymax = deltaYmin * invYDir;
       }
 
       // if regions do not overlap, return false
-      if (tmin > tymax || tmax < tymin)
+      if (tmin > tymax + ONE_TRILLIONTH)
+      {
+         return 0;
+      }
+      if (tmax < tymin - ONE_TRILLIONTH)
       {
          return 0;
       }
 
-      // update tmin
-      if (tymin > tmin)
+      // update tmin - make sure its not NaN
+      if (tymin > tmin || Double.isNaN(tmin))
          tmin = tymin;
 
-      if (tymax < tmax)
+      if (tymax < tmax || Double.isNaN(tmax))
          tmax = tymax;
+
+      double deltaZmin = boundingBoxMinZ - startZ;
+      double deltaZmax = boundingBoxMaxZ - startZ;
+
+      if (Math.abs(deltaZmin) < ONE_TRILLIONTH)
+      {
+         deltaZmin = 0.0 * deltaZmin;
+      }
+      if (Math.abs(deltaZmax) < ONE_TRILLIONTH)
+      {
+         deltaZmax = 0.0 * deltaZmax;
+      }
 
       if (invZDir > 0.0)
       {
-         tzmin = (boundingBoxMinZ - startZ) * invZDir;
-         tzmax = (boundingBoxMaxZ - startZ) * invZDir;
+         tzmin = deltaZmin * invZDir;
+         tzmax = deltaZmax * invZDir;
       }
       else
       {
-         tzmin = (boundingBoxMaxZ - startZ) * invZDir;
-         tzmax = (boundingBoxMinZ - startZ) * invZDir;
+         tzmin = deltaZmax * invZDir;
+         tzmax = deltaZmin * invZDir;
       }
 
       // if regions do not overlap, return false
-      if (tmin > tzmax || tmax < tzmin)
+      if (tmin > tzmax + ONE_TRILLIONTH)
+      {
+         return 0;
+      }
+      if (tmax < tzmin - ONE_TRILLIONTH)
       {
          return 0;
       }
 
       // update tmin
-      if (tzmin > tmin)
+      if (tzmin > tmin || Double.isNaN(tmin))
          tmin = tzmin;
 
-      if (tzmax < tmax)
+      if (tzmax < tmax || Double.isNaN(tmax))
          tmax = tzmax;
+
+      // From here, we know that the support line is intersecting with the bounding-box.
+      int numberOfIntersections = 0;
 
       if (!canIntersectionOccurAfterEnd && tmin > 1.0)
          return 0;
       if (!canIntersectionOccurBeforeStart && tmax < 0.0)
          return 0;
-
-      int numberOfIntersections = 0;
 
       boolean isIntersectingAtTmin = canIntersectionOccurBeforeStart || tmin >= 0.0;
       boolean isIntersectingAtTmax = canIntersectionOccurAfterEnd || tmax <= 1.0;
@@ -4304,40 +4642,210 @@ public class EuclidGeometryTools
       if (isIntersectingAtTmax)
          numberOfIntersections++;
 
-      switch (numberOfIntersections)
+      // 1 intersection
+      if (numberOfIntersections == 1)
       {
-         case 0:
-            return 0;
-         case 1:
-            if (firstIntersectionToPack != null)
-            {
-               if (isIntersectingAtTmin)
-               {
-                  firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
-               }
-               else
-               {
-                  firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
-               }
-            }
-            if (secondIntersectionToPack != null)
-               secondIntersectionToPack.setToNaN();
-            return 1;
-         case 2:
-            if (firstIntersectionToPack != null)
+         if (firstIntersectionToPack != null)
+         {
+            if (isIntersectingAtTmin)
             {
                firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
             }
+            else
+            {
+               firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
+            }
+         }
 
+         if (secondIntersectionToPack != null)
+            secondIntersectionToPack.setToNaN();
+      }
+
+      // 2 intersections
+      if (numberOfIntersections == 2)
+      {
+         if (firstIntersectionToPack != null)
+         {
+            firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
+         }
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
+         }
+      }
+
+      // check if the two intersection points are (almost) identical
+      if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
+      {
+         numberOfIntersections = 1;
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setToNaN();
+         }
+         return numberOfIntersections;
+      }
+
+      if (canIntersectionOccurAfterEnd && canIntersectionOccurBeforeStart)
+      {// we have a infinite line and we are done here
+         return numberOfIntersections;
+      }
+
+      if (!isColinearX && !isColinearY && !isColinearZ)
+      { // No edge case, we good
+         return numberOfIntersections;
+      }
+
+      // if we get here we have a line-segment or a ray colinear with one of the box surfaces and we need to check for edge cases
+      if (canIntersectionOccurAfterEnd)
+      {// we have a ray and need to test for the edge-case that can only occur with ray at this point
+         // check if ray origin lies on bounding box surface and ray or line are colinear  with that bounding box surface
+         boolean isRayOriginOnBox = false;
+
+         if (isColinearX)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaXmin == 0.0 || deltaXmax == 0.0)
+            {
+               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+               { // ray origin lies on x surface of box
+                  isRayOriginOnBox = true;
+               }
+            }
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaYmin == 0.0 || deltaYmax == 0.0)
+            {
+               if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+               { // ray origin lies on y surface of box
+                  isRayOriginOnBox = true;
+               }
+            }
+         }
+         else if (isColinearZ)
+         {// check if start point of ray lies on bounding box surface
+            if (deltaZmin == 0.0 || deltaZmax == 0.0)
+            {
+               if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
+               { // ray origin lies on z surface of box
+                  isRayOriginOnBox = true;
+               }
+            }
+         }
+
+         if (isRayOriginOnBox)
+         {// the ray origin lies on the bounding box surface, we consider the ray origin the first intersection
             if (secondIntersectionToPack != null)
             {
-               secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
+               secondIntersectionToPack.set(firstIntersectionToPack);
             }
-
-            return 2;
-         default:
-            throw new IllegalStateException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
       }
+      else
+      {// we have a line-segment and need to test for the edge-case that can only occur with a line-segment at this point
+         // check if start- and/or end- point lies on bounding box surface and the line-segment is colinear with that bounding box surface
+         boolean isLineSegmentStartOnBox = false;
+         boolean isLineSegmentEndOnBox = false;
+         double deltaXEndmin = boundingBoxMinX - endX;
+         double deltaXEndmax = boundingBoxMaxX - endX;
+         double deltaYEndmin = boundingBoxMinY - endY;
+         double deltaYEndmax = boundingBoxMaxY - endY;
+         double deltaZEndmin = boundingBoxMinZ - endZ;
+         double deltaZEndmax = boundingBoxMaxZ - endZ;
+
+         if (isColinearX)
+         {// check if start point of line-segment lies on bounding box surface   
+
+            if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+            }
+         }
+         else if (isColinearY)
+         {// check if start point of ray lies on bounding box surface
+
+            if (deltaXmin <= 0.0 && deltaXmax >= 0.0 && deltaZmin <= 0.0 && deltaZmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0 && deltaZEndmin <= 0.0 && deltaZEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+            }
+         }
+         else if (isColinearZ)
+         {// check if start point of ray lies on bounding box surface
+
+            if (deltaYmin <= 0.0 && deltaYmax >= 0.0 && deltaXmin <= 0.0 && deltaXmax >= 0.0)
+            { // line-segment start point lies on x surface of box
+               isLineSegmentStartOnBox = true;
+            }
+            if (deltaYEndmin <= 0.0 && deltaYEndmax >= 0.0 && deltaXEndmin <= 0.0 && deltaXEndmax >= 0.0)
+            { // line-segment end point also lies on x surface of box
+               isLineSegmentEndOnBox = true;
+            }
+         }
+         if (isLineSegmentStartOnBox && isLineSegmentEndOnBox)
+         { // start and end are on the box, we consider them intersections
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY, endZ);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+         else if (isLineSegmentStartOnBox)
+         { // only the  start is on the box, we consider the segment start as the first intersection
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(firstIntersectionToPack);
+            }
+            if (firstIntersectionToPack != null)
+            {
+               firstIntersectionToPack.set(startX, startY, startZ);
+               tmin = 0.0;
+            }
+            numberOfIntersections = 2;
+         }
+         else
+         { // only the  end is on the box, we consider the segment end as the first intersection
+            if (secondIntersectionToPack != null)
+            {
+               secondIntersectionToPack.set(endX, endY, endZ);
+               tmax = 1.0;
+            }
+            numberOfIntersections = 2;
+         }
+      }
+
+      // check if the two intersection points are (almost) identical
+      if (numberOfIntersections == 2 && EuclidCoreTools.epsilonEquals(tmin, tmax, ONE_TRILLIONTH))
+      {
+         numberOfIntersections = 1;
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setToNaN();
+         }
+      }
+
+      return numberOfIntersections;
    }
 
    /**
@@ -4376,9 +4884,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
-    *         1, or 2.
+    *       1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
                                                             double cylinderRadius,
@@ -4452,9 +4960,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
-    *         1, or 2.
+    *       1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
                                                             double cylinderRadius,
@@ -4526,9 +5034,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
-    *         1, or 2.
+    *       1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
                                                             double cylinderRadius,
@@ -4631,9 +5139,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
     *                                        {@code null}. Modified.
     * @return the number of intersections between the line/line-segment/ray and the cylinder. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    private static int intersectionBetweenLine3DAndCylinder3DImpl(double cylinderLength,
                                                                  double cylinderRadius,
@@ -4740,8 +5248,8 @@ public class EuclidGeometryTools
       // If dIntersection2 is not NaN, that means two intersections were found which is the max, so no need to check with the cylinder part.
       if (Double.isNaN(dIntersection2))
       { // Compute possible intersections with the cylinder part
-        // Notation used: cylinder axis: pa + va * d; line equation: p + v * d
-        // Need to solve quadratic equation of the form A * d^2 + B * d + C = 0
+         // Notation used: cylinder axis: pa + va * d; line equation: p + v * d
+         // Need to solve quadratic equation of the form A * d^2 + B * d + C = 0
 
          // (v, va)*va
          double scaledAxisX1 = lineDirectionDotCylinderAxis * axisX;
@@ -4926,9 +5434,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
@@ -4991,9 +5499,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
@@ -5052,9 +5560,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
                                                              double radiusY,
@@ -5138,9 +5646,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack        the coordinate of the second intersection. Can be
     *                                        {@code null}. Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    private static int intersectionBetweenLine3DAndEllipsoid3DImpl(double radiusX,
                                                                   double radiusY,
@@ -5281,7 +5789,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the coordinates of the intersection, or {@code null} if the line is parallel to the
-    *         plane.
+    *       plane.
     */
    public static Point3D intersectionBetweenLine3DAndPlane3D(Point3DReadOnly pointOnPlane,
                                                              Vector3DReadOnly planeNormal,
@@ -5369,6 +5877,15 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line segment start and/or end point lie on the boundary of the bounding box they are
+    * considered as intersection points.
+    * <li>if a line segment is colinear with a boundary of the bounding box, the points where the line
+    * first/last intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -5379,10 +5896,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
-    *         equal to 0, 1, or 2.
+    *       equal to 0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLineSegment2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin,
                                                                       Point2DReadOnly boundingBoxMax,
@@ -5425,6 +5942,15 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the start or end point of the line segment lie on the boundary of the bounding box they
+    * are considered as intersection points.
+    * <li>if a line segment is colinear with a boundary of the bounding box, the points where the line
+    * first/last intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -5435,10 +5961,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
-    *         equal to 0, 1, or 2.
+    *       equal to 0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenLineSegment3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin,
                                                                       Point3DReadOnly boundingBoxMax,
@@ -5489,9 +6015,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line segment and the cylinder. It is either equal
-    *         to 0, 1, or 2.
+    *       to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength,
                                                                    double cylinderRadius,
@@ -5563,9 +6089,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX,
                                                                     double radiusY,
@@ -5658,6 +6184,15 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the ray origin lies on the boundary of the bounding box it is considered as intersection
+    * point.
+    * <li>if the ray is colinear with a boundary of the bounding box, the points where the ray
+    * first/last intersects with the bounding box boundary are returned as intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -5668,10 +6203,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenRay2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin,
                                                               Point2DReadOnly boundingBoxMax,
@@ -5742,7 +6277,6 @@ public class EuclidGeometryTools
       double end2x = lineSegmentEndX;
       double end2y = lineSegmentEndY;
       return intersectionBetweenTwoLine2DsImpl(start1x, start1y, false, end1x, end1y, true, start2x, start2y, false, end2x, end2y, false, intersectionToPack);
-
    }
 
    /**
@@ -5850,6 +6384,17 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
+    * <p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the start of the ray lies on the surface of the bounding box it is considered as
+    * intersection point.
+    * <li>if the ray is colinear with a surface of the bounding box, the points where the ray
+    * first/last intersects with the bounding box (on the bounding box boundary) are returned as
+    * intersection points.
+    * </ul>
+    * </p>
     *
     * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
@@ -5860,10 +6405,10 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *                              greater than the maximum coordinate of the bounding box on the same
-    *                              axis.
+    *       greater than the maximum coordinate of the bounding box on the same
+    *       axis.
     */
    public static int intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin,
                                                               Point3DReadOnly boundingBoxMax,
@@ -5890,6 +6435,105 @@ public class EuclidGeometryTools
                                                            true,
                                                            firstIntersectionToPack,
                                                            secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a 3D ray and a 3D box
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param rayOrigin                the origin point of the 3D ray. Not modified.
+    * @param rayDirection             the direction of the 3D ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *       or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
+    *       Vector3DReadOnly, Point3DBasics, Point3DBasics)
+    */
+   public static int intersectionBetweenRay3DAndBox3D(Point3DReadOnly boxPosition,
+                                                      Orientation3DReadOnly boxOrientation,
+                                                      Vector3DReadOnly boxSize,
+                                                      Point3DReadOnly rayOrigin,
+                                                      Vector3DReadOnly rayDirection,
+                                                      Point3DBasics firstIntersectionToPack,
+                                                      Point3DBasics secondIntersectionToPack)
+   {
+
+      if (boxSize.getX() <= 0.0 || boxSize.getY() <= 0.0 || boxSize.getZ() <= 0.0)
+         throw new IllegalArgumentException("The box size has to be positive and bigger 0.");
+
+      // if arguments null:
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToNaN();
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToNaN();
+
+      if (firstIntersectionToPack == null)
+         firstIntersectionToPack = new Point3D();
+      if (secondIntersectionToPack == null)
+         secondIntersectionToPack = new Point3D();
+
+      firstIntersectionToPack.set(rayOrigin);
+      firstIntersectionToPack.sub(boxPosition);
+      boxOrientation.inverseTransform(firstIntersectionToPack);
+
+      double firstPointOnLineX = firstIntersectionToPack.getX();
+      double firstPointOnLineY = firstIntersectionToPack.getY();
+      double firstPointOnLineZ = firstIntersectionToPack.getZ();
+
+      // construct the second point on line
+      secondIntersectionToPack.set(rayDirection);
+      boxOrientation.inverseTransform(secondIntersectionToPack);
+
+      double secondPointOnLineX = firstPointOnLineX + secondIntersectionToPack.getX();
+      double secondPointOnLineY = firstPointOnLineY + secondIntersectionToPack.getY();
+      double secondPointOnLineZ = firstPointOnLineZ + secondIntersectionToPack.getZ();
+
+      double boundingBoxMinX = -0.5 * boxSize.getX();
+      double boundingBoxMinY = -0.5 * boxSize.getY();
+      double boundingBoxMinZ = -0.5 * boxSize.getZ();
+      double boundingBoxMaxX = 0.5 * boxSize.getX();
+      double boundingBoxMaxY = 0.5 * boxSize.getY();
+      double boundingBoxMaxZ = 0.5 * boxSize.getZ();
+
+      int numIntersections = intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMinX,
+                                                                           boundingBoxMinY,
+                                                                           boundingBoxMinZ,
+                                                                           boundingBoxMaxX,
+                                                                           boundingBoxMaxY,
+                                                                           boundingBoxMaxZ,
+                                                                           firstPointOnLineX,
+                                                                           firstPointOnLineY,
+                                                                           firstPointOnLineZ,
+                                                                           false,
+                                                                           secondPointOnLineX,
+                                                                           secondPointOnLineY,
+                                                                           secondPointOnLineZ,
+                                                                           true,
+                                                                           firstIntersectionToPack,
+                                                                           secondIntersectionToPack);
+
+      boxOrientation.transform(firstIntersectionToPack);
+      firstIntersectionToPack.add(boxPosition);
+      boxOrientation.transform(secondIntersectionToPack);
+      secondIntersectionToPack.add(boxPosition);
+
+      return numIntersections;
    }
 
    /**
@@ -5920,9 +6564,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
-    *         0, 1, or 2.
+    *       0, 1, or 2.
     * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
-    *                                  {@code cylinderRadius < 0}.
+    *       {@code cylinderRadius < 0}.
     */
    public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength,
                                                            double cylinderRadius,
@@ -5994,9 +6638,9 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
-    *         either equal to 0, 1, or 2.
+    *       either equal to 0, 1, or 2.
     * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *                                  is negative.
+    *       is negative.
     */
    public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX,
                                                             double radiusY,
@@ -6455,9 +7099,9 @@ public class EuclidGeometryTools
       intersectionDirectionToPack.scale(1.0 / EuclidCoreTools.squareRoot(det));
 
       double normal3DotPoint1 = intersectionDirectionToPack.getX() * pointOnPlane1.getX() + intersectionDirectionToPack.getY() * pointOnPlane1.getY()
-            + intersectionDirectionToPack.getZ() * pointOnPlane1.getZ();
+                                + intersectionDirectionToPack.getZ() * pointOnPlane1.getZ();
       double normal3DotPoint2 = intersectionDirectionToPack.getX() * pointOnPlane2.getX() + intersectionDirectionToPack.getY() * pointOnPlane2.getY()
-            + intersectionDirectionToPack.getZ() * pointOnPlane2.getZ();
+                                + intersectionDirectionToPack.getZ() * pointOnPlane2.getZ();
       double d3 = 0.5 * (normal3DotPoint1 + normal3DotPoint2);
 
       pointOnIntersectionToPack.set(d1 * normal3Cross2X + d2 * normal1Cross3X + d3 * normal2Cross1X,
@@ -6530,7 +7174,7 @@ public class EuclidGeometryTools
     * @param lengthSideB the length of the side B.
     * @param lengthSideC the length of the side C.
     * @return {@code true} if the lengths represents the three sides of a triangle, {@code false}
-    *         otherwise.
+    *       otherwise.
     * @throws IllegalArgumentException if any of the three lengths is negative.
     */
    public static boolean isFormingTriangle(double lengthSideA, double lengthSideB, double lengthSideC)
@@ -6562,8 +7206,8 @@ public class EuclidGeometryTools
     * @param rayDirectionX the x-component of the ray's direction.
     * @param rayDirectionY the y-component of the ray's direction.
     * @return {@link Location#AHEAD} if the query is located in front of the ray,
-    *         {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
-    *         projection onto the ray is exactly equal to the ray origin.
+    *       {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
+    *       projection onto the ray is exactly equal to the ray origin.
     */
    public static Location whichPartOfRay2DIsPoint2DOn(double pointX,
                                                       double pointY,
@@ -6591,8 +7235,8 @@ public class EuclidGeometryTools
     * @param rayOrigin    the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @return {@link Location#AHEAD} if the query is located in front of the ray,
-    *         {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
-    *         projection onto the ray is exactly equal to the ray origin.
+    *       {@link Location#BEHIND} if the query is behind the ray, and {@code null} if the query's
+    *       projection onto the ray is exactly equal to the ray origin.
     */
    public static Location whichPartOfRay2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
    {
@@ -6639,7 +7283,7 @@ public class EuclidGeometryTools
     * @param b     second vertex of the triangle. Not modified.
     * @param c     third vertex of the triangle. Not modified.
     * @return {@code true} if the query is exactly inside the triangle. {@code false} if the query
-    *         point is outside triangle or exactly on an edge of the triangle.
+    *       point is outside triangle or exactly on an edge of the triangle.
     */
    public static boolean isPoint2DInsideTriangleABC(Point2DReadOnly point, Point2DReadOnly a, Point2DReadOnly b, Point2DReadOnly c)
    {
@@ -6747,7 +7391,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
-    *         the line, or {@code null} if the point is exactly on the line.
+    *       the line, or {@code null} if the point is exactly on the line.
     */
    public static Location whichSideOfLine2DIsPoint2DOn(double pointX, double pointY, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -6776,7 +7420,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point positioned on the infinite line. Not modified.
     * @param lineDirection the direction of the infinite line. Not modified.
     * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
-    *         the line, or {@code null} if the point is exactly on the line.
+    *       the line, or {@code null} if the point is exactly on the line.
     */
    public static Location whichSideOfLine2DIsPoint2DOn(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -6805,7 +7449,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
-    *         the line, or {@code null} if the point is exactly on the line.
+    *       the line, or {@code null} if the point is exactly on the line.
     */
    public static Location whichSideOfLine2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -6829,7 +7473,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point positioned on the infinite line. Not modified.
     * @param lineDirection the direction of the infinite line. Not modified.
     * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
-    *         the line, or {@code null} if the point is exactly on the line.
+    *       the line, or {@code null} if the point is exactly on the line.
     */
    public static Location whichSideOfLine2DIsPoint2DOn(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -6856,7 +7500,7 @@ public class EuclidGeometryTools
     * @param lineDirectionX the x-component of the direction of the infinite line.
     * @param lineDirectionY the y-component of the direction of the infinite line.
     * @return {@link Location.LEFT}/{@link Location.RIGHT} if the point is on the left/right side of
-    *         the line, or {@code null} if the point is exactly on the line.
+    *       the line, or {@code null} if the point is exactly on the line.
     */
    public static Location whichSideOfLine2DIsPoint2DOn(double pointX,
                                                        double pointY,
@@ -6891,7 +7535,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@code true} if the point is on the left side of the line, {@code false} if the point is
-    *         on the right side or exactly on the line.
+    *       on the right side or exactly on the line.
     */
    public static boolean isPoint2DOnLeftSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -6913,7 +7557,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@code true} if the point is on the right side of the line, {@code false} if the point is
-    *         on the left side or exactly on the line.
+    *       on the left side or exactly on the line.
     */
    public static boolean isPoint2DOnRightSideOfLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -6942,10 +7586,10 @@ public class EuclidGeometryTools
     * @param testLeftSide   the query of the side, when equal to {@code true} this will test for the
     *                       left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
+    *       on the opposite side or exactly on the line.
     * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, double, double, double, double)}
-    *             instead.
+    *       {@link #whichSideOfLine2DIsPoint2DOn(double, double, double, double, double, double)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
@@ -6981,10 +7625,10 @@ public class EuclidGeometryTools
     * @param testLeftSide      the query of the side, when equal to {@code true} this will test for the
     *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
+    *       on the opposite side or exactly on the line.
     * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Point2DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Point2DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
@@ -7017,10 +7661,10 @@ public class EuclidGeometryTools
     * @param testLeftSide  the query of the side, when equal to {@code true} this will test for the
     *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
+    *       on the opposite side or exactly on the line.
     * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Vector2DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfLine2DIsPoint2DOn(double, double, Point2DReadOnly, Vector2DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(double pointX,
@@ -7053,10 +7697,10 @@ public class EuclidGeometryTools
     * @param testLeftSide      the query of the side, when equal to {@code true} this will test for the
     *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
+    *       on the opposite side or exactly on the line.
     * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(Point2DReadOnly point,
@@ -7087,10 +7731,10 @@ public class EuclidGeometryTools
     * @param testLeftSide  the query of the side, when equal to {@code true} this will test for the
     *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
-    *         on the opposite side or exactly on the line.
+    *       on the opposite side or exactly on the line.
     * @deprecated Use
-    *             {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Vector2DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfLine2DIsPoint2DOn(Point2DReadOnly, Point2DReadOnly, Vector2DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint2DOnSideOfLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, boolean testLeftSide)
@@ -7122,7 +7766,7 @@ public class EuclidGeometryTools
     * @param planeNormalY  the y-component of the normal of the infinite plane.
     * @param planeNormalZ  the z-component of the normal of the infinite plane.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
                                                         double pointY,
@@ -7166,7 +7810,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7198,7 +7842,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7231,9 +7875,9 @@ public class EuclidGeometryTools
     * @param planeSecondTangentY the y-component of a second tangent of the infinite plane.
     * @param planeSecondTangentZ the z-component of a second tangent of the infinite plane.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
-    *      double, double)
+    *       double, double)
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
                                                         double pointY,
@@ -7275,9 +7919,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
-    *      double, double)
+    *       double, double)
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(double pointX,
                                                         double pointY,
@@ -7319,9 +7963,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@link Location#ABOVE}/{@link Location#BELOW} if the point is above/below the plane,
-    *         {@code null} if the point is exactly on the plane.
+    *       {@code null} if the point is exactly on the plane.
     * @see #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double,
-    *      double, double)
+    *       double, double)
     */
    public static Location whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly point,
                                                         Point3DReadOnly pointOnPlane,
@@ -7356,10 +8000,10 @@ public class EuclidGeometryTools
     * @param testForAbove  the query of the side, when equal to {@code true} this will test for the
     *                      above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
@@ -7406,10 +8050,10 @@ public class EuclidGeometryTools
     * @param testForAbove the query of the side, when equal to {@code true} this will test for the
     *                     above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, boolean)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, boolean)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
@@ -7442,10 +8086,10 @@ public class EuclidGeometryTools
     * @param testForAbove the query of the side, when equal to {@code true} this will test for the
     *                     above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, boolean testForAbove)
@@ -7473,7 +8117,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
-    *         below or exactly on the plane.
+    *       below or exactly on the plane.
     */
    public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7497,7 +8141,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
-    *         below or exactly on the plane.
+    *       below or exactly on the plane.
     */
    public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7523,7 +8167,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
-    *         above or exactly on the plane.
+    *       above or exactly on the plane.
     */
    public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7547,7 +8191,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
     * @param planeNormal  the normal of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
-    *         above or exactly on the plane.
+    *       above or exactly on the plane.
     */
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -7582,12 +8226,12 @@ public class EuclidGeometryTools
     * @param testForAbove        the query of the side, when equal to {@code true} this will test for
     *                            the above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double, double, double, double)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, double, double, double, double, double, double, double, double, double)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
@@ -7617,7 +8261,6 @@ public class EuclidGeometryTools
                                                     planeSecondTangentY,
                                                     planeSecondTangentZ);
       return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
-
    }
 
    /**
@@ -7643,12 +8286,12 @@ public class EuclidGeometryTools
     * @param testForAbove       the query of the side, when equal to {@code true} this will test for
     *                           the above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(double, double, double, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
@@ -7661,7 +8304,6 @@ public class EuclidGeometryTools
    {
       Location side = whichSideOfPlane3DIsPoint3DOn(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
       return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
-
    }
 
    /**
@@ -7685,12 +8327,12 @@ public class EuclidGeometryTools
     * @param testForAbove       the query of the side, when equal to {@code true} this will test for
     *                           the above side, {@code false} this will test for the below side.
     * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
-    *         is on the opposite side or exactly on the plane.
+    *       is on the opposite side or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     * @deprecated Use
-    *             {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
-    *             instead.
+    *       {@link #whichSideOfPlane3DIsPoint3DOn(Point3DReadOnly, Point3DReadOnly, Vector3DReadOnly, Vector3DReadOnly)}
+    *       instead.
     */
    @Deprecated
    public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point,
@@ -7701,7 +8343,6 @@ public class EuclidGeometryTools
    {
       Location side = whichSideOfPlane3DIsPoint3DOn(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
       return testForAbove ? side == Location.ABOVE : side == Location.BELOW;
-
    }
 
    /**
@@ -7725,9 +8366,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
-    *         below or exactly on the plane.
+    *       below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     */
    public static boolean isPoint3DAbovePlane3D(double pointX,
                                                double pointY,
@@ -7758,9 +8399,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
-    *         below or exactly on the plane.
+    *       below or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     */
    public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
@@ -7791,9 +8432,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
-    *         above or exactly on the plane.
+    *       above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     */
    public static boolean isPoint3DBelowPlane3D(double pointX,
                                                double pointY,
@@ -7824,9 +8465,9 @@ public class EuclidGeometryTools
     * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
     * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
     * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
-    *         above or exactly on the plane.
+    *       above or exactly on the plane.
     * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
-    *      double, double, boolean)
+    *       double, double, boolean)
     */
    public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point,
                                                Point3DReadOnly pointOnPlane,
@@ -8604,8 +9245,8 @@ public class EuclidGeometryTools
 
       projectionToPack.set(x, y, z);
       projectionToPack.sub(pointOnPlane);
-      double signedDistance = projectionToPack.getX() * planeNormal.getX() + projectionToPack.getY() * planeNormal.getY()
-            + projectionToPack.getZ() * planeNormal.getZ();
+      double signedDistance =
+            projectionToPack.getX() * planeNormal.getX() + projectionToPack.getY() * planeNormal.getY() + projectionToPack.getZ() * planeNormal.getZ();
       signedDistance /= normalMagnitude * normalMagnitude;
 
       projectionToPack.set(x - signedDistance * planeNormal.getX(), y - signedDistance * planeNormal.getY(), z - signedDistance * planeNormal.getZ());
@@ -8635,7 +9276,7 @@ public class EuclidGeometryTools
     * @param lineDirection2x x-component of the second line direction.
     * @param lineDirection2y y-component of the second line direction.
     * @return {@code alpha} the percentage along the first line of the intersection location. This
-    *         method returns {@link Double#NaN} if the lines do not intersect.
+    *       method returns {@link Double#NaN} if the lines do not intersect.
     */
    public static double percentageOfIntersectionBetweenTwoLine2Ds(double pointOnLine1x,
                                                                   double pointOnLine1y,
@@ -8660,7 +9301,7 @@ public class EuclidGeometryTools
 
       if (Math.abs(determinant) < ONE_TRILLIONTH)
       { // The lines are parallel
-        // Check if they are collinear
+         // Check if they are collinear
          double cross = dx * lineDirection1y - dy * lineDirection1x;
          if (Math.abs(cross) < ONE_TRILLIONTH)
          {
@@ -8706,7 +9347,7 @@ public class EuclidGeometryTools
     * @param pointOnLine2   a point located on the second line. Not modified.
     * @param lineDirection2 the second line direction. Not modified.
     * @return {@code alpha} the percentage along the first line of the intersection location. This
-    *         method returns {@link Double#NaN} if the lines do not intersect.
+    *       method returns {@link Double#NaN} if the lines do not intersect.
     */
    public static double percentageOfIntersectionBetweenTwoLine2Ds(Point2DReadOnly pointOnLine1,
                                                                   Vector2DReadOnly lineDirection1,
@@ -8746,7 +9387,7 @@ public class EuclidGeometryTools
     * @param pointOnLine      a point located on the line. Not modified.
     * @param lineDirection    the line direction. Not modified.
     * @return {@code alpha} the percentage along the line segment of the intersection location. This
-    *         method returns {@link Double#NaN} if the line segment and the line do not intersect.
+    *       method returns {@link Double#NaN} if the line segment and the line do not intersect.
     */
    public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(Point2DReadOnly lineSegmentStart,
                                                                               Point2DReadOnly lineSegmentEnd,
@@ -8796,7 +9437,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -8823,7 +9464,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -8852,7 +9493,7 @@ public class EuclidGeometryTools
     * @param lineDirectionX x-component of the direction of the line.
     * @param lineDirectionY y-component of the direction of the line.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine2D(double pointX,
                                               double pointY,
@@ -8902,7 +9543,7 @@ public class EuclidGeometryTools
     * @param lineSegmentEndX   the x-coordinate of the line segment second endpoint.
     * @param lineSegmentEndY   the y-coordinate of the line segment second endpoint.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment2D(double pointX,
                                                      double pointY,
@@ -8952,7 +9593,7 @@ public class EuclidGeometryTools
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment2D(double pointX, double pointY, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
@@ -8984,7 +9625,7 @@ public class EuclidGeometryTools
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment2D(Point2DReadOnly point, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
@@ -9010,7 +9651,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -9046,7 +9687,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -9086,7 +9727,7 @@ public class EuclidGeometryTools
     * @param lineDirectionY y-component of the direction of the line.
     * @param lineDirectionZ z-component of the direction of the line.
     * @return the computed percentage along the line representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLine3D(double pointX,
                                               double pointY,
@@ -9143,7 +9784,7 @@ public class EuclidGeometryTools
     * @param lineSegmentEndY   the y-coordinate of the line segment second endpoint.
     * @param lineSegmentEndZ   the z-coordinate of the line segment second endpoint.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment3D(double pointX,
                                                      double pointY,
@@ -9199,7 +9840,7 @@ public class EuclidGeometryTools
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment3D(double pointX,
                                                      double pointY,
@@ -9243,7 +9884,7 @@ public class EuclidGeometryTools
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
-    *         located.
+    *       located.
     */
    public static double percentageAlongLineSegment3D(Point3DReadOnly point, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
    {
@@ -9449,7 +10090,7 @@ public class EuclidGeometryTools
     * @param orthogonalProjectionToPack a 3D point in which the projection of {@code point} onto the
     *                                   line is stored. Modified. Can be {@code null}.
     * @return the vector perpendicular to the line and pointing to the {@code point}, or {@code null}
-    *         when the method fails.
+    *       when the method fails.
     */
    public static Vector3D perpendicularVector3DFromLine3DToPoint3D(Point3DReadOnly point,
                                                                    Point3DReadOnly firstPointOnLine,
@@ -9547,7 +10188,7 @@ public class EuclidGeometryTools
     * @param cathetusA   the length of the cathetus A.
     * @return the length of the cathetus B.
     * @throws IllegalArgumentException if the length of the cathetus A is negative or greater than the
-    *                                  hypotenuse C.
+    *       hypotenuse C.
     */
    public static double pythagorasGetCathetus(double hypotenuseC, double cathetusA)
    {
@@ -9621,7 +10262,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
-    *         the query is located on the right side of the line.
+    *       the query is located on the right side of the line.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -9651,7 +10292,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
-    *         the query is located on the right side of the line.
+    *       the query is located on the right side of the line.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -9682,7 +10323,7 @@ public class EuclidGeometryTools
     * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
-    *         the query is located on the right side of the line.
+    *       the query is located on the right side of the line.
     */
    public static double signedDistanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -9707,7 +10348,7 @@ public class EuclidGeometryTools
     * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
-    *         the query is located on the right side of the line.
+    *       the query is located on the right side of the line.
     */
    public static double signedDistanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -9735,7 +10376,7 @@ public class EuclidGeometryTools
     * @param lineDirectionX x-component of the line direction.
     * @param lineDirectionY y-component of the line direction.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
-    *         the query is located on the right side of the line.
+    *       the query is located on the right side of the line.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX,
                                                           double pointY,
@@ -9990,8 +10631,8 @@ public class EuclidGeometryTools
    public static double triangleIsoscelesHeight(double legLength, double baseLength)
    {
       if (legLength < 0.5 * baseLength)
-         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength + ", baseLength/2: "
-               + 0.5 * baseLength);
+         throw new IllegalArgumentException(
+               "Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength + ", baseLength/2: " + 0.5 * baseLength);
       if (baseLength < 0.0)
          throw new IllegalArgumentException("The base cannot have a negative length, baseLength = " + baseLength);
 
@@ -10009,14 +10650,15 @@ public class EuclidGeometryTools
     * @param lengthOppositeSideC  the length of the side C.
     * @return the value in radians of the unknown angle.
     * @throws IllegalArgumentException if the lengths do not describe a triangle, see
-    *                                  {@link #isFormingTriangle(double, double, double)}.
+    *       {@link #isFormingTriangle(double, double, double)}.
     */
    public static double unknownTriangleAngleByLawOfCosine(double lengthNeighbourSideA, double lengthNeighbourSideB, double lengthOppositeSideC)
    {
       if (!isFormingTriangle(lengthNeighbourSideA, lengthNeighbourSideB, lengthOppositeSideC))
       {
-         throw new IllegalArgumentException("Unable to build a Triangle of the given triangle sides a: " + lengthNeighbourSideA + " b: " + lengthNeighbourSideB
-               + " c: " + lengthOppositeSideC);
+         throw new IllegalArgumentException(
+               "Unable to build a Triangle of the given triangle sides a: " + lengthNeighbourSideA + " b: " + lengthNeighbourSideB + " c: "
+               + lengthOppositeSideC);
       }
 
       double numerator = lengthNeighbourSideA * lengthNeighbourSideA + lengthNeighbourSideB * lengthNeighbourSideB - lengthOppositeSideC * lengthOppositeSideC;
@@ -10040,7 +10682,7 @@ public class EuclidGeometryTools
     * @param angleBetweenAAndB the angle between the sides A and B.
     * @return the value of the unknown side length.
     * @throws IllegalArgumentException if {@code lengthSideA} and/or {@code lengthSideB} are negative,
-    *                                  if {@code angleBetweenAAndB} is greater than <i>pi</i>.
+    *       if {@code angleBetweenAAndB} is greater than <i>pi</i>.
     */
    public static double unknownTriangleSideLengthByLawOfCosine(double lengthSideA, double lengthSideB, double angleBetweenAAndB)
    {
@@ -10051,7 +10693,1006 @@ public class EuclidGeometryTools
       if (Math.abs(angleBetweenAAndB) > Math.PI)
          throw new IllegalArgumentException("angleBetweenAAndB " + angleBetweenAAndB + " does not define a triangle.");
 
-      return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB
-            - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));
+      return EuclidCoreTools.squareRoot(
+            lengthSideA * lengthSideA + lengthSideB * lengthSideB - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));
+   }
+
+   /**
+    * Tests if the point 2D is located on the infinitely long line 2D.
+    * <p>
+    * The test is performed by computing the distance between the point and the line, if that distance
+    * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * </p>
+    *
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
+    * @return {@code true} if the query is considered to be lying on the line, {@code false} otherwise.
+    */
+   public static boolean isPoint2DOnLineSegment2D(double pointX, double pointY, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return distanceSquaredFromPoint2DToLineSegment2D(pointX,
+                                                       pointY,
+                                                       lineSegmentStart.getX(),
+                                                       lineSegmentStart.getY(),
+                                                       lineSegmentEnd.getX(),
+                                                       lineSegmentEnd.getY()) < IS_POINT_ON_LINE_EPS;
+   }
+
+   /**
+    * This method implements the same operation as
+    * {@link EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(double, double, double, double, double, double, Orientation3DBasics)}
+    * except that it does not rely on {@code Math#acos(double)} making it faster.
+    *
+    * @param firstVectorX   x-component of the first vector.
+    * @param firstVectorY   y-component of the first vector.
+    * @param firstVectorZ   z-component of the first vector.
+    * @param secondVectorX  x-component of the second vector that is rotated with respect to the first
+    *                       vector.
+    * @param secondVectorY  y-component of the second vector that is rotated with respect to the first
+    *                       vector.
+    * @param secondVectorZ  z-component of the second vector that is rotated with respect to the first
+    *                       vector.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @see EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(double, double, double, double,
+    *       double, double, Orientation3DBasics)
+    */
+   public static void rotationMatrix3DFromFirstToSecondVector3D(double firstVectorX,
+                                                                double firstVectorY,
+                                                                double firstVectorZ,
+                                                                double secondVectorX,
+                                                                double secondVectorY,
+                                                                double secondVectorZ,
+                                                                CommonMatrix3DBasics rotationToPack)
+   {
+      double firstVectorLengthInv = 1.0 / Math.sqrt(normSquared(firstVectorX, firstVectorY, firstVectorZ));
+      double secondVectorLengthInv = 1.0 / Math.sqrt(normSquared(secondVectorX, secondVectorY, secondVectorZ));
+      firstVectorX *= firstVectorLengthInv;
+      firstVectorY *= firstVectorLengthInv;
+      firstVectorZ *= firstVectorLengthInv;
+      secondVectorX *= secondVectorLengthInv;
+      secondVectorY *= secondVectorLengthInv;
+      secondVectorZ *= secondVectorLengthInv;
+
+      double rotationAxisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
+      double rotationAxisY = firstVectorZ * secondVectorX - firstVectorX * secondVectorZ;
+      double rotationAxisZ = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
+      double sinAngle = Math.sqrt(normSquared(rotationAxisX, rotationAxisY, rotationAxisZ));
+
+      boolean normalsAreParallel = sinAngle < ONE_TEN_MILLIONTH;
+
+      if (normalsAreParallel)
+      {
+         rotationToPack.setIdentity();
+         return;
+      }
+
+      rotationAxisX /= sinAngle;
+      rotationAxisY /= sinAngle;
+      rotationAxisZ /= sinAngle;
+
+      double cosAngle = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
+
+      if (cosAngle > 1.0)
+         cosAngle = 1.0;
+      else if (cosAngle < -1.0)
+         cosAngle = -1.0;
+
+      double t = 1.0 - cosAngle;
+
+      double xz = rotationAxisX * rotationAxisZ;
+      double xy = rotationAxisX * rotationAxisY;
+      double yz = rotationAxisY * rotationAxisZ;
+
+      double m00 = t * rotationAxisX * rotationAxisX + cosAngle;
+      double m01 = t * xy - sinAngle * rotationAxisZ;
+      double m02 = t * xz + sinAngle * rotationAxisY;
+      double m10 = t * xy + sinAngle * rotationAxisZ;
+      double m11 = t * rotationAxisY * rotationAxisY + cosAngle;
+      double m12 = t * yz - sinAngle * rotationAxisX;
+      double m20 = t * xz - sinAngle * rotationAxisY;
+      double m21 = t * yz + sinAngle * rotationAxisX;
+      double m22 = t * rotationAxisZ * rotationAxisZ + cosAngle;
+
+      if (rotationToPack instanceof RotationMatrix)
+         ((RotationMatrix) rotationToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      else
+         rotationToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * This method implements the same operation as
+    * {@link EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(Vector3DReadOnly, Vector3DReadOnly, Orientation3DBasics)}
+    * except that it does not rely on {@code Math#acos(double)} making it faster.
+    *
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @see EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(Vector3DReadOnly,
+    *       Vector3DReadOnly, Orientation3DBasics)
+    */
+   public static void rotationMatrix3DFromFirstToSecondVector3D(Vector3DReadOnly firstVector,
+                                                                Vector3DReadOnly secondVector,
+                                                                CommonMatrix3DBasics rotationToPack)
+   {
+      rotationMatrix3DFromFirstToSecondVector3D(firstVector.getX(),
+                                                firstVector.getY(),
+                                                firstVector.getZ(),
+                                                secondVector.getX(),
+                                                secondVector.getY(),
+                                                secondVector.getZ(),
+                                                rotationToPack);
+   }
+
+   /**
+    * This method implements the same operation as
+    * {@link EuclidGeometryTools#orientation3DFromZUpToVector3D(Vector3DReadOnly, Orientation3DBasics)}
+    * except that it does not rely on {@code Math#acos(double)} making it faster.
+    *
+    * @param vector         the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param vector         the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *                       Modified.
+    * @see EuclidGeometryTools#orientation3DFromZUpToVector3D(Vector3DReadOnly, Orientation3DBasics)
+    */
+   public static void rotationMatrix3DFromZUpToVector3D(Vector3DReadOnly vector, CommonMatrix3DBasics rotationToPack)
+   {
+      rotationMatrix3DFromFirstToSecondVector3D(Axis3D.Z, vector, rotationToPack);
+   }
+
+   /**
+    * Returns the square of the minimum distance between a point and a given line segment, and packs the closest point on the line segment in
+    * {@code pointOnSegmentToPack}
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX               x coordinate of point to be tested.
+    * @param pointY               y coordinate of point to be tested.
+    * @param lineSegmentStartX    the x-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartY    the y-coordinate of the line segment first endpoint.
+    * @param lineSegmentEndX      the x-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndY      the y-coordinate of the line segment second endpoint.
+    * @param pointOnSegmentToPack the closest point on the line segment to the point to be tested. Modified.
+    * @return the square of the minimum distance between the 2D point and the 2D line segment.
+    */
+   public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX,
+                                                                  double pointY,
+                                                                  double lineSegmentStartX,
+                                                                  double lineSegmentStartY,
+                                                                  double lineSegmentEndX,
+                                                                  double lineSegmentEndY,
+                                                                  Point2DBasics pointOnSegmentToPack)
+   {
+      double percentage = percentageAlongLineSegment2D(pointX, pointY, lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY);
+
+      if (percentage > 1.0)
+         percentage = 1.0;
+      else if (percentage < 0.0)
+         percentage = 0.0;
+
+      double projectionX = (1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX;
+      double projectionY = (1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY;
+
+      if (pointOnSegmentToPack != null)
+         pointOnSegmentToPack.set(projectionX, projectionY);
+
+      double dx = projectionX - pointX;
+      double dy = projectionY - pointY;
+      return dx * dx + dy * dy;
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d line segment and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting position of the line segment.
+    * @param endPoint                 end position of the line segment.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenLineSegment2DAndCylinder3D(double circleRadius,
+                                                                   Point2DReadOnly circlePosition,
+                                                                   Point2DReadOnly startPoint,
+                                                                   Point2DReadOnly endPoint,
+                                                                   Point2DBasics firstIntersectionToPack,
+                                                                   Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndCircle(circleRadius,
+                                                circlePosition.getX(),
+                                                circlePosition.getY(),
+                                                startPoint.getX(),
+                                                startPoint.getY(),
+                                                false,
+                                                endPoint.getX(),
+                                                endPoint.getY(),
+                                                false,
+                                                firstIntersectionToPack,
+                                                secondIntersectionToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d line and a circle. Returns the number of found intersections. If the 2d line is represented as a
+    * line segment, then {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd} should both be false.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius                    radius of the circle in question.
+    * @param circlePositionX                 x position of the center of the circle.
+    * @param circlePositionY                 y position of the center of the circle.
+    * @param startX                          x position of a point on the line, or starting x position of the line segment.
+    * @param startY                          y position of a point on the line, or starting y position of the line segment.
+    * @param canIntersectionOccurBeforeStart {@code true} if this is a line, {@code false} if this is a line segment or a ray.
+    * @param endX                            x position of a second point on the line, or end x position of the line segment.
+    * @param endY                            y position of a second point on the line, or end y position of the line segment.
+    * @param canIntersectionOccurAfterEnd    {@code true} if this is a line or ray, {@code false} if this is a line segment.
+    * @param firstIntersectionToPack         first possible intersecting point.
+    * @param secondIntersectionToPack        second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenLine2DAndCircle(double circleRadius,
+                                                        double circlePositionX,
+                                                        double circlePositionY,
+                                                        double startX,
+                                                        double startY,
+                                                        boolean canIntersectionOccurBeforeStart,
+                                                        double endX,
+                                                        double endY,
+                                                        boolean canIntersectionOccurAfterEnd,
+                                                        Point2DBasics firstIntersectionToPack,
+                                                        Point2DBasics secondIntersectionToPack)
+   {
+      if (circleRadius < 0.0)
+         throw new IllegalArgumentException("The circle radius has to be positive.");
+
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToNaN();
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToNaN();
+
+      if (circleRadius == 0.0)
+         return 0;
+
+      double radiusSquared = circleRadius * circleRadius;
+
+      double dx = endX - startX;
+      double dy = endY - startY;
+
+      double dIntersection1 = Double.NaN;
+      double dIntersection2 = Double.NaN;
+
+      // Compute possible intersections with the circle
+      //
+      double deltaPX = startX - circlePositionX;
+      double deltaPY = startY - circlePositionY;
+
+      double A = EuclidCoreTools.normSquared(dx, dy);
+      double B = 2.0 * (dx * deltaPX + dy * deltaPY);
+      double C = EuclidCoreTools.normSquared(deltaPX, deltaPY) - radiusSquared;
+
+      double delta = EuclidCoreTools.squareRoot(B * B - 4 * A * C);
+
+      if (Double.isFinite(delta))
+      {
+         double oneOverTwoA = 0.5 / A;
+         double dCircle1 = -(B + delta) * oneOverTwoA;
+         double dCircle2 = -(B - delta) * oneOverTwoA;
+
+         double intersection1X = dCircle1 * dx + startX;
+         double intersection1Y = dCircle1 * dy + startY;
+
+         if (Math.abs(percentageAlongLine2D(intersection1X, intersection1Y, circlePositionX, circlePositionY, 1.0, 0.0)) > circleRadius - ONE_TRILLIONTH)
+            dCircle1 = Double.NaN;
+
+         if (Double.isFinite(dCircle1))
+         {
+            if (Double.isNaN(dIntersection1) || Math.abs(dCircle1 - dIntersection1) < ONE_TRILLIONTH)
+            {
+               dIntersection1 = dCircle1;
+            }
+            else if (dCircle1 < dIntersection1)
+            {
+               dIntersection2 = dIntersection1;
+               dIntersection1 = dCircle1;
+            }
+            else
+            {
+               dIntersection2 = dCircle1;
+            }
+         }
+
+         double intersection2X = dCircle2 * dx + startX;
+         double intersection2Y = dCircle2 * dy + startY;
+
+         if (Math.abs(percentageAlongLine2D(intersection2X, intersection2Y, circlePositionX, circlePositionY, 1.0, 0.0)) > circleRadius - ONE_TRILLIONTH)
+            dCircle2 = Double.NaN;
+         else if (Math.abs(dCircle1 - dCircle2) < ONE_TRILLIONTH)
+            dCircle2 = Double.NaN;
+
+         if (Double.isFinite(dCircle2))
+         {
+            if (Double.isNaN(dIntersection1))
+            {
+               dIntersection1 = dCircle2;
+            }
+            else if (dCircle2 < dIntersection1)
+            {
+               dIntersection2 = dIntersection1;
+               dIntersection1 = dCircle2;
+            }
+            else
+            {
+               dIntersection2 = dCircle2;
+            }
+         }
+      }
+
+      if (!canIntersectionOccurBeforeStart)
+      {
+         if (dIntersection2 < 0.0)
+            dIntersection2 = Double.NaN;
+
+         if (dIntersection1 < 0.0)
+         {
+            dIntersection1 = dIntersection2;
+            dIntersection2 = Double.NaN;
+         }
+      }
+
+      if (!canIntersectionOccurAfterEnd)
+      {
+         if (dIntersection2 > 1.0)
+            dIntersection2 = Double.NaN;
+
+         if (dIntersection1 > 1.0)
+         {
+            dIntersection1 = dIntersection2;
+            dIntersection2 = Double.NaN;
+         }
+      }
+
+      if (Double.isNaN(dIntersection1))
+         return 0;
+
+      if (firstIntersectionToPack != null)
+      {
+         firstIntersectionToPack.set(dx, dy);
+         firstIntersectionToPack.scale(dIntersection1);
+         firstIntersectionToPack.add(startX, startY);
+      }
+
+      if (Double.isNaN(dIntersection2))
+         return 1;
+
+      if (secondIntersectionToPack != null)
+      {
+         secondIntersectionToPack.set(dx, dy);
+         secondIntersectionToPack.scale(dIntersection2);
+         secondIntersectionToPack.add(startX, startY);
+      }
+
+      return 2;
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d line and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param pointOnLine              point on the line
+    * @param direction                direction of the line.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenLine2DAndCircle(double circleRadius,
+                                                        Point2DReadOnly circlePosition,
+                                                        Point2DReadOnly pointOnLine,
+                                                        Vector2DReadOnly direction,
+                                                        Point2DBasics firstIntersectionToPack,
+                                                        Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndCircle(circleRadius,
+                                                circlePosition.getX(),
+                                                circlePosition.getY(),
+                                                pointOnLine.getX(),
+                                                pointOnLine.getY(),
+                                                true,
+                                                pointOnLine.getX() + direction.getX(),
+                                                pointOnLine.getY() + direction.getY(),
+                                                true,
+                                                firstIntersectionToPack,
+                                                secondIntersectionToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d ray and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting point of the line.
+    * @param direction                direction of the line.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenRay2DAndCircle(double circleRadius,
+                                                       Point2DReadOnly circlePosition,
+                                                       Point2DReadOnly startPoint,
+                                                       Vector2DReadOnly direction,
+                                                       Point2DBasics firstIntersectionToPack,
+                                                       Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndCircle(circleRadius,
+                                                circlePosition.getX(),
+                                                circlePosition.getY(),
+                                                startPoint.getX(),
+                                                startPoint.getY(),
+                                                false,
+                                                startPoint.getX() + direction.getX(),
+                                                startPoint.getY() + direction.getY(),
+                                                true,
+                                                firstIntersectionToPack,
+                                                secondIntersectionToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d ray and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting point of the line.
+    * @param pointOnRay               additional point on the ray use to determine its direction.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenRay2DAndCircle(double circleRadius,
+                                                       Point2DReadOnly circlePosition,
+                                                       Point2DReadOnly startPoint,
+                                                       Point2DReadOnly pointOnRay,
+                                                       Point2DBasics firstIntersectionToPack,
+                                                       Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndCircle(circleRadius,
+                                                circlePosition.getX(),
+                                                circlePosition.getY(),
+                                                startPoint.getX(),
+                                                startPoint.getY(),
+                                                false,
+                                                pointOnRay.getX(),
+                                                pointOnRay.getY(),
+                                                true,
+                                                firstIntersectionToPack,
+                                                secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the intersection between a plane and an infinitely long line.
+    * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line is parallel to the plane, this methods fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnPlaneX      x-value of a point located on the plane.
+    * @param pointOnPlaneY      y-value of a point located on the plane.
+    * @param pointOnPlaneZ      z-value of a point located on the plane.
+    * @param planeNormalX       x-value of the normal of the plane.
+    * @param planeNormalY       y-value of the normal of the plane.
+    * @param planeNormalZ       z-value of the normal of the plane.
+    * @param pointOnLineX       x-value of a point located on the line.
+    * @param pointOnLineY       y-value of a point located on the line.
+    * @param pointOnLineZ       z-value of a point located on the line.
+    * @param lineDirectionX     x-value of the direction of the line.
+    * @param lineDirectionY     y-value of the direction of the line.
+    * @param lineDirectionZ     z-value of the direction of the line.
+    * @param intersectionToPack point in which the coordinates of the intersection are stored. Modified.
+    * @return {@code true} if the method succeeds, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenLine3DAndPlane3D(double pointOnPlaneX,
+                                                             double pointOnPlaneY,
+                                                             double pointOnPlaneZ,
+                                                             double planeNormalX,
+                                                             double planeNormalY,
+                                                             double planeNormalZ,
+                                                             double pointOnLineX,
+                                                             double pointOnLineY,
+                                                             double pointOnLineZ,
+                                                             double lineDirectionX,
+                                                             double lineDirectionY,
+                                                             double lineDirectionZ,
+                                                             Point3DBasics intersectionToPack)
+   {
+      // Switching to the notation used in https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+      // Note: the algorithm is independent from the magnitudes of planeNormal and lineDirection
+
+      // Let's compute the value of the coefficient d = ( (p0 - l0).n ) / ( l.n )
+      double numerator, denominator;
+      numerator = (pointOnPlaneX - pointOnLineX) * planeNormalX;
+      numerator += (pointOnPlaneY - pointOnLineY) * planeNormalY;
+      numerator += (pointOnPlaneZ - pointOnLineZ) * planeNormalZ;
+      denominator = planeNormalX * lineDirectionX + planeNormalY * lineDirectionY + planeNormalZ * lineDirectionZ;
+
+      // Check if the line is parallel to the plane
+      if (Math.abs(denominator) < ONE_TRILLIONTH)
+      {
+         return false;
+      }
+      else
+      {
+         double d = numerator / denominator;
+
+         intersectionToPack.setX(d * lineDirectionX + pointOnLineX);
+         intersectionToPack.setY(d * lineDirectionY + pointOnLineY);
+         intersectionToPack.setZ(d * lineDirectionZ + pointOnLineZ);
+         return true;
+      }
+   }
+
+   /**
+    * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
+    * direction) and a 2D ray segment (defined by the start and direction 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the ray are parallel but not collinear, they do not intersect.
+    * <li>When the line and the ray are collinear, they are assumed to intersect at
+    * {@code rayStart}.
+    * <li>When the line intersects the ray at the start point, this method returns
+    * {@code true} and the start point is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin          start point of the ray.
+    * @param rayDirection       direction of the ray.
+    * @param linePoint1         first point located on the line.
+    * @param linePoint2         second point located on the line.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenRay2DAndLine2D(Point2DReadOnly rayOrigin,
+                                                           Vector2DReadOnly rayDirection,
+                                                           Point2DReadOnly linePoint1,
+                                                           Point2DReadOnly linePoint2,
+                                                           Point2DBasics intersectionToPack)
+   {
+      return intersectionBetweenRay2DAndLine2D(rayOrigin.getX(),
+                                               rayOrigin.getY(),
+                                               rayDirection.getX(),
+                                               rayDirection.getY(),
+                                               linePoint1.getX(),
+                                               linePoint1.getY(),
+                                               linePoint2.getX() - linePoint1.getX(),
+                                               linePoint2.getY() - linePoint1.getY(),
+                                               intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
+    * direction) and a 2D ray segment (defined by the start and direction 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the ray are parallel but not collinear, they do not intersect.
+    * <li>When the line and the ray are collinear, they are assumed to intersect at
+    * {@code rayStart}.
+    * <li>When the line intersects the ray at the start point, this method returns
+    * {@code true} and the start point is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOriginX         x-coordinate of the start point of the ray.
+    * @param rayOriginY         y-coordinate of the start point of the ray.
+    * @param rayDirectionX      x-component of the ray direction.
+    * @param rayDirectionY      y-component of the ray direction.
+    * @param pointOnLineX       x-coordinate of a point located on the line.
+    * @param pointOnLineY       y-coordinate of a point located on the line.
+    * @param lineDirectionX     x-component of the line direction.
+    * @param lineDirectionY     y-component of the line direction.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenRay2DAndLine2D(double rayOriginX,
+                                                           double rayOriginY,
+                                                           double rayDirectionX,
+                                                           double rayDirectionY,
+                                                           double pointOnLineX,
+                                                           double pointOnLineY,
+                                                           double lineDirectionX,
+                                                           double lineDirectionY,
+                                                           Point2DBasics intersectionToPack)
+   {
+      double start1x = rayOriginX;
+      double start1y = rayOriginY;
+      double end1x = rayOriginX + rayDirectionX;
+      double end1y = rayOriginY + rayDirectionY;
+      double start2x = pointOnLineX;
+      double start2y = pointOnLineY;
+      double end2x = pointOnLineX + lineDirectionX;
+      double end2y = pointOnLineY + lineDirectionY;
+      return intersectionBetweenTwoLine2DsImpl(start1x, start1y, false, end1x, end1y, true, start2x, start2y, true, end2x, end2y, true, intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
+    * direction) and a 2D ray segment (defined by the start and direction 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the ray are parallel but not collinear, they do not intersect.
+    * <li>When the line and the ray are collinear, they are assumed to intersect at
+    * {@code rayStart}.
+    * <li>When the line intersects the ray at the start point, this method returns
+    * {@code true} and the start point is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin          start point of the ray.
+    * @param rayDirection       direction of the ray.
+    * @param pointOnLine        point located on the line.
+    * @param lineDirection      direction of the line.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenRay2DAndLine2D(Point2DReadOnly rayOrigin,
+                                                           Vector2DReadOnly rayDirection,
+                                                           Point2DReadOnly pointOnLine,
+                                                           Vector2DReadOnly lineDirection,
+                                                           Point2DBasics intersectionToPack)
+   {
+      return intersectionBetweenRay2DAndLine2D(rayOrigin.getX(),
+                                               rayOrigin.getY(),
+                                               rayDirection.getX(),
+                                               rayDirection.getY(),
+                                               pointOnLine.getX(),
+                                               pointOnLine.getY(),
+                                               lineDirection.getX(),
+                                               lineDirection.getY(),
+                                               intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by a 2D point and a
+    * 2D direction and returns a percentage {@code alpha} along the first line such that the
+    * intersection coordinates can be computed as follows: <br>
+    * {@code intersection = pointOnLine1 + alpha * lineDirection1}
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
+    * returned value is {@link Double#NaN}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting infinitely the
+    * returned value {@code Double.POSITIVE_INFINITY}.
+    * </ul>
+    * </p>
+    *
+    * @param startPoint1x    x-coordinate of a point located on the first line.
+    * @param startPoint1y    y-coordinate of a point located on the first line.
+    * @param segmentTravel1x x-component of the first line direction.
+    * @param segmentTravel1y y-component of the first line direction.
+    * @param startPoint2x    x-coordinate of a point located on the second line.
+    * @param startPoint2y    y-coordinate of a point located on the second line.
+    * @param segmentTravel2x x-component of the second line direction.
+    * @param segmentTravel2y y-component of the second line direction.
+    * @return {@code alpha} the percentage along the first line of the intersection location. This
+    *       method returns {@link Double#NaN} if the lines do not intersect.
+    */
+   public static double percentageOfIntersectionBetweenTwoLine2DsInfCase(double startPoint1x,
+                                                                         double startPoint1y,
+                                                                         double segmentTravel1x,
+                                                                         double segmentTravel1y,
+                                                                         double startPoint2x,
+                                                                         double startPoint2y,
+                                                                         double segmentTravel2x,
+                                                                         double segmentTravel2y)
+   {
+      //      We solve for x the problem of the form: A * x = b
+      //            A      *     x     =      b
+      //      / segmentTravel1x -segmentTravel2x \   / alpha \   / startPoint2x - startPoint1x \
+      //      |                                  | * |       | = |                               |
+      //      \ segmentTravel1y -segmentTravel2y /   \ beta  /   \ startPoint2y - startPoint1y /
+      // Here, only alpha or beta is needed.
+
+      double determinant = -segmentTravel1x * segmentTravel2y + segmentTravel1y * segmentTravel2x;
+
+      double dx = startPoint2x - startPoint1x;
+      double dy = startPoint2y - startPoint1y;
+
+      if (Math.abs(determinant) < ONE_TRILLIONTH)
+      { // The lines are parallel
+         // Check if they are collinear
+         double cross = dx * segmentTravel1y - dy * segmentTravel1x;
+         if (Math.abs(cross) < ONE_TRILLIONTH)
+         {
+            /*
+             * The two lines are collinear. There's an infinite number of intersection. Let's set the result to
+             * infinity, i.e. alpha = infinity so it can be handled.
+             */
+            return Double.POSITIVE_INFINITY;
+         }
+         else
+         {
+            return Double.NaN;
+         }
+      }
+      else
+      {
+         double oneOverDeterminant = 1.0 / determinant;
+         double AInverse00 = oneOverDeterminant * -segmentTravel2y;
+         double AInverse01 = oneOverDeterminant * segmentTravel2x;
+
+         double alpha = AInverse00 * dx + AInverse01 * dy;
+
+         return alpha;
+      }
+   }
+
+   /**
+    * Computes the z height of a Euclidean point defined by {@code pointX} and {@code pointY} on a plane defined by point {@code pointOnPlane} and normal
+    * {@code planeNormal}.
+    *
+    * @param pointOnPlane point located on a plane
+    * @param planeNormal  vector describing the plane normal
+    * @param pointX       x coordinate to query.
+    * @param pointY       y coordinate to query.
+    * @return height of the plane located at {@code pointX} and {@code pointY}
+    */
+   public static double getZOnPlane(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, double pointX, double pointY)
+   {
+      // The three components of the plane origin
+      double x0 = pointOnPlane.getX();
+      double y0 = pointOnPlane.getY();
+      double z0 = pointOnPlane.getZ();
+      // The three components of the plane normal
+      double a = planeNormal.getX();
+      double b = planeNormal.getY();
+      double c = planeNormal.getZ();
+
+      // Given the plane equation: a*x + b*y + c*z + d = 0, with d = -(a*x0 + b*y0 + c*z0), we find z:
+      double z = a / c * (x0 - pointX) + b / c * (y0 - pointY) + z0;
+      return z;
+   }
+
+   /**
+    * Finds the intersection of two bounding boxes defined by a bounding box.
+    * <p>
+    * WARNING: generates garbage
+    * <p>
+    * Allocates a new  BoundingBox2D. TODO: Check, Unit test, move where BoundingBox union is
+    *
+    * @param a first bounding box to check
+    * @param b second bounding box to check
+    * @return the intersection bounding box, or null if no intersection
+    */
+   public static BoundingBox2D computeIntersectionOfTwoBoundingBoxes(BoundingBox2DReadOnly a, BoundingBox2DReadOnly b)
+   {
+      double maxX = Math.min(a.getMaxX(), b.getMaxX());
+      double maxY = Math.min(a.getMaxY(), b.getMaxY());
+      double minX = Math.max(a.getMinX(), b.getMinX());
+      double minY = Math.max(a.getMinY(), b.getMinY());
+
+      if ((maxX <= minX) || (maxY <= minY))
+         return null;
+
+      return new BoundingBox2D(minX, minY, maxX, maxY);
+   }
+
+   /**
+    * Finds the intersection of two bounding boxes defined by a bounding box.
+    * <p>
+    * WARNING: generates garbage
+    * <p>
+    * Allocates a new boundingBox3D.
+    *
+    * @param a first bounding box to check
+    * @param b second bounding box to check
+    * @return the intersection bounding box, or null if no intersection
+    */
+   public static BoundingBox3D computeIntersectionOfTwoBoundingBoxes(BoundingBox3DReadOnly a, BoundingBox3DReadOnly b)
+   {
+      double maxX = Math.min(a.getMaxX(), b.getMaxX());
+      double maxY = Math.min(a.getMaxY(), b.getMaxY());
+      double maxZ = Math.min(a.getMaxZ(), b.getMaxZ());
+
+      double minX = Math.max(a.getMinX(), b.getMinX());
+      double minY = Math.max(a.getMinY(), b.getMinY());
+      double minZ = Math.max(a.getMinZ(), b.getMinZ());
+
+      if ((maxX <= minX) || (maxY <= minY) || (maxZ <= minZ))
+         return null;
+
+      return new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ);
+   }
+
+   /**
+    * Computes the volume of the bounding box.
+    *
+    * @param boundingBox bounding box to inspect
+    * @return total volume of the bounding box.
+    */
+   public static double computeBoundingBoxVolume3D(BoundingBox3DReadOnly boundingBox)
+   {
+      return Math.abs(boundingBox.getMaxX() - boundingBox.getMinX()) * Math.abs(boundingBox.getMaxY() - boundingBox.getMinY()) * Math.abs(
+            boundingBox.getMaxZ() - boundingBox.getMinZ());
+   }
+
+   /**
+    * Inspects whether a 2d line segment ever intersects with a 2d convex polygon.
+    *
+    * @param lineSegmentStart      starting point of the line segment.
+    * @param lineSegmentEnd        ending point of the line segment.
+    * @param convexPolygonVertices list of points that compose the convex polygon.
+    * @param numberOfVertices      number of vertices contained in the convex polygon.
+    * @return whether the line segment intersects with the polygon.
+    */
+   public static boolean doLineSegment2DAndConvexPolygon2DIntersect(Point2DReadOnly lineSegmentStart,
+                                                                    Point2DReadOnly lineSegmentEnd,
+                                                                    List<? extends Point2DReadOnly> convexPolygonVertices,
+                                                                    int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygonVertices, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices == 1)
+         return isPoint2DOnLineSegment2D(convexPolygonVertices.get(0), lineSegmentStart, lineSegmentEnd);
+
+      if (numberOfVertices == 2)
+         return doLineSegment2DsIntersect(convexPolygonVertices.get(0), convexPolygonVertices.get(1), lineSegmentStart, lineSegmentEnd);
+
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
+      {
+         Point2DReadOnly edgeStart = convexPolygonVertices.get(edgeIndex);
+         Point2DReadOnly edgeEnd = convexPolygonVertices.get(EuclidGeometryPolygonTools.next(edgeIndex, numberOfVertices));
+
+         if (doLineSegment2DsIntersect(edgeStart, edgeEnd, lineSegmentStart, lineSegmentEnd))
+            return true;
+      }
+
+      return false;
+   }
+
+   private static void checkNumberOfVertices(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > convexPolygon2D.size())
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon2D.size() + "].");
+   }
+
+   /**
+    * Compute Intersection-over-Union (IoU) of two 3D bounding boxes. This is the percentage of volume of the two bounding boxes that are intersecting.
+    * <p>
+    * WARNING: generates garbage.
+    */
+   public static double computeIntersectionOverUnionOfTwoBoundingBoxes(BoundingBox3DReadOnly a, BoundingBox3DReadOnly b)
+   {
+      BoundingBox3D intersection = computeIntersectionOfTwoBoundingBoxes(a, b);
+
+      if (intersection == null)
+         return 0.0;
+
+      double intersectionVolume = computeBoundingBoxVolume3D(intersection);
+      double volumeA = computeBoundingBoxVolume3D(a);
+      double volumeB = computeBoundingBoxVolume3D(b);
+      double unionVolume = volumeA + volumeB - intersectionVolume;
+
+      return intersectionVolume / unionVolume;
+   }
+
+   /**
+    * Compute Intersection-over-Union (IoU) of two 3D bounding boxes. This is the percentage of volume of the two bounding boxes that are intersecting.
+    * <p>
+    * WARNING: generates garbage.
+    */
+   public static double computeIntersectionOverSmallerOfTwoBoundingBoxes(BoundingBox3DReadOnly a, BoundingBox3DReadOnly b)
+   {
+      BoundingBox3D intersection = computeIntersectionOfTwoBoundingBoxes(a, b);
+
+      if (intersection == null)
+         return 0.0;
+
+      double intersectionVolume = computeBoundingBoxVolume3D(intersection);
+      double volumeA = computeBoundingBoxVolume3D(a);
+      double volumeB = computeBoundingBoxVolume3D(b);
+      double smallerVolume = Math.min(volumeA, volumeB);
+
+      return intersectionVolume / smallerVolume;
+   }
+
+   /**
+    * Determines if the polygonToTest is fully inside the convex polygon by some epsilon distance.
+    *
+    * @return {@code true} if {@code polygonToTest} is fully contained inside {@code polygon}. {@code false} otherwise.
+    */
+   public static boolean isPolygonInside(ConvexPolygon2DReadOnly polygonToTest, double epsilon, ConvexPolygon2DReadOnly polygon)
+   {
+      for (int i = 0; i < polygonToTest.getNumberOfVertices(); i++)
+      {
+         if (!polygon.isPointInside(polygonToTest.getVertex(i), epsilon))
+            return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Determines if the polygonToTest is inside the convex polygon.
+    *
+    * @return {@code true} if {@code polygonToTest} is fully contained inside {@code polygon}. {@code false} otherwise.
+    */
+   public static boolean isPolygonInside(ConvexPolygon2DReadOnly polygonToTest, ConvexPolygon2DReadOnly polygon)
+   {
+      return isPolygonInside(polygonToTest, 0.0, polygon);
+   }
+
+   /**
+    * Finds the projection of a 3D point onto a 3D plane given in general form.
+    * Uses: projectedPoint = point - (normal.dot(point) + planeScalar) * (normal)
+    * <p>
+    * WARNING: generates garbage.
+    *
+    * @param plane Coefficients of the general form of plane equation (ax + by + cz + d = 0) as Vector4D
+    * @param point Point to be projected onto the plane as Point3D
+    * @return Projected point onto the plane as Point3D
+    */
+   public static Point3D projectPointOntoPlane(Vector4DReadOnly plane, Point3DReadOnly point)
+   {
+      UnitVector3D planeNormal = new UnitVector3D(plane.getX(), plane.getY(), plane.getZ());
+
+      Vector3D scaledNormal = new Vector3D(planeNormal);
+      scaledNormal.scale(planeNormal.dot(point) + plane.getS());
+
+      Point3D projectedPoint = new Point3D();
+      projectedPoint.sub(point, scaledNormal);
+
+      return projectedPoint;
    }
 }

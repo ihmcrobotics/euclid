@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.exceptions.NotAPositiveDefiniteMatrixException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
@@ -374,6 +375,21 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    }
 
    /**
+    * Asserts that this matrix is a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @throws NotAPositiveDefiniteMatrixException if the matrix is not a positive definite matrix.
+    */
+   default void checkIfPositiveDefiniteMatrix()
+   {
+      if (!isPositiveDefiniteMatrix())
+         throw new NotAPositiveDefiniteMatrixException(this);
+   }
+
+   /**
     * Asserts that this matrix is a rotation matrix.
     * <p>
     * This matrix is a rotation matrix if:
@@ -474,6 +490,20 @@ public interface Matrix3DReadOnly extends EuclidGeometry
    default boolean isZero(double epsilon)
    {
       return Matrix3DFeatures.isZero(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
+   }
+
+   /**
+    * Tests if this matrix is a positive definite matrix.
+    * <p>
+    * This matrix is positive definite if, by <a href="https://en.wikipedia.org/wiki/Sylvester%27s_criterion">Sylvester's Criterion</a>, the determinant of each
+    * of the leading principal minors is positive.
+    * </p>
+    *
+    * @return {@code true} if this matrix is a positive definite matrix, {@code false} otherwise.
+    */
+   default boolean isPositiveDefiniteMatrix()
+   {
+      return Matrix3DFeatures.isPositiveDefiniteMatrix(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
    }
 
    /**

@@ -6,34 +6,27 @@ import java.util.List;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.Location;
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.EuclidFrameGeometry;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * Extension of the tools provided in {@link EuclidGeometryTools} for frame geometries.
@@ -3963,6 +3956,117 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the coordinates of the possible intersections between a 3D ray and a 3D box
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param rayOrigin                the origin point of the 3D ray. Not modified.
+    * @param rayDirection             the direction of the 3D ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
+    * @throws IllegalArgumentException if {@code boxSize} contains values <= 0.0
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
+    *      Vector3DReadOnly, Point3DBasics, Point3DBasics)
+    */
+   public static int intersectionBetweenRay3DAndBox3D(FramePoint3DReadOnly boxPosition,
+                                                      FrameOrientation3DReadOnly boxOrientation,
+                                                      FrameVector3DReadOnly boxSize,
+                                                      FramePoint3DReadOnly rayOrigin,
+                                                      FrameVector3DReadOnly rayDirection,
+                                                      FramePoint3DBasics firstIntersectionToPack,
+                                                      FramePoint3DBasics secondIntersectionToPack)
+   {
+      boxPosition.checkReferenceFrameMatch(boxSize, rayOrigin, rayDirection, boxOrientation);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBox3D(boxPosition,
+                                                                                       boxOrientation,
+                                                                                       boxSize,
+                                                                                       rayOrigin,
+                                                                                       rayDirection,
+                                                                                       firstIntersectionToPack,
+                                                                                       secondIntersectionToPack);
+
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
+
+      return numberOfIntersections;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a 3D ray and a 3D box
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
+    * @param boxPosition              the coordinates of the box position. Not modified.
+    * @param boxOrientation           the orientation of the box. Not modified.
+    * @param boxSize                  the size of the box. Not modified.
+    * @param rayOrigin                the origin point of the 3D ray. Not modified.
+    * @param rayDirection             the direction of the 3D ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and the 3D box. It is either equal to 0, 1,
+    *         or 2. If the ray origin is on the surface of the 3D box it is considered an intersection.
+    * @throws IllegalArgumentException        if {@code boxSize} contains values <= 0.0
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    * @see #intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly,
+    *      Vector3DReadOnly, Point3DBasics, Point3DBasics)
+    */
+   public static int intersectionBetweenRay3DAndBox3D(FramePoint3DReadOnly boxPosition,
+                                                      FrameOrientation3DReadOnly boxOrientation,
+                                                      FrameVector3DReadOnly boxSize,
+                                                      FramePoint3DReadOnly rayOrigin,
+                                                      FrameVector3DReadOnly rayDirection,
+                                                      FixedFramePoint3DBasics firstIntersectionToPack,
+                                                      FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      boxPosition.checkReferenceFrameMatch(boxSize, rayOrigin, rayDirection, boxOrientation);
+      if (firstIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
+
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBox3D(boxPosition,
+                                                                                       boxOrientation,
+                                                                                       boxSize,
+                                                                                       rayOrigin,
+                                                                                       rayDirection,
+                                                                                       firstIntersectionToPack,
+                                                                                       secondIntersectionToPack);
+
+      return numberOfIntersections;
+   }
+
+   /**
     * Computes the coordinates of the possible intersections between a ray and an axis-aligned bounding
     * box.
     * <p>
@@ -7789,5 +7893,471 @@ public class EuclidFrameTools
    public static boolean geometricallyEquals(EuclidFrameGeometry a, EuclidFrameGeometry b, double epsilon)
    {
       return (a == b) || (a != null && a.geometricallyEquals(b, epsilon));
+   }
+
+   /**
+    * Calculates the 3D part of the given {@code input} that is parallel to the given
+    * {@code normalAxis} and stores the result in {@code inputNormalPartToPack}.
+    * <p>
+    * The result has the following properties:
+    * <ul>
+    * <li><tt>x.n = x<sub>n</sub>.n</tt>
+    * <li><tt>|x<sub>n</sub>&times;n| = 0</tt>
+    * </ul>
+    * where:
+    * <ul>
+    * <li><tt>x</tt> is {@code input}.
+    * <li></tt>n</tt> is {@code normalAxis}.
+    * <li><tt>x<sub>n</sub></tt> is {@code inputNormalPartToPack}.
+    * </ul>
+    * </p>
+    *
+    * @param input                 the tuple to extract the normal part of. Not modified.
+    * @param normalAxis            the normal vector. It is normalized internally if needed. Not
+    *                              modified.
+    * @param inputNormalPartToPack the tuple used to store the normal part of the input. Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public static void extractNormalPart(FrameTuple3DReadOnly input, FrameVector3DReadOnly normalAxis, FixedFrameTuple3DBasics inputNormalPartToPack)
+   {
+      input.checkReferenceFrameMatch(normalAxis, inputNormalPartToPack);
+      EuclidCoreTools.extractNormalPart(input, normalAxis, inputNormalPartToPack);
+   }
+
+   /**
+    * Calculates the 3D part of the given {@code input} that is parallel to the given
+    * {@code normalAxis} and stores the result in {@code inputNormalPartToPack}.
+    * <p>
+    * The result has the following properties:
+    * <ul>
+    * <li><tt>x.n = x<sub>n</sub>.n</tt>
+    * <li><tt>|x<sub>n</sub>&times;n| = 0</tt>
+    * </ul>
+    * where:
+    * <ul>
+    * <li><tt>x</tt> is {@code input}.
+    * <li></tt>n</tt> is {@code normalAxis}.
+    * <li><tt>x<sub>n</sub></tt> is {@code inputNormalPartToPack}.
+    * </ul>
+    * </p>
+    *
+    * @param input                 the tuple to extract the normal part of. Not modified.
+    * @param normalAxis            the normal vector. It is normalized internally if needed. Not
+    *                              modified.
+    * @param inputNormalPartToPack the tuple used to store the normal part of the input. Modified.
+    * @throws ReferenceFrameMismatchException if {@code input} and {@code normalAxis} are not expressed
+    *                                         in the same reference frame.
+    */
+   public static void extractNormalPart(FrameTuple3DReadOnly input, FrameVector3DReadOnly normalAxis, FrameTuple3DBasics inputNormalPartToPack)
+   {
+      input.checkReferenceFrameMatch(normalAxis);
+      inputNormalPartToPack.setReferenceFrame(input.getReferenceFrame());
+      EuclidCoreTools.extractNormalPart((Tuple3DReadOnly) input, (Vector3DReadOnly) normalAxis, (Tuple3DBasics) inputNormalPartToPack);
+   }
+
+   /**
+    * Calculates the 3D part of the given {@code input} that is orthogonal to the given
+    * {@code normalAxis} and stores the result in {@code inputTangentialPartToPack}.
+    * <p>
+    * The result has the following properties:
+    * <ul>
+    * <li><tt>x<sub>t</sub>.n = 0</tt>
+    * <li><tt>|x - (x.n)n| = |x<sub>t</sub>|</tt>
+    * </ul>
+    * where:
+    * <ul>
+    * <li><tt>x</tt> is {@code input}.
+    * <li></tt>n</tt> is {@code normalAxis}.
+    * <li><tt>x<sub>t</sub></tt> is {@code inputTangentialPartToPack}.
+    * </ul>
+    * </p>
+    *
+    * @param input                     the tuple to extract the tangential part of. Not modified.
+    * @param normalAxis                the normal vector. It is normalized internally if needed. Not
+    *                                  modified.
+    * @param inputTangentialPartToPack the tuple used to store the tangential part of the input.
+    *                                  Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public static void extractTangentialPart(FrameTuple3DReadOnly input, FrameVector3DReadOnly normalAxis, FixedFrameTuple3DBasics inputTangentialPartToPack)
+   {
+      input.checkReferenceFrameMatch(normalAxis, inputTangentialPartToPack);
+      EuclidCoreTools.extractTangentialPart((Tuple3DReadOnly) input, (Vector3DReadOnly) normalAxis, (Tuple3DBasics) inputTangentialPartToPack);
+   }
+
+   /**
+    * Calculates the 3D part of the given {@code input} that is orthogonal to the given
+    * {@code normalAxis} and stores the result in {@code inputTangentialPartToPack}.
+    * <p>
+    * The result has the following properties:
+    * <ul>
+    * <li><tt>x<sub>t</sub>.n = 0</tt>
+    * <li><tt>|x - (x.n)n| = |x<sub>t</sub>|</tt>
+    * </ul>
+    * where:
+    * <ul>
+    * <li><tt>x</tt> is {@code input}.
+    * <li></tt>n</tt> is {@code normalAxis}.
+    * <li><tt>x<sub>t</sub></tt> is {@code inputTangentialPartToPack}.
+    * </ul>
+    * </p>
+    *
+    * @param input                     the tuple to extract the tangential part of. Not modified.
+    * @param normalAxis                the normal vector. It is normalized internally if needed. Not
+    *                                  modified.
+    * @param inputTangentialPartToPack the tuple used to store the tangential part of the input.
+    *                                  Modified.
+    * @throws ReferenceFrameMismatchException if {@code input} and {@code normalAxis} are not expressed
+    *                                         in the same reference frame.
+    */
+   public static void extractTangentialPart(FrameTuple3DReadOnly input, FrameVector3DReadOnly normalAxis, FrameTuple3DBasics inputTangentialPartToPack)
+   {
+      input.checkReferenceFrameMatch(normalAxis);
+      inputTangentialPartToPack.setReferenceFrame(input.getReferenceFrame());
+      EuclidCoreTools.extractTangentialPart((Tuple3DReadOnly) input, (Vector3DReadOnly) normalAxis, (Tuple3DBasics) inputTangentialPartToPack);
+   }
+
+   /**
+    * This method implements the same operation as
+    * {@link EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(Vector3DReadOnly, Vector3DReadOnly, Orientation3DBasics)}
+    * except that it does not rely on {@code Math#acos(double)} making it faster.
+    *
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @see EuclidGeometryTools#orientation3DFromFirstToSecondVector3D(Vector3DReadOnly,
+    *       Vector3DReadOnly, Orientation3DBasics)
+    */
+   public static void rotationMatrix3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector,
+                                                                FrameVector3DReadOnly secondVector,
+                                                                FixedFrameCommonMatrix3DBasics rotationToPack)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector, rotationToPack);
+      EuclidGeometryTools.rotationMatrix3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d line segment and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting position of the line segment.
+    * @param endPoint                 end position of the line segment.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenLineSegment2DAndCylinder3D(double circleRadius,
+                                                                   FramePoint2DReadOnly circlePosition,
+                                                                   FramePoint2DReadOnly startPoint,
+                                                                   FramePoint2DReadOnly endPoint,
+                                                                   FixedFramePoint2DBasics firstIntersectionToPack,
+                                                                   FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      circlePosition.checkReferenceFrameMatch(startPoint, endPoint);
+      circlePosition.checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenLineSegment2DAndCylinder3D(circleRadius,
+                                                                               circlePosition,
+                                                                               startPoint,
+                                                                               endPoint,
+                                                                               firstIntersectionToPack,
+                                                                               secondIntersectionToPack);
+   }
+   /**
+    * Computes and packs the intersecting points between a 2d line and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param pointOnLine              point on the line
+    * @param direction                direction of the line.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenLine2DAndCircle(double circleRadius,
+                                                        FramePoint2DReadOnly circlePosition,
+                                                        FramePoint2DReadOnly pointOnLine,
+                                                        FrameVector2DReadOnly direction,
+                                                        FixedFramePoint2DBasics firstIntersectionToPack,
+                                                        FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      circlePosition.checkReferenceFrameMatch(pointOnLine, direction);
+      circlePosition.checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenLine2DAndCircle(circleRadius,
+                                                                    circlePosition,
+                                                                    pointOnLine,
+                                                                    direction,
+                                                                    firstIntersectionToPack,
+                                                                    secondIntersectionToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d ray and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting point of the line.
+    * @param direction                direction of the line.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenRay2DAndCircle(double circleRadius,
+                                                       FramePoint2DReadOnly circlePosition,
+                                                       FramePoint2DReadOnly startPoint,
+                                                       FrameVector2DReadOnly direction,
+                                                       FixedFramePoint2DBasics firstIntersectionToPack,
+                                                       FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      circlePosition.checkReferenceFrameMatch(startPoint, direction);
+      circlePosition.checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenRay2DAndCircle(circleRadius,
+                                                                   circlePosition,
+                                                                   startPoint,
+                                                                   direction,
+                                                                   firstIntersectionToPack,
+                                                                   secondIntersectionToPack);
+   }
+
+   /**
+    * Computes and packs the intersecting points between a 2d ray and a circle. Returns the number of found intersections.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line does not intersect the circle, this methods fails and returns {@code 0}.
+    * </ul>
+    * </p>
+    *
+    * @param circleRadius             radius of the circle in question.
+    * @param circlePosition           position of the center of the circle.
+    * @param startPoint               starting point of the line.
+    * @param pointOnRay               point on the line.
+    * @param firstIntersectionToPack  first possible intersecting point.
+    * @param secondIntersectionToPack second possible intersecting point.
+    * @return number of intersections found. Can be {@code 0} if no intersections, {@code 1} or {@code 2}.
+    */
+   public static int intersectionBetweenRay2DAndCircle(double circleRadius,
+                                                       FramePoint2DReadOnly circlePosition,
+                                                       FramePoint2DReadOnly startPoint,
+                                                       FramePoint2DReadOnly pointOnRay,
+                                                       FixedFramePoint2DBasics firstIntersectionToPack,
+                                                       FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      circlePosition.checkReferenceFrameMatch(startPoint, pointOnRay);
+      circlePosition.checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenRay2DAndCircle(circleRadius,
+                                                                   circlePosition,
+                                                                   startPoint,
+                                                                   pointOnRay,
+                                                                   firstIntersectionToPack,
+                                                                   secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
+    * direction) and a 2D ray segment (defined by the start and direction 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the ray are parallel but not collinear, they do not intersect.
+    * <li>When the line and the ray are collinear, they are assumed to intersect at
+    * {@code rayStart}.
+    * <li>When the line intersects the ray at the start point, this method returns
+    * {@code true} and the start point is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin          start point of the ray.
+    * @param rayDirection       direction of the ray.
+    * @param linePoint1         first point located on the line.
+    * @param linePoint2         second point located on the line.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenRay2DAndLine2D(FramePoint2DReadOnly rayOrigin,
+                                                           FrameVector2DReadOnly rayDirection,
+                                                           FramePoint2DReadOnly linePoint1,
+                                                           FramePoint2DReadOnly linePoint2,
+                                                           FixedFramePoint2DBasics intersectionToPack)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection, linePoint1);
+      rayOrigin.checkReferenceFrameMatch(linePoint2, intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenRay2DAndLine2D(rayOrigin, rayDirection, linePoint1, linePoint2, intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
+    * direction) and a 2D ray segment (defined by the start and direction 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the ray are parallel but not collinear, they do not intersect.
+    * <li>When the line and the ray are collinear, they are assumed to intersect at
+    * {@code rayStart}.
+    * <li>When the line intersects the ray at the start point, this method returns
+    * {@code true} and the start point is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin          start point of the ray.
+    * @param rayDirection       direction of the ray.
+    * @param pointOnLine        point located on the line.
+    * @param lineDirection      direction of the line.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenRay2DAndLine2D(FramePoint2DReadOnly rayOrigin,
+                                                           FrameVector2DReadOnly rayDirection,
+                                                           FramePoint2DReadOnly pointOnLine,
+                                                           FrameVector2DReadOnly lineDirection,
+                                                           FixedFramePoint2DBasics intersectionToPack)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection, pointOnLine);
+      rayOrigin.checkReferenceFrameMatch(lineDirection, intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenRay2DAndLine2D(rayOrigin, rayDirection, pointOnLine, lineDirection, intersectionToPack);
+   }
+
+   /**
+    * Finds the intersection of two bounding boxes defined by a bounding box.
+    * <p>
+    * WARNING: generates garbage
+    * <p>
+    * Allocates a new  BoundingBox2D. TODO: Check, Unit test, move where BoundingBox union is
+    *
+    * @param a first bounding box to check
+    * @param b second bounding box to check
+    * @return the intersection bounding box, or null if no intersection
+    */
+   public static FrameBoundingBox2D computeIntersectionOfTwoBoundingBoxes(FrameBoundingBox2DReadOnly a, FrameBoundingBox2DReadOnly b)
+   {
+      a.checkReferenceFrameMatch(b);
+      BoundingBox2D unframedBox = EuclidGeometryTools.computeIntersectionOfTwoBoundingBoxes(a, b);
+      if (unframedBox == null)
+         return null;
+      return new FrameBoundingBox2D(a.getReferenceFrame(), unframedBox);
+   }
+
+   /**
+    * Finds the intersection of two bounding boxes defined by a bounding box.
+    * <p>
+    * WARNING: generates garbage
+    * <p>
+    * Allocates a new  BoundingBox2D. TODO: Check, Unit test, move where BoundingBox union is
+    *
+    * @param a first bounding box to check
+    * @param b second bounding box to check
+    * @return the intersection bounding box, or null if no intersection
+    */
+   public static FrameBoundingBox3D computeIntersectionOfTwoBoundingBoxes(FrameBoundingBox3DReadOnly a, FrameBoundingBox3DReadOnly b)
+   {
+      a.checkReferenceFrameMatch(b);
+      BoundingBox3D unframedBox = EuclidGeometryTools.computeIntersectionOfTwoBoundingBoxes(a, b);
+      if (unframedBox == null)
+         return null;
+      return new FrameBoundingBox3D(a.getReferenceFrame(), unframedBox);
+   }
+
+   /**
+    * Determines if the polygonToTest is fully inside the convex polygon by some epsilon distance.
+    *
+    * @return {@code true} if {@code polygonToTest} is fully contained inside {@code polygon}. {@code false} otherwise.
+    */
+   public static boolean isPolygonInside(FrameConvexPolygon2DReadOnly polygonToTest, double epsilon, FrameConvexPolygon2DReadOnly polygon)
+   {
+      polygonToTest.checkReferenceFrameMatch(polygon);
+      return EuclidGeometryTools.isPolygonInside(polygonToTest, epsilon, polygon);
+   }
+
+   /**
+    * Determines if the polygonToTest is fully inside the convex polygon by some epsilon distance.
+    *
+    * @return {@code true} if {@code polygonToTest} is fully contained inside {@code polygon}. {@code false} otherwise.
+    */
+   public static boolean isPolygonInside(FrameConvexPolygon2DReadOnly polygonToTest, FrameConvexPolygon2DReadOnly polygon)
+   {
+      polygonToTest.checkReferenceFrameMatch(polygon);
+      return EuclidGeometryTools.isPolygonInside(polygonToTest, polygon);
+   }
+
+   /**
+    * This method implements the same operation as
+    * {@link EuclidGeometryTools#orientation3DFromZUpToVector3D(Vector3DReadOnly, Orientation3DBasics)}
+    * except that it does not rely on {@code Math#acos(double)} making it faster.
+    *
+    * @param vector         the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *                       Modified.
+    * @see EuclidGeometryTools#orientation3DFromZUpToVector3D(Vector3DReadOnly, Orientation3DBasics)
+    */
+   public static void rotationMatrix3DFromZUpToVector3D(FrameVector3DReadOnly vector, FixedFrameCommonMatrix3DBasics rotationToPack)
+   {
+      vector.checkReferenceFrameMatch(rotationToPack);
+      EuclidGeometryTools.rotationMatrix3DFromZUpToVector3D(vector, rotationToPack);
+   }
+
+   /**
+    * Compute Intersection-over-Union (IoU) of two 3D bounding boxes. This is the percentage of volume of the two bounding boxes that are intersecting.
+    * <p>
+    * WARNING: generates garbage.
+    */
+   public static double computeIntersectionOverUnionOfTwoBoundingBoxes(FrameBoundingBox3DReadOnly a, FrameBoundingBox3DReadOnly b)
+   {
+      a.checkReferenceFrameMatch(b);
+      return EuclidGeometryTools.computeIntersectionOverUnionOfTwoBoundingBoxes(a, b);
+   }
+
+   /**
+    * Compute Intersection-over-Union (IoU) of two 3D bounding boxes. This is the percentage of volume of the two bounding boxes that are intersecting.
+    * <p>
+    * WARNING: generates garbage.
+    */
+   public static double computeIntersectionOverSmallerOfTwoBoundingBoxes(FrameBoundingBox3DReadOnly a, FrameBoundingBox3DReadOnly b)
+   {
+      a.checkReferenceFrameMatch(b);
+      return EuclidGeometryTools.computeIntersectionOverSmallerOfTwoBoundingBoxes(a, b);
+   }
+
+   /**
+    * Finds the projection of a 3D point onto a 3D plane given in general form.
+    * Uses: projectedPoint = point - (normal.dot(point) + planeScalar) * (normal)
+    * <p>
+    * WARNING: generates garbage.
+    *
+    * @param plane Coefficients of the general form of plane equation (ax + by + cz + d = 0) as Vector4D
+    * @param point Point to be projected onto the plane as Point3D
+    * @return Projected point onto the plane as Point3D
+    */
+   public static FramePoint3D projectPointOntoPlane(FrameVector4DReadOnly plane, FramePoint3DReadOnly point)
+   {
+      plane.checkReferenceFrameMatch(point);
+      return new FramePoint3D(plane.getReferenceFrame(), EuclidGeometryTools.projectPointOntoPlane(plane, point));
    }
 }

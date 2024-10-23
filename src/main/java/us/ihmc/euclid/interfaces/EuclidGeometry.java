@@ -52,7 +52,8 @@ public interface EuclidGeometry
    /**
     * Provides a {@code String} representation of this geometry.
     *
-    * @param format the format to use for each number.
+    * @param format the format to use for each number, if {@code null} is passed, raw number format is
+    *               used.
     * @return the {@code String} representing this geometry.
     * @see EuclidCoreIOTools#DEFAULT_FORMAT
     */
