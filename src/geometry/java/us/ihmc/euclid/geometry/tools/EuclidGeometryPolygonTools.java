@@ -304,7 +304,7 @@ public class EuclidGeometryPolygonTools
                                                                                         Point2DReadOnly candidateVertex,
                                                                                         double epsilon)
    {
-      // Here we treat the case as the two neighboring edges of a triangle, where the joined poitn is the last hull vertex. If the angle between the two
+      // Here we treat the case as the two neighboring edges of a triangle, where the join point is the last hull vertex. If the angle between the two
       // edges is zero, it's collinear. We know that the angle is zero if the sin of the angle is zero, and the cos of the angle is positive. If the cos of the
       // angle is negative,
 
