@@ -226,7 +226,10 @@ public class EuclidGeometryPolygonTools
          int candidateIndex = lastHullVertexIndex + 1;
          Point2DReadOnly candidateVertex = vertices.get(candidateIndex);
 
-         while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON))
+         while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON) || (lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                                                                                                         vertices.get(lastHullVertexIndex - 1),
+                                                                                                                                                                         candidateVertex,
+                                                                                                                                                                         EPSILON)))
          { // Remove any duplicate vertices
             Collections.swap(vertices, candidateIndex, --numberOfVertices);
             candidateVertex = vertices.get(candidateIndex);
