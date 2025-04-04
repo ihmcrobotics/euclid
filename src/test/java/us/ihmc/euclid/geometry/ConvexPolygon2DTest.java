@@ -193,7 +193,7 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
          assertPointsInside(croppedFoothold, footPointsInEnvironment, 1e-7);
 
 
-         // Create a polygon around all teh transformed points, and make sure they're inside
+         // Create a polygon around all the transformed points, and make sure they're inside
          ConvexPolygon2D polygon2D = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(footPointsInFoot));
          assertPoint2DsInside(polygon2D, footPointsInFoot, 1e-7);
       }
