@@ -227,7 +227,7 @@ public class EuclidGeometryPolygonTools
          Point2DReadOnly candidateVertex = vertices.get(candidateIndex);
 
          while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON))
-         { // Remove any duplicate vertices  between here and the end of the list. We do this by swapping this vertex to the last of the list, and hten making
+         { // Remove any duplicate vertices  between here and the end of the list. We do this by swapping this vertex to the last of the list, and then making
             // the working list shorter
             Collections.swap(vertices, candidateIndex, --numberOfVertices);
             candidateVertex = vertices.get(candidateIndex);
