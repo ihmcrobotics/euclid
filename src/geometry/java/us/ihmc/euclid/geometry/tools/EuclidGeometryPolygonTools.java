@@ -227,7 +227,8 @@ public class EuclidGeometryPolygonTools
          Point2DReadOnly candidateVertex = vertices.get(candidateIndex);
 
          while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON))
-         { // Remove any duplicate vertices
+         { // Remove any duplicate vertices  between here and the end of the list. We do this by swapping this vertex to the last of the list, and then making
+            // the working list shorter
             Collections.swap(vertices, candidateIndex, --numberOfVertices);
             candidateVertex = vertices.get(candidateIndex);
 
@@ -235,7 +236,16 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices;)
+         while ((lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                                           vertices.get(lastHullVertexIndex - 1),
+                                                                                                           candidateVertex,
+                                                                                                           EPSILON)))
+         { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
+            candidateIndex++;
+            candidateVertex = vertices.get(candidateIndex);
+         }
+
+         for (int vertexIndex = candidateIndex + 1; vertexIndex <= numberOfVertices;)
          {
             int wrappedIndex = wrap(vertexIndex, numberOfVertices);
             Point2DReadOnly vertex = vertices.get(wrappedIndex);
@@ -252,8 +262,17 @@ public class EuclidGeometryPolygonTools
 
             if (isPoint2DOnLeftSideOfLine2D(vertex, lastHullVertex, candidateVertex))
             { // vertex is located outside => candidateVertex is not the next polygon vertex, vertex might be though.
-               candidateIndex = wrappedIndex;
-               candidateVertex = vertex;
+
+               // Check that we're not trying to finish the loop. If we are trying to finish the loop, make sure we're not doubling back, as this is a failure
+               // case.
+               if (lastHullVertexIndex < 1 || !isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                                       vertices.get(lastHullVertexIndex - 1),
+                                                                                                       vertex,
+                                                                                                       EPSILON))
+               {
+                  candidateIndex = wrappedIndex;
+                  candidateVertex = vertex;
+               }
             }
 
             vertexIndex++;
@@ -280,6 +299,26 @@ public class EuclidGeometryPolygonTools
       return numberOfVertices;
    }
 
+   private static boolean isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(Point2DReadOnly lastHullVertex,
+                                                                                        Point2DReadOnly previousHullVertex,
+                                                                                        Point2DReadOnly candidateVertex,
+                                                                                        double epsilon)
+   {
+      // Here we treat the case as the two neighboring edges of a triangle, where the join point is the last hull vertex. If the angle between the two
+      // edges is zero, it's collinear. We know that the angle is zero if the sin of the angle is zero, and the cos of the angle is positive. If the cos of the
+      // angle is negative,
+
+      double x1 = previousHullVertex.getX() - lastHullVertex.getX();
+      double y1 = previousHullVertex.getY() - lastHullVertex.getY();
+      double x2 = candidateVertex.getX() - lastHullVertex.getX();
+      double y2 = candidateVertex.getY() - lastHullVertex.getY();
+
+      double sinTheta = x1 * y2 - y1 * x2;
+      double cosTheta = x1 * x2 + y1 * y2;
+
+      return EuclidCoreTools.epsilonEquals(sinTheta, 0.0, epsilon) && cosTheta > -epsilon;
+   }
+
    /**
     * In-place and garbage free implementation of the
     * <a href="https://en.wikipedia.org/wiki/Graham_scan">Graham scan algorithm</a> for computing the
@@ -292,7 +331,7 @@ public class EuclidGeometryPolygonTools
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
     * @return the size of the convex hull.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int inPlaceGrahamScanConvexHull2D(List<? extends Point2DReadOnly> vertices)
    {
@@ -314,7 +353,7 @@ public class EuclidGeometryPolygonTools
     *                         only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int inPlaceGrahamScanConvexHull2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
@@ -402,7 +441,7 @@ public class EuclidGeometryPolygonTools
     *                         {@code null}. Modified.
     * @return the area of the convex polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static double computeConvexPolygon2DArea(List<? extends Point2DReadOnly> convexPolygon2D,
                                                    int numberOfVertices,
@@ -500,9 +539,9 @@ public class EuclidGeometryPolygonTools
     *                         of the polygon. Modified.
     * @return whether the method succeeds or not.
     * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
-    *                                   than {@code numberOfVertices}.
-    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
-    *                                   size of the given list of vertices.
+    *       than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *       size of the given list of vertices.
     */
    public static boolean edgeNormal(int edgeIndex,
                                     List<? extends Point2DReadOnly> convexPolygon2D,
@@ -556,9 +595,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
-    *         otherwise.
+    *       otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean isPoint2DInsideConvexPolygon2D(double pointX,
                                                         double pointY,
@@ -659,9 +698,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
-    *         otherwise.
+    *       otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean isPoint2DInsideConvexPolygon2D(Point2DReadOnly point,
                                                         List<? extends Point2DReadOnly> convexPolygon2D,
@@ -701,9 +740,9 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @param epsilon          the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
-    *         otherwise.
+    *       otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean isPoint2DInsideConvexPolygon2D(double pointX,
                                                         double pointY,
@@ -744,9 +783,9 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @param epsilon          the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
-    *         otherwise.
+    *       otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean isPoint2DInsideConvexPolygon2D(Point2DReadOnly point,
                                                         List<? extends Point2DReadOnly> convexPolygon2D,
@@ -787,7 +826,7 @@ public class EuclidGeometryPolygonTools
     *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int intersectionBetweenLine2DAndConvexPolygon2D(Point2DReadOnly pointOnLine,
                                                                  Vector2DReadOnly lineDirection,
@@ -845,7 +884,7 @@ public class EuclidGeometryPolygonTools
     *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int intersectionBetweenLine2DAndConvexPolygon2D(double pointOnLineX,
                                                                  double pointOnLineY,
@@ -981,9 +1020,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the intersections between between the line and the polygon or {@code null} if the method
-    *         failed or if there is no intersections.
+    *       failed or if there is no intersections.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static Point2D[] intersectionBetweenLine2DAndConvexPolygon2D(Point2DReadOnly pointOnLine,
                                                                        Vector2DReadOnly lineDirection,
@@ -1055,7 +1094,7 @@ public class EuclidGeometryPolygonTools
     *                                 Modified.
     * @return the number of intersections between the line segment and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int intersectionBetweenLineSegment2DAndConvexPolygon2D(Point2DReadOnly lineSegmentStart,
                                                                         Point2DReadOnly lineSegmentEnd,
@@ -1229,7 +1268,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the intersections between the line segment and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static Point2D[] intersectionBetweenLineSegment2DAndConvexPolygon2D(Point2DReadOnly lineSegmentStart,
                                                                               Point2DReadOnly lineSegmentEnd,
@@ -1288,7 +1327,7 @@ public class EuclidGeometryPolygonTools
     *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly rayOrigin,
                                                                 Vector2DReadOnly rayDirection,
@@ -1346,7 +1385,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the intersections between the ray and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static Point2D[] intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly rayOrigin,
                                                                       Vector2DReadOnly rayDirection,
@@ -1401,9 +1440,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the distance between the query and the polygon, it is negative if the point is inside the
-    *         polygon.
+    *       polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static double signedDistanceFromPoint2DToConvexPolygon2D(double pointX,
                                                                    double pointY,
@@ -1466,9 +1505,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the distance between the query and the polygon, it is negative if the point is inside the
-    *         polygon.
+    *       polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static double signedDistanceFromPoint2DToConvexPolygon2D(Point2DReadOnly point,
                                                                    List<? extends Point2DReadOnly> convexPolygon2D,
@@ -1508,7 +1547,7 @@ public class EuclidGeometryPolygonTools
     *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean closestPointToNonInterectingRay2D(Point2DReadOnly rayOrigin,
                                                            Vector2DReadOnly rayDirection,
@@ -1594,7 +1633,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the closest point to the ray or {@code null} if the method failed.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static Point2D closestPointToNonInterectingRay2D(Point2DReadOnly rayOrigin,
                                                            Vector2DReadOnly rayDirection,
@@ -1628,7 +1667,7 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToLine2D(double pointOnLineX,
                                                 double pointOnLineY,
@@ -1677,7 +1716,7 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices  the number of vertices that belong to the convex polygon.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToLine2D(Point2DReadOnly firstPointOnLine,
                                                 Point2DReadOnly secondPointOnLine,
@@ -1710,7 +1749,7 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToLine2D(Point2DReadOnly pointOnLine,
                                                 Vector2DReadOnly lineDirection,
@@ -1740,7 +1779,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToRay2D(Point2DReadOnly rayOrigin,
                                                Vector2DReadOnly rayDirection,
@@ -1787,7 +1826,7 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToPoint2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
@@ -1813,7 +1852,7 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @return the index of the closest vertex to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestVertexIndexToPoint2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
@@ -1856,7 +1895,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the closest edge to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestEdgeIndexToPoint2D(double pointX,
                                                double pointY,
@@ -1929,7 +1968,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the closest edge to the query.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int closestEdgeIndexToPoint2D(Point2DReadOnly point,
                                                List<? extends Point2DReadOnly> convexPolygon2D,
@@ -1968,9 +2007,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
-    *         fails.
+    *       fails.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int lineOfSightStartIndex(double observerX,
                                            double observerY,
@@ -2038,9 +2077,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
-    *         fails.
+    *       fails.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int lineOfSightStartIndex(Point2DReadOnly observer,
                                            List<? extends Point2DReadOnly> convexPolygon2D,
@@ -2079,9 +2118,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
-    *         fails.
+    *       fails.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int lineOfSightEndIndex(double observerX,
                                          double observerY,
@@ -2149,9 +2188,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
-    *         fails.
+    *       fails.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int lineOfSightEndIndex(Point2DReadOnly observer,
                                          List<? extends Point2DReadOnly> convexPolygon2D,
@@ -2192,9 +2231,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return in order the index of the first vertex and the index of the last vertex that are in the
-    *         line-of-sight, {@code null} if this method fails.
+    *       line-of-sight, {@code null} if this method fails.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static int[] lineOfSightIndices(Point2DReadOnly observer,
                                           List<? extends Point2DReadOnly> convexPolygon2D,
@@ -2244,9 +2283,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices  the number of vertices that belong to the convex polygon.
     * @return the index of the next polygon's edge the line intersects with, if none found {@code -2}.
     * @throws IndexOutOfBoundsException if {@code previousEdgeIndex} is not in [-2,
-    *                                   {@code numberOfVertices}[.
-    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
-    *                                   size of the given list of vertices.
+    *       {@code numberOfVertices}[.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *       size of the given list of vertices.
     */
    public static int nextEdgeIndexIntersectingWithLine2D(int previousEdgeIndex,
                                                          Point2DReadOnly pointOnLine,
@@ -2300,9 +2339,9 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices  the number of vertices that belong to the convex polygon.
     * @return the index of the next polygon's edge the line intersects with, if none found {@code -2}.
     * @throws IndexOutOfBoundsException if {@code previousEdgeIndex} is not in [-2,
-    *                                   {@code numberOfVertices}[.
-    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
-    *                                   size of the given list of vertices.
+    *       {@code numberOfVertices}[.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *       size of the given list of vertices.
     */
    public static int nextEdgeIndexIntersectingWithLine2D(int previousEdgeIndex,
                                                          double pointOnLineX,
@@ -2372,7 +2411,7 @@ public class EuclidGeometryPolygonTools
     *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean orthogonalProjectionOnConvexPolygon2D(double pointToProjectX,
                                                                double pointToProjectY,
@@ -2435,7 +2474,7 @@ public class EuclidGeometryPolygonTools
     *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static boolean orthogonalProjectionOnConvexPolygon2D(Point2DReadOnly pointToProject,
                                                                List<? extends Point2DReadOnly> convexPolygon2D,
@@ -2475,7 +2514,7 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return the coordinates of the projection, or {@code null} if the method failed.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *                                  of the given list of vertices.
+    *       of the given list of vertices.
     */
    public static Point2D orthogonalProjectionOnConvexPolygon2D(Point2DReadOnly pointToProject,
                                                                List<? extends Point2DReadOnly> convexPolygon2D,
@@ -2509,11 +2548,11 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
-    *         observer cannot see the outside or is lying on the edge.
+    *       observer cannot see the outside or is lying on the edge.
     * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
-    *                                   than {@code numberOfVertices}.
-    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
-    *                                   size of the given list of vertices.
+    *       than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *       size of the given list of vertices.
     */
    public static boolean canObserverSeeEdge(int edgeIndex,
                                             Point2DReadOnly observer,
@@ -2542,11 +2581,11 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
-    *         observer cannot see the outside or is lying on the edge.
+    *       observer cannot see the outside or is lying on the edge.
     * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
-    *                                   than {@code numberOfVertices}.
-    * @throws IllegalArgumentException  if {@code numberOfVertices} is negative or greater than the
-    *                                   size of the given list of vertices.
+    *       than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *       size of the given list of vertices.
     */
    public static boolean canObserverSeeEdge(int edgeIndex,
                                             double observerX,
