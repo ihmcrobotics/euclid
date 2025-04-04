@@ -226,11 +226,9 @@ public class EuclidGeometryPolygonTools
          int candidateIndex = lastHullVertexIndex + 1;
          Point2DReadOnly candidateVertex = vertices.get(candidateIndex);
 
-         while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON) || (lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
-                                                                                                                                                                         vertices.get(lastHullVertexIndex - 1),
-                                                                                                                                                                         candidateVertex,
-                                                                                                                                                                         EPSILON)))
-         { // Remove any duplicate vertices
+         while (candidateVertex.epsilonEquals(lastHullVertex, EPSILON))
+         { // Remove any duplicate vertices  between here and the end of the list. We do this by swapping this vertex to the last of the list, and hten making
+            // the working list shorter
             Collections.swap(vertices, candidateIndex, --numberOfVertices);
             candidateVertex = vertices.get(candidateIndex);
 
@@ -238,7 +236,16 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices;)
+         while ((lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                                           vertices.get(lastHullVertexIndex - 1),
+                                                                                                           candidateVertex,
+                                                                                                           EPSILON)))
+         { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
+            candidateIndex++;
+            candidateVertex = vertices.get(candidateIndex);
+         }
+
+         for (int vertexIndex = candidateIndex + 1; vertexIndex <= numberOfVertices;)
          {
             int wrappedIndex = wrap(vertexIndex, numberOfVertices);
             Point2DReadOnly vertex = vertices.get(wrappedIndex);
@@ -297,21 +304,19 @@ public class EuclidGeometryPolygonTools
                                                                                         Point2DReadOnly candidateVertex,
                                                                                         double epsilon)
    {
-      // get the normalized direction of the previous edge.
-      double candidateDeltaX = lastHullVertex.getX() - previousHullVertex.getX();
-      double candidateDeltaY = lastHullVertex.getY() - previousHullVertex.getY();
-      double candidateNorm = EuclidCoreTools.norm(candidateDeltaX, candidateDeltaY);
-      double candidateDirectionX = candidateDeltaX / candidateNorm;
-      double candidateDirectionY = candidateDeltaY / candidateNorm;
+      // Here we treat the case as the two neighboring edges of a triangle, where the joined poitn is the last hull vertex. If the angle between the two
+      // edges is zero, it's collinear. We know that the angle is zero if the sin of the angle is zero, and the cos of the angle is positive. If the cos of the
+      // angle is negative,
 
-      // Check if this new candidate point is collinear and in the opposite direction
-      double vertexDeltaX = candidateVertex.getX() - lastHullVertex.getX();
-      double vertexDeltaY = candidateVertex.getY() - lastHullVertex.getY();
-      double vertexDeltaNorm = EuclidCoreTools.norm(vertexDeltaX, vertexDeltaY);
+      double x1 = previousHullVertex.getX() - lastHullVertex.getX();
+      double y1 = previousHullVertex.getY() - lastHullVertex.getY();
+      double x2 = candidateVertex.getX() - lastHullVertex.getX();
+      double y2 = candidateVertex.getY() - lastHullVertex.getY();
 
-      double dotProduct = vertexDeltaX * candidateDirectionX + vertexDeltaY * candidateDirectionY;
+      double sinTheta = x1 * y2 - y1 * x2;
+      double cosTheta = x1 * x2 + y1 * y2;
 
-      return EuclidCoreTools.epsilonEquals(dotProduct, -vertexDeltaNorm, epsilon);
+      return EuclidCoreTools.epsilonEquals(sinTheta, 0.0, epsilon) && cosTheta > -epsilon;
    }
 
    /**
