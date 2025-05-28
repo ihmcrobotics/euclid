@@ -1,29 +1,5 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.ONE_TEN_MILLIONTH;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.ONE_TRILLIONTH;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.areVector2DsParallel;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceBetweenPoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredBetweenPoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.doLine2DAndLineSegment2DIntersect;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.orthogonalProjectionOnLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageOfIntersectionBetweenTwoLine2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.whichSideOfLine2DIsPoint2DOn;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 import us.ihmc.euclid.Location;
 import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
@@ -33,6 +9,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 
 /**
  * This class provides a variety of tools to perform operations with polygons.
@@ -236,12 +218,18 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         while ((lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+         while ( candidateIndex < numberOfVertices && lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
                                                                                                            vertices.get(lastHullVertexIndex - 1),
                                                                                                            candidateVertex,
-                                                                                                           EPSILON)))
+                                                                                                           EPSILON))
          { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
             candidateIndex++;
+
+            if (candidateIndex >= numberOfVertices)
+            {
+               return lastHullVertexIndex +1;
+            }
+
             candidateVertex = vertices.get(candidateIndex);
          }
 
