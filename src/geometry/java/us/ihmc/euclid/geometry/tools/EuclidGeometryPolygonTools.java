@@ -250,7 +250,7 @@ public class EuclidGeometryPolygonTools
             // Since lastHullVertexIndex is the index of the last added vertex, the total count is lastHullVertexIndex + 1.
             if (candidateIndex >= numberOfVertices)
             {
-               return lastHullVertexIndex +1;
+               return lastHullVertexIndex + 1;
             }
 
             candidateVertex = vertices.get(candidateIndex);
