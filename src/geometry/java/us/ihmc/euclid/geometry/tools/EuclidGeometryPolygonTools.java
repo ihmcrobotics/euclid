@@ -225,6 +225,8 @@ public class EuclidGeometryPolygonTools
          { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
             candidateIndex++;
 
+            // This is exceptional case when skpping over the duplicate or collinear points, this ran out of valid candidates but still tried to access the next one.
+            // Forcely, increasing index number for this.
             if (candidateIndex >= numberOfVertices)
             {
                return lastHullVertexIndex +1;
