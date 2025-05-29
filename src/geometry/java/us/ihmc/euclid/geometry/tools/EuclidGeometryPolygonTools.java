@@ -236,12 +236,23 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         while ((lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
-                                                                                                           vertices.get(lastHullVertexIndex - 1),
-                                                                                                           candidateVertex,
-                                                                                                           EPSILON)))
+         while (candidateIndex < numberOfVertices && lastHullVertexIndex >= 1
+                && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                 vertices.get(lastHullVertexIndex- 1),
+                                                                                 candidateVertex,
+                                                                                 EPSILON))
          { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
             candidateIndex++;
+
+            // If we have skipped over all remaining vertices (e.g., due to duplicates or collinear points),
+            // there is no valid candidate left to add to the convex hull.
+            // In this case, we terminate the wrapping early and return the number of hull vertices found so far.
+            // Since lastHullVertexIndex is the index of the last added vertex, the total count is lastHullVertexIndex + 1.
+            if (candidateIndex >= numberOfVertices)
+            {
+               return lastHullVertexIndex + 1;
+            }
+
             candidateVertex = vertices.get(candidateIndex);
          }
 
