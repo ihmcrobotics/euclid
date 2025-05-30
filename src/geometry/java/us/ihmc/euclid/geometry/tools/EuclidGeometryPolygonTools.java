@@ -236,11 +236,11 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         while (candidateIndex < numberOfVertices && lastHullVertexIndex >= 1
-                && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
-                                                                                 vertices.get(lastHullVertexIndex- 1),
-                                                                                 candidateVertex,
-                                                                                 EPSILON))
+         while (lastHullVertexIndex >= 1 && isCandidatePointCollinearInOppositeDirectionWithTheFirstPoint(lastHullVertex,
+                                                                                                          vertices.get(lastHullVertexIndex- 1),
+                                                                                                          candidateVertex,
+                                                                                                          EPSILON))
+
          { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
             candidateIndex++;
 
