@@ -240,7 +240,6 @@ public class EuclidGeometryPolygonTools
                                                                                                           vertices.get(lastHullVertexIndex- 1),
                                                                                                           candidateVertex,
                                                                                                           EPSILON))
-
          { // The next candidate vertex isn't valid because it's collinear, but may be valid for a future point, so we want to keep it in scope.
             candidateIndex++;
 
