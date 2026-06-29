@@ -12,10 +12,10 @@ import us.ihmc.euclid.tuple3D.Vector3D;
  * Static utility class providing SE(3) Lie group and Lie algebra operations.
  *
  * <p>The Lie algebra se(3) is identified with ℝ⁶ via the hat/vee isomorphism.
- * The 6-vector convention is {@code ξ = [ρ; φ]} where:
+ * The 6-vector convention is {@code ξ = [φ; ρ]} where:
  * <ul>
- *   <li>ρ = xi[0..2] — translational (linear) component</li>
- *   <li>φ = xi[3..5] — rotational (angular) component</li>
+ *   <li>φ = xi[0..2] — rotational (angular) component</li>
+ *   <li>ρ = xi[3..5] — translational (linear) component</li>
  * </ul>
  * </p>
  *
@@ -27,10 +27,10 @@ import us.ihmc.euclid.tuple3D.Vector3D;
  * </pre>
  * </p>
  *
- * <p>The SE(3) group adjoint (6×6) for T = (R, t) with 6-vector ordering [ρ; φ] is:
+ * <p>The SE(3) group adjoint (6×6) for T = (R, t) with 6-vector ordering [φ; ρ] is:
  * <pre>
- *   Ad_T = [ R    hat(t)·R ]
- *          [ 0       R     ]
+ *   Ad_T = [    R     0 ]
+ *          [ hat(t)·R R ]
  * </pre>
  * </p>
  *
@@ -49,10 +49,10 @@ public class SE3LieGroupTools
    // -----------------------------------------------------------------------
 
    /**
-    * SE(3) hat map: converts a 6-vector ξ = [ρ; φ] to a 4×4 se(3) matrix.
+    * SE(3) hat map: converts a 6-vector ξ = [φ; ρ] to a 4×4 se(3) matrix.
     *
     * <pre>
-    * xi[0..2] = ρ (translation part),  xi[3..5] = φ (rotation part)
+    * xi[0..2] = φ (rotation part),  xi[3..5] = ρ (translation part)
     *
     *            [  0   -φz   φy   ρx ]
     *            [ φz    0   -φx   ρy ]
@@ -60,13 +60,13 @@ public class SE3LieGroupTools
     *            [  0    0    0     0  ]
     * </pre>
     *
-    * @param xi          6-element array [ρx, ρy, ρz, φx, φy, φz]. Not modified.
+    * @param xi          6-element array [φx, φy, φz, ρx, ρy, ρz]. Not modified.
     * @param matrixToPack 4×4 matrix to pack the result into (must be at least 4×4). Modified.
     */
    public static void hat(double[] xi, DMatrixRMaj matrixToPack)
    {
-      double rhoX = xi[0], rhoY = xi[1], rhoZ = xi[2];
-      double phiX = xi[3], phiY = xi[4], phiZ = xi[5];
+      double phiX = xi[0], phiY = xi[1], phiZ = xi[2];
+      double rhoX = xi[3], rhoY = xi[4], rhoZ = xi[5];
 
       matrixToPack.unsafe_set(0, 0, 0.0);
       matrixToPack.unsafe_set(0, 1, -phiZ);
@@ -90,19 +90,19 @@ public class SE3LieGroupTools
    }
 
    /**
-    * SE(3) vee map: extracts the 6-vector ξ = [ρ; φ] from a 4×4 se(3) hat matrix.
+    * SE(3) vee map: extracts the 6-vector ξ = [φ; ρ] from a 4×4 se(3) hat matrix.
     *
     * @param hatMatrix  4×4 se(3) hat matrix. Not modified.
-    * @param xiToPack   6-element array to pack [ρx, ρy, ρz, φx, φy, φz] into. Modified.
+    * @param xiToPack   6-element array to pack [φx, φy, φz, ρx, ρy, ρz] into. Modified.
     */
    public static void vee(DMatrixRMaj hatMatrix, double[] xiToPack)
    {
-      xiToPack[0] = hatMatrix.unsafe_get(0, 3); // ρx
-      xiToPack[1] = hatMatrix.unsafe_get(1, 3); // ρy
-      xiToPack[2] = hatMatrix.unsafe_get(2, 3); // ρz
-      xiToPack[3] = hatMatrix.unsafe_get(2, 1); // φx
-      xiToPack[4] = hatMatrix.unsafe_get(0, 2); // φy
-      xiToPack[5] = hatMatrix.unsafe_get(1, 0); // φz
+      xiToPack[0] = hatMatrix.unsafe_get(2, 1); // φx
+      xiToPack[1] = hatMatrix.unsafe_get(0, 2); // φy
+      xiToPack[2] = hatMatrix.unsafe_get(1, 0); // φz
+      xiToPack[3] = hatMatrix.unsafe_get(0, 3); // ρx
+      xiToPack[4] = hatMatrix.unsafe_get(1, 3); // ρy
+      xiToPack[5] = hatMatrix.unsafe_get(2, 3); // ρz
    }
 
    // -----------------------------------------------------------------------
@@ -110,16 +110,16 @@ public class SE3LieGroupTools
    // -----------------------------------------------------------------------
 
    /**
-    * SE(3) exponential map: converts a Lie algebra element ξ = [ρ; φ] to a rigid-body transform.
+    * SE(3) exponential map: converts a Lie algebra element ξ = [φ; ρ] to a rigid-body transform.
     *
     * <p>Formula: R = exp(hat(φ)), t = J_l(φ) · ρ.</p>
     *
-    * @param xi          6-element array [ρx, ρy, ρz, φx, φy, φz]. Not modified.
+    * @param xi          6-element array [φx, φy, φz, ρx, ρy, ρz]. Not modified.
     * @param transformToPack the rigid-body transform to pack the result into. Modified.
     */
    public static void exp(double[] xi, RigidBodyTransformBasics transformToPack)
    {
-      Vector3D phi = new Vector3D(xi[3], xi[4], xi[5]);
+      Vector3D phi = new Vector3D(xi[0], xi[1], xi[2]);
 
       RotationMatrix R = new RotationMatrix();
       SO3LieGroupTools.exp(phi, R);
@@ -127,7 +127,7 @@ public class SE3LieGroupTools
       Matrix3D Jl = new Matrix3D();
       SO3LieGroupTools.leftJacobian(phi, Jl);
 
-      double rhoX = xi[0], rhoY = xi[1], rhoZ = xi[2];
+      double rhoX = xi[3], rhoY = xi[4], rhoZ = xi[5];
       double tx = Jl.getM00() * rhoX + Jl.getM01() * rhoY + Jl.getM02() * rhoZ;
       double ty = Jl.getM10() * rhoX + Jl.getM11() * rhoY + Jl.getM12() * rhoZ;
       double tz = Jl.getM20() * rhoX + Jl.getM21() * rhoY + Jl.getM22() * rhoZ;
@@ -137,12 +137,12 @@ public class SE3LieGroupTools
    }
 
    /**
-    * SE(3) logarithmic map: converts a rigid-body transform to its Lie algebra element ξ = [ρ; φ].
+    * SE(3) logarithmic map: converts a rigid-body transform to its Lie algebra element ξ = [φ; ρ].
     *
     * <p>Formula: φ = log(R), ρ = J_l⁻¹(φ) · t.</p>
     *
     * @param transform  the rigid-body transform. Not modified.
-    * @param xiToPack   6-element array to pack [ρx, ρy, ρz, φx, φy, φz] into. Modified.
+    * @param xiToPack   6-element array to pack [φx, φy, φz, ρx, ρy, ρz] into. Modified.
     */
    public static void log(RigidBodyTransformReadOnly transform, double[] xiToPack)
    {
@@ -156,12 +156,12 @@ public class SE3LieGroupTools
       double ty = transform.getTranslation().getY();
       double tz = transform.getTranslation().getZ();
 
-      xiToPack[0] = JlInv.getM00() * tx + JlInv.getM01() * ty + JlInv.getM02() * tz;
-      xiToPack[1] = JlInv.getM10() * tx + JlInv.getM11() * ty + JlInv.getM12() * tz;
-      xiToPack[2] = JlInv.getM20() * tx + JlInv.getM21() * ty + JlInv.getM22() * tz;
-      xiToPack[3] = phi.getX();
-      xiToPack[4] = phi.getY();
-      xiToPack[5] = phi.getZ();
+      xiToPack[0] = phi.getX();
+      xiToPack[1] = phi.getY();
+      xiToPack[2] = phi.getZ();
+      xiToPack[3] = JlInv.getM00() * tx + JlInv.getM01() * ty + JlInv.getM02() * tz;
+      xiToPack[4] = JlInv.getM10() * tx + JlInv.getM11() * ty + JlInv.getM12() * tz;
+      xiToPack[5] = JlInv.getM20() * tx + JlInv.getM21() * ty + JlInv.getM22() * tz;
    }
 
    // -----------------------------------------------------------------------
@@ -169,11 +169,11 @@ public class SE3LieGroupTools
    // -----------------------------------------------------------------------
 
    /**
-    * Group adjoint Ad_T (6×6) for T = (R, t), with 6-vector ordering [ρ; φ].
+    * Group adjoint Ad_T (6×6) for T = (R, t), with 6-vector ordering [φ; ρ].
     *
     * <pre>
-    *   Ad_T = [ R    hat(t)·R ]
-    *          [ 0       R     ]
+    *   Ad_T = [    R     0 ]
+    *          [ hat(t)·R R ]
     * </pre>
     *
     * @param transform    the SE(3) element T. Not modified.
@@ -213,15 +213,15 @@ public class SE3LieGroupTools
       adjToPack.unsafe_set(1, 0, r10); adjToPack.unsafe_set(1, 1, r11); adjToPack.unsafe_set(1, 2, r12);
       adjToPack.unsafe_set(2, 0, r20); adjToPack.unsafe_set(2, 1, r21); adjToPack.unsafe_set(2, 2, r22);
 
-      // Top-right 3×3: hat(t)*R
-      adjToPack.unsafe_set(0, 3, ht00); adjToPack.unsafe_set(0, 4, ht01); adjToPack.unsafe_set(0, 5, ht02);
-      adjToPack.unsafe_set(1, 3, ht10); adjToPack.unsafe_set(1, 4, ht11); adjToPack.unsafe_set(1, 5, ht12);
-      adjToPack.unsafe_set(2, 3, ht20); adjToPack.unsafe_set(2, 4, ht21); adjToPack.unsafe_set(2, 5, ht22);
+      // Top-right 3×3: 0
+      adjToPack.unsafe_set(0, 3, 0.0); adjToPack.unsafe_set(0, 4, 0.0); adjToPack.unsafe_set(0, 5, 0.0);
+      adjToPack.unsafe_set(1, 3, 0.0); adjToPack.unsafe_set(1, 4, 0.0); adjToPack.unsafe_set(1, 5, 0.0);
+      adjToPack.unsafe_set(2, 3, 0.0); adjToPack.unsafe_set(2, 4, 0.0); adjToPack.unsafe_set(2, 5, 0.0);
 
-      // Bottom-left 3×3: 0
-      adjToPack.unsafe_set(3, 0, 0.0); adjToPack.unsafe_set(3, 1, 0.0); adjToPack.unsafe_set(3, 2, 0.0);
-      adjToPack.unsafe_set(4, 0, 0.0); adjToPack.unsafe_set(4, 1, 0.0); adjToPack.unsafe_set(4, 2, 0.0);
-      adjToPack.unsafe_set(5, 0, 0.0); adjToPack.unsafe_set(5, 1, 0.0); adjToPack.unsafe_set(5, 2, 0.0);
+      // Bottom-left 3×3: hat(t)*R
+      adjToPack.unsafe_set(3, 0, ht00); adjToPack.unsafe_set(3, 1, ht01); adjToPack.unsafe_set(3, 2, ht02);
+      adjToPack.unsafe_set(4, 0, ht10); adjToPack.unsafe_set(4, 1, ht11); adjToPack.unsafe_set(4, 2, ht12);
+      adjToPack.unsafe_set(5, 0, ht20); adjToPack.unsafe_set(5, 1, ht21); adjToPack.unsafe_set(5, 2, ht22);
 
       // Bottom-right 3×3: R
       adjToPack.unsafe_set(3, 3, r00); adjToPack.unsafe_set(3, 4, r01); adjToPack.unsafe_set(3, 5, r02);
@@ -230,20 +230,20 @@ public class SE3LieGroupTools
    }
 
    /**
-    * Algebra adjoint (small adjoint) ad_ξ (6×6) for ξ = [ρ; φ].
+    * Algebra adjoint (small adjoint) ad_ξ (6×6) for ξ = [φ; ρ].
     *
     * <pre>
-    *   ad_ξ = [ hat(φ)   hat(ρ) ]
-    *          [   0      hat(φ) ]
+    *   ad_ξ = [ hat(φ)     0    ]
+    *          [ hat(ρ)   hat(φ) ]
     * </pre>
     *
-    * @param xi         6-element array [ρx, ρy, ρz, φx, φy, φz]. Not modified.
+    * @param xi         6-element array [φx, φy, φz, ρx, ρy, ρz]. Not modified.
     * @param adToPack   6×6 DMatrixRMaj to pack ad_ξ into (must be at least 6×6). Modified.
     */
    public static void smallAdjoint(double[] xi, DMatrixRMaj adToPack)
    {
-      double rhoX = xi[0], rhoY = xi[1], rhoZ = xi[2];
-      double phiX = xi[3], phiY = xi[4], phiZ = xi[5];
+      double phiX = xi[0], phiY = xi[1], phiZ = xi[2];
+      double rhoX = xi[3], rhoY = xi[4], rhoZ = xi[5];
 
       // hat(phi) = [[0, -phiZ, phiY], [phiZ, 0, -phiX], [-phiY, phiX, 0]]
       // hat(rho) = [[0, -rhoZ, rhoY], [rhoZ, 0, -rhoX], [-rhoY, rhoX, 0]]
@@ -253,15 +253,15 @@ public class SE3LieGroupTools
       adToPack.unsafe_set(1, 0, phiZ);   adToPack.unsafe_set(1, 1, 0.0);   adToPack.unsafe_set(1, 2, -phiX);
       adToPack.unsafe_set(2, 0, -phiY);  adToPack.unsafe_set(2, 1, phiX);  adToPack.unsafe_set(2, 2, 0.0);
 
-      // Top-right 3×3: hat(rho)
-      adToPack.unsafe_set(0, 3, 0.0);    adToPack.unsafe_set(0, 4, -rhoZ); adToPack.unsafe_set(0, 5, rhoY);
-      adToPack.unsafe_set(1, 3, rhoZ);   adToPack.unsafe_set(1, 4, 0.0);   adToPack.unsafe_set(1, 5, -rhoX);
-      adToPack.unsafe_set(2, 3, -rhoY);  adToPack.unsafe_set(2, 4, rhoX);  adToPack.unsafe_set(2, 5, 0.0);
+      // Top-right 3×3: 0
+      adToPack.unsafe_set(0, 3, 0.0); adToPack.unsafe_set(0, 4, 0.0); adToPack.unsafe_set(0, 5, 0.0);
+      adToPack.unsafe_set(1, 3, 0.0); adToPack.unsafe_set(1, 4, 0.0); adToPack.unsafe_set(1, 5, 0.0);
+      adToPack.unsafe_set(2, 3, 0.0); adToPack.unsafe_set(2, 4, 0.0); adToPack.unsafe_set(2, 5, 0.0);
 
-      // Bottom-left 3×3: 0
-      adToPack.unsafe_set(3, 0, 0.0); adToPack.unsafe_set(3, 1, 0.0); adToPack.unsafe_set(3, 2, 0.0);
-      adToPack.unsafe_set(4, 0, 0.0); adToPack.unsafe_set(4, 1, 0.0); adToPack.unsafe_set(4, 2, 0.0);
-      adToPack.unsafe_set(5, 0, 0.0); adToPack.unsafe_set(5, 1, 0.0); adToPack.unsafe_set(5, 2, 0.0);
+      // Bottom-left 3×3: hat(rho)
+      adToPack.unsafe_set(3, 0, 0.0);    adToPack.unsafe_set(3, 1, -rhoZ); adToPack.unsafe_set(3, 2, rhoY);
+      adToPack.unsafe_set(4, 0, rhoZ);   adToPack.unsafe_set(4, 1, 0.0);   adToPack.unsafe_set(4, 2, -rhoX);
+      adToPack.unsafe_set(5, 0, -rhoY);  adToPack.unsafe_set(5, 1, rhoX);  adToPack.unsafe_set(5, 2, 0.0);
 
       // Bottom-right 3×3: hat(phi)
       adToPack.unsafe_set(3, 3, 0.0);    adToPack.unsafe_set(3, 4, -phiZ); adToPack.unsafe_set(3, 5, phiY);

@@ -34,8 +34,8 @@ public class SE3LieGroupToolsTest
          double[] xi = randomXi(random);
          SE3LieGroupTools.hat(xi, hat);
 
-         double rhoX = xi[0], rhoY = xi[1], rhoZ = xi[2];
-         double phiX = xi[3], phiY = xi[4], phiZ = xi[5];
+         double phiX = xi[0], phiY = xi[1], phiZ = xi[2];
+         double rhoX = xi[3], rhoY = xi[4], rhoZ = xi[5];
 
          // Last row must be zero
          for (int c = 0; c < 4; c++)
@@ -132,7 +132,7 @@ public class SE3LieGroupToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D phi = EuclidCoreRandomTools.nextRotationVector(random);
-         double[] xi = {0.0, 0.0, 0.0, phi.getX(), phi.getY(), phi.getZ()};
+         double[] xi = {phi.getX(), phi.getY(), phi.getZ(), 0.0, 0.0, 0.0};
          SE3LieGroupTools.exp(xi, T);
 
          SO3LieGroupTools.exp(phi, Rexpected);
@@ -154,7 +154,7 @@ public class SE3LieGroupToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D rho = EuclidCoreRandomTools.nextVector3D(random);
-         double[] xi = {rho.getX(), rho.getY(), rho.getZ(), 0.0, 0.0, 0.0};
+         double[] xi = {0.0, 0.0, 0.0, rho.getX(), rho.getY(), rho.getZ()};
          SE3LieGroupTools.exp(xi, T);
 
          EuclidCoreTestTools.assertMatrix3DEquals(identity, T.getRotation(), EPSILON);
@@ -225,8 +225,8 @@ public class SE3LieGroupToolsTest
    public void testSmallAdjointBracket()
    {
       // ad_xi1 * xi2 should equal the se(3) Lie bracket [xi1, xi2]:
-      //   rho part: phi1 x rho2 + rho1 x phi2
       //   phi part: phi1 x phi2
+      //   rho part: phi1 x rho2 + rho1 x phi2
       Random random = new Random(666L);
       DMatrixRMaj adXi1 = new DMatrixRMaj(6, 6);
       DMatrixRMaj xi2Mat = new DMatrixRMaj(6, 1);
@@ -241,10 +241,10 @@ public class SE3LieGroupToolsTest
          for (int k = 0; k < 6; k++) xi2Mat.unsafe_set(k, 0, xi2[k]);
          CommonOps_DDRM.mult(adXi1, xi2Mat, bracket);
 
-         Vector3D rho1 = new Vector3D(xi1[0], xi1[1], xi1[2]);
-         Vector3D phi1 = new Vector3D(xi1[3], xi1[4], xi1[5]);
-         Vector3D rho2 = new Vector3D(xi2[0], xi2[1], xi2[2]);
-         Vector3D phi2 = new Vector3D(xi2[3], xi2[4], xi2[5]);
+         Vector3D phi1 = new Vector3D(xi1[0], xi1[1], xi1[2]);
+         Vector3D rho1 = new Vector3D(xi1[3], xi1[4], xi1[5]);
+         Vector3D phi2 = new Vector3D(xi2[0], xi2[1], xi2[2]);
+         Vector3D rho2 = new Vector3D(xi2[3], xi2[4], xi2[5]);
 
          Vector3D expectedRho = new Vector3D();
          Vector3D tmp = new Vector3D();
@@ -255,12 +255,12 @@ public class SE3LieGroupToolsTest
          Vector3D expectedPhi = new Vector3D();
          expectedPhi.cross(phi1, phi2);
 
-         assertEquals(expectedRho.getX(), bracket.unsafe_get(0, 0), EPSILON);
-         assertEquals(expectedRho.getY(), bracket.unsafe_get(1, 0), EPSILON);
-         assertEquals(expectedRho.getZ(), bracket.unsafe_get(2, 0), EPSILON);
-         assertEquals(expectedPhi.getX(), bracket.unsafe_get(3, 0), EPSILON);
-         assertEquals(expectedPhi.getY(), bracket.unsafe_get(4, 0), EPSILON);
-         assertEquals(expectedPhi.getZ(), bracket.unsafe_get(5, 0), EPSILON);
+         assertEquals(expectedPhi.getX(), bracket.unsafe_get(0, 0), EPSILON);
+         assertEquals(expectedPhi.getY(), bracket.unsafe_get(1, 0), EPSILON);
+         assertEquals(expectedPhi.getZ(), bracket.unsafe_get(2, 0), EPSILON);
+         assertEquals(expectedRho.getX(), bracket.unsafe_get(3, 0), EPSILON);
+         assertEquals(expectedRho.getY(), bracket.unsafe_get(4, 0), EPSILON);
+         assertEquals(expectedRho.getZ(), bracket.unsafe_get(5, 0), EPSILON);
       }
    }
 
@@ -271,18 +271,18 @@ public class SE3LieGroupToolsTest
    private static double[] randomXi(Random random)
    {
       double[] xi = new double[6];
-      for (int k = 0; k < 3; k++) xi[k] = EuclidCoreRandomTools.nextDouble(random, 5.0);
       Vector3D phi = EuclidCoreRandomTools.nextRotationVector(random);
-      xi[3] = phi.getX(); xi[4] = phi.getY(); xi[5] = phi.getZ();
+      xi[0] = phi.getX(); xi[1] = phi.getY(); xi[2] = phi.getZ();
+      for (int k = 3; k < 6; k++) xi[k] = EuclidCoreRandomTools.nextDouble(random, 5.0);
       return xi;
    }
 
    private static double[] randomSmallXi(Random random)
    {
       double[] xi = new double[6];
-      for (int k = 0; k < 3; k++) xi[k] = EuclidCoreRandomTools.nextDouble(random, 5.0);
       Vector3D phi = EuclidCoreRandomTools.nextRotationVector(random, Math.PI - 1e-3);
-      xi[3] = phi.getX(); xi[4] = phi.getY(); xi[5] = phi.getZ();
+      xi[0] = phi.getX(); xi[1] = phi.getY(); xi[2] = phi.getZ();
+      for (int k = 3; k < 6; k++) xi[k] = EuclidCoreRandomTools.nextDouble(random, 5.0);
       return xi;
    }
 
