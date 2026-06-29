@@ -292,6 +292,84 @@ public class SO3LieGroupToolsTest
       }
    }
 
+   @Test
+   public void testGamma2AtZero()
+   {
+      // Γ₂(0) = Σ φ̂ⁿ/(n+2)! evaluated at 0 = I/2! = ½I
+      Matrix3D gamma2 = new Matrix3D();
+      SO3LieGroupTools.gamma2(new Vector3D(0.0, 0.0, 0.0), gamma2);
+
+     Matrix3D halfIdentity = new Matrix3D();
+     halfIdentity.setIdentity();
+     halfIdentity.scale(0.5);
+
+     EuclidCoreTestTools.assertMatrix3DEquals(halfIdentity, gamma2, EPSILON);
+   }
+
+   @Test
+   public void testGamma2RecurrenceWithLeftJacobian()
+   {
+      // Recurrence Γ₁(φ) = I + hat(φ)·Γ₂(φ), with Γ₁ = leftJacobian.
+      Random random = new Random(2024L);
+      Matrix3D gamma2 = new Matrix3D();
+      Matrix3D hatPhi = new Matrix3D();
+      Matrix3D Jl = new Matrix3D();
+      Matrix3D reconstructed = new Matrix3D();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D phi = EuclidCoreRandomTools.nextRotationVector(random);
+         SO3LieGroupTools.gamma2(phi,gamma2);
+         SO3LieGroupTools.hat(phi, hatPhi);
+         SO3LieGroupTools.leftJacobian(phi, Jl);
+
+
+         // reconstructed = I + hatPhi * gamma2
+         for (int r = 0; r < 3; r++)
+         {
+            for (int c = 0; c < 3; c++)
+            {
+               double sum = (r == c) ? 1.0 : 0.0;
+               for (int k = 0; k < 3; k++)
+                  sum += hatPhi.getElement(r,k) * gamma2.getElement(k,c);
+               reconstructed.setElement(r,c,sum);
+            }
+         }
+         EuclidCoreTestTools.assertMatrix3DEquals(Jl, reconstructed, 1.0e-9);
+      }
+   }
+
+   @Test
+   public void testGamma2SmallAngleRecurrence()
+   {
+      // Same recurrence but with the small angle assumption, to try out the Taylor series and make sure that it works
+      Random random = new Random(4096L);
+      Matrix3D gamma2 = new Matrix3D();
+      Matrix3D hatPhi = new Matrix3D();
+      Matrix3D Jl = new Matrix3D();
+      Matrix3D reconstructed = new Matrix3D();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D phi = EuclidCoreRandomTools.nextRotationVector(random, 1.0e-8);
+         SO3LieGroupTools.gamma2(phi,gamma2);
+         SO3LieGroupTools.hat(phi, hatPhi);
+         SO3LieGroupTools.leftJacobian(phi, Jl);
+
+         for (int r = 0; r < 3; r++)
+         {
+            for (int c = 0; c < 3; c++)
+            {
+               double sum = (r == c) ? 1.0 : 0.0;
+               for (int k = 0; k < 3; k++)
+                  sum += hatPhi.getElement(r,k) * gamma2.getElement(k,c);
+               reconstructed.setElement(r,c,sum);
+            }
+         }
+         EuclidCoreTestTools.assertMatrix3DEquals(Jl, reconstructed, 1.0e-12);
+      }
+   }
+
    // -----------------------------------------------------------------------
    // helpers
    // -----------------------------------------------------------------------

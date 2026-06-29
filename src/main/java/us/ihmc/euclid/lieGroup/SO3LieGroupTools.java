@@ -81,6 +81,7 @@ public class SO3LieGroupTools
     * @param omega             rotation vector (axis scaled by angle). Not modified.
     * @param orientationToPack the orientation to pack the result into. Modified.
     */
+   // Equivalent of \Gamma_0
    public static void exp(Vector3DReadOnly omega, Orientation3DBasics orientationToPack)
    {
       Quaternion q = new Quaternion();
@@ -132,7 +133,7 @@ public class SO3LieGroupTools
    // -----------------------------------------------------------------------
 
    /**
-    * Left Jacobian of SO(3), J_l(ω).
+    * Left Jacobian of SO(3), J_l(ω). Equivalent to \Gamma_1.
     *
     * <p>Closed-form (θ = ‖ω‖, n̂ = ω/θ):
     * <pre>
@@ -302,4 +303,62 @@ public class SO3LieGroupTools
                        omhtc * ny * nx + halfTheta * nz,  htCot + omhtc * ny * ny,        omhtc * ny * nz - halfTheta * nx,
                        omhtc * nz * nx - halfTheta * ny,  omhtc * nz * ny + halfTheta * nx,  htCot + omhtc * nz * nz);
    }
+
+   /**
+    * Packs M = a·I + b·hat(ω) + c·ωωᵀ into matrixToPack.
+    * The Γ_m functions and the SO(3) Jacobians all share this structure,
+    * because hat(ω)² = ωωᵀ − ‖ω‖²·I collapses any φ̂ power series to these three terms.
+    */
+   private static void setIPlusSkewOuter(double a, double b, double c,
+                                         double wx, double wy, double wz,
+                                         Matrix3DBasics matrixToPack)
+   {
+      matrixToPack.set(a + c * wx * wx,      c * wx * wy - b * wz,  c * wx * wz + b * wy,
+                       c * wy * wx + b * wz, a + c * wy * wy,       c * wy * wz - b * wx,
+                       c * wz * wx - b * wy, c * wz * wy + b * wx,  a + c * wz * wz);
+   }
+
+
+   /**
+    * Third SO(3) integration coefficient Γ₂(φ) = Σ_{n≥0} hat(φ)ⁿ / (n+2)!.
+    *
+    * <p>Closed-form (θ = ‖φ‖, Φ = hat(φ)):
+    * <pre>
+    *   Γ₂ = ½I + ((θ − sinθ)/θ³) Φ + ((θ² + 2cosθ − 2)/(2θ⁴)) Φ²
+    * </pre>
+    * Rewritten via Φ² = φφᵀ − θ²I into the a·I + b·hat + c·φφᵀ form.
+    * For θ &lt; EPS the coefficients use their Taylor series.</p>
+    *
+    * @param phi          the rotation vector φ. Not modified.
+    * @param matrixToPack the 3×3 matrix to pack Γ₂ into. Modified.
+    */
+   public static void gamma2(Vector3DReadOnly phi, Matrix3DBasics matrixToPack)
+   {
+      double wx = phi.getX();
+      double wy = phi.getY();
+      double wz = phi.getZ();
+
+      double theta2 = wx * wx + wy * wy + wz * wz;
+      double theta = Math.sqrt(theta2);
+
+      double b; // coefficient on \Phi: (\theta - \sin\theta)/\theta^3
+      double c; // coefficient on \Phi^2: (\theta^2+2\cos\theta - 2)(2\theta^4)
+
+      if (theta < EPS) // small angle approximation, disregard fourth order terms
+      {
+         b = 1.0 / 6.0 - theta2 / 120.0;
+         c = 1.0 / 24.0 - theta2 / 720.0;
+      }
+      else
+      {
+         double theta3 = theta * theta2;
+         double theta4 = theta2 * theta2;
+         b = (theta - Math.sin(theta)) / theta3;
+         c = (theta2 + 2.0 * Math.cos(theta) - 2.0) / (2.0 * theta4);
+      }
+
+      double a = 0.5 - c * theta2;
+      setIPlusSkewOuter(a, b, c, wx, wy, wz, matrixToPack);
+   }
+
 }
