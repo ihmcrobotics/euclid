@@ -4,10 +4,8 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.rotationConversion.QuaternionConversion;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.Quaternion;
 
 /**
  * Static utility class providing SO(3) Lie group and Lie algebra operations.
@@ -84,9 +82,10 @@ public class SO3LieGroupTools
    // Equivalent of \Gamma_0
    public static void exp(Vector3DReadOnly omega, Orientation3DBasics orientationToPack)
    {
-      Quaternion q = new Quaternion();
-      QuaternionConversion.convertRotationVectorToQuaternion(omega, q);
-      orientationToPack.set(q);
+      // Allocation-free: write the rotation vector straight into the target orientation. This is the
+      // same exponential map as routing through a quaternion, but without the per-call Quaternion
+      // garbage — this method is on the estimator's per-tick hot path (SEK3_Utils, InvariantPropagator).
+      orientationToPack.setRotationVector(omega);
    }
 
    /**
