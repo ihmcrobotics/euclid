@@ -4,9 +4,12 @@ import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * Static utility class providing SE(3) Lie group and Lie algebra operations.
@@ -34,9 +37,17 @@ import us.ihmc.euclid.tuple3D.Vector3D;
  * </pre>
  * </p>
  *
- * <p>Allocation note: {@link #exp}, {@link #log}, {@link #adjoint}, and
- * {@link #smallAdjoint} allocate small temporaries. They are <em>not</em> suitable
- * for hard real-time loops without pre-allocation wrappers.</p>
+ * <p>Allocation note: {@link #hat}, {@link #vee}, and {@link #smallAdjoint} are allocation-free —
+ * they only write into the caller's output. {@link #exp}, {@link #log}, and {@link #adjoint} need
+ * intermediate 3D quantities, so each comes in two flavors:
+ * <ul>
+ *   <li>a convenience overload that creates those intermediates itself — fine for tests and other
+ *       non-real-time callers;</li>
+ *   <li>an allocation-free overload that takes them as parameters, so a per-tick caller can hold
+ *       them as fields and reuse them. They are inputs only in the sense that the caller supplies
+ *       the objects; their contents are overwritten and carry no meaning between calls.</li>
+ * </ul>
+ * The allocation-free overloads are covered by {@code SE3LieGroupToolsTest.testAllocationFree}.</p>
  */
 public class SE3LieGroupTools
 {
@@ -119,20 +130,34 @@ public class SE3LieGroupTools
     */
    public static void exp(double[] xi, RigidBodyTransformBasics transformToPack)
    {
-      Vector3D phi = new Vector3D(xi[0], xi[1], xi[2]);
+      exp(xi, transformToPack, new Vector3D(), new Matrix3D());
+   }
 
-      RotationMatrix R = new RotationMatrix();
-      SO3LieGroupTools.exp(phi, R);
+   /**
+    * Allocation-free {@link #exp(double[], RigidBodyTransformBasics)}: the caller supplies the two
+    * intermediates so a per-tick caller can hold them as fields instead of allocating per call.
+    *
+    * @param xi              6-element array [φx, φy, φz, ρx, ρy, ρz]. Not modified.
+    * @param transformToPack the rigid-body transform to pack the result into. Modified.
+    * @param phi             holds the rotation part φ. Contents overwritten; caller-supplied only to
+    *                        avoid the allocation.
+    * @param leftJacobian    holds the left Jacobian J_l(φ). Contents overwritten; caller-supplied
+    *                        only to avoid the allocation.
+    */
+   public static void exp(double[] xi, RigidBodyTransformBasics transformToPack, Vector3DBasics phi, Matrix3DBasics leftJacobian)
+   {
+      phi.set(xi[0], xi[1], xi[2]);
 
-      Matrix3D Jl = new Matrix3D();
-      SO3LieGroupTools.leftJacobian(phi, Jl);
+      // Exponentiate straight into the target orientation rather than into an intermediate rotation
+      // matrix: one less temporary, and a quaternion-backed transform never round-trips through a DCM.
+      SO3LieGroupTools.exp(phi, transformToPack.getRotation());
+      SO3LieGroupTools.leftJacobian(phi, leftJacobian);
 
       double rhoX = xi[3], rhoY = xi[4], rhoZ = xi[5];
-      double tx = Jl.getM00() * rhoX + Jl.getM01() * rhoY + Jl.getM02() * rhoZ;
-      double ty = Jl.getM10() * rhoX + Jl.getM11() * rhoY + Jl.getM12() * rhoZ;
-      double tz = Jl.getM20() * rhoX + Jl.getM21() * rhoY + Jl.getM22() * rhoZ;
+      double tx = leftJacobian.getM00() * rhoX + leftJacobian.getM01() * rhoY + leftJacobian.getM02() * rhoZ;
+      double ty = leftJacobian.getM10() * rhoX + leftJacobian.getM11() * rhoY + leftJacobian.getM12() * rhoZ;
+      double tz = leftJacobian.getM20() * rhoX + leftJacobian.getM21() * rhoY + leftJacobian.getM22() * rhoZ;
 
-      transformToPack.getRotation().set(R);
       transformToPack.getTranslation().set(tx, ty, tz);
    }
 
@@ -146,11 +171,24 @@ public class SE3LieGroupTools
     */
    public static void log(RigidBodyTransformReadOnly transform, double[] xiToPack)
    {
-      Vector3D phi = new Vector3D();
-      SO3LieGroupTools.log(transform.getRotation(), phi);
+      log(transform, xiToPack, new Vector3D(), new Matrix3D());
+   }
 
-      Matrix3D JlInv = new Matrix3D();
-      SO3LieGroupTools.leftJacobianInverse(phi, JlInv);
+   /**
+    * Allocation-free {@link #log(RigidBodyTransformReadOnly, double[])}: the caller supplies the two
+    * intermediates so a per-tick caller can hold them as fields instead of allocating per call.
+    *
+    * @param transform           the rigid-body transform. Not modified.
+    * @param xiToPack            6-element array to pack [φx, φy, φz, ρx, ρy, ρz] into. Modified.
+    * @param phi                 holds the rotation part φ. Contents overwritten; caller-supplied only
+    *                            to avoid the allocation.
+    * @param leftJacobianInverse holds the inverse left Jacobian J_l⁻¹(φ). Contents overwritten;
+    *                            caller-supplied only to avoid the allocation.
+    */
+   public static void log(RigidBodyTransformReadOnly transform, double[] xiToPack, Vector3DBasics phi, Matrix3DBasics leftJacobianInverse)
+   {
+      SO3LieGroupTools.log(transform.getRotation(), phi);
+      SO3LieGroupTools.leftJacobianInverse(phi, leftJacobianInverse);
 
       double tx = transform.getTranslation().getX();
       double ty = transform.getTranslation().getY();
@@ -159,9 +197,9 @@ public class SE3LieGroupTools
       xiToPack[0] = phi.getX();
       xiToPack[1] = phi.getY();
       xiToPack[2] = phi.getZ();
-      xiToPack[3] = JlInv.getM00() * tx + JlInv.getM01() * ty + JlInv.getM02() * tz;
-      xiToPack[4] = JlInv.getM10() * tx + JlInv.getM11() * ty + JlInv.getM12() * tz;
-      xiToPack[5] = JlInv.getM20() * tx + JlInv.getM21() * ty + JlInv.getM22() * tz;
+      xiToPack[3] = leftJacobianInverse.getM00() * tx + leftJacobianInverse.getM01() * ty + leftJacobianInverse.getM02() * tz;
+      xiToPack[4] = leftJacobianInverse.getM10() * tx + leftJacobianInverse.getM11() * ty + leftJacobianInverse.getM12() * tz;
+      xiToPack[5] = leftJacobianInverse.getM20() * tx + leftJacobianInverse.getM21() * ty + leftJacobianInverse.getM22() * tz;
    }
 
    // -----------------------------------------------------------------------
@@ -181,8 +219,26 @@ public class SE3LieGroupTools
     */
    public static void adjoint(RigidBodyTransformReadOnly transform, DMatrixRMaj adjToPack)
    {
-      RotationMatrix R = new RotationMatrix();
-      R.set(transform.getRotation());
+      adjoint(transform, adjToPack, new RotationMatrix());
+   }
+
+   /**
+    * Allocation-free {@link #adjoint(RigidBodyTransformReadOnly, DMatrixRMaj)}: the caller supplies
+    * the intermediate so a per-tick caller can hold it as a field instead of allocating per call.
+    *
+    * <p>This one is unavoidable rather than merely convenient:
+    * {@link RigidBodyTransformReadOnly#getRotation()} returns an {@code Orientation3DReadOnly}, which
+    * may be quaternion- or axis-angle-backed and exposes no matrix elements, so the orientation has
+    * to be materialized as a rotation matrix before R's nine components can be read.</p>
+    *
+    * @param transform the SE(3) element T. Not modified.
+    * @param adjToPack 6×6 DMatrixRMaj to pack Ad_T into (must be at least 6×6). Modified.
+    * @param rotation  receives T's rotation R. Contents overwritten; caller-supplied only to avoid
+    *                  the allocation.
+    */
+   public static void adjoint(RigidBodyTransformReadOnly transform, DMatrixRMaj adjToPack, RotationMatrixBasics rotation)
+   {
+      rotation.set(transform.getRotation());
 
       double tx = transform.getTranslation().getX();
       double ty = transform.getTranslation().getY();
@@ -190,9 +246,9 @@ public class SE3LieGroupTools
 
       // hat(t) = [[0, -tz, ty], [tz, 0, -tx], [-ty, tx, 0]]
       // hat(t)*R: compute rows of hat(t) dotted with cols of R
-      double r00 = R.getM00(), r01 = R.getM01(), r02 = R.getM02();
-      double r10 = R.getM10(), r11 = R.getM11(), r12 = R.getM12();
-      double r20 = R.getM20(), r21 = R.getM21(), r22 = R.getM22();
+      double r00 = rotation.getM00(), r01 = rotation.getM01(), r02 = rotation.getM02();
+      double r10 = rotation.getM10(), r11 = rotation.getM11(), r12 = rotation.getM12();
+      double r20 = rotation.getM20(), r21 = rotation.getM21(), r22 = rotation.getM22();
 
       // [hat(t)*R]_ij = sum_k hat(t)_ik * R_kj
       // hat(t) row 0: [0, -tz, ty]

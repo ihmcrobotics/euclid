@@ -1,13 +1,16 @@
 package us.ihmc.euclid.lieGroup;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.lang.management.ManagementFactory;
 import java.util.Random;
 
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -18,6 +21,15 @@ public class SE3LieGroupToolsTest
 {
    private static final double EPSILON = 1.0e-10;
    private static final int ITERATIONS = 1000;
+
+   /** Iterations run before measuring, so JIT compilation and one-off class init are already paid. */
+   private static final int WARMUP_ITERATIONS = 50_000;
+   /** Measurement rounds; the minimum is taken to filter an occasional deopt/recompile blip. */
+   private static final int ALLOCATION_ROUNDS = 5;
+   /** Iterations per measurement round. */
+   private static final int ALLOCATION_ITERATIONS = 20_000;
+   /** Noise budget for a round. Expected to be 0; the allocating overloads would burn megabytes. */
+   private static final long ALLOCATION_TOLERANCE_BYTES = 4096L;
 
    // -----------------------------------------------------------------------
    // hat / vee
@@ -262,6 +274,96 @@ public class SE3LieGroupToolsTest
          assertEquals(expectedRho.getY(), bracket.unsafe_get(4, 0), EPSILON);
          assertEquals(expectedRho.getZ(), bracket.unsafe_get(5, 0), EPSILON);
       }
+   }
+
+   // -----------------------------------------------------------------------
+   // allocation
+   // -----------------------------------------------------------------------
+
+   /**
+    * Guards the per-tick contract: the allocation-free overloads of {@code exp}/{@code log}/
+    * {@code adjoint} — the ones taking the intermediates as parameters — must not allocate.
+    *
+    * <p>Allocation is measured with {@code ThreadMXBean.getThreadAllocatedBytes} on this thread,
+    * which counts bytes on the TLAB rather than sampling the heap, so it sees allocations even when
+    * no GC runs. The loop is warmed first and the minimum across several rounds is taken.</p>
+    *
+    * <p>The signal is enormous relative to the tolerance: the convenience overloads allocate on the
+    * order of 200 B per call, so a regression on any of the three shows up as several MB per round
+    * against a 4 KB budget. The budget exists for measurement noise only — the expected value is
+    * exactly 0.</p>
+    */
+   @Test
+   public void testAllocationFree()
+   {
+      java.lang.management.ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+      assumeTrue(bean instanceof com.sun.management.ThreadMXBean, "allocation counters unavailable on this JVM");
+      com.sun.management.ThreadMXBean threadBean = (com.sun.management.ThreadMXBean) bean;
+      assumeTrue(threadBean.isThreadAllocatedMemorySupported(), "thread allocation measurement unsupported");
+      threadBean.setThreadAllocatedMemoryEnabled(true);
+      assumeTrue(threadBean.isThreadAllocatedMemoryEnabled(), "thread allocation measurement disabled");
+
+      long threadId = Thread.currentThread().getId();
+
+      // Everything the loop touches is allocated up front — the harness has to be silent too.
+      RigidBodyTransform transform = new RigidBodyTransform();
+      DMatrixRMaj adjoint = new DMatrixRMaj(6, 6);
+      double[] xiIn = new double[6];
+      double[] xiOut = new double[6];
+
+      Vector3D phi = new Vector3D();
+      Matrix3D jacobian = new Matrix3D();
+      RotationMatrix rotation = new RotationMatrix();
+
+      double sink = 0.0;
+
+      for (int i = 0; i < WARMUP_ITERATIONS; i++)
+         sink += driveOnce(i, xiIn, xiOut, transform, adjoint, phi, jacobian, rotation);
+
+      long fewestBytes = Long.MAX_VALUE;
+      for (int round = 0; round < ALLOCATION_ROUNDS; round++)
+      {
+         long before = threadBean.getThreadAllocatedBytes(threadId);
+         for (int i = 0; i < ALLOCATION_ITERATIONS; i++)
+            sink += driveOnce(i, xiIn, xiOut, transform, adjoint, phi, jacobian, rotation);
+         long after = threadBean.getThreadAllocatedBytes(threadId);
+
+         fewestBytes = Math.min(fewestBytes, after - before);
+      }
+
+      // Keep the work observable so the loop cannot be optimized away wholesale.
+      assertFalse(Double.isNaN(sink), "loop result went NaN");
+
+      assertTrue(fewestBytes <= ALLOCATION_TOLERANCE_BYTES,
+                 "exp/log/adjoint allocation-free overloads allocated " + fewestBytes + " bytes over " + ALLOCATION_ITERATIONS
+                       + " iterations (tolerance " + ALLOCATION_TOLERANCE_BYTES + " B) — a per-tick allocation has regressed");
+   }
+
+   /** One exp → log → adjoint cycle through the allocation-free overloads. Must not allocate. */
+   private static double driveOnce(int i,
+                                   double[] xiIn,
+                                   double[] xiOut,
+                                   RigidBodyTransform transform,
+                                   DMatrixRMaj adjoint,
+                                   Vector3D phi,
+                                   Matrix3D jacobian,
+                                   RotationMatrix rotation)
+   {
+      // Vary the input without allocating, keeping |φ| well inside (0, π) so the generic (non-small-angle)
+      // branch of the Jacobians is the one under test.
+      double t = 1.0e-3 * (i % 1000);
+      xiIn[0] = 0.3 + t;
+      xiIn[1] = -0.2 + t;
+      xiIn[2] = 0.5 - t;
+      xiIn[3] = 1.0 + t;
+      xiIn[4] = -2.0 + t;
+      xiIn[5] = 0.7 + t;
+
+      SE3LieGroupTools.exp(xiIn, transform, phi, jacobian);
+      SE3LieGroupTools.log(transform, xiOut, phi, jacobian);
+      SE3LieGroupTools.adjoint(transform, adjoint, rotation);
+
+      return xiOut[0] + xiOut[5] + adjoint.unsafe_get(3, 0);
    }
 
    // -----------------------------------------------------------------------
